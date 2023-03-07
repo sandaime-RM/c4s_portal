@@ -45,86 +45,86 @@
       <div class="py-3 px-3" style="max-width: 600px">
         <div class="mb-3">
             <label>氏名</label>
-            <input class="form-control" type="text">
+            <input class="form-control" type="text" id="name">
         </div>
         
         <div class="mb-3">
             <label>氏名（よみがな）</label>
-            <input class="form-control" type="text">
+            <input class="form-control" type="text" id="nameKana">
         </div>
 
         <div class="mb-3">
             <label>性別</label>
-            <select class="form-select">
-                <option>男性</option>
-                <option>女性</option>
-                <option>その他</option>
+            <select class="form-select" id="sex">
+                <option value="man">男性</option>
+                <option value="woman">女性</option>
+                <option value="other">その他</option>
             </select>
         </div>
 
         <div class="mb-3">
             <label>誕生日</label>
-            <input type="date" class="form-control">
+            <input type="date" class="form-control" id="birth">
         </div>
 
         <div class="mb-3">
             <label>学部・学科</label>
             <div class="small text-secondary">理科大の方はこちらから選択</div>
-            <select class="form-select">
-                <option>理学部第一部 数学科</option>
-                <option>理学部第一部 物理学科</option>
-                <option>理学部第一部 化学科</option>
-                <option>理学部第一部 応用数学科</option>
-                <option>理学部第一部 応用化学科</option>
-                <option>工学部 建築学科</option>
-                <option>工学部 工業化学科</option>
-                <option>工学部 電気工学科</option>
-                <option>工学部 情報工学科</option>
-                <option>工学部 機械工学科</option>
-                <option>薬学部 薬学科</option>
-                <option>薬学部 生命創薬科学科</option>
-                <option>創域理工学部 数理科学科</option>
-                <option>創域理工学部 先端物理学科</option>
-                <option>創域理工学部 情報計算科学科</option>
-                <option>創域理工学部 生命生物科学科</option>
-                <option>創域理工学部 建築学科</option>
-                <option>創域理工学部 先端化学科</option>
-                <option>創域理工学部 電気電子情報工学科</option>
-                <option>創域理工学部 経営システム工学科</option>
-                <option>創域理工学部 機械航空宇宙工学科</option>
-                <option>創域理工学部 社会基盤工学科</option>
-                <option>先進工学部 電子システム工学科</option>
-                <option>先進工学部 マテリアル創成工学科</option>
-                <option>先進工学部 生命システム工学科</option>
-                <option>先進工学部 物理工学科</option>
-                <option>先進工学部 機械デザイン工学科</option>
-                <option>経営学部 経営学科</option>
-                <option>経営学部 ビジネスエコノミクス学科</option>
-                <option>経営学部 国際デザイン経営学科</option>
-                <option>理学部第二部 数学科</option>
-                <option>理学部第二部 物理学科</option>
-                <option>理学部第二部 化学科</option>
+            <select class="form-select" id="department">
+                <option value="0">理学部第一部 数学科</option>
+                <option value="1">理学部第一部 物理学科</option>
+                <option value="2">理学部第一部 化学科</option>
+                <option value="3">理学部第一部 応用数学科</option>
+                <option value="4">理学部第一部 応用化学科</option>
+                <option value="5">工学部 建築学科</option>
+                <option value="6">工学部 工業化学科</option>
+                <option value="7">工学部 電気工学科</option>
+                <option value="8">工学部 情報工学科</option>
+                <option value="9">工学部 機械工学科</option>
+                <option value="10">薬学部 薬学科</option>
+                <option value="11">薬学部 生命創薬科学科</option>
+                <option value="12">創域理工学部 数理科学科</option>
+                <option value="13">創域理工学部 先端物理学科</option>
+                <option value="14">創域理工学部 情報計算科学科</option>
+                <option value="15">創域理工学部 生命生物科学科</option>
+                <option value="16">創域理工学部 建築学科</option>
+                <option value="17">創域理工学部 先端化学科</option>
+                <option value="18">創域理工学部 電気電子情報工学科</option>
+                <option value="19">創域理工学部 経営システム工学科</option>
+                <option value="20">創域理工学部 機械航空宇宙工学科</option>
+                <option value="21">創域理工学部 社会基盤工学科</option>
+                <option value="22">先進工学部 電子システム工学科</option>
+                <option value="23">先進工学部 マテリアル創成工学科</option>
+                <option value="24">先進工学部 生命システム工学科</option>
+                <option value="25">先進工学部 物理工学科</option>
+                <option value="26">先進工学部 機械デザイン工学科</option>
+                <option value="27">経営学部 経営学科</option>
+                <option value="28">経営学部 ビジネスエコノミクス学科</option>
+                <option value="29">経営学部 国際デザイン経営学科</option>
+                <option value="30">理学部第二部 数学科</option>
+                <option value="31">理学部第二部 物理学科</option>
+                <option value="32">理学部第二部 化学科</option>
                 <option selected>その他</option>
             </select>
         </div>
 
         <div class="mb-3">
             <label>大学名・学部・学科（理科大以外の方）</label>
-            <input type="text" class="form-control">
+            <input type="text" class="form-control" id="otherDepart">
         </div>
 
         <div class="mb-3">
             <label>学籍番号</label>
-            <input type="text" class="form-control">
+            <input type="text" class="form-control" id="schoolNumber">
         </div>
 
         <div class="mb-3">
             <label>過去の制作経験、目標、楽しみなこと、など</label>
-            <textarea class="form-control"></textarea>
+            <textarea class="form-control" id="detail"></textarea>
         </div>
 
         <div class="text-end">
-            <a href="join2.html" class="btn btn-dark">次へ<br><span class="small">（ここには戻れません）</span></a>
+            <button onclick="upload()" class="btn btn-dark">次へ<br><span class="small">（ここには戻れません）</span></button>
         </div>
       </div>
     </div>

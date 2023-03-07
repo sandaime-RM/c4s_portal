@@ -1,7 +1,7 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-app.js";
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-analytics.js";
-import { GoogleAuthProvider, getAuth, getRedirectResult } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-auth.js";
+import { GoogleAuthProvider, getAuth, signInWithRedirect, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-auth.js";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -23,29 +23,25 @@ const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
 
 const auth = getAuth();
+const provider = new GoogleAuthProvider();
+
+//読み込み時に実行
+window.onload = function() {
+
+}
+
+onAuthStateChanged(auth, (user) => {
+    if (user) {
+        console.log(user);
+        document.getElementById("account").innerHTML = '<img src="'+user.photoURL+'" width="32px" height="32px" class="rounded-pill mx-2"> <span class="fs-5">'+user.displayName+'</span>'
+    } else {
+      document.getElementById("account").innerHTML = '<button type="button" class="btn btn-outline-dark me-2" onclick="login()"><img src="icons/google.svg" height="20px"> ログイン</button>';
+    }
+});
 
 //ログイン
 function login() {
-    getRedirectResult(auth)
-    .then((result) => {
-      // This gives you a Google Access Token. You can use it to access Google APIs.
-      const credential = GoogleAuthProvider.credentialFromResult(result);
-      const token = credential.accessToken;
-  
-      // The signed-in user info.
-      const user = result.user;
-      // IdP data available using getAdditionalUserInfo(result)
-      // ...
-    }).catch((error) => {
-      // Handle Errors here.
-      const errorCode = error.code;
-      const errorMessage = error.message;
-      // The email of the user's account used.
-      const email = error.customData.email;
-      // The AuthCredential type that was used.
-      const credential = GoogleAuthProvider.credentialFromError(error);
-      // ...
-    });
+    signInWithRedirect(auth, provider);
 }
 
 window.login = login;

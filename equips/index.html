@@ -41,7 +41,7 @@
       <h2 class="fs-2 fw-normal">備品管理</h2>
 
       <div class="py-2 text-end">
-        <button class="btn btn-dark">新規備品</button>
+        <button class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#exampleModal">新規備品</button>
       </div>
 
       <div class="py-3">
@@ -54,6 +54,116 @@
             </div>
           </li>
         </ul>
+      </div>
+    </div>
+
+    <!-- 新規備品モーダル -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">新規備品</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <div class="py-2">
+              <label>名称</label>
+              <input class="form-control" type="text">
+            </div>
+
+            <div class="py-2">
+              <label>保管場所</label>
+              <input class="form-control" type="text">
+            </div>
+
+            <div class="py-2">
+              <label>数量</label>
+              <div class="input-group">
+                <input class="form-control" type="number">
+                <span class="input-group-text" id="basic-addon2">個</span>
+              </div>
+            </div>
+
+            <div class="py-2">
+              <label>カテゴリ</label>
+
+              <div class="row">
+                <div class="col-6">
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="flexCheck1">
+                    <label class="form-check-label" for="flexCheck1">
+                      書籍
+                    </label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="flexCheck2">
+                    <label class="form-check-label" for="flexCheck2">
+                      電子工作
+                    </label>
+                  </div>
+    
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="flexCheck2">
+                    <label class="form-check-label" for="flexCheck2">
+                      映像・写真
+                    </label>
+                  </div>
+    
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="flexCheck4">
+                    <label class="form-check-label" for="flexCheck4">
+                      3Dプリンター
+                    </label>
+                  </div>
+                </div>
+
+                <div class="col-6">
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="flexCheck5">
+                    <label class="form-check-label" for="flexCheck5">
+                      ケーブル・アダプタ
+                    </label>
+                  </div>
+    
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="flexCheck6">
+                    <label class="form-check-label" for="flexCheck6">
+                      部室用インテリア
+                    </label>
+                  </div>
+    
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="flexCheck7">
+                    <label class="form-check-label" for="flexCheck7">
+                      工具
+                    </label>
+                  </div>
+    
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="flexCheck8">
+                    <label class="form-check-label" for="flexCheck8">
+                      音響
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="py-2">
+              <label for="itemImage">画像</label>
+              <input type="file" id="itemImage" class="form-control" accept="image/*">
+            </div>
+
+            <div class="py-2">
+              <label for="itemImage">詳細</label>
+              <textarea class="form-control"></textarea>
+            </div>
+            
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-dark">追加</button>
+          </div>
+        </div>
       </div>
     </div>
 

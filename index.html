@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!--Bootstrap-->
+    <!-- CSS only -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <!-- JavaScript Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+
+
+    <!--ログイン-->
+    <script type="module" src="script/login.js"></script>
+
+    <title>C4's Portal</title>
+    <link rel="icon" href="img/logo_mini.png">
+</head>
+<body>
+    <!--ヘッダー-->
+    <div class="container">
+        <header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom">
+          <a href="/" class="d-flex align-items-center col-md-3 mb-2 mb-md-0 text-dark text-decoration-none fs-5">
+            <img src="img/logo.png" width="38px"> C4's Portal
+          </a>
+    
+          <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
+            <li><a href="#" class="nav-link px-2 link-secondary">ホーム</a></li>
+            <li><a href="equips" class="nav-link px-2 link-dark">備品</a></li>
+            <li><a href="money" class="nav-link px-2 link-dark">部費</a></li>
+            <li><a href="procedure" class="nav-link px-2 link-dark">手続き</a></li>
+            <li><a href="control" class="nav-link px-2 link-dark">管理</a></li>
+          </ul>
+    
+          <div class="col-md-3 text-end" id="account">
+            <button type="button" class="btn btn-outline-dark me-2" onclick="login()"><img src="icons/google.svg" height="20px"> ログイン</button>
+          </div>
+        </header>
+    </div>
+
+    <!--メインの画面-->
+    <main>
+        <div class="container">
+            <div class="py-3 text-center">
+                <h2 class="fs-2 fw-normal">C4's Portal</h2>
+                <p class="text-secondary">～ワクワクを作りつづける～</p>
+            </div>
+
+            <div class="row py-3">
+                <h3 class="text-center fw-normal text-secondary">メニュー</h3>
+
+                <div class="col-4 px-2 py-2">
+                    <a class="btn btn-outline-secondary container-fluid" href="equips/"><img src="icons/boxes.svg" class="my-2" width="40px"><br>備品</a>
+                </div>
+
+                <div class="col-4 px-2 py-2">
+                    <a class="btn btn-outline-secondary container-fluid" href="money/"><img src="icons/cash-coin.svg" class="my-2" width="40px"><br>部費</a>
+                </div>
+
+                <div class="col-4 px-2 py-2">
+                    <a class="btn btn-outline-secondary container-fluid" href="/"><img src="icons/people.svg" class="my-2" width="40px"><br>アカウント</a>
+                </div>
+
+                <div class="col-4 px-2 py-2">
+                    <a class="btn btn-outline-secondary container-fluid" href="procedure/"><img src="icons/file-earmark-text.svg" class="my-2" width="40px"><br>手続き</a>
+                </div>
+
+                <div class="col-4 px-2 py-2">
+                    <a class="btn btn-outline-secondary container-fluid" href="procedure/"><img src="icons/gear.svg" class="my-2" width="40px"><br>サークル管理</a>
+                </div>
+            </div>
+
+            <div class="py-3">
+                <h3 class="text-center fw-normal text-secondary">リンク集</h3>
+
+                <div class="row row-cols-1 row-cols-sm-2 row-cols-md-2 g-3 mb-3">
+                    <div class="col">
+                      <ul class="list-group">
+                        <li class="list-group-item"><a href="https://c4-s.net/">C4's HP</a></li>
+                        <li class="list-group-item"><a href="https://twitter.com/C4s_TUS">Twitter</a></li>
+                        <li class="list-group-item"><a href="https://www.instagram.com/c4s_tus/">Instagram</a></li>
+                        <li class="list-group-item"><a href="https://t.co/fH9w6pEkUO">公式LINE</a></li>
+                        <li class="list-group-item"><a href="https://peing.net/ja/c4s_tus">Peing 質問箱</a></li>
+                        <li class="list-group-item"><a href="https://www.tus-act.tus.ac.jp/club_admin/index.php?c=login_1&amp;next_c=clubinfo">TUS-ACTフォーム</a></li>
+                      </ul>
+                    </div>
+            
+                    <div class="col">
+                      <ul class="list-group">
+                        <li class="list-group-item"><a href="https://c4s.esa.io/">esa</a><small class="text-secondary">（文書管理）</small></li>
+                        <li class="list-group-item"><a href="https://www.value-domain.com/login.php">Value Domain</a><small class="text-secondary">（メール，サーバー，ドメイン）</small></li>
+                        <li class="list-group-item"><a href="https://gitlab.com/users/sign_in">GitLab</a><small class="text-secondary">（公式HP用）</small></li>
+                        <li class="list-group-item"><a href="https://app.netlify.com/login">Netlify</a><small class="text-secondary">（公式HP用）</small></li>
+                        <li class="list-group-item"><a href="https://be.contentful.com/login">Contentful</a><small class="text-secondary">（公式HPでの作品公開用）</small></li>
+                        <li class="list-group-item"><a href="vr/index.html">Aframeコンテンツ</a></li>
+                      </ul>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+    </main>
+
+</body>
+</html>

@@ -35,13 +35,12 @@ function upload() {
     var number = document.getElementById("schoolNumber");
     var birth = document.getElementById("birth");
 
-    push(ref(db, "users"), {
+    set(ref(db, "users/" + user.uid), {
         name : name.value,
         nameKana : nameKana.value,
         detail : detail.value,
         studentNumber : Number(number.value),
         birth : birth.value,
-        userId : user.uid,
         time : (new Date()).getTime()
     })
     .then(() => {

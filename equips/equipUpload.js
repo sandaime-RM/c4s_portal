@@ -32,14 +32,25 @@ var equipNum = 0;
 var editting = -1;
 const storage = getStorage(app);
 const categories = 8; //カテゴリーの数
+const categoryNames = ["書籍", "電子工作", "映像・写真", "3Dプリンター", "ケーブル・アダプタ", "部室用インテリア", "工具", "音響"];
+var loadingEquips = document.getElementById("loadingEquips");
 
-//読み込み時に実行
+//備品追加時に実行
 onChildAdded(ref(db, 'equips'), (snapshot) => {
+    loadingEquips.style.display = "none";
+
     var equip = snapshot.val();
     var key = snapshot.key;
     console.log(equip);
 
-    document.getElementById("equipsList").innerHTML += '<li class="list-group-item"><h5>'+equip.name+'</h5><div class="row"><div class="col-4">数量 : '+equip.number+'</div><div class="col-4">場所 : '+equip.place+'</div></div><div class="position-absolute top-0 end-0 px-2 py-1 pb-2" style="cursor:pointer;" data-bs-toggle="modal" data-bs-target="#exampleModal" onclick="openInfo('+equipNum+')"><img src="../icons/three-dots-vertical.svg"></div></li>';
+    var category = "";
+    equip.category.forEach((element, index) => {
+        if(element) {
+            category += "#" + categoryNames[index] + " ";
+        }
+    });
+
+    document.getElementById("equipsList").innerHTML += '<li class="list-group-item"><h5>'+equip.name+'</h5><div class="small text-primary">'+category+'</div><div class="row"><div class="col-4">数量 : '+equip.number+'</div><div class="col-4">場所 : '+equip.place+'</div></div><div class="position-absolute top-0 end-0 px-2 py-1 pb-2" style="cursor:pointer;" data-bs-toggle="modal" data-bs-target="#exampleModal" onclick="openInfo('+equipNum+')"><img src="../icons/three-dots-vertical.svg"></div></li>';
 
     equips[equipNum] = equip;
     equipKeys[equipNum] = key;
@@ -80,7 +91,7 @@ function upload() {
     }
 
     if(editting != -1) {
-        fileNames.concat(equips[editting]);
+        fileNames = fileNames.concat(equips[editting]);
     }
 
     if(files.length != 0) {
@@ -188,6 +199,7 @@ function openInfo(num) {
     }
 
     //画像表示
+    document.getElementById("imgs").innerHTML = "";
     if(equips[num].imgs) {
         equips[num].imgs.forEach(function(img) {
             const gsReference = ref_st(storage, "equips/" + img);
@@ -212,6 +224,8 @@ function clearForm() {
     var detail = document.getElementById("detail");
     var number = document.getElementById("number");
     var place = document.getElementById("place");
+
+    document.getElementById("imgs").innerHTML = "";
 
     name.value = "";
     detail.value = "";

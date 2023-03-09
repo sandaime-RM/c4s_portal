@@ -34,6 +34,8 @@ function upload() {
     var detail = document.getElementById("detail");
     var number = document.getElementById("schoolNumber");
     var birth = document.getElementById("birth");
+    var department = document.getElementById("department");
+    var sex = document.getElementById("sex");
 
     set(ref(db, "users/" + user.uid), {
         name : name.value,
@@ -41,6 +43,8 @@ function upload() {
         detail : detail.value,
         studentNumber : Number(number.value),
         birth : birth.value,
+        department : department.options[department.selectedIndex].text,
+        sex : sex.value,
         time : (new Date()).getTime()
     })
     .then(() => {

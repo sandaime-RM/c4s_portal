@@ -25,11 +25,7 @@ const analytics = getAnalytics(app);
 const auth = getAuth();
 const provider = new GoogleAuthProvider();
 
-//読み込み時に実行
-window.onload = function() {
-
-}
-
+//ログイン状態の確認
 onAuthStateChanged(auth, (user) => {
     if (user) {
         console.log(user);

@@ -2,8 +2,8 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-app.js";
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-analytics.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-auth.js";
-import { getDatabase, ref, get, set, push } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-database.js";
-import { getStorage, ref as ref_st, uploadBytes } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-storage.js";
+import { getDatabase, ref, onChildAdded, push, remove, set } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-database.js";
+import { getStorage, ref as ref_st, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-storage.js";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -26,7 +26,26 @@ const analytics = getAnalytics(app);
 const db = getDatabase(app);
 const auth = getAuth();
 var user;
+var equips = [];
+var equipKeys = [];
+var equipNum = 0;
+var editting = -1;
 const storage = getStorage(app);
+const categories = 8; //カテゴリーの数
+
+//読み込み時に実行
+onChildAdded(ref(db, 'equips'), (snapshot) => {
+    var equip = snapshot.val();
+    var key = snapshot.key;
+    console.log(equip);
+
+    document.getElementById("equipsList").innerHTML += '<li class="list-group-item"><h5>'+equip.name+'</h5><div class="row"><div class="col-4">数量 : '+equip.number+'</div><div class="col-4">場所 : '+equip.place+'</div></div><div class="position-absolute top-0 end-0 px-2 py-1 pb-2" style="cursor:pointer;" data-bs-toggle="modal" data-bs-target="#exampleModal" onclick="openInfo('+equipNum+')"><img src="../icons/three-dots-vertical.svg"></div></li>';
+
+    equips[equipNum] = equip;
+    equipKeys[equipNum] = key;
+
+    equipNum ++;
+});
 
 
 //備品情報アップロード
@@ -41,7 +60,9 @@ function upload() {
     var finishPic = false;
     var finishDb = false;
 
-    for(var i = 1; i <= 8; i++) {
+    if(name == "") {alert("名称くらいは入力してよ！怒"); return;}
+
+    for(var i = 1; i <= categories; i++) {
         if(document.getElementById("flexCheck" + i).checked) {
             category[i-1] = true;
         } else {
@@ -52,6 +73,15 @@ function upload() {
     //画像の圧縮＆アップロード
     var files = document.getElementById("itemImage").files;
     var fileNameTop = (new Date()).getTime();
+    var fileNames = [];
+
+    for(var i=0; i<files.length; i++) {
+        fileNames[i] = 'equips/' + fileNameTop + "_" + files[i].name;
+    }
+
+    if(editting != -1) {
+        fileNames.concat(equips[editting]);
+    }
 
     if(files.length != 0) {
         var num = 0;
@@ -74,7 +104,7 @@ function upload() {
                         // you can keep blob or save blob to another position
                         const blob = new Blob([fr.result]);
 
-                        uploadBytes(ref_st(storage, 'equips/' + fileNameTop + "_" + file.name), blob).then((snapshot) => {
+                        uploadBytes(ref_st(storage, 'equips/' + fileNames[num]), blob).then((snapshot) => {
                             num ++;
 
                             console.log("画像アップロード状況 ("+ num + "/" + files.length +")");
@@ -101,22 +131,36 @@ function upload() {
     } else {
         finishPic = true;
     }
-    
-    push(ref(db, "equips"), {
+
+    var setData = {
         name : name.value,
         detail : detail.value,
         number : Number(number.value),
         place : place.value,
         userId : user.uid,
         time : (new Date()).getTime(),
-        category : category
-    })
-    .then (() => {
-        finishDb = true;
-        if(finishDb && finishPic) {
-            window.location.reload();
-        }
-    });
+        category : category,
+        imgs : fileNames
+    };
+
+    //更新か追加か
+    if(editting == -1) {
+        push(ref(db, "equips"), setData)
+        .then (() => {
+            finishDb = true;
+            if(finishDb && finishPic) {
+                window.location.reload();
+            }
+        });
+    } else {
+        set(ref(db, 'equips/' + equipKeys[editting]), setData)
+        .then (() => {
+            finishDb = true;
+            if(finishDb && finishPic) {
+                window.location.reload();
+            }
+        });
+    }
 }
 
 window.upload = upload;
@@ -126,3 +170,75 @@ export{upload}
 onAuthStateChanged(auth, (us) => {
     user = us;
 });
+
+//備品情報の表示
+function openInfo(num) {
+    var name = document.getElementById("name");
+    var detail = document.getElementById("detail");
+    var number = document.getElementById("number");
+    var place = document.getElementById("place");
+
+    name.value = equips[num].name;
+    detail.value = equips[num].detail;
+    place.value = equips[num].place;
+    number.value = equips[num].number;
+
+    for(var i=1; i<=categories; i++) {
+        document.getElementById("flexCheck"+i).checked = equips[num].category[i-1];
+    }
+
+    //画像表示
+    if(equips[num].imgs) {
+        equips[num].imgs.forEach(function(img) {
+            const gsReference = ref_st(storage, "equips/" + img);
+    
+            getDownloadURL(gsReference)
+            .then(async function(url) {
+                document.getElementById("imgs").innerHTML += "<img src='"+url+"' style='max-width:130px; max-height: 220px; object-fit: contain;' class='border rounded'>";
+            })
+            .catch((err) => console.log(err));
+        });
+    }
+    
+    editting = num;
+}
+
+window.openInfo = openInfo;
+export{openInfo}
+
+//フォームの初期化
+function clearForm() {
+    var name = document.getElementById("name");
+    var detail = document.getElementById("detail");
+    var number = document.getElementById("number");
+    var place = document.getElementById("place");
+
+    name.value = "";
+    detail.value = "";
+    place.value = "";
+    number.value = "";
+
+    for(var i=1; i<=categories; i++) {
+        document.getElementById("flexCheck"+i).checked = false;
+    }
+
+    editting = -1;
+}
+
+window.clearForm = clearForm;
+export{clearForm}
+
+//備品の削除
+function delItem() {
+    var result = confirm("「"+equips[editting].name+"」を削除してよろしいですか？");
+
+    if(!result) {return;}
+
+    remove(ref(db, 'equips/' + equipKeys[editting]))
+    .then(() => {
+        window.location.reload();
+    });
+}
+
+window.delItem = delItem;
+export{delItem};

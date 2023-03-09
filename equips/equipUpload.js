@@ -3,7 +3,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/9.17.2/firebas
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-analytics.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-auth.js";
 import { getDatabase, ref, get, set, push } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-database.js";
-import { getStorage, ref as ref_st } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-storage.js";
+import { getStorage, ref as ref_st, uploadBytes } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-storage.js";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -26,22 +26,96 @@ const analytics = getAnalytics(app);
 const db = getDatabase(app);
 const auth = getAuth();
 var user;
+const storage = getStorage(app);
 
 
 //備品情報アップロード
 function upload() {
+    document.getElementById("uploading").style.display = "";
+
     var name = document.getElementById("name");
     var detail = document.getElementById("detail");
     var number = document.getElementById("number");
     var place = document.getElementById("place");
+    var category = [];
+    var finishPic = false;
+    var finishDb = false;
 
+    for(var i = 1; i <= 8; i++) {
+        if(document.getElementById("flexCheck" + i).checked) {
+            category[i-1] = true;
+        } else {
+            category[i-1] = false;
+        }
+    }
+
+    //画像の圧縮＆アップロード
+    var files = document.getElementById("itemImage").files;
+    var fileNameTop = (new Date()).getTime();
+
+    if(files.length != 0) {
+        var num = 0;
+
+        for(let file of files) {
+            console.time();
+            //圧縮処理
+            new Compressor(file, {
+                // Compressorのオプション
+                maxHeight: 1000,
+                convertSize: Infinity,
+                success(result) {
+                    console.timeEnd()
+                    console.log(result)
+
+                    //アップロード処理
+                    const fr = new FileReader()
+                    fr.readAsArrayBuffer(result)
+                    fr.onload = function() {
+                        // you can keep blob or save blob to another position
+                        const blob = new Blob([fr.result]);
+
+                        uploadBytes(ref_st(storage, 'equips/' + fileNameTop + "_" + file.name), blob).then((snapshot) => {
+                            num ++;
+
+                            console.log("画像アップロード状況 ("+ num + "/" + files.length +")");
+                            if(num == files.length) {
+                                finishPic = true;
+
+                                if(finishDb && finishPic) {
+                                    window.location.reload();
+                                }
+                            }
+                        })
+                        .catch((error) => {
+                            console.error(error);
+                        });
+                    }
+                },
+                error(err) {
+                // エラー時のメッセージ
+                console.log(err.message);
+                },
+            });
+            
+        };
+    } else {
+        finishPic = true;
+    }
+    
     push(ref(db, "equips"), {
         name : name.value,
         detail : detail.value,
         number : Number(number.value),
         place : place.value,
         userId : user.uid,
-        time : (new Date()).getTime()
+        time : (new Date()).getTime(),
+        category : category
+    })
+    .then (() => {
+        finishDb = true;
+        if(finishDb && finishPic) {
+            window.location.reload();
+        }
     });
 }
 

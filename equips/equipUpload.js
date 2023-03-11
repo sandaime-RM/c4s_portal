@@ -2,7 +2,7 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-app.js";
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-analytics.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-auth.js";
-import { getDatabase, ref, onChildAdded, push, remove, set } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-database.js";
+import { getDatabase, ref, onChildAdded, push, remove, set, get } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-database.js";
 import { getStorage, ref as ref_st, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-storage.js";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -36,27 +36,32 @@ const categoryNames = ["書籍", "電子工作", "映像・写真", "3Dプリン
 var loadingEquips = document.getElementById("loadingEquips");
 
 //備品追加時に実行
-onChildAdded(ref(db, 'equips'), (snapshot) => {
-    loadingEquips.style.display = "none";
+window.onload = function() {
 
-    var equip = snapshot.val();
-    var key = snapshot.key;
-    console.log(equip);
+    get(ref(db, 'equips')).then((snapshot) => {
+        loadingEquips.style.display = "none";
+        var data = snapshot.val();
 
-    var category = "";
-    equip.category.forEach((element, index) => {
-        if(element) {
-            category += "#" + categoryNames[index] + " ";
-        }
+        Object.keys(data).forEach((e, i)=> {
+            var equip = data[e];
+            var key = e;
+        
+            var category = "";
+            equip.category.forEach((element, index) => {
+                if(element) {
+                    category += "#" + categoryNames[index] + " ";
+                }
+            });
+        
+            document.getElementById("equipsList").innerHTML += '<li class="list-group-item"><h5>'+equip.name+'</h5><div class="small text-primary">'+category+'</div><div class="row"><div class="col-4">数量 : '+equip.number+'</div><div class="col-4">場所 : '+equip.place+'</div></div><div class="position-absolute top-0 end-0 px-2 py-1 pb-2" style="cursor:pointer;" data-bs-toggle="modal" data-bs-target="#exampleModal" onclick="openInfo('+equipNum+')"><img src="../icons/three-dots-vertical.svg"></div></li>';
+        
+            equips[equipNum] = equip;
+            equipKeys[equipNum] = key;
+        
+            equipNum ++;
+        });
     });
-
-    document.getElementById("equipsList").innerHTML += '<li class="list-group-item"><h5>'+equip.name+'</h5><div class="small text-primary">'+category+'</div><div class="row"><div class="col-4">数量 : '+equip.number+'</div><div class="col-4">場所 : '+equip.place+'</div></div><div class="position-absolute top-0 end-0 px-2 py-1 pb-2" style="cursor:pointer;" data-bs-toggle="modal" data-bs-target="#exampleModal" onclick="openInfo('+equipNum+')"><img src="../icons/three-dots-vertical.svg"></div></li>';
-
-    equips[equipNum] = equip;
-    equipKeys[equipNum] = key;
-
-    equipNum ++;
-});
+}
 
 
 //備品情報アップロード
@@ -91,7 +96,7 @@ function upload() {
     }
 
     if(editting != -1) {
-        fileNames = fileNames.concat(equips[editting]);
+        fileNames = fileNames.concat(equips[editting].imgs);
     }
 
     if(files.length != 0) {
@@ -200,8 +205,11 @@ function openInfo(num) {
 
     //画像表示
     document.getElementById("imgs").innerHTML = "";
+    
     if(equips[num].imgs) {
-        equips[num].imgs.forEach(function(img) {
+        
+        equips[num].imgs.forEach(function(img, index) {
+
             const gsReference = ref_st(storage, "equips/" + img);
     
             getDownloadURL(gsReference)

@@ -2,7 +2,7 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-app.js";
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-analytics.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-auth.js";
-import { getDatabase, ref, get, set, push } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-database.js";
+import { getDatabase, ref, get, set } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-database.js";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -51,7 +51,7 @@ function upload() {
         time : (new Date()).getTime()
     })
     .then(() => {
-        window.location.href = "join2.html";
+        alert("更新しました。");
     });
 }
 
@@ -61,4 +61,27 @@ export{upload}
 //ユーザー情報の取得
 onAuthStateChanged(auth, (us) => {
     user = us;
+
+    var name = document.getElementById("name");
+    var nameKana = document.getElementById("nameKana");
+    var detail = document.getElementById("detail");
+    var number = document.getElementById("schoolNumber");
+    var birth = document.getElementById("birth");
+    var department = document.getElementById("department");
+    var grade = document.getElementById("grade");
+    var sex = document.getElementById("sex");
+    
+
+    get(ref(db, 'users/' + user.uid)).then((snapshot) => {
+        var data = snapshot.val();
+
+        name.value = data.name;
+        nameKana.value = data.nameKana;
+        detail.value = data.detail;
+        number.value = data.studentNumber;
+        birth.value = data.birth;
+        grade.value = data.grade;
+        department.selectedIndex = data.departmentIndex;
+        sex.value = data.sex;
+    });
 });

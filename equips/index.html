@@ -48,10 +48,6 @@
     <div class="container">
       <h2 class="fs-2 fw-normal">備品管理</h2>
 
-      <div class="py-2 text-end">
-        <button class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#exampleModal" onclick="clearForm()">新規備品</button>
-      </div>
-
       <div class="text-center py-3" id="loadingEquips">
         <div class="spinner-border" role="status">
           <span class="visually-hidden">Loading...</span>
@@ -61,6 +57,13 @@
       <div class="py-3"><ul class="list-group" id="equipsList">
         
       </ul></div>
+    </div>
+
+    <!--追加ボタン-->
+    <div class="bg-dark text-light position-fixed end-0 bottom-0 mx-3 my-3 px-3 py-3 shadow rounded-pill" style="cursor: pointer;" data-bs-toggle="modal" data-bs-target="#exampleModal" onclick="clearForm()">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-plus-lg" viewBox="0 0 16 16">
+        <path fill-rule="evenodd" d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2Z"/>
+      </svg>
     </div>
 
     <!-- 新規備品モーダル -->
@@ -73,7 +76,7 @@
           </div>
           <div class="modal-body">
             <div class="py-2">
-              <label>名称</label>
+              <label>名称 <span class="text-danger">*</span></label>
               <input class="form-control" type="text" id="name">
             </div>
 

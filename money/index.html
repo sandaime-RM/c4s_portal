@@ -12,6 +12,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 
     <script src="../script/login.js" type="module"></script>
+    <script src="money.js" type="module"></script>
 
     <title>C4's Portal</title>
     <link rel="icon" href="../img/logo_mini.png">
@@ -43,32 +44,111 @@
     <div class="container">
       <h2 class="fs-2 fw-normal">部費通帳</h2>
 
+      <div style="max-width: 600px;">
+        <div class="my-3 mx-2 py-2 border rounded px-3 shadow-sm">
+          <h5 class="fw-normal">残高</h5>
+          <div class="fw-bold fs-3">￥<span id="total">---</span></div>
+          <div class="text-secondary small" id="date"></div>
+        </div>
+
+        <div class="py-3">
+          <h5 class="text-secondary fs-5">詳細</h5>
+          <select class="form-select mb-3" id="year" style="width: 50%">
+            <option value="2023" selected>2023年</option>
+            <option value="2022">2022年</option>
+          </select>
+          <ul class="list-group mx-2" id="moneyList">
+
+          </ul>
+        </div>
+      </div>
+      
     </div>
 
+    <!--追加ボタン-->
+    <div class="bg-dark text-light position-fixed end-0 bottom-0 mx-3 my-3 px-3 py-3 shadow rounded-pill" style="cursor: pointer;" data-bs-toggle="modal" data-bs-target="#exampleModal">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-plus-lg" viewBox="0 0 16 16">
+        <path fill-rule="evenodd" d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2Z"/>
+      </svg>
+    </div>
 
-    <script type="module">
-        // Import the functions you need from the SDKs you need
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-app.js";
-        import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-analytics.js";
-        // TODO: Add SDKs for Firebase products that you want to use
-        // https://firebase.google.com/docs/web/setup#available-libraries
-        
-        // Your web app's Firebase configuration
-        // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-        const firebaseConfig = {
-            apiKey: "AIzaSyBE60G8yImWlENWpCnQZzqqVUrwWa_torg",
-            authDomain: "c4s-portal.firebaseapp.com",
-            databaseURL: "https://c4s-portal-default-rtdb.asia-southeast1.firebasedatabase.app",
-            projectId: "c4s-portal",
-            storageBucket: "c4s-portal.appspot.com",
-            messagingSenderId: "863775995414",
-            appId: "1:863775995414:web:82eb9557a13a099dfbe737",
-            measurementId: "G-K2SR1WSNRC"
-        };
-        
-        // Initialize Firebase
-        const app = initializeApp(firebaseConfig);
-        const analytics = getAnalytics(app);
-    </script>
+        <!-- 新規部費情報モーダル -->
+        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">部費情報</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <div class="py-2">
+                  <label>名称 <span class="text-danger">*</span></label>
+                  <input class="form-control" type="text" id="name">
+                </div>
+    
+                <div class="py-2">
+                  <label>金額 <span class="text-danger">*</span></label>
+                  <div class="input-group">
+                    <input class="form-control" type="number" id="amount">
+                    <span class="input-group-text" id="basic-addon2">円</span>
+                  </div>
+                </div>
+    
+                <div class="row">
+                  <div class="py-2 col-6">
+                    <label>種別 <span class="text-danger">*</span></label>
+      
+                    <div class="px-2">
+                      <div class="form-check">
+                        <input class="form-check-input" type="radio" name="type" id="type1">
+                        <label class="form-check-label" for="type1">
+                          入金
+                        </label>
+                      </div>
+                      <div class="form-check">
+                        <input class="form-check-input" type="radio" name="type" id="type2" checked>
+                        <label class="form-check-label" for="type2">
+                          出金
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="py-2 col-6">
+                    <label>清算 <span class="text-danger">*</span></label>
+      
+                    <div class="px-2">
+                      <div class="form-check">
+                        <input class="form-check-input" type="radio" name="seisan" id="seisan1">
+                        <label class="form-check-label" for="seisan1">
+                          清算済み
+                        </label>
+                      </div>
+                      <div class="form-check">
+                        <input class="form-check-input" type="radio" name="seisan" id="seisan2" checked>
+                        <label class="form-check-label" for="seisan2">
+                          未精算
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+    
+                <div class="py-2">
+                  <label for="detail">詳細</label>
+                  <textarea class="form-control" id="detail"></textarea>
+                </div>
+                
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-outline-dark" onclick="delItem()">削除</button>
+                <button type="button" class="btn btn-dark" onclick="upload()">
+                  <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" id="uploading" style="display: none;"></span>
+                    保存
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
 </body>
 </html>

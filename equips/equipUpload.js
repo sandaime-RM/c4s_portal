@@ -41,6 +41,8 @@ window.onload = function() {
     get(ref(db, 'equips')).then((snapshot) => {
         loadingEquips.style.display = "none";
         var data = snapshot.val();
+        var totalNum = Object.keys(data).length;
+        document.getElementById("totalNum").textContent = "総数：" + totalNum;
 
         Object.keys(data).forEach((e, i)=> {
             var equip = data[e];

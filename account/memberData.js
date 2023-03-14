@@ -70,7 +70,13 @@ onAuthStateChanged(auth, (us) => {
     var department = document.getElementById("department");
     var grade = document.getElementById("grade");
     var sex = document.getElementById("sex");
-    
+    var accountName = document.getElementById("userName");
+    var accountIcon = document.getElementById("userIcon");
+    var accountEmail = document.getElementById("userEmail");
+
+    accountName.textContent = user.displayName;
+    accountIcon.src = user.photoURL;
+    accountEmail.textContent = user.email;
 
     get(ref(db, 'users/' + user.uid)).then((snapshot) => {
         var data = snapshot.val();

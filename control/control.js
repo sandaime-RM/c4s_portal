@@ -26,3 +26,48 @@ const analytics = getAnalytics(app);
 const db = getDatabase(app);
 const auth = getAuth();
 var user;
+
+//ユーザー情報の取得
+onAuthStateChanged(auth, (us) => {
+    user = us;
+});
+
+//読み込み時に実行
+window.onload = function() {
+    get(ref(db, 'users')).then((snapshot) => {
+        document.getElementById("loadingControl").style.display = "none";
+        var users = snapshot.val();
+        var date = new Date();
+
+        Object.keys(users).forEach((key, i) => {
+            if(key == "admin-users") {return;}
+
+            var sex = "女性";
+            if(users[key].sex == "man") {sex="男性";}
+
+            var tags = "";
+            var roles = "";
+            if(users[key].fields) {
+                tags = '<div class="text-primary small">';
+                users[key].fields.forEach(element => {
+                    tags += '<span class="mx-1">'+element+'</span>';
+                });
+                tags += '</div>';
+            }
+
+            if(users["admin-users"][key]) {
+                roles += '<span class="badge bg-secondary mx-1">管理者</span>';
+            }
+
+            var age = 0;
+            var birth = new Date(users[key].birth);
+            age = Math.floor((date - birth) / (86400000 * 365));
+
+            document.getElementById("memberList").innerHTML += '<li class="list-group-item col-lg-6"><h6>'+users[key].name + roles + '</h6><div class="small text-secondary">'+users[key].department+' '+users[key].grade+'年 '+sex+' '+age+'歳</div>'+tags+'</li>'
+        });
+    })
+    .catch((error) => {
+        document.getElementById("loadingControl").style.display = "none";
+        document.getElementById("errorControl").innerHTML = '<span class="text-danger small">'+error+'</span>';
+    });
+}

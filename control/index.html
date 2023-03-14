@@ -46,7 +46,19 @@
       <div class="container">
         <h2 class="fs-2 fw-normal">サークル管理</h2>
 
-        <p class="text-secondary">閲覧・操作には管理者権限が必要です</p>
+        <p id="text-secondary">閲覧・操作には管理者権限が必要です</p>
+
+        <p id="errorControl"></p>
+
+        <h5 class="fw-normal">部員一覧</h5>
+        <div class="text-center py-3" id="loadingControl">
+          <div class="spinner-border" role="status">
+            <span class="visually-hidden">Loading...</span>
+          </div>
+        </div>
+        <ul class="list-group" id="memberList">
+          
+        </ul>
       </div>
     </main>
 

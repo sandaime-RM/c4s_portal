@@ -1,7 +1,7 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-app.js";
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-analytics.js";
-import { GoogleAuthProvider, getAuth, signInWithRedirect, onAuthStateChanged, signInWithPopup } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-auth.js";
+import { GoogleAuthProvider, getAuth, onAuthStateChanged, signInWithPopup, signOut } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-auth.js";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -61,3 +61,22 @@ function goAccount() {
 
 window.goAccount = goAccount;
 export{goAccount}
+
+//ログアウト
+function logout() {
+    signOut(auth).then(() => {
+      var accountName = document.getElementById("userName");
+      var accountIcon = document.getElementById("userIcon");
+      var accountEmail = document.getElementById("userEmail");
+      
+      accountName.innerHTML = "";
+      accountIcon.src = "";
+      accountEmail.innerHTML = "ログインしていません";
+      
+      }).catch((error) => {
+        document.getElementById("error").innerHTML = error.message;
+      });
+}
+
+window.logout = logout;
+export{logout}

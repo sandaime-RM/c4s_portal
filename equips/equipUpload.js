@@ -31,8 +31,8 @@ var equipKeys = [];
 var equipNum = 0;
 var editting = -1;
 const storage = getStorage(app);
-const categories = 8; //カテゴリーの数
-const categoryNames = ["書籍", "電子工作", "映像・写真", "3Dプリンター", "ケーブル・アダプタ", "部室用インテリア", "工具", "音響"];
+const categories = 10; //カテゴリーの数
+const categoryNames = ["書籍", "電子工作", "映像・写真", "3Dプリンター", "ケーブル・アダプタ", "部室用インテリア", "工具", "音響", "VR", "テープ"];
 var loadingEquips = document.getElementById("loadingEquips");
 
 //備品追加時に実行
@@ -54,8 +54,11 @@ window.onload = function() {
                     category += "#" + categoryNames[index] + " ";
                 }
             });
+
+            var addTo = "equipsList";
+            if(i > totalNum/2) { addTo = "equipsList2"; }
         
-            document.getElementById("equipsList").innerHTML += '<li class="list-group-item"><h5>'+equip.name+'</h5><div class="small text-primary">'+category+'</div><div class="row"><div class="col-4">数量 : '+equip.number+'</div><div class="col-4">場所 : '+equip.place+'</div></div><div class="position-absolute top-0 end-0 px-2 py-1 pb-2" style="cursor:pointer;" data-bs-toggle="modal" data-bs-target="#exampleModal" onclick="openInfo('+equipNum+')"><img src="../icons/three-dots-vertical.svg"></div></li>';
+            document.getElementById(addTo).innerHTML += '<li class="list-group-item"><h5>'+equip.name+'</h5><div class="small text-primary">'+category+'</div><div class="row"><div class="col-4">数量 : '+equip.number+'</div><div class="col-4">場所 : '+equip.place+'</div></div><div class="position-absolute top-0 end-0 px-2 py-1 pb-2" style="cursor:pointer;" data-bs-toggle="modal" data-bs-target="#exampleModal" onclick="openInfo('+equipNum+')"><img src="../icons/three-dots-vertical.svg"></div></li>';
         
             equips[equipNum] = equip;
             equipKeys[equipNum] = key;

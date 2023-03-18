@@ -106,6 +106,7 @@ function dispList() {
     document.getElementById("moneyList").innerHTML = '<div class="text-center py-3"><div class="spinner-border" role="status"><span class="visually-hidden">Loading...</span></div></div>';
 
     get(ref(db, 'money')).then((snapshot) => {
+        document.getElementById("errorMoney").innerHTML = "";
         data = snapshot.child(document.getElementById("year").value).val();
 
         //合計金額計算
@@ -140,6 +141,10 @@ function dispList() {
         });
 
         return;
+    })
+    .catch((error) => {
+        document.getElementById("moneyList").innerHTML = "";
+        document.getElementById("errorMoney").innerHTML = '<span class="text-danger small">'+error+'</span>';
     });
 }
 

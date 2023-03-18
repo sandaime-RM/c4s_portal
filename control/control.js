@@ -63,7 +63,7 @@ window.onload = function() {
             var birth = new Date(users[key].birth);
             age = Math.floor((date - birth) / (86400000 * 365));
 
-            document.getElementById("memberList").innerHTML += '<li class="list-group-item col-lg-6"><h6>'+users[key].name + roles + '</h6><div class="small text-secondary">'+users[key].department+' '+users[key].grade+'年 '+sex+' '+age+'歳</div>'+tags+'</li>'
+            document.getElementById("memberList").innerHTML += '<li class="list-group-item col-lg-6"><h6>'+users[key].name + '<span class="text-secondary mx-1">' + users[key].studentNumber + '</span>' + roles + '</h6><div class="small text-secondary">'+users[key].department+' '+users[key].grade+'年 '+sex+' '+age+'歳</div>'+tags+'</li>'
         });
     })
     .catch((error) => {

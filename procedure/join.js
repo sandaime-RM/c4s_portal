@@ -29,6 +29,7 @@ var user;
 
 //部員情報アップロード
 function upload() {
+
     var name = document.getElementById("name");
     var nameKana = document.getElementById("nameKana");
     var detail = document.getElementById("detail");
@@ -37,6 +38,8 @@ function upload() {
     var department = document.getElementById("department");
     var grade = document.getElementById("grade");
     var sex = document.getElementById("sex");
+    var phoneNumber = document.getElementById("phoneNumber");
+    var otherDepart = document.getElementById("otherDepart");
 
     set(ref(db, "users/" + user.uid), {
         name : name.value,
@@ -48,6 +51,8 @@ function upload() {
         department : department.options[department.selectedIndex].text,
         departmentIndex : department.selectedIndex,
         sex : sex.value,
+        otherDepart : otherDepart.value,
+        phoneNumber : phoneNumber.value,
         time : (new Date()).getTime()
     })
     .then(() => {
@@ -61,4 +66,9 @@ export{upload}
 //ユーザー情報の取得
 onAuthStateChanged(auth, (us) => {
     user = us;
+
+    if(!user) {
+        alert("Googleアカウントでのログインをしてから、部員情報の登録をお願いします。");
+        login();
+    }
 });

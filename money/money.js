@@ -39,11 +39,11 @@ window.onload = function() {
 function upload() {
     var name = document.getElementById("name");
     var amount = document.getElementById("amount");
-    var itemImage = document.getElementById("itemImage");
+    //var itemImage = document.getElementById("itemImage");
     var detail = document.getElementById("detail");
     var type = 2;
     var liquid = true;
-    var date = new Date();
+    var date = document.getElementById("dateForm");
 
     document.getElementById("uploading").style.display = "";
 
@@ -55,7 +55,7 @@ function upload() {
         price : Number(amount.value),
         detail : detail.value,
         userId : user.uid,
-        date : date.toLocaleDateString(),
+        date : date.value,
         type : type,
         liquid : liquid
     }
@@ -157,9 +157,12 @@ function openInfo(index) {
     var name = document.getElementById("name");
     var price = document.getElementById("amount");
     var detail = document.getElementById("detail");
+    var date = document.getElementById("dateForm");
 
     name.value = thisData.name;
     price.value = thisData.price;
+    date.value = thisData.date;
+
     if(thisData.detail) {
         detail.value = thisData.detail;
     }

@@ -62,6 +62,58 @@
       </div>
     </main>
 
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">部員情報</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <div class="py-2">
+              <label>名前</label>
+              <input class="form-control" type="text" id="name">
+            </div>
+
+            <div class="py-2">
+              <label>学部学科</label>
+              <input class="form-control" type="text" id="department">
+            </div>
+
+            <div class="py-2">
+              <label>学年</label>
+              <input class="form-control" type="number" id="grade">
+            </div>
+
+            <div class="py-2">
+              <label>学籍番号</label>
+              <div class="input-group">
+                <input class="form-control" type="number" id="schoolNumber">
+              </div>
+            </div>
+
+            <div class="py-2">
+              <label for="detail">自己PR</label>
+              <textarea class="form-control" id="detail"></textarea>
+            </div>
+
+            <div class="py-2">
+              <label for="detail">役職</label>
+              <input class="form-control" type="text" id="name">
+            </div>
+            
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-outline-dark" onclick="delItem()">削除</button>
+            <button type="button" class="btn btn-dark" onclick="upload()">
+              <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" id="uploading" style="display: none;"></span>
+                保存
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
 
     <script type="module">
         // Import the functions you need from the SDKs you need

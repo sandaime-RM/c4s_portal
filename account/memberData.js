@@ -37,6 +37,8 @@ function upload() {
     var department = document.getElementById("department");
     var grade = document.getElementById("grade");
     var sex = document.getElementById("sex");
+    var phoneNumber = document.getElementById("phoneNumber");
+    var otherDepart = document.getElementById("otherDepart");
 
     set(ref(db, "users/" + user.uid), {
         name : name.value,
@@ -48,6 +50,8 @@ function upload() {
         department : department.options[department.selectedIndex].text,
         departmentIndex : department.selectedIndex,
         sex : sex.value,
+        phoneNumber : phoneNumber.value,
+        otherDepart : otherDepart.value,
         time : (new Date()).getTime()
     })
     .then(() => {
@@ -73,6 +77,8 @@ onAuthStateChanged(auth, (us) => {
     var accountName = document.getElementById("userName");
     var accountIcon = document.getElementById("userIcon");
     var accountEmail = document.getElementById("userEmail");
+    var phoneNumber = document.getElementById("phoneNumber");
+    var otherDepart = document.getElementById("otherDepart");
 
     accountName.textContent = user.displayName;
     accountIcon.src = user.photoURL;
@@ -81,12 +87,14 @@ onAuthStateChanged(auth, (us) => {
     get(ref(db, 'users/' + user.uid)).then((snapshot) => {
         var data = snapshot.val();
 
+        phoneNumber.value = data.phoneNumber;
         name.value = data.name;
         nameKana.value = data.nameKana;
         detail.value = data.detail;
         number.value = data.studentNumber;
         birth.value = data.birth;
         grade.value = data.grade;
+        otherDepart.value = data.otherDepart;
         department.selectedIndex = data.departmentIndex;
         sex.value = data.sex;
     });

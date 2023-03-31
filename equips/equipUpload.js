@@ -25,7 +25,7 @@ const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
 const db = getDatabase(app);
 const auth = getAuth();
-var user;
+var user, data;
 var equips = [];
 var equipKeys = [];
 var equipNum = 0;
@@ -40,31 +40,9 @@ window.onload = function() {
 
     get(ref(db, 'equips')).then((snapshot) => {
         loadingEquips.style.display = "none";
-        var data = snapshot.val();
-        var totalNum = Object.keys(data).length;
-        document.getElementById("totalNum").textContent = "総数：" + totalNum;
-
-        Object.keys(data).forEach((e, i)=> {
-            var equip = data[e];
-            var key = e;
+        data = snapshot.val();
         
-            var category = "";
-            equip.category.forEach((element, index) => {
-                if(element) {
-                    category += "#" + categoryNames[index] + " ";
-                }
-            });
-
-            var addTo = "equipsList";
-            if(i > totalNum/2) { addTo = "equipsList2"; }
-        
-            document.getElementById(addTo).innerHTML += '<li class="list-group-item"><h5>'+equip.name+'</h5><div class="small text-primary">'+category+'</div><div class="row"><div class="col-4">数量 : '+equip.number+'</div><div class="col-4">場所 : '+equip.place+'</div></div><div class="position-absolute top-0 end-0 px-2 py-1 pb-2" style="cursor:pointer;" data-bs-toggle="modal" data-bs-target="#exampleModal" onclick="openInfo('+equipNum+')"><img src="../icons/three-dots-vertical.svg"></div></li>';
-        
-            equips[equipNum] = equip;
-            equipKeys[equipNum] = key;
-        
-            equipNum ++;
-        });
+        showList();
     });
 }
 
@@ -269,3 +247,62 @@ function delItem() {
 
 window.delItem = delItem;
 export{delItem};
+
+
+//備品リストの表示
+function showList() {
+    var totalNum = Object.keys(data).length;
+    document.getElementById("equipsList").innerHTML = "";
+    document.getElementById("equipsList2").innerHTML = "";
+
+    //絞り込みの判定
+    var categoryChecked = [];
+    var noChecked = true;
+    var skipped = 0;
+    for(var i=1; i<=categories; i++) {
+        categoryChecked[i-1] = document.getElementById("flex2Check" + i).checked;
+        if(categoryChecked[i-1]) { noChecked = false; }
+    }
+
+    //備品ごとに処理
+    Object.keys(data).forEach((e, i)=> {
+        var equip = data[e];
+        var key = e;
+
+        //絞り込みから外れたら非表示（全部チェックしてなかったら、とりあえず表示）
+        var show = false;
+        if(!noChecked) {
+            categoryChecked.forEach((checked, i) => {
+                if(checked && equip.category[i]) {
+                    show = true;
+                }
+            });
+        } else {
+            show = true;
+        }
+
+        if(!show) {skipped ++; return;}
+    
+        var category = "";
+        equip.category.forEach((element, index) => {
+            if(element) {
+                category += "#" + categoryNames[index] + " ";
+            }
+        });
+
+        var addTo = "equipsList";
+        if(i > totalNum/2 && noChecked) { addTo = "equipsList2"; }
+    
+        document.getElementById(addTo).innerHTML += '<li class="list-group-item"><h5>'+equip.name+'</h5><div class="small text-primary">'+category+'</div><div class="row"><div class="col-4">数量 : '+equip.number+'</div><div class="col-4">場所 : '+equip.place+'</div></div><div class="position-absolute top-0 end-0 px-2 py-1 pb-2" style="cursor:pointer;" data-bs-toggle="modal" data-bs-target="#exampleModal" onclick="openInfo('+equipNum+')"><img src="../icons/three-dots-vertical.svg"></div></li>';
+    
+        equips[equipNum] = equip;
+        equipKeys[equipNum] = key;
+    
+        equipNum ++;
+    });
+
+    document.getElementById("totalNum").textContent = "総数：" + (totalNum-skipped);
+}
+
+window.showList = showList;
+export{showList}

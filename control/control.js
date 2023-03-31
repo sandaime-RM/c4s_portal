@@ -35,7 +35,7 @@ onAuthStateChanged(auth, (us) => {
 
 //読み込み時に実行
 window.onload = function() {
-    toCsvData = [["名前", "名前（ふりがな）", "学籍番号", "学部学科", "大学名・学部学科（他大学）", "学年", "性別", "電話番号", "自己PR"]];
+    toCsvData = [["名前", "名前（ふりがな）", "学籍番号", "学部学科", "大学名・学部学科（他大学）", "学年", "性別", "誕生日", "電話番号", "自己PR"]];
 
     get(ref(db, 'users')).then((snapshot) => {
         document.getElementById("loadingControl").style.display = "none";
@@ -68,7 +68,7 @@ window.onload = function() {
 
             document.getElementById("memberList").innerHTML += '<li class="list-group-item col-lg-6" onclick="openInfo('+i+')" data-bs-toggle="modal" data-bs-target="#exampleModal"><h6>'+users[key].name + '<span class="text-secondary mx-1">' + users[key].studentNumber + '</span>' + roles + '</h6><div class="small text-secondary">'+users[key].department+' '+users[key].grade+'年 '+sex+' '+age+'歳</div>'+tags+'</li>'
             
-            toCsvData.push([users[key].name, users[key].nameKana, users[key].studentNumber, users[key].department, users[key].otherDepart, users[key].grade, users[key].sex, String(users[key].phoneNumber), users[key].detail]);
+            toCsvData.push([users[key].name, users[key].nameKana, users[key].studentNumber, users[key].department, users[key].otherDepart, users[key].grade, users[key].sex, users[key].birth, String(users[key].phoneNumber), users[key].detail]);
         });
 
         create_csv(toCsvData);

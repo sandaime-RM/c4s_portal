@@ -26,6 +26,7 @@ const analytics = getAnalytics(app);
 const db = getDatabase(app);
 const auth = getAuth();
 var user;
+var toCsvData = []; //CSV変換用のデータ
 
 //ユーザー情報の取得
 onAuthStateChanged(auth, (us) => {
@@ -34,6 +35,8 @@ onAuthStateChanged(auth, (us) => {
 
 //読み込み時に実行
 window.onload = function() {
+    toCsvData = [["名前", "名前（ふりがな）", "学籍番号", "学部学科", "大学名・学部学科（他大学）", "学年", "性別", "電話番号", "自己PR"]];
+
     get(ref(db, 'users')).then((snapshot) => {
         document.getElementById("loadingControl").style.display = "none";
         var users = snapshot.val();
@@ -64,7 +67,11 @@ window.onload = function() {
             age = Math.floor((date - birth) / (86400000 * 365));
 
             document.getElementById("memberList").innerHTML += '<li class="list-group-item col-lg-6" onclick="openInfo('+i+')" data-bs-toggle="modal" data-bs-target="#exampleModal"><h6>'+users[key].name + '<span class="text-secondary mx-1">' + users[key].studentNumber + '</span>' + roles + '</h6><div class="small text-secondary">'+users[key].department+' '+users[key].grade+'年 '+sex+' '+age+'歳</div>'+tags+'</li>'
+            
+            toCsvData.push([users[key].name, users[key].nameKana, users[key].studentNumber, users[key].department, users[key].otherDepart, users[key].grade, users[key].sex, String(users[key].phoneNumber), users[key].detail]);
         });
+
+        create_csv(toCsvData);
     })
     .catch((error) => {
         document.getElementById("loadingControl").style.display = "none";
@@ -79,3 +86,26 @@ function openInfo(i) {
 
 window.openInfo = openInfo;
 export{openInfo}
+
+
+//現在スタックされているデータをCSVに変換してダウンロードする
+function create_csv(data){
+
+    console.log(data);
+
+    //作った二次元配列をCSV文字列に直す。
+    let csv_string  = ""; 
+    for (let d of data) {
+        csv_string += d.join(",");
+        csv_string += '\r\n';
+    }   
+
+    //ファイル名の指定
+    let file_name   = "test.csv";
+
+    //CSVのバイナリデータを作る
+    let blob        = new Blob([csv_string], {type: "text/csv"});
+    let uri         = URL.createObjectURL(blob);
+
+    document.getElementById("exportBtn").href = uri;
+}

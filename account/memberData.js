@@ -97,5 +97,16 @@ onAuthStateChanged(auth, (us) => {
         otherDepart.value = data.otherDepart;
         department.selectedIndex = data.departmentIndex;
         sex.value = data.sex;
+
+        if(data.buhiRecord) {
+            var buhiRecord = data.buhiRecord;
+            document.getElementById("buhiRecord").innerHTML = "";
+    
+            Object.keys(buhiRecord).forEach((key, index) => {
+                document.getElementById("buhiRecord").innerHTML += '<li class="list-group-item"><span class="fw-bold mx-1">￥' + Number(buhiRecord[key].amount).toLocaleString() + '</span><span class="text-secondary mx-1 small">'+buhiRecord[key].date+' 記録者 : '+buhiRecord[key].recorderName+'</span></li>';
+            });
+        } else {
+            document.getElementById("buhiRecord").innerHTML = '<p class="text-secondary small text-center py-2 mx-1">履歴はありません</p>';
+        }
     });
 });

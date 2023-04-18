@@ -33,6 +33,16 @@ window.onload = function() {
     dispList();
 
     document.getElementById("year").addEventListener('change', dispList);
+
+    var nowYear = (new Date()).getFullYear();
+
+    for(var i=2022; i<=nowYear; i++) {
+        if(i == nowYear) {
+            document.getElementById("year").innerHTML = '<option value="'+i+'" selected>'+i+'年</option>' + document.getElementById("year").innerHTML;
+        } else {
+            document.getElementById("year").innerHTML = '<option value="'+i+'">'+i+'年</option>' + document.getElementById("year").innerHTML;
+        }
+    }
 }
 
 //項目編集・保存
@@ -61,7 +71,7 @@ function upload() {
     }
 
     if(editting == -1) {
-        push(ref(db, 'money/' + date.getFullYear()), setData)
+        push(ref(db, 'money/' + (new Date(date.value)).getFullYear()), setData)
         .then(() => {
             window.location.reload();
         });

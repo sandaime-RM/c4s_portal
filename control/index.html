@@ -59,10 +59,15 @@
             <span class="visually-hidden">Loading...</span>
           </div>
         </div>
-        <ul class="list-group mb-5" id="memberList">
+        <ul class="list-group mb-5" id="memberList" style="cursor: pointer;">
           
         </ul>
-        
+
+        <h5 class="fw-normal">部費支払い一覧</h5>
+        <ul class="list-group mb-5" id="buhiList" style="cursor: pointer;">
+          
+        </ul>
+
       </div>
     </main>
 
@@ -75,35 +80,62 @@
           </div>
           <div class="modal-body">
             <div class="py-2">
-              <label>名前</label>
-              <input class="form-control" type="text" id="name">
+              <div id="mbName" class="fs-5 fw-bold">松浦竜征</div>
+              <div class="text-secondary small py-1 mb-2" id="mbYomi"></div>
+
+              <p><span id="mbSex" class="mx-1"></span><span class="mx-1" id="mbBirth"></span>
+              <br><span id="mbDepartment" class="mx-1"></span><span class="mx-1" id="mbGrade"></span>
+              <br><span class="ms-1">学籍番号</span><span id="mbStudentNumber" class="mx-1 me-2 text-secondary"></span>TEL<span class="mx-1 text-secondary" id="mbTel"></span></p>
+              <label class="mt-1">自己PR</label>
+              <p class="small mx-1 my-2" id="mbPR"></p>
+
+              <div class="accordion accordion" id="accordionFlushExample">
+                <div class="accordion-item">
+                  <h2 class="accordion-header" id="flush-headingOne">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                      部費支払い履歴
+                    </button>
+                  </h2>
+                  <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
+                    <ul class="list-group mx-2 my-2" id="buhiRecord">
+                      
+                    </ul>
+                  </div>
+                </div>
+              </div>
             </div>
 
-            <div class="py-2">
-              <label>学部学科</label>
-              <input class="form-control" type="text" id="department">
-            </div>
+            <hr>
 
             <div class="py-2">
-              <label>学年</label>
-              <input class="form-control" type="number" id="grade">
-            </div>
+              <label for="detail">役職</label>
 
-            <div class="py-2">
-              <label>学籍番号</label>
-              <div class="input-group">
-                <input class="form-control" type="number" id="schoolNumber">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="role1">
+                <label class="form-check-label" for="role1">
+                  管理者
+                </label>
               </div>
             </div>
 
             <div class="py-2">
-              <label for="detail">自己PR</label>
-              <textarea class="form-control" id="detail"></textarea>
-            </div>
+              <label for="detail">新規部費支払い</label>
 
-            <div class="py-2">
-              <label for="detail">役職</label>
-              <input class="form-control" type="text" id="name">
+              <div class="row">
+                <div class="col-6">
+                  <label id="buhiDate">日付</label>
+                  <input class="form-control" type="date" id="buhiDate2">
+                </div>
+  
+                <div class="col-6">
+                  <label>金額</label>
+                  <div class="input-group">
+                    <input class="form-control" type="number" id="buhiPrice">
+                    <span class="input-group-text" id="basic-addon2">円</span>
+                  </div>
+                </div>
+              </div>
+              
             </div>
             
           </div>

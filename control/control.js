@@ -26,7 +26,12 @@ const analytics = getAnalytics(app);
 const db = getDatabase(app);
 const auth = getAuth();
 var user;
+var userKeys = [];
+var users;
+var editting = -1;
 var toCsvData = []; //CSV変換用のデータ
+var buhiKeys = [];
+var buhiList = [];
 
 //ユーザー情報の取得
 onAuthStateChanged(auth, (us) => {
@@ -39,7 +44,8 @@ window.onload = function() {
 
     get(ref(db, 'users')).then((snapshot) => {
         document.getElementById("loadingControl").style.display = "none";
-        var users = snapshot.val();
+        users = snapshot.val();
+        userKeys = Object.keys(users);
         var date = new Date();
 
         Object.keys(users).forEach((key, i) => {
@@ -69,6 +75,21 @@ window.onload = function() {
             document.getElementById("memberList").innerHTML += '<li class="list-group-item col-lg-6" onclick="openInfo('+i+')" data-bs-toggle="modal" data-bs-target="#exampleModal"><h6>'+users[key].name + '<span class="text-secondary mx-1">' + users[key].studentNumber + '</span>' + roles + '</h6><div class="small text-secondary">'+users[key].department+' '+users[key].grade+'年 '+sex+' '+age+'歳</div>'+tags+'</li>'
             
             toCsvData.push([users[key].name, users[key].nameKana, users[key].studentNumber, users[key].department, users[key].otherDepart, users[key].grade, users[key].sex, users[key].birth, String(users[key].phoneNumber), users[key].detail]);
+
+
+            var buhiRecords = users[key].buhiRecord;
+
+            if(buhiRecords) {
+                Object.keys(buhiRecords).forEach((key2, ib) => {
+                    buhiRecords[key2].name = users[key].name;
+                    buhiList = buhiList.concat(buhiRecords[key2]);
+                });   
+            }
+        });
+
+        console.log(buhiList);
+        buhiList.forEach((buhi, il) => {
+            document.getElementById("buhiList").innerHTML += '<li class="list-group-item">'+buhi.name+'<span class="fw-bold mx-1">￥' + Number(buhi.amount).toLocaleString() + '</span><span class="text-secondary mx-1 small">'+buhi.date+' 記録者 : '+buhi.recorderName+'</span></li>';
         });
 
         create_csv(toCsvData);
@@ -81,7 +102,42 @@ window.onload = function() {
 
 //部員情報の表示
 function openInfo(i) {
-    
+    document.getElementById("mbName").textContent = users[userKeys[i]].name;
+    document.getElementById("mbYomi").textContent = users[userKeys[i]].nameKana;
+    document.getElementById("mbBirth").textContent = users[userKeys[i]].birth + "生";
+    document.getElementById("mbTel").textContent = users[userKeys[i]].phoneNumber;
+
+    var sex = "男性";
+    if(users[userKeys[i]].sex == "woman") {
+        sex = "女性";
+    }
+
+    document.getElementById("mbSex").textContent = sex;
+    document.getElementById("mbDepartment").textContent = users[userKeys[i]].department;
+    document.getElementById("mbGrade").textContent = users[userKeys[i]].grade + "年生";
+    document.getElementById("mbPR").textContent = users[userKeys[i]].detail;
+    document.getElementById("mbStudentNumber").textContent = users[userKeys[i]].studentNumber;
+
+    if(users["admin-users"][userKeys[i]]) {
+        document.getElementById("role1").checked = true;
+    } else {
+        document.getElementById("role1").checked = false;
+    }
+
+    if(users[userKeys[i]].buhiRecord) {
+        var buhiRecord = users[userKeys[i]].buhiRecord;
+        document.getElementById("buhiRecord").innerHTML = "";
+
+        buhiKeys = Object.keys(buhiRecord);
+
+        Object.keys(buhiRecord).forEach((key, index) => {
+            document.getElementById("buhiRecord").innerHTML += '<li class="list-group-item"><span class="fw-bold mx-1">￥' + Number(buhiRecord[key].amount).toLocaleString() + '</span><span class="text-secondary mx-1 small">'+buhiRecord[key].date+' 記録者 : '+buhiRecord[key].recorderName+'</span><div class="position-absolute top-50 end-0 translate-middle-y"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" onclick="deleteBuhi('+i+', '+index+')" class="mx-2 bi bi-x-lg text-secondary" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M13.854 2.146a.5.5 0 0 1 0 .708l-11 11a.5.5 0 0 1-.708-.708l11-11a.5.5 0 0 1 .708 0Z"/><path fill-rule="evenodd" d="M2.146 2.146a.5.5 0 0 0 0 .708l11 11a.5.5 0 0 0 .708-.708l-11-11a.5.5 0 0 0-.708 0Z"/></svg></div></li>';
+        });
+    } else {
+        document.getElementById("buhiRecord").innerHTML = '<p class="text-secondary small text-center py-2 mx-1">履歴はありません</p>';
+    }
+
+    editting = i;
 }
 
 window.openInfo = openInfo;
@@ -109,3 +165,72 @@ function create_csv(data){
 
     document.getElementById("exportBtn").href = uri;
 }
+
+//役職情報の保存
+function upload() {
+    if(document.getElementById("buhiPrice").value) {
+        push(ref(db, "users/" + userKeys[editting] + "/buhiRecord/"), {
+            date : document.getElementById("buhiDate2").value,
+            amount : Number(document.getElementById("buhiPrice").value),
+            recorderName : users[user.uid].name
+        });
+
+        push(ref(db, "money/" + (new Date(document.getElementById("buhiDate2").value)).getFullYear()), {
+            date : document.getElementById("buhiDate2").value,
+            price : Number(document.getElementById("buhiPrice").value),
+            detail : "部費支払い記録による自動追加です。",
+            name : "部費支払い (" + users[userKeys[editting]].name+" さん)",
+            type : 2,
+            liquid : true,
+            userId : user.uid
+        });
+    }
+
+    if(document.getElementById("role1").checked) {
+        set(ref(db, "users/admin-users/" + userKeys[editting]), true)
+        .then(() => {
+            //window.location.reload();
+            alert("保存しました");
+        });
+    } else {
+        set(ref(db, "users/admin-users/" + userKeys[editting]), false)
+        .then(() => {
+            //window.location.reload();
+            alert("保存しました");
+        });
+    }
+}
+
+window.upload = upload;
+export{upload}
+
+//部員情報の削除
+function delItem() {
+    var result = confirm(users[userKeys[editting]].name + " さんの情報を完全に削除しますが、よろしいですか？");
+
+    if(!result) {return;}
+
+    remove(ref(db, "users/" + userKeys[editting]))
+    .then(() => {
+        window.location.reload();
+    });
+}
+
+window.delItem = delItem;
+export{delItem}
+
+
+//部費情報の削除
+function deleteBuhi(member, buhi) {
+    var result = confirm(users[userKeys[member]].name + " さんの選択された部費支払い情報を削除しますが、よろしいですか？");
+
+    if(!result) {return;}
+
+    remove(ref(db, "users/" + userKeys[editting] + "/buhiRecord/" + buhiKeys[buhi]))
+    .then(() => {
+        window.location.reload();
+    });
+}
+
+window.deleteBuhi = deleteBuhi;
+export{deleteBuhi}

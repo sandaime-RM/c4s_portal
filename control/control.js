@@ -48,6 +48,8 @@ window.onload = function() {
         userKeys = Object.keys(users);
         var date = new Date();
 
+        document.getElementById("totalMember").innerHTML = '合計 ' + userKeys.length + "人";
+
         Object.keys(users).forEach((key, i) => {
             if(key == "admin-users") {return;}
 
@@ -88,6 +90,12 @@ window.onload = function() {
         });
 
         console.log(buhiList);
+
+
+        buhiList.sort(
+            (x, y) => ((new Date(y.date)).getTime()) - ((new Date(x.date)).getTime()),
+        )
+
         buhiList.forEach((buhi, il) => {
             document.getElementById("buhiList").innerHTML += '<li class="list-group-item">'+buhi.name+'<span class="fw-bold mx-1">￥' + Number(buhi.amount).toLocaleString() + '</span><span class="text-secondary mx-1 small">'+buhi.date+' 記録者 : '+buhi.recorderName+'</span></li>';
         });

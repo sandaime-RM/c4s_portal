@@ -12,7 +12,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 
     <script src="../script/login.js" type="module"></script>
-    <script src="money.js" type="module"></script>
+    <script src="event.js" type="module"></script>
 
     <title>C4's Portal</title>
     <link rel="icon" href="../img/logo_mini.png">
@@ -28,8 +28,9 @@
     
           <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
             <li><a href="../" class="nav-link px-2 link-dark">ホーム</a></li>
+            <li><a href="../event" class="nav-link px-2 link-secondary">予定</a></li>
             <li><a href="../equips" class="nav-link px-2 link-dark">備品</a></li>
-            <li><a href="../money" class="nav-link px-2 link-secondary">部費</a></li>
+            <li><a href="../money" class="nav-link px-2 link-dark">部費</a></li>
             <li><a href="../procedure" class="nav-link px-2 link-dark">手続き</a></li>
             <li><a href="../control" class="nav-link px-2 link-dark">管理</a></li>
           </ul>
@@ -43,26 +44,44 @@
       </div>
 
     <div class="container">
-      <h2 class="fs-2 fw-normal">部費通帳</h2>
+      <h2 class="fs-2 fw-normal">イベント予定</h2>
 
-      <p id="errorMoney"></p>
-
-      <div style="max-width: 600px;">
-        <div class="my-3 mx-2 py-2 border rounded px-3 shadow-sm bg-white">
-          <h5 class="fw-normal">残高</h5>
-          <div class="fw-bold fs-3">￥<span id="total">---</span></div>
-          <div class="text-secondary small" id="date"></div>
+      <p id="errorEvent" class="text-danger small">開発中のページです</p>
+    
+      <div class="py-2 row">
+        <div class="col-lg-4 px-3 py-2">
+            <div class="card shadow-sm" style="border-left: 6px solid rgb(62, 174, 255);">
+                <div class="card-body">
+                  <h5 class="card-title">ビギナーズ#2 Web</h5>
+                  <h6 class="card-subtitle mb-2 text-muted small">4/27（木） ハイフレックス</h6>
+                  <p class="card-text small">HTML, CSSを使って、簡単なWebサイトの制作体験を行います。<br>
+                    <span class="mx-1 text-primary">#ビギナーズ #Web #ワクワク発見</span></p>
+                  <a href="#" class="card-link" style="text-decoration: none;"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="text-secondary bi bi-suit-heart" viewBox="0 0 16 16">
+                    <path d="m8 6.236-.894-1.789c-.222-.443-.607-1.08-1.152-1.595C5.418 2.345 4.776 2 4 2 2.324 2 1 3.326 1 4.92c0 1.211.554 2.066 1.868 3.37.337.334.721.695 1.146 1.093C5.122 10.423 6.5 11.717 8 13.447c1.5-1.73 2.878-3.024 3.986-4.064.425-.398.81-.76 1.146-1.093C14.446 6.986 15 6.131 15 4.92 15 3.326 13.676 2 12 2c-.777 0-1.418.345-1.954.852-.545.515-.93 1.152-1.152 1.595L8 6.236zm.392 8.292a.513.513 0 0 1-.784 0c-1.601-1.902-3.05-3.262-4.243-4.381C1.3 8.208 0 6.989 0 4.92 0 2.755 1.79 1 4 1c1.6 0 2.719 1.05 3.404 2.008.26.365.458.716.596.992a7.55 7.55 0 0 1 .596-.992C9.281 2.049 10.4 1 12 1c2.21 0 4 1.755 4 3.92 0 2.069-1.3 3.288-3.365 5.227-1.193 1.12-2.642 2.48-4.243 4.38z"/>
+                  </svg>
+                  <span class="text-secondary mx-1">2</span></a>
+                  <a href="#" class="btn btn-outline-dark py-1 ms-2">詳細</a>
+                </div>
+              </div>
         </div>
 
-        <div class="py-3">
-          <h5 class="text-secondary fs-5">詳細</h5>
-          <select class="form-select mb-3" id="year" style="width: 50%">
-          </select>
-          <ul class="list-group mx-2 mb-5" id="moneyList">
-
-          </ul>
+        <div class="col-lg-4 px-3 py-2">
+            <div class="card shadow-sm" style="border-left: 6px solid rgb(148, 148, 148);">
+                <div class="card-body">
+                  <h5 class="card-title">C4's Creation Challenge</h5>
+                  <h6 class="card-subtitle mb-2 text-muted small">5～6月 場所指定なし</h6>
+                  <p class="card-text small">HTML, CSSを使って、簡単なWebサイトの制作体験を行います。<br>
+                    <span class="mx-1 text-primary">#コンテスト #グループワーク #ワクワク制作</span></p>
+                  <a href="#" class="card-link" style="text-decoration: none;"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="text-danger bi bi-suit-heart-fill" viewBox="0 0 16 16">
+                    <path d="M4 1c2.21 0 4 1.755 4 3.92C8 2.755 9.79 1 12 1s4 1.755 4 3.92c0 3.263-3.234 4.414-7.608 9.608a.513.513 0 0 1-.784 0C3.234 9.334 0 8.183 0 4.92 0 2.755 1.79 1 4 1z"/>
+                  </svg>
+                  <span class="text-secondary mx-1">4</span></a>
+                  <a href="#" class="btn btn-outline-dark py-1 ms-2">詳細</a>
+                </div>
+              </div>
         </div>
       </div>
+      
       
     </div>
 
@@ -78,7 +97,7 @@
           <div class="modal-dialog">
             <div class="modal-content">
               <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">部費情報</h5>
+                <h5 class="modal-title" id="exampleModalLabel">イベント情報</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
               <div class="modal-body">
@@ -88,16 +107,13 @@
                 </div>
     
                 <div class="py-2">
-                  <label>金額 <span class="text-danger">*</span></label>
-                  <div class="input-group">
-                    <input class="form-control" type="number" id="amount">
-                    <span class="input-group-text" id="basic-addon2">円</span>
-                  </div>
+                  <label>場所 <span class="text-danger">*</span></label>
+                  <input type="text" class="form-control">
                 </div>
 
                 <div class="py-2">
-                  <label>日付 <span class="text-danger">*</span></label>
-                  <input class="form-control" type="date" id="dateForm">
+                  <label>日程 <span class="text-danger">*</span></label>
+                  <input class="form-control" type="text" id="dateForm">
                 </div>
     
                 <div class="row">

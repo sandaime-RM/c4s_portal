@@ -17,8 +17,9 @@
 
     <title>C4's Portal</title>
     <link rel="icon" href="img/logo_mini.png">
+    <link rel="manifest" href="manifest.json">
 </head>
-<body>
+<body class="bg-light">
     <!--ヘッダー-->
     <div class="container">
         <header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom">
@@ -28,6 +29,7 @@
     
           <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
             <li><a href="#" class="nav-link px-2 link-secondary">ホーム</a></li>
+            <li><a href="event" class="nav-link px-2 link-dark">予定</a></li>
             <li><a href="equips" class="nav-link px-2 link-dark">備品</a></li>
             <li><a href="money" class="nav-link px-2 link-dark">部費</a></li>
             <li><a href="procedure" class="nav-link px-2 link-dark">手続き</a></li>
@@ -54,6 +56,10 @@
                 <h3 class="text-center fw-normal text-secondary">メニュー</h3>
 
                 <div class="col-4 px-2 py-2">
+                    <a class="btn btn-outline-secondary container-fluid" href="event/"><img src="icons/calendar-week.svg" class="my-2" width="40px"><br>予定</a>
+                </div>
+
+                <div class="col-4 px-2 py-2">
                     <a class="btn btn-outline-secondary container-fluid" href="equips/"><img src="icons/boxes.svg" class="my-2" width="40px"><br>備品</a>
                 </div>
 
@@ -70,7 +76,7 @@
                 </div>
 
                 <div class="col-4 px-2 py-2">
-                    <a class="btn btn-outline-secondary container-fluid" href="control/"><img src="icons/gear.svg" class="my-2" width="40px"><br>メンバー管理</a>
+                    <a class="btn btn-outline-secondary container-fluid" href="control/"><img src="icons/gear.svg" class="my-2" width="40px"><br>管理</a>
                 </div>
             </div>
 

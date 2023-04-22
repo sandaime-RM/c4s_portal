@@ -25,7 +25,7 @@ const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
 const db = getDatabase(app);
 const auth = getAuth();
-var user;
+var user = {};
 
 //データベースのデータ格納用
 var events = {};
@@ -34,7 +34,7 @@ var eventId = [];
 var editting = -1;
 var likes;
 var likeNum = [];
-
+var users = null;
 
 //ユーザー情報の取得
 onAuthStateChanged(auth, (us) => {
@@ -76,12 +76,11 @@ window.onload = function() {
                             Object.keys(likes[key]).forEach((key2, index2) => {
                                 if(user != null) {
                                     if(key2 == user.uid) {
+                                        likeList[index] = true;
                                         likeIcon = '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="text-danger bi bi-suit-heart-fill" viewBox="0 0 16 16"><path d="M4 1c2.21 0 4 1.755 4 3.92C8 2.755 9.79 1 12 1s4 1.755 4 3.92c0 3.263-3.234 4.414-7.608 9.608a.513.513 0 0 1-.784 0C3.234 9.334 0 8.183 0 4.92 0 2.755 1.79 1 4 1z"/></svg>';
                                     }
                                 }
                             });
-    
-                            likeList[index] = true;
                         }
                     }
 
@@ -180,6 +179,9 @@ function openInfo(index) {
     document.getElementById("tag").value = events[eventId[index]].tags.join(' ');
 
     document.getElementById("detail").style.height = "120px";
+
+    document.getElementById("heartList").innerHTML = "";
+    document.getElementById("noHeart").style.display = "";
 }
 
 window.openInfo = openInfo;
@@ -249,3 +251,39 @@ function delItem() {
 
 window.delItem = delItem;
 export{delItem}
+
+//いいね一覧の表示
+function dispHeart() {
+    if(!users) {
+        get(ref(db, "users"))
+        .then((snapshot) => {
+            users = snapshot.val();
+            dispHeart2();
+        })
+        .catch((error) => {
+            document.getElementById("noHeart").textContent = error;
+        })
+    } else {
+        dispHeart2();
+    }
+}
+
+window.dispHeart = dispHeart;
+export{dispHeart}
+
+//いいね一覧（実際に表示するのはこっち）
+function dispHeart2() {
+    document.getElementById("heartList").innerHTML = "";
+
+    if(likes) {
+        if(likes[eventId[editting]]) {
+            document.getElementById("noHeart").style.display = "none";
+
+            Object.keys(likes[eventId[editting]]).forEach((key, i) => {
+                if(users[key]) {
+                    document.getElementById("heartList").innerHTML += '<li class="list-group-item"><h6>'+users[key].name + '<span class="text-secondary mx-1">' + users[key].studentNumber + '</span></h6><div class="small text-secondary">'+users[key].department+' '+users[key].grade+'年</div></li>';
+                }
+            });
+        }
+    }
+}

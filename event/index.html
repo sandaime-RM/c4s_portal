@@ -22,7 +22,7 @@
   <!--SVGの定義-->
   <svg display="none">
     <defs>
-        <symbol id="calendar" xmlns="http://www.w3.org/2000/svg" class="bi bi-calendar-week" viewBox="0 0 16 16">
+        <symbol id="calendar" xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-calendar-week" viewBox="0 0 16 16">
           <path d="M11 6.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1zm-3 0a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1zm-5 3a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1zm3 0a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1z"/>
           <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4H1z"/>
         </symbol>
@@ -85,7 +85,7 @@
       </div>
 
     <div class="container">
-      <h2 class="fs-2 fw-normal">イベント予定</h2>
+      <h2 class="fs-2 fw-normal"><svg class="me-3 ms-2" viewBox="0 0 16 16" x="0" y="0" width="36px" height="36px"><use xlink:href="#calendar"></use></svg>イベント予定</h2>
       <p class="text-secondary">「いいね」にはログインが必要です</p>
 
       <p id="errorEvent" class="text-danger small"></p>
@@ -160,6 +160,50 @@
                     <label>出席コード</label>
                     <input class="form-control" type="password" id="attendNum">
                     <div class="small text-secondary">部員が入力すると参加記録が残ります</div>
+                </div>
+
+                <div class="accordion accordion" id="accordionFlushExample">
+                  <div class="accordion-item">
+                    <h2 class="accordion-header" id="flush-headingOne">
+                      <button class="accordion-button collapsed" onclick="dispHeart()" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                        いいね一覧
+                      </button>
+                    </h2>
+                    <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
+                      <div class="my-3 text-secondary text-center" id="noHeart">データなし</div>
+                      <ul class="list-group mx-2 my-2" id="heartList">
+                        
+                      </ul>
+                    </div>
+                  </div>
+
+                  <div class="accordion-item">
+                    <h2 class="accordion-header" id="flush-headingTwo">
+                      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">
+                        参加者一覧
+                      </button>
+                    </h2>
+                    <div id="flush-collapseTwo" class="accordion-collapse collapse" aria-labelledby="flush-headingTwo" data-bs-parent="#accordionFlushExample">
+                      <div class="my-3 text-secondary text-center">データなし</div>
+                      <ul class="list-group mx-2 my-2" id="attendList">
+                        
+                      </ul>
+                    </div>
+                  </div>
+
+                  <div class="accordion-item">
+                    <h2 class="accordion-header" id="flush-headingThree">
+                      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseThree" aria-expanded="false" aria-controls="flush-collapseThree">
+                        不参加者一覧
+                      </button>
+                    </h2>
+                    <div id="flush-collapseThree" class="accordion-collapse collapse" aria-labelledby="flush-headingThree" data-bs-parent="#accordionFlushExample">
+                      <div class="my-3 text-secondary text-center">データなし</div>
+                      <ul class="list-group mx-2 my-2" id="absentList">
+                        
+                      </ul>
+                    </div>
+                  </div>
                 </div>
                 
               </div>

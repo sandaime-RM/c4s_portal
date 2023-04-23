@@ -86,7 +86,27 @@
 
     <div class="container">
       <h2 class="fs-2 fw-normal"><svg class="me-3 ms-2" viewBox="0 0 16 16" x="0" y="0" width="36px" height="36px"><use xlink:href="#calendar"></use></svg>イベント予定</h2>
-      <p class="text-secondary">「いいね」にはログインが必要です</p>
+      <p class="text-secondary">リアクションにはログインが必要です<br>
+        <span class="mx-2">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="text-danger bi bi-suit-heart-fill" viewBox="0 0 16 16">
+          <path d="M4 1c2.21 0 4 1.755 4 3.92C8 2.755 9.79 1 12 1s4 1.755 4 3.92c0 3.263-3.234 4.414-7.608 9.608a.513.513 0 0 1-.784 0C3.234 9.334 0 8.183 0 4.92 0 2.755 1.79 1 4 1z"/>
+        </svg>
+        いいね</span>
+
+        <span class="me-2">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="text-primary bi bi-check-circle-fill" viewBox="0 0 16 16">
+            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
+          </svg>
+          参加する
+        </span>
+
+        <span class="me-2">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="text-danger bi bi-x-circle-fill" viewBox="0 0 16 16">
+            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z"/>
+          </svg>
+           不参加
+        </span>
+      </p>
 
       <p id="errorEvent" class="text-danger small"></p>
 
@@ -102,12 +122,26 @@
       </div>
     </div>
 
-    <!--追加ボタン-->
-    <div class="bg-dark text-light position-fixed end-0 bottom-0 mx-3 my-3 px-3 py-3 shadow rounded-pill" style="cursor: pointer;" data-bs-toggle="modal" data-bs-target="#exampleModal" onclick="clearForm()">
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-plus-lg" viewBox="0 0 16 16">
-        <path fill-rule="evenodd" d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2Z"/>
-      </svg>
+    <br>
+
+    
+    <div class="position-fixed end-0 bottom-0 mx-3 my-3">
+      <!--出席ボタン-->
+      <div class="bg-light text-dark shadow rounded-pill px-3 py-3 mb-2 border border-dark" style="cursor: pointer;" data-bs-target="#attendModal" data-bs-toggle="modal">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-person-check" viewBox="0 0 16 16">
+          <path d="M6 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H1s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C9.516 10.68 8.289 10 6 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z"/>
+          <path fill-rule="evenodd" d="M15.854 5.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 0 1 .708-.708L12.5 7.793l2.646-2.647a.5.5 0 0 1 .708 0z"/>
+        </svg>
+      </div>
+
+      <!--追加ボタン-->
+      <div class="bg-dark text-light px-3 py-3 shadow rounded-pill" style="cursor: pointer;" data-bs-toggle="modal"  data-bs-target="#exampleModal" onclick="clearForm()">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-plus-lg" viewBox="0 0 16 16">
+          <path fill-rule="evenodd" d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2Z"/>
+        </svg>
+      </div>
     </div>
+    
 
         <!-- 新規部費情報モーダル -->
         <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -158,11 +192,11 @@
 
                 <div class="py-2">
                     <label>出席コード</label>
-                    <input class="form-control" type="password" id="attendNum">
-                    <div class="small text-secondary">部員が入力すると参加記録が残ります</div>
+                    <input class="form-control" type="number" id="attendNum">
+                    <div class="small text-secondary">部員が入力すると参加記録が残ります <span class="text-success fw-bold" id="codeSet" style="display: none;">設定済み</span></div>
                 </div>
 
-                <div class="accordion accordion" id="accordionFlushExample">
+                <div class="accordion accordion mt-3" id="accordionFlushExample">
                   <div class="accordion-item">
                     <h2 class="accordion-header" id="flush-headingOne">
                       <button class="accordion-button collapsed" onclick="dispHeart()" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
@@ -179,12 +213,12 @@
 
                   <div class="accordion-item">
                     <h2 class="accordion-header" id="flush-headingTwo">
-                      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">
+                      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo" onclick="dispAttend()">
                         参加者一覧
                       </button>
                     </h2>
                     <div id="flush-collapseTwo" class="accordion-collapse collapse" aria-labelledby="flush-headingTwo" data-bs-parent="#accordionFlushExample">
-                      <div class="my-3 text-secondary text-center">データなし</div>
+                      <div class="my-3 text-secondary text-center" id="noAttend">データなし</div>
                       <ul class="list-group mx-2 my-2" id="attendList">
                         
                       </ul>
@@ -193,12 +227,12 @@
 
                   <div class="accordion-item">
                     <h2 class="accordion-header" id="flush-headingThree">
-                      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseThree" aria-expanded="false" aria-controls="flush-collapseThree">
+                      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseThree" aria-expanded="false" aria-controls="flush-collapseThree"  onclick="dispAbsent()">
                         不参加者一覧
                       </button>
                     </h2>
                     <div id="flush-collapseThree" class="accordion-collapse collapse" aria-labelledby="flush-headingThree" data-bs-parent="#accordionFlushExample">
-                      <div class="my-3 text-secondary text-center">データなし</div>
+                      <div class="my-3 text-secondary text-center" id="noAbsent">データなし</div>
                       <ul class="list-group mx-2 my-2" id="absentList">
                         
                       </ul>
@@ -212,6 +246,80 @@
                 <button type="button" class="btn btn-dark" onclick="upload()">
                   <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" id="uploading" style="display: none;"></span>
                     保存
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 出席登録モーダル -->
+        <div class="modal fade" id="attendModal" tabindex="-1" aria-labelledby="attendModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="attendModalLabel">出席登録</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <div class="py-2">
+                  <label for="attendCode">出席コード</label>
+                  <input type="number" class="form-control" id="code">
+                </div>
+
+                <p class="text-danger small" id="errorAttend"></p>
+
+                <div class="py-2" id="success" style="display: none;">
+                  <div class="fs-4 fw-bold text-success text-center mb-2"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="me-2 bi bi-check" viewBox="4 3 7 10"><path d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.267.267 0 0 1 .02-.022z"/></svg>出席</div>
+                  <div class="text-secondary small text-center" id="successText">ビギナーズ#3 パワポアート（基本編）</div>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="col-12 btn btn-dark" onclick="attend()" id="attendBtn">
+                  <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" id="uploading" style="display: none;"></span>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="me-2 bi bi-check" viewBox="4 3 7 10"><path d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.267.267 0 0 1 .02-.022z"/></svg>登録
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 欠席理由登録モーダル -->
+        <div class="modal fade" id="absentModal" tabindex="-1" aria-labelledby="absentModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="absentModalLabel">欠席理由</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <div class="py-2">
+                  <label for="absentReason">欠席理由 <span class="text-danger">*</span></label>
+                  <select class="form-select" id="absentReason">
+                    <option>内容に興味なし</option>
+                    <option>大学の授業・研究活動</option>
+                    <option>アルバイト</option>
+                    <option>他サークル</option>
+                    <option>体調不良</option>
+                    <option>帰省</option>
+                    <option>家庭の用事</option>
+                    <option>その他個人的な用事</option>
+                  </select>
+                </div>
+
+                <div class="py-2">
+                  <label for="absentDetail">詳細</label>
+                  <textarea id="absentDetail" class="form-control"></textarea>
+                </div>
+
+                <p class="text-danger small" id="errorAbsent"></p>
+
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="col-12 btn btn-dark" onclick="absent()" id="attendBtn">
+                  <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" id="uploading" style="display: none;"></span>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="me-2 bi bi-send" viewBox="0 0 16 16">
+                    <path d="M15.854.146a.5.5 0 0 1 .11.54l-5.819 14.547a.75.75 0 0 1-1.329.124l-3.178-4.995L.643 7.184a.75.75 0 0 1 .124-1.33L15.314.037a.5.5 0 0 1 .54.11ZM6.636 10.07l2.761 4.338L14.13 2.576 6.636 10.07Zm6.787-8.201L1.591 6.602l4.339 2.76 7.494-7.493Z"/>
+                  </svg>送信
                 </button>
               </div>
             </div>

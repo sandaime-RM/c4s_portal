@@ -12,12 +12,11 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 
     <script src="../script/login.js" type="module"></script>
+    <script src="wallet.js" type="module"></script>
 
-    
     <title>C4's Portal</title>
     <link rel="icon" href="../img/logo_mini.png">
     <link rel="manifest" href="../manifest.json">
-
 </head>
 <body class="bg-light">
 
@@ -28,10 +27,6 @@
           <path d="M11 6.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1zm-3 0a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1zm-5 3a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1zm3 0a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1z"/>
           <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4H1z"/>
         </symbol>
-
-        <symbol id="wallet" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-wallet" viewBox="0 0 16 16">
-          <path d="M0 3a2 2 0 0 1 2-2h13.5a.5.5 0 0 1 0 1H15v2a1 1 0 0 1 1 1v8.5a1.5 1.5 0 0 1-1.5 1.5h-12A2.5 2.5 0 0 1 0 12.5V3zm1 1.732V12.5A1.5 1.5 0 0 0 2.5 14h12a.5.5 0 0 0 .5-.5V5H2a1.99 1.99 0 0 1-1-.268zM1 3a1 1 0 0 0 1 1h12V2H2a1 1 0 0 0-1 1z"/>
-      </symbol>
 
         <symbol id="house" xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-house" viewBox="0 0 16 16">
           <path fill-rule="evenodd" d="M2 13.5V7h1v6.5a.5.5 0 0 0 .5.5h9a.5.5 0 0 0 .5-.5V7h1v6.5a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 2 13.5zm11-11V6l-2-2V2.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5z"/>
@@ -63,6 +58,18 @@
           <path d="M6.5 2a.5.5 0 0 0 0 1h3a.5.5 0 0 0 0-1h-3zM11 8a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
           <path d="M4.5 0A2.5 2.5 0 0 0 2 2.5V14a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2.5A2.5 2.5 0 0 0 11.5 0h-7zM3 2.5A1.5 1.5 0 0 1 4.5 1h7A1.5 1.5 0 0 1 13 2.5v10.795a4.2 4.2 0 0 0-.776-.492C11.392 12.387 10.063 12 8 12s-3.392.387-4.224.803a4.2 4.2 0 0 0-.776.492V2.5z"/>
         </symbol>
+
+        <symbol id="wallet" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-wallet" viewBox="0 0 16 16">
+            <path d="M0 3a2 2 0 0 1 2-2h13.5a.5.5 0 0 1 0 1H15v2a1 1 0 0 1 1 1v8.5a1.5 1.5 0 0 1-1.5 1.5h-12A2.5 2.5 0 0 1 0 12.5V3zm1 1.732V12.5A1.5 1.5 0 0 0 2.5 14h12a.5.5 0 0 0 .5-.5V5H2a1.99 1.99 0 0 1-1-.268zM1 3a1 1 0 0 0 1 1h12V2H2a1 1 0 0 0-1 1z"/>
+        </symbol>
+
+        <symbol id="qrScan" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-qr-code-scan" viewBox="0 0 16 16">
+            <path d="M0 .5A.5.5 0 0 1 .5 0h3a.5.5 0 0 1 0 1H1v2.5a.5.5 0 0 1-1 0v-3Zm12 0a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-1 0V1h-2.5a.5.5 0 0 1-.5-.5ZM.5 12a.5.5 0 0 1 .5.5V15h2.5a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5v-3a.5.5 0 0 1 .5-.5Zm15 0a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1 0-1H15v-2.5a.5.5 0 0 1 .5-.5ZM4 4h1v1H4V4Z"/>
+            <path d="M7 2H2v5h5V2ZM3 3h3v3H3V3Zm2 8H4v1h1v-1Z"/>
+            <path d="M7 9H2v5h5V9Zm-4 1h3v3H3v-3Zm8-6h1v1h-1V4Z"/>
+            <path d="M9 2h5v5H9V2Zm1 1v3h3V3h-3ZM8 8v2h1v1H8v1h2v-2h1v2h1v-1h2v-1h-3V8H8Zm2 2H9V9h1v1Zm4 2h-1v1h-2v1h3v-2Zm-4 2v-1H8v1h2Z"/>
+            <path d="M12 9h2V8h-2v1Z"/>
+        </symbol>
     </defs>
   </svg>
 
@@ -79,8 +86,8 @@
             <li><a href="../event" class="nav-link px-2 mx-1"><svg viewBox="0 0 16 16" x="0" y="0" width="24px" height="24px"><use class="text-dark" xlink:href="#calendar"></use></svg></a></li>
             <li><a href="../equips" class="nav-link px-2 mx-1"><svg viewBox="0 0 16 16" x="0" y="0" width="24px" height="24px"><use class="text-dark" xlink:href="#box"></use></svg></a></li>
             <li><a href="../money" class="nav-link px-2 mx-1"><svg viewBox="0 0 16 16" x="0" y="0" width="24px" height="24px"><use class="text-dark" xlink:href="#cash"></use></svg></a></li>
-            <li><a href="../wallet" class="nav-link px-2 mx-1"><svg viewBox="0 0 16 16" x="0" y="0" width="24px" height="24px"><use class="text-dark" xlink:href="#wallet"></use></svg></a></li>
-            <li><a href="../procedure" class="nav-link px-2 mx-1"><svg viewBox="0 0 16 16" x="0" y="0" width="24px" height="24px"><use class="text-secondary" xlink:href="#textFile"></use></svg></a></li>
+            <li><a href="../wallet" class="nav-link px-2 mx-1"><svg viewBox="0 0 16 16" x="0" y="0" width="24px" height="24px"><use class="text-secondary" xlink:href="#wallet"></use></svg></a></li>
+            <li><a href="../procedure" class="nav-link px-2 mx-1"><svg viewBox="0 0 16 16" x="0" y="0" width="24px" height="24px"><use class="text-dark" xlink:href="#textFile"></use></svg></a></li>
             <li><a href="../control" class="nav-link px-2 mx-1"><svg viewBox="0 0 16 16" x="0" y="0" width="24px" height="24px"><use class="text-dark" xlink:href="#gear"></use></svg></a></li>
           </ul>
     
@@ -90,53 +97,101 @@
             </div>
           </div>
         </header>
-    </div>
+      </div>
 
     <div class="container">
-      <h2 class="fs-2 fw-normal">入部手続き</h2>
-      <p class="text-secondary">C4'sへようこそ！</p>
+      <h2 class="fs-2 fw-normal"><svg class="me-3 ms-2" viewBox="0 0 16 16" x="0" y="0" width="36px" height="36px"><use xlink:href="#wallet"></use></svg>ウォレット</h2>
 
-      <div class="mb-4">
-        <h3>2. Discordに参加しよう</h3>
-        <p>C4'sでは、メインの連絡手段としてDiscordを利用しています。<br>
-          お手数ですが、Discordアカウントを持っていない方は、ここでアカウントの作成もお願いします。</p>
-        <a href="https://discord.gg/KkFaQfA4uT" class="btn btn-outline-dark">Discordサーバー「C4's」に参加</a>
+      <p id="errorMoney"></p>
+
+      <div style="max-width: 600px;">
+        <div class="my-3 mx-2 py-2 border rounded px-3 shadow-sm bg-white">
+          <h5 class="fw-normal">残高</h5>
+          <div class="fw-bold fs-3"><span id="total">---</span> pt</div>
+          <div class="text-secondary small" id="date"></div>
+        </div>
+
+        <div class="py-3">
+          <h5 class="text-secondary fs-5">履歴</h5>
+          <select class="form-select mb-3" id="year" style="width: 50%">
+          </select>
+          <ul class="list-group mx-2 mb-5" id="moneyList">
+
+          </ul>
+        </div>
       </div>
       
-      <div class="mb-4">
-        <h3>3. esaにログインしよう</h3>
-        <p>C4'sでは、文書管理ツールとしてesaを利用しています。ご自身のGoogleアカウントでログインしてください。</p>
-        <a href="https://c4s.esa.io/team/invitations/member-bdea0c194425635198c6ca6e739e0613" class="btn btn-outline-dark">esa「c4s」に参加</a>
-      </div>
-
-      <div class="mb-4">
-        <h3>4. ガクセイ協賛にログインしよう</h3>
-        <p>C4'sでは、部費の調達手段の1つとして、「ガクセイ協賛」を活用しています。こちらは強制ではありませんが、ぜひ協賛プログラムへの参加にご協力ください。</p>
-        <a href="https://www.gakuseikyosan.com/member_regist/step1?is_group=2&in_code=zW8wxXSe" class="btn btn-outline-dark">ガクセイ協賛に参加</a>
-      </div>
-      
-
-        <div class="text-end">
-            <button class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#exampleModal">完了</button>
-        </div>
     </div>
 
-    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="exampleModalLabel">手続き完了</h5>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    <!--送金ボタン-->
+    <div class="bg-dark text-light position-fixed end-0 bottom-0 mx-3 my-3 px-3 py-3 shadow rounded-pill" style="cursor: pointer;" data-bs-toggle="modal" data-bs-target="#exampleModal">
+        <svg viewBox="0 0 16 16" x="0" y="0" width="24px" height="24px">
+            <use xlink:href="#cash"></use>
+        </svg>
+    </div>
+
+        <!-- 送金モーダル -->
+        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">送金用リンクの作成</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <div class="py-2">
+                    <label>ポイント数</label>
+                    <div class="input-group">
+                        <input type="number" min="0" class="form-control" id="sendAmount">
+                        <span class="input-group-text" >pt</span>
+                    </div>
+                </div>
+
+                <p class="text-danger small" id="pointError"></p>
+
+                <div class="py-2" id="urlDisp" style="display: none;">
+                    <div class="py-2 px-1 border rounded">
+                        <h6>ポイント受け取り用URL</h6>
+                        <span class="text-primary small" id="sendUrl"></span>
+
+                        <button class="btn btn-dark position-absolute end-0 translate-middle-y my-2 mx-4" id="copyBtn" onclick="copyUrl()">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-clipboard" viewBox="0 0 16 16">
+                                <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1v-1z"/>
+                                <path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3z"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-dark" onclick="sendPoint()">
+                  <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" id="uploading" style="display: none;"></span>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="me-1 bi bi-link-45deg" viewBox="0 0 16 16">
+                    <path d="M4.715 6.542 3.343 7.914a3 3 0 1 0 4.243 4.243l1.828-1.829A3 3 0 0 0 8.586 5.5L8 6.086a1.002 1.002 0 0 0-.154.199 2 2 0 0 1 .861 3.337L6.88 11.45a2 2 0 1 1-2.83-2.83l.793-.792a4.018 4.018 0 0 1-.128-1.287z"/>
+                    <path d="M6.586 4.672A3 3 0 0 0 7.414 9.5l.775-.776a2 2 0 0 1-.896-3.346L9.12 3.55a2 2 0 1 1 2.83 2.83l-.793.792c.112.42.155.855.128 1.287l1.372-1.372a3 3 0 1 0-4.243-4.243L6.586 4.672z"/>
+                  </svg>作成
+                </button>
+              </div>
             </div>
-            <div class="modal-body text-center">
-                <img src="../icons/check2-circle.svg" width="80px" class="mb-3">
-                <h5 class="text-center py-3">ありがとうございました！</h5>
-                <p>これからどうぞよろしくお願いします。</p>
-            </div>
-            <div class="modal-footer">
-                <a type="button" class="btn btn-dark" href="../">終了</a>
+          </div>
+        </div>
+
+        <!-- ポイント受信完了 -->
+        <div class="modal fade" id="getModal" tabindex="-1" aria-labelledby="getModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="getModalLabel">ポイント受け取り完了</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <img src="../icons/check2-circle.svg" width="80px" class="mb-3">
+                    <h5 class="text-center py-2 my-0"><span id="getPoint"></span> pt</h5>
+                    <p class="text-secondary my-1"><span id="senderName"></span> さんより</p>
+                    <div class="mb-3">受け取り完了しました。</div>
+                </div>
             </div>
         </div>
-    </div>
 </body>
 </html>

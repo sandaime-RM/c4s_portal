@@ -32,8 +32,10 @@ var events = {};
 var likeList = []; //自分が「いいね」してたらTrue
 var eventId = [];
 var editting = -1;
-var likes;
+var reactions;
 var likeNum = [];
+var attendNum = [];
+var attendList = [];
 var users = null;
 
 //ユーザー情報の取得
@@ -46,8 +48,8 @@ window.onload = function() {
     setTextareaSize();
     document.getElementById("detail").style.height = "120px";
 
-    get(ref(db, "eventLikes")).then((snapshot) => {
-        likes = snapshot.val();
+    get(ref(db, "eventReactions")).then((snapshot) => {
+        reactions = snapshot.val();
     });
 
     get(ref(db, "event")).then((snapshot) => {
@@ -64,23 +66,42 @@ window.onload = function() {
 
                     likeNum[key] = 0;
                     var likeIcon = '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="text-secondary bi bi-suit-heart" viewBox="0 0 16 16"><path d="m8 6.236-.894-1.789c-.222-.443-.607-1.08-1.152-1.595C5.418 2.345 4.776 2 4 2 2.324 2 1 3.326 1 4.92c0 1.211.554 2.066 1.868 3.37.337.334.721.695 1.146 1.093C5.122 10.423 6.5 11.717 8 13.447c1.5-1.73 2.878-3.024 3.986-4.064.425-.398.81-.76 1.146-1.093C14.446 6.986 15 6.131 15 4.92 15 3.326 13.676 2 12 2c-.777 0-1.418.345-1.954.852-.545.515-.93 1.152-1.152 1.595L8 6.236zm.392 8.292a.513.513 0 0 1-.784 0c-1.601-1.902-3.05-3.262-4.243-4.381C1.3 8.208 0 6.989 0 4.92 0 2.755 1.79 1 4 1c1.6 0 2.719 1.05 3.404 2.008.26.365.458.716.596.992a7.55 7.55 0 0 1 .596-.992C9.281 2.049 10.4 1 12 1c2.21 0 4 1.755 4 3.92 0 2.069-1.3 3.288-3.365 5.227-1.193 1.12-2.642 2.48-4.243 4.38z"/></svg>';
+                    var attendIcon = '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="text-secondary bi bi-check-lg" viewBox="0 0 16 16"><path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425a.247.247 0 0 1 .02-.022Z"/></svg>';
                     var tagText = "";
                     var color = "#aaa";
 
                     likeList[index] = false;
+                    attendList[index] = false;
 
-                    if(likes) {
-                        if(likes[key]) {
-                            likeNum[key] = Object.keys(likes[key]).length;
-                            
-                            Object.keys(likes[key]).forEach((key2, index2) => {
-                                if(user != null) {
-                                    if(key2 == user.uid) {
-                                        likeList[index] = true;
-                                        likeIcon = '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="text-danger bi bi-suit-heart-fill" viewBox="0 0 16 16"><path d="M4 1c2.21 0 4 1.755 4 3.92C8 2.755 9.79 1 12 1s4 1.755 4 3.92c0 3.263-3.234 4.414-7.608 9.608a.513.513 0 0 1-.784 0C3.234 9.334 0 8.183 0 4.92 0 2.755 1.79 1 4 1z"/></svg>';
+                    //イベントのリアクション
+                    if(reactions) {
+                        if(reactions[key]) {
+                            //いいねしてるかどうか＆いいね数
+                            if(reactions[key].likes) {
+                                likeNum[key] = Object.keys(reactions[key].likes).length;
+
+                                Object.keys(reactions[key].likes).forEach((key2, index2) => {
+                                    if(user != null) {
+                                        if(key2 == user.uid) {
+                                            likeList[index] = true;
+                                            likeIcon = '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="text-danger bi bi-suit-heart-fill" viewBox="0 0 16 16"><path d="M4 1c2.21 0 4 1.755 4 3.92C8 2.755 9.79 1 12 1s4 1.755 4 3.92c0 3.263-3.234 4.414-7.608 9.608a.513.513 0 0 1-.784 0C3.234 9.334 0 8.183 0 4.92 0 2.755 1.79 1 4 1z"/></svg>';
+                                        }
                                     }
-                                }
-                            });
+                                });
+                            }
+
+                            if(reactions[key].attend) {
+                                attendNum[key] = Object.keys(reactions[key].attend).length;
+
+                                Object.keys(reactions[key].attend).forEach((key2, index2) => {
+                                    if(user != null) {
+                                        if(key2 == user.uid) {
+                                            attendList[index] = true;
+                                            attendIcon = '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="text-success bi bi-check-lg" viewBox="0 0 16 16"><path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425a.247.247 0 0 1 .02-.022Z"/></svg>';
+                                        }
+                                    }
+                                });
+                            }
                         }
                     }
 
@@ -108,7 +129,7 @@ window.onload = function() {
                             break;
                     }
 
-                    document.getElementById("eventList").innerHTML += '<div class="col-lg-4 px-3 py-2"><div class="card shadow-sm" style="border-left: 6px solid '+color+'; cursor:pointer;" ><div class="card-body"><div onclick="openInfo('+index+')" data-bs-toggle="modal" data-bs-target="#exampleModal"><h5 class="card-title">'+events[key].title+'</h5><h6 class="card-subtitle mb-2 text-muted small">'+events[key].date+'<br>'+events[key].place+'</h6><p class="card-text small">'+events[key].description+'<br><span class="mx-1 text-primary">'+tagText+'</span></p></div><div class="card-link" style="text-decoration: none;" onclick="pushLike('+index+')"><span id="like_'+index+'">'+likeIcon+'</span><span class="text-secondary mx-1" id="num_'+index+'">'+likeNum[key]+'</span></div></div></div></div>';
+                    document.getElementById("eventList").innerHTML += '<div class="col-lg-4 px-3 py-2"><div class="card shadow-sm" style="border-left: 6px solid '+color+'; cursor:pointer;" ><div class="card-body"><div onclick="openInfo('+index+')" data-bs-toggle="modal" data-bs-target="#exampleModal"><h5 class="card-title">'+events[key].title+'</h5><h6 class="card-subtitle mb-2 text-muted small">'+events[key].date+'<br>'+events[key].place+'</h6><p class="card-text small">'+events[key].description+'<br><span class="mx-1 text-primary">'+tagText+'</span></p></div><div class="card-link" style="text-decoration: none;"><span id="like_'+index+'" onclick="pushLike('+index+')">'+likeIcon+'</span><span class="text-secondary mx-1 me-2" id="num_'+index+'">'+likeNum[key]+'</span><span id="attend_'+index+'" onclick="pushAttend('+index+')">'+attendIcon+'</span><span class="text-secondary mx-1 me-2" id="num2_'+index+'">'+attendNum[key]+'</span></div></div></div></div>';
                 });
             }
         } else {
@@ -196,7 +217,7 @@ function pushLike(index) {
 
         likeList[index] = false;
 
-        remove(ref(db, "eventLikes/" + eventId[index] + "/" + user.uid));
+        remove(ref(db, "eventReactions/" + eventId[index] + "/likes/" + user.uid));
 
         likeNum[eventId[index]] --;
     } else {
@@ -204,7 +225,7 @@ function pushLike(index) {
 
         likeList[index] = true;
 
-        set(ref(db, "eventLikes/" + eventId[index] + "/" + user.uid), true);
+        set(ref(db, "eventReactions/" + eventId[index] + "/likes/" + user.uid), true);
 
         likeNum[eventId[index]] ++;
     }
@@ -244,7 +265,7 @@ function delItem() {
 
     remove(ref(db, "event/" + eventId[editting]))
     .then(() => {
-        remove(ref(db, "eventLikes/" + eventId[editting]))
+        remove(ref(db, "eventReactions/" + eventId[editting]))
         window.location.reload();
     })
 }
@@ -275,15 +296,45 @@ export{dispHeart}
 function dispHeart2() {
     document.getElementById("heartList").innerHTML = "";
 
-    if(likes) {
-        if(likes[eventId[editting]]) {
-            document.getElementById("noHeart").style.display = "none";
+    if(reactions) {
+        if(reactions[eventId[editting]]) {
+            if(reactions[eventId[editting]].likes) {
+                document.getElementById("noHeart").style.display = "none";
 
-            Object.keys(likes[eventId[editting]]).forEach((key, i) => {
-                if(users[key]) {
-                    document.getElementById("heartList").innerHTML += '<li class="list-group-item"><h6>'+users[key].name + '<span class="text-secondary mx-1">' + users[key].studentNumber + '</span></h6><div class="small text-secondary">'+users[key].department+' '+users[key].grade+'年</div></li>';
-                }
-            });
+                Object.keys(reactions[eventId[editting]].likes).forEach((key, i) => {
+                    if(users[key]) {
+                        document.getElementById("heartList").innerHTML += '<li class="list-group-item"><h6>'+users[key].name + '<span class="text-secondary mx-1">' + users[key].studentNumber + '</span></h6><div class="small text-secondary">'+users[key].department+' '+users[key].grade+'年</div></li>';
+                    }
+                });
+            }
         }
     }
 }
+
+//参加ボタンを押したら
+function pushAttend(index) {
+    if(user == null) {return;}
+    
+    if(attendList[index]) {
+        document.getElementById("attend_"+index).innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="text-secondary bi bi-suit-heart" viewBox="0 0 16 16"><path d="m8 6.236-.894-1.789c-.222-.443-.607-1.08-1.152-1.595C5.418 2.345 4.776 2 4 2 2.324 2 1 3.326 1 4.92c0 1.211.554 2.066 1.868 3.37.337.334.721.695 1.146 1.093C5.122 10.423 6.5 11.717 8 13.447c1.5-1.73 2.878-3.024 3.986-4.064.425-.398.81-.76 1.146-1.093C14.446 6.986 15 6.131 15 4.92 15 3.326 13.676 2 12 2c-.777 0-1.418.345-1.954.852-.545.515-.93 1.152-1.152 1.595L8 6.236zm.392 8.292a.513.513 0 0 1-.784 0c-1.601-1.902-3.05-3.262-4.243-4.381C1.3 8.208 0 6.989 0 4.92 0 2.755 1.79 1 4 1c1.6 0 2.719 1.05 3.404 2.008.26.365.458.716.596.992a7.55 7.55 0 0 1 .596-.992C9.281 2.049 10.4 1 12 1c2.21 0 4 1.755 4 3.92 0 2.069-1.3 3.288-3.365 5.227-1.193 1.12-2.642 2.48-4.243 4.38z"/></svg>';
+
+        attendList[index] = false;
+
+        remove(ref(db, "eventReactions/" + eventId[index] + "/attend/" + user.uid));
+
+        attendNum[eventId[index]] --;
+    } else {
+        document.getElementById("attend_"+index).innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="text-danger bi bi-suit-heart-fill" viewBox="0 0 16 16"><path d="M4 1c2.21 0 4 1.755 4 3.92C8 2.755 9.79 1 12 1s4 1.755 4 3.92c0 3.263-3.234 4.414-7.608 9.608a.513.513 0 0 1-.784 0C3.234 9.334 0 8.183 0 4.92 0 2.755 1.79 1 4 1z"/></svg>';
+
+        attendList[index] = true;
+
+        set(ref(db, "eventReactions/" + eventId[index] + "/attend/" + user.uid), true);
+
+        attendNum[eventId[index]] ++;
+    }
+
+    document.getElementById("num2_"+index).innerHTML = attendNum[eventId[index]];
+}
+
+window.pushAttend = pushAttend;
+export{pushAttend}

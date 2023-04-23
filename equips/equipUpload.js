@@ -34,6 +34,9 @@ const storage = getStorage(app);
 const categories = 10; //カテゴリーの数
 const categoryNames = ["書籍", "電子工作", "映像・写真", "3Dプリンター", "ケーブル・アダプタ", "部室用インテリア", "工具", "音響", "VR", "テープ"];
 var loadingEquips = document.getElementById("loadingEquips");
+var urls = [];
+
+var photoModal = new bootstrap.Modal(document.getElementById('photoModal'))
 
 //備品追加時に実行
 window.onload = function() {
@@ -197,7 +200,8 @@ function openInfo(num) {
     
             getDownloadURL(gsReference)
             .then(async function(url) {
-                document.getElementById("imgs").innerHTML += "<img src='"+url+"' style='max-width:130px; max-height: 220px; object-fit: contain;' class='border rounded'>";
+                urls[index] = url;
+                document.getElementById("imgs").innerHTML += "<img src='"+url+"' style='max-width:130px; max-height: 220px; object-fit: contain;' class='border rounded' onclick='openLargePhoto("+index+")'>";
             })
             .catch((err) => console.log(err));
         });
@@ -306,3 +310,12 @@ function showList() {
 
 window.showList = showList;
 export{showList}
+
+//大きく画像を表示
+function openLargePhoto(index) {
+    document.getElementById("equipPhoto").src = urls[index];
+    photoModal.show();
+}
+
+window.openLargePhoto = openLargePhoto;
+export{openLargePhoto}

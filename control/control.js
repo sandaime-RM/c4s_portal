@@ -32,6 +32,7 @@ var editting = -1;
 var toCsvData = []; //CSV変換用のデータ
 var buhiKeys = [];
 var buhiList = [];
+var noExit = true;
 
 //ユーザー情報の取得
 onAuthStateChanged(auth, (us) => {
@@ -52,6 +53,16 @@ window.onload = function() {
 
         Object.keys(users).forEach((key, i) => {
             if(key == "admin-users") {return;}
+
+            //引退・退部した部員
+            if(users[key].status == 1 || users[key].status == 2) {
+                noExit = false;
+                var role = "引退";
+                if(users[key].status == 1) {role = "退部";}
+
+                document.getElementById("exitMembers").innerHTML += '<li class="list-group-item" onclick="openInfo('+i+')" data-bs-toggle="modal" data-bs-target="#exampleModal"><h6>'+users[key].name + '<span class="badge bg-danger mx-1">'+role+'</span></h6><span class="text-secondary small mx-1">'+users[key].nameKana+' ' + users[key].studentNumber + '</span></li>';
+                return;
+            }
 
             var sex = "女性";
             if(users[key].sex == "man") {sex="男性";}
@@ -101,6 +112,11 @@ window.onload = function() {
         });
 
         create_csv(toCsvData);
+
+        //引退・退部部員がいる
+        if(!noExit) {
+            document.getElementById("noExit").style.display = "none";
+        }
     })
     .catch((error) => {
         document.getElementById("loadingControl").style.display = "none";
@@ -112,18 +128,27 @@ window.onload = function() {
 function openInfo(i) {
     document.getElementById("mbName").textContent = users[userKeys[i]].name;
     document.getElementById("mbYomi").textContent = users[userKeys[i]].nameKana;
-    document.getElementById("mbBirth").textContent = users[userKeys[i]].birth + "生";
-    document.getElementById("mbTel").textContent = users[userKeys[i]].phoneNumber;
 
-    var sex = "男性";
-    if(users[userKeys[i]].sex == "woman") {
-        sex = "女性";
+    if(users[userKeys[i]].status == 1 || users[userKeys[i]].status == 2) {
+        document.getElementById("mbPR").textContent = users[userKeys[i]].reason;
+        document.getElementById("detailTitle").textContent = "退部理由";
+    } else {
+        document.getElementById("mbBirth").textContent = users[userKeys[i]].birth + "生";
+        document.getElementById("mbTel").textContent = users[userKeys[i]].phoneNumber;
+    
+        var sex = "男性";
+        if(users[userKeys[i]].sex == "woman") {
+            sex = "女性";
+        }
+    
+        document.getElementById("mbSex").textContent = sex;
+        document.getElementById("mbDepartment").textContent = users[userKeys[i]].department;
+        document.getElementById("mbGrade").textContent = users[userKeys[i]].grade + "年生";
+        document.getElementById("mbPR").textContent = users[userKeys[i]].detail;
+        document.getElementById("detailTitle").textContent = "自己PR";
     }
-
-    document.getElementById("mbSex").textContent = sex;
-    document.getElementById("mbDepartment").textContent = users[userKeys[i]].department;
-    document.getElementById("mbGrade").textContent = users[userKeys[i]].grade + "年生";
-    document.getElementById("mbPR").textContent = users[userKeys[i]].detail;
+    
+    
     document.getElementById("mbStudentNumber").textContent = users[userKeys[i]].studentNumber;
 
     if(users["admin-users"][userKeys[i]]) {

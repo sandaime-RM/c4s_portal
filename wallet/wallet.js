@@ -30,13 +30,17 @@ var amount = 0;
 var myName = "";
 var url = "";
 var getId = "";
-var getModal = new bootstrap.Modal(document.getElementById('getModal'))
+var getModal = new bootstrap.Modal(document.getElementById('getModal'));
+var keys;
+var data;
 
 
 //読み込み時に実行
 window.onload = function() {
     var nowYear = (new Date()).getFullYear();
 
+    document.getElementById("year").addEventListener('change', dispList);
+    
     for(var i=2022; i<=nowYear; i++) {
         if(i == nowYear) {
             document.getElementById("year").innerHTML = '<option value="'+i+'" selected>'+i+'年</option>' + document.getElementById("year").innerHTML;
@@ -69,7 +73,9 @@ onAuthStateChanged(auth, (us) => {
 
 
         getId = getParam("get");
-        console.log(getId)
+        console.log(getId);
+
+        dispList();
 
         //ポイント受け取り
         if(getId) {
@@ -84,11 +90,19 @@ onAuthStateChanged(auth, (us) => {
 
                 set(ref(db, "users/"+user.uid+"/point"), amount);
 
+                push(ref(db, "users/"+user.uid+"/pointHistory/"+((new Date()).getFullYear()) + "/"), {
+                    amount : getData.amount,
+                    date : date.getTime(),
+                    title : getData.senderName + " さんから受け取り",
+                    mode : 1
+                });
+
                 remove(ref(db, "pointBank/" + getId));
                 
                 getModal.show();
 
                 document.getElementById("total").textContent = Number(amount).toLocaleString();
+                dispList();
             });
         }
     });
@@ -97,6 +111,11 @@ onAuthStateChanged(auth, (us) => {
 //ポイント送信用リンクを作成
 function sendPoint() {
     var sendAmount = Number(document.getElementById("sendAmount").value);
+
+    if(0 >= sendAmount) {
+        document.getElementById("pointError").textContent = "エラー：0pt以下の送信はできません。";
+        return;
+    }
 
     if(amount < sendAmount) {
         document.getElementById("pointError").textContent = "エラー：残高を超過しています。";
@@ -112,6 +131,13 @@ function sendPoint() {
         amount -= sendAmount;
 
         set(ref(db, "users/" + user.uid + "/point"), amount);
+
+        push(ref(db, "users/"+user.uid+"/pointHistory/"+((new Date()).getFullYear()) + "/"), {
+            amount : sendAmount,
+            date : (new Date()).getTime(),
+            title : "送信用リンクの作成",
+            mode : 2
+        });
 
         url = "https://portal.c4-s.net/wallet?get=" + snapshot.key;
 
@@ -151,4 +177,44 @@ function getParam(name, url) {
     if (!results) return null;
     if (!results[2]) return '';
     return decodeURIComponent(results[2].replace(/\+/g, " "));
+}
+
+
+//履歴の表示
+function dispList() {
+    var total = 0;
+    document.getElementById("moneyList").innerHTML = '<div class="text-center py-3"><div class="spinner-border" role="status"><span class="visually-hidden">Loading...</span></div></div>';
+
+    get(ref(db, 'users/'+user.uid + "/pointHistory")).then((snapshot) => {
+        document.getElementById("errorMoney").innerHTML = "";
+        data = snapshot.child(document.getElementById("year").value).val();
+
+        //詳細表示
+        if(!data) {
+            document.getElementById("moneyList").innerHTML = "<div class='text-center text-secondary py-3'>データがありません</div>";
+            return;
+        } else {
+            document.getElementById("moneyList").innerHTML = "";
+            keys = Object.keys(data);
+        }
+
+        Object.keys(data).forEach((element, index) => {
+            dispMoneyInfo(data[element], index);
+        });
+
+        return;
+    })
+    .catch((error) => {
+        document.getElementById("moneyList").innerHTML = "";
+        document.getElementById("errorMoney").innerHTML = '<span class="text-danger small">'+error+'</span>';
+    });
+}
+
+function dispMoneyInfo(e, index) {
+
+    if(e.mode == 1) {
+        document.getElementById("moneyList").innerHTML = '<li class="list-group-item"><div class="row"><div class="col-2 text-primary fs-6"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor" class="bi bi-box-arrow-in-down" viewBox="0 0 16 16" ><path fill-rule="evenodd" d="M3.5 6a.5.5 0 0 0-.5.5v8a.5.5 0 0 0 .5.5h9a.5.5 0 0 0 .5-.5v-8a.5.5 0 0 0-.5-.5h-2a.5.5 0 0 1 0-1h2A1.5 1.5 0 0 1 14 6.5v8a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 2 14.5v-8A1.5 1.5 0 0 1 3.5 5h2a.5.5 0 0 1 0 1h-2z"/><path fill-rule="evenodd" d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/></svg></div><div class="col-10"><div class="fw-normal">'+e.title+'</div><div class="row py-1"><div class="col-7 text-secondary small">'+(new Date(e.date)).toLocaleString()+'</div><div class="col-5 fw-bold fs-5 text-end">'+Number(e.amount).toLocaleString()+' pt</div></div></div></div></li>' + document.getElementById("moneyList").innerHTML;
+    } else {
+        document.getElementById("moneyList").innerHTML = '<li class="list-group-item"><div class="row"><div class="col-2 text-danger fs-6"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor" class="bi bi-box-arrow-up" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M3.5 6a.5.5 0 0 0-.5.5v8a.5.5 0 0 0 .5.5h9a.5.5 0 0 0 .5-.5v-8a.5.5 0 0 0-.5-.5h-2a.5.5 0 0 1 0-1h2A1.5 1.5 0 0 1 14 6.5v8a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 2 14.5v-8A1.5 1.5 0 0 1 3.5 5h2a.5.5 0 0 1 0 1h-2z"/><path fill-rule="evenodd" d="M7.646.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 1.707V10.5a.5.5 0 0 1-1 0V1.707L5.354 3.854a.5.5 0 1 1-.708-.708l3-3z"/></svg></div><div class="col-10"><div class="fw-normal">'+e.title+'</div><div class="row py-1"><div class="col-7 text-secondary small">'+(new Date(e.date)).toLocaleString()+'</div><div class="col-5 fw-bold fs-5 text-end">'+Number(e.amount).toLocaleString()+' pt</div></div></div></div></li>' + document.getElementById("moneyList").innerHTML;
+    }
 }

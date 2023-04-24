@@ -2,7 +2,7 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-app.js";
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-analytics.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-auth.js";
-import { getDatabase, ref, get, set } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-database.js";
+import { getDatabase, ref, get, set, update } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-database.js";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -24,11 +24,13 @@ const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
 const db = getDatabase(app);
 const auth = getAuth();
-var user;
+var user, data;
 
 
 //部員情報アップロード
 function upload() {
+    if(data.status == 1 || data.status == 2) {return;}
+    
     var name = document.getElementById("name");
     var nameKana = document.getElementById("nameKana");
     var detail = document.getElementById("detail");
@@ -40,7 +42,7 @@ function upload() {
     var phoneNumber = document.getElementById("phoneNumber");
     var otherDepart = document.getElementById("otherDepart");
 
-    set(ref(db, "users/" + user.uid), {
+    update(ref(db, "users/" + user.uid), {
         name : name.value,
         nameKana : nameKana.value,
         detail : detail.value,
@@ -85,7 +87,9 @@ onAuthStateChanged(auth, (us) => {
     accountEmail.textContent = user.email;
 
     get(ref(db, 'users/' + user.uid)).then((snapshot) => {
-        var data = snapshot.val();
+        data = snapshot.val();
+
+        if(data.status == 1 || data.status == 2) {return;}
 
         phoneNumber.value = data.phoneNumber;
         name.value = data.name;

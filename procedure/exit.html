@@ -11,27 +11,27 @@
     <!-- JavaScript Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 
+    <script src="exit.js" type="module"></script>
     <script src="../script/login.js" type="module"></script>
-    <script src="control.js" type="module"></script>
 
-    
     <title>C4's Portal</title>
     <link rel="icon" href="../img/logo_mini.png">
     <link rel="manifest" href="../manifest.json">
 
 </head>
 <body class="bg-light">
-  <!--SVGの定義-->
+
+    <!--SVGの定義-->
   <svg display="none">
     <defs>
-      <symbol id="wallet" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-wallet" viewBox="0 0 16 16">
-        <path d="M0 3a2 2 0 0 1 2-2h13.5a.5.5 0 0 1 0 1H15v2a1 1 0 0 1 1 1v8.5a1.5 1.5 0 0 1-1.5 1.5h-12A2.5 2.5 0 0 1 0 12.5V3zm1 1.732V12.5A1.5 1.5 0 0 0 2.5 14h12a.5.5 0 0 0 .5-.5V5H2a1.99 1.99 0 0 1-1-.268zM1 3a1 1 0 0 0 1 1h12V2H2a1 1 0 0 0-1 1z"/>
-    </symbol>
-    
         <symbol id="calendar" xmlns="http://www.w3.org/2000/svg" class="bi bi-calendar-week" viewBox="0 0 16 16">
           <path d="M11 6.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1zm-3 0a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1zm-5 3a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1zm3 0a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1z"/>
           <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4H1z"/>
         </symbol>
+
+        <symbol id="wallet" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-wallet" viewBox="0 0 16 16">
+          <path d="M0 3a2 2 0 0 1 2-2h13.5a.5.5 0 0 1 0 1H15v2a1 1 0 0 1 1 1v8.5a1.5 1.5 0 0 1-1.5 1.5h-12A2.5 2.5 0 0 1 0 12.5V3zm1 1.732V12.5A1.5 1.5 0 0 0 2.5 14h12a.5.5 0 0 0 .5-.5V5H2a1.99 1.99 0 0 1-1-.268zM1 3a1 1 0 0 0 1 1h12V2H2a1 1 0 0 0-1 1z"/>
+      </symbol>
 
         <symbol id="house" xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-house" viewBox="0 0 16 16">
           <path fill-rule="evenodd" d="M2 13.5V7h1v6.5a.5.5 0 0 0 .5.5h9a.5.5 0 0 0 .5-.5V7h1v6.5a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 2 13.5zm11-11V6l-2-2V2.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5z"/>
@@ -65,7 +65,7 @@
         </symbol>
     </defs>
   </svg>
-
+  
     <!--ヘッダー-->
     <div class="container">
         <header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom">
@@ -79,173 +79,104 @@
             <li><a href="../equips" class="nav-link px-2 mx-1"><svg viewBox="0 0 16 16" x="0" y="0" width="24px" height="24px"><use class="text-dark" xlink:href="#box"></use></svg></a></li>
             <li><a href="../money" class="nav-link px-2 mx-1"><svg viewBox="0 0 16 16" x="0" y="0" width="24px" height="24px"><use class="text-dark" xlink:href="#cash"></use></svg></a></li>
             <li><a href="../wallet" class="nav-link px-2 mx-1"><svg viewBox="0 0 16 16" x="0" y="0" width="24px" height="24px"><use class="text-dark" xlink:href="#wallet"></use></svg></a></li>
-            <li><a href="../procedure" class="nav-link px-2 mx-1"><svg viewBox="0 0 16 16" x="0" y="0" width="24px" height="24px"><use class="text-dark" xlink:href="#textFile"></use></svg></a></li>
-            <li><a href="../control" class="nav-link px-2 mx-1"><svg viewBox="0 0 16 16" x="0" y="0" width="24px" height="24px"><use class="text-secondary" xlink:href="#gear"></use></svg></a></li>
+            <li><a href="../procedure" class="nav-link px-2 mx-1"><svg viewBox="0 0 16 16" x="0" y="0" width="24px" height="24px"><use class="text-secondary" xlink:href="#textFile"></use></svg></a></li>
+            <li><a href="../control" class="nav-link px-2 mx-1"><svg viewBox="0 0 16 16" x="0" y="0" width="24px" height="24px"><use class="text-dark" xlink:href="#gear"></use></svg></a></li>
           </ul>
     
           <div class="col-md-3 text-end" id="account">
             <div class="spinner-border" role="status">
-              <span class="visually-hidden">Loading...</span>
-            </div>
+                <span class="visually-hidden">Loading...</span>
+              </div>
           </div>
         </header>
     </div>
 
-    <main>
-      <div class="container">
-        <h2 class="fs-2 fw-normal"><svg class="me-3 ms-2" viewBox="0 0 16 16" x="0" y="0" width="36px" height="36px"><use xlink:href="#gear"></use></svg>メンバー管理</h2>
+    <div class="container">
+      <h2 class="fs-2 fw-normal">退部/引退手続き</h2>
+      <p class="text-secondary">退部/引退の選択と、退部の場合は理由を簡単にお書きください。<br>Googleアカウントでログインを済ませた状態で入力してください。</p>
 
-        <p id="text-secondary">閲覧・操作には管理者権限が必要です</p>
+      <h3>1. 部員情報を入力</h3>
 
-        <p id="errorControl"></p>
+      <div class="py-3 px-3" style="max-width: 600px">
+        <div class="mb-3">
+          <label>名前</label>
+          <h5 id="name">----</h5>
+        </div>
 
-        <div class="row">
-          <div class="col-lg-6">
-            <h5 class="fw-normal">部員一覧</h5>
-            <div class="py-2">
-              <a class="btn btn-outline-dark" id="exportBtn">CSV形式で出力</a>
-              <span class="mx-2" id="totalMember"></span>
-            </div>
-            <div class="text-center py-3" id="loadingControl">
-              <div class="spinner-border" role="status">
-                <span class="visually-hidden">Loading...</span>
-              </div>
-            </div>
-            <ul class="list-group mb-4" id="memberList" style="cursor: pointer;">
-              
-            </ul>
-
-            <div class="accordion accordion mb-5" id="accordionFlushExit">
-              <div class="accordion-item">
-                <h2 class="accordion-header" id="flush-headingTwo">
-                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">
-                    退部/引退した部員
-                  </button>
-                </h2>
-                <div id="flush-collapseTwo" class="accordion-collapse collapse" aria-labelledby="flush-headingTwo" data-bs-parent="#accordionFlushExit">
-                  <div class="my-3 text-center text-secondary" id="noExit">データがありません</div>
-                  <ul class="list-group mx-2 my-2" id="exitMembers" style="cursor: pointer;">
-                    
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="col-lg-6">
-            <h5 class="fw-normal">部費支払い一覧</h5>
-            <ul class="list-group mb-5" id="buhiList" style="cursor: pointer;">
-              
-            </ul>
+        <div class="mb-3">
+          <label>退部/引退の選択 <span class="text-danger">*</span></label>
+          <select class="form-select" id="type">
+            <option>退部</option>
+            <option>引退</option>
+          </select>
+          <div class="py-1 small text-secondary">
+            選択の目安<br>
+            引退：卒研着手前・卒業前などの区切りに、約１年以上続けていたサークル活動をやめる, 何らかの活動実績がある, など<br>
+            退部：卒業前などの区切りではないが、途中でサークル活動をやめる, あまり活動期間・実績はない, など
           </div>
         </div>
 
+        <div class="mb-3">
+          <label>退部理由</label>
+          <textarea class="form-control" id="reason"></textarea>
+        </div>
+
+        <div class="mb-3">
+          <h6>Discord, esa, LINEグループなど</h6>
+          <p class="px-2">
+            退部される際に、これらのサービスも基本的には<strong class="text-danger">退会</strong>してください。
+            Discordの「<strong>サーバーから脱退</strong>」など。<br>
+            ただし、OB・OG用LINEグループへの参加やDiscordのOB・OGロールの割り振りは別途ご相談ください。
+          </p>
+        </div>
+
+        <div class="mb-3">
+          <h6>退部後の個人情報の扱いについて</h6>
+          <p class="px-2">
+            C4's Portal上に保存されている個人情報は、一部を除き削除されます。
+            <br>保存し続ける情報は、「<strong>名前</strong>」と「<strong>学籍番号</strong>」です。
+            <br>退部された後に、連絡を取る必要が出た場合のみ使用します。
+          </p>
+        </div>
+
+        <div class="text-end">
+            <button onclick="upload()" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#exampleModal">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="me-1 bi bi-door-open" viewBox="0 0 16 16">
+                <path d="M8.5 10c-.276 0-.5-.448-.5-1s.224-1 .5-1 .5.448.5 1-.224 1-.5 1z"/>
+                <path d="M10.828.122A.5.5 0 0 1 11 .5V1h.5A1.5 1.5 0 0 1 13 2.5V15h1.5a.5.5 0 0 1 0 1h-13a.5.5 0 0 1 0-1H3V1.5a.5.5 0 0 1 .43-.495l7-1a.5.5 0 0 1 .398.117zM11.5 2H11v13h1V2.5a.5.5 0 0 0-.5-.5zM4 1.934V15h6V1.077l-6 .857z"/>
+              </svg>
+              退部/引退</button>
+        </div>
       </div>
-    </main>
+    </div>
 
     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">部員情報</h5>
+            <h5 class="modal-title" id="exampleModalLabel">手続き</h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
-          <div class="modal-body">
-            <div class="py-2">
-              <div id="mbName" class="fs-5 fw-bold">松浦竜征</div>
-              <div class="text-secondary small py-1 mb-2" id="mbYomi"></div>
+          <div class="modal-body text-center">
 
-              <p><span id="mbSex" class="mx-1"></span><span class="mx-1" id="mbBirth"></span>
-              <br><span id="mbDepartment" class="mx-1"></span><span class="mx-1" id="mbGrade"></span>
-              <br><span class="ms-1">学籍番号</span><span id="mbStudentNumber" class="mx-1 me-2 text-secondary"></span>TEL<span class="mx-1 text-secondary" id="mbTel"></span></p>
-              <label class="mt-1" id="detailTitle">自己PR</label>
-              <p class="small mx-1 my-2" id="mbPR"></p>
-
-              <div class="accordion accordion" id="accordionFlushExample">
-                <div class="accordion-item">
-                  <h2 class="accordion-header" id="flush-headingOne">
-                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
-                      部費支払い履歴
-                    </button>
-                  </h2>
-                  <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
-                    <ul class="list-group mx-2 my-2" id="buhiRecord">
-                      
-                    </ul>
-                  </div>
-                </div>
+            <div class="my-3" id="loading">
+              <div class="spinner-border" role="status">
+                <span class="visually-hidden">Loading...</span>
               </div>
             </div>
 
-            <hr>
-
-            <div class="py-2">
-              <label for="detail">役職</label>
-
-              <div class="form-check">
-                <input class="form-check-input" type="checkbox" value="" id="role1">
-                <label class="form-check-label" for="role1">
-                  管理者
-                </label>
-              </div>
+            <div style="display: none;" id="done">
+              <img src="../icons/check2-circle.svg" width="80px" class="mb-3">
+              <h5 class="text-center py-3">ありがとうございました！</h5>
+              <p>部員情報を削除しました。<br>
+                Discordからの退会などもご協力お願いします。
+              </p>
             </div>
-
-            <div class="py-2">
-              <label for="detail">新規部費支払い</label>
-
-              <div class="row">
-                <div class="col-6">
-                  <label id="buhiDate">日付</label>
-                  <input class="form-control" type="date" id="buhiDate2">
-                </div>
-  
-                <div class="col-6">
-                  <label>金額</label>
-                  <div class="input-group">
-                    <input class="form-control" type="number" id="buhiPrice">
-                    <span class="input-group-text" id="basic-addon2">円</span>
-                  </div>
-                </div>
-              </div>
-              
-            </div>
-            
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-outline-dark" onclick="delItem()">削除</button>
-            <button type="button" class="btn btn-dark" onclick="upload()">
-              <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" id="uploading" style="display: none;"></span>
-                保存
-            </button>
+              <a type="button" class="btn btn-dark" href="../">終了</a>
           </div>
-        </div>
       </div>
-    </div>
-
-
-    <script type="module">
-        // Import the functions you need from the SDKs you need
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-app.js";
-        import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-analytics.js";
-        // TODO: Add SDKs for Firebase products that you want to use
-        // https://firebase.google.com/docs/web/setup#available-libraries
-        
-        // Your web app's Firebase configuration
-        // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-        const firebaseConfig = {
-            apiKey: "AIzaSyBE60G8yImWlENWpCnQZzqqVUrwWa_torg",
-            authDomain: "c4s-portal.firebaseapp.com",
-            databaseURL: "https://c4s-portal-default-rtdb.asia-southeast1.firebasedatabase.app",
-            projectId: "c4s-portal",
-            storageBucket: "c4s-portal.appspot.com",
-            messagingSenderId: "863775995414",
-            appId: "1:863775995414:web:82eb9557a13a099dfbe737",
-            measurementId: "G-K2SR1WSNRC"
-        };
-        
-        // Initialize Firebase
-        const app = initializeApp(firebaseConfig);
-        const analytics = getAnalytics(app);
-    </script>
+  </div>
 </body>
 </html>

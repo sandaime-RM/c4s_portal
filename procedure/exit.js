@@ -25,38 +25,38 @@ const analytics = getAnalytics(app);
 const db = getDatabase(app);
 const auth = getAuth();
 var user;
+var userData;
 
 
 //部員情報アップロード
 function upload() {
+    if(!user) {return;}
 
-    var name = document.getElementById("name");
-    var nameKana = document.getElementById("nameKana");
-    var detail = document.getElementById("detail");
-    var number = document.getElementById("schoolNumber");
-    var birth = document.getElementById("birth");
-    var department = document.getElementById("department");
-    var grade = document.getElementById("grade");
-    var sex = document.getElementById("sex");
-    var phoneNumber = document.getElementById("phoneNumber");
-    var otherDepart = document.getElementById("otherDepart");
+    var setData = {
+        name : userData.name,
+        nameKana : userData.nameKana,
+        studentNumber : userData.studentNumber,
+        time : (new Date()).getTime(),
+        status : Number(document.getElementById("type").selectedIndex) + 1, //status 1 : 途中退部者
+        reason : document.getElementById("reason").value,
+    }
 
-    set(ref(db, "users/" + user.uid), {
-        name : name.value,
-        nameKana : nameKana.value,
-        detail : detail.value,
-        studentNumber : number.value,
-        birth : birth.value,
-        grade : Number(grade.value),
-        department : department.options[department.selectedIndex].text,
-        departmentIndex : department.selectedIndex,
-        sex : sex.value,
-        otherDepart : otherDepart.value,
-        phoneNumber : phoneNumber.value,
-        time : (new Date()).getTime()
-    })
+    if(userData.buhiRecord) {
+        setData.buhiRecord = userData.buhiRecord;
+    }
+
+    if(userData.point) {
+        setData.point = userData.point;
+    }
+
+    if(userData.pointHistory) {
+        setData.pointHistory = userData.pointHistory;
+    }
+
+    set(ref(db, "users/" + user.uid), setData)
     .then(() => {
-        window.location.href = "join2.html";
+        document.getElementById("loading").style.display = "none";
+        document.getElementById("done").style.display = "";
     });
 }
 
@@ -70,12 +70,11 @@ onAuthStateChanged(auth, (us) => {
     if(!user) {
         alert("Googleアカウントでのログインをしてから、部員情報の登録をお願いします。");
         login();
+    } else {
+        get(ref(db, "users/" + user.uid)).then((snapshot) => {
+            userData = snapshot.val();
+    
+            document.getElementById("name").textContent = userData.name;
+        });
     }
-
-    get(ref(db, "users/" + user.uid)).then((snapshot) =>{
-        if(snapshot.exists()) {
-            alert("既に入部手続きを終えています。部員情報の更新は、アカウント画面からお願いします。");
-            window.location.href = "../account";
-        }
-    });
 });

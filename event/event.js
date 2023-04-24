@@ -43,6 +43,7 @@ var absentList = [];
 var users = null;
 var userAttend;
 var edittingAbsent = -1;
+var amount;
 
 var absentModal = new bootstrap.Modal(document.getElementById('absentModal'))
 
@@ -54,6 +55,10 @@ onAuthStateChanged(auth, (us) => {
         userAttend = snapshot.val();
 
         attendCheck();
+    });
+
+    get(ref(db, "users/" + user.uid + "/point")).then((snapshot) => {
+        amount = snapshot.val();
     });
 });
 
@@ -186,7 +191,8 @@ function upload() {
         description : document.getElementById("detail").value,
         type : document.getElementById("type").selectedIndex,
         tags : tags,
-        code : document.getElementById("attendNum").value
+        code : document.getElementById("attendNum").value,
+        point : Number(document.getElementById("point").value)
     }
 
     if(editting == -1) {
@@ -213,6 +219,7 @@ function clearForm() {
     document.getElementById("dateForm").value = "";
     document.getElementById("place").value = "";
     document.getElementById("detail").value = "";
+    document.getElementById("point").value = "0";
     document.getElementById("type").selectedIndex = -1;
     document.getElementById("attendNum").value = "";
     document.getElementById("tag").value = "";
@@ -229,6 +236,7 @@ function openInfo(index) {
     document.getElementById("title").value = events[eventId[index]].title;
     document.getElementById("dateForm").value = events[eventId[index]].date;
     document.getElementById("place").value = events[eventId[index]].place;
+    document.getElementById("point").value = events[eventId[index]].point;
     document.getElementById("detail").value = events[eventId[index]].description;
     document.getElementById("type").selectedIndex = events[eventId[index]].type;
     //document.getElementById("attendNum").value = events[eventId[index]].code;
@@ -402,9 +410,25 @@ function attend() {
             successed = true;
 
             set(ref(db, "users/" + user.uid + "/attend/" + key), {
-                date : (new Date()).getTime()
+                date : (new Date()).getTime(),
+                title : events[key].title
             })
             .then(() => {
+                document.getElementById("pointText").textContent = "";
+
+                if(events[key].point) {
+                    amount += events[key].point;
+                    set(ref(db, "users/" + user.uid + "/point/"), amount);
+                    push(ref(db, "users/" + user.uid + "/pointHistory/"+ (new Date()).getFullYear() + "/"), {
+                        date : (new Date()).getTime(),
+                        mode : 1,
+                        amount : events[key].point,
+                        title : events[key].title+" への出席登録"
+                    });
+
+                    document.getElementById("pointText").textContent = events[key].point+"pt 受け取りました";
+                }
+
                 document.getElementById("success").style.display = "";
                 document.getElementById("successText").textContent = events[key].title;
                 document.getElementById("attendBtn").disabled = true;

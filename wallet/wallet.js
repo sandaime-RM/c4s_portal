@@ -141,9 +141,31 @@ function sendPoint() {
 
         url = "https://portal.c4-s.net/wallet?get=" + snapshot.key;
 
+        //URL表示
         document.getElementById("sendUrl").textContent = url;
         document.getElementById("urlDisp").style.display = "";
         document.getElementById("total").textContent = Number(amount).toLocaleString();
+
+        //QRコード生成
+        // 入力された文字列を取得
+        var userInput = url
+        var query = userInput.split(' ').join('+');
+        // QRコードの生成
+        (function() {
+            var qr = new QRious({
+                element: document.getElementById('qr'),
+                // 入力した文字列でQRコード生成
+                value: query
+        });
+        qr.background = '#FFF'; //背景色
+        qr.backgroundAlpha = 0.8; // 背景の透過率
+        qr.foreground = '#333'; //QRコード自体の色
+        qr.foregroundAlpha = 1.0; //QRコード自体の透過率
+        qr.level = 'L'; // QRコードの誤り訂正レベル
+        qr.size = 160; // QRコードのサイズ
+            // QRコードをflexboxで表示
+            document.getElementById('qrOutput').style.display = 'flex';
+        })();
 
     });
 }

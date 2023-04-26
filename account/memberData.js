@@ -112,5 +112,16 @@ onAuthStateChanged(auth, (us) => {
         } else {
             document.getElementById("buhiRecord").innerHTML = '<p class="text-secondary small text-center py-2 mx-1">履歴はありません</p>';
         }
+
+        if(data.attend) {
+            var attends = data.attend;
+            document.getElementById("attendHistory").innerHTML = "";
+
+            Object.keys(attends).forEach((key, index) => {
+                document.getElementById("attendHistory").innerHTML += '<li class="list-group-item"><span class="fw-bold mx-1">' + attends[key].title + '</span><span class="text-secondary mx-1 small">'+(new Date(attends[key].date)).toLocaleString()+'</span></li>';
+            });
+        } else {
+            document.getElementById("attendHistory").innerHTML = '<p class="text-secondary small text-center py-2 mx-1">履歴はありません</p>';
+        }
     });
 });

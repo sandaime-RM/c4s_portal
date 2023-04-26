@@ -452,10 +452,12 @@ function attendCheck() {
     Object.keys(events).forEach((key, index) => {
         var attended = "";
         //出席登録済みか確認
-        if(userAttend[key]) {
-            attended = '<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor" class="text-success bi bi-check mx-2 my-2" viewBox="4 3 7 10"><path d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.267.267 0 0 1 .02-.022z"/></svg>';
-
-            document.getElementById("attended_"+index).innerHTML = attended;
+        if(userAttend) {
+            if(userAttend[key]) {
+                attended = '<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor" class="text-success bi bi-check mx-2 my-2" viewBox="4 3 7 10"><path d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.267.267 0 0 1 .02-.022z"/></svg>';
+    
+                document.getElementById("attended_"+index).innerHTML = attended;
+            }
         }
     });
 }

@@ -33,6 +33,8 @@ var toCsvData = []; //CSV変換用のデータ
 var buhiKeys = [];
 var buhiList = [];
 var noExit = true;
+var buhiTotal = 0;
+var totalMembers = 0;
 
 //ユーザー情報の取得
 onAuthStateChanged(auth, (us) => {
@@ -40,7 +42,13 @@ onAuthStateChanged(auth, (us) => {
 });
 
 //読み込み時に実行
-window.onload = function() {
+window.onload = restart();
+
+function restart() {
+    var date = new Date();
+    document.getElementById("endDate").value = date.getFullYear() + "-" + ("0" + (date.getMonth() + 1)).slice(-2) + "-" + ("0" + date.getDate()).slice(-2);
+    document.getElementById("startDate").value = '2022-04-01';
+
     toCsvData = [["名前", "名前（ふりがな）", "学籍番号", "学部学科", "大学名・学部学科（他大学）", "学年", "性別", "誕生日", "電話番号", "自己PR"]];
 
     get(ref(db, 'users')).then((snapshot) => {
@@ -48,8 +56,7 @@ window.onload = function() {
         users = snapshot.val();
         userKeys = Object.keys(users);
         var date = new Date();
-
-        document.getElementById("totalMember").innerHTML = '合計 ' + userKeys.length + "人";
+        totalMembers = userKeys.length - 1;
 
         Object.keys(users).forEach((key, i) => {
             if(key == "admin-users") {return;}
@@ -59,6 +66,8 @@ window.onload = function() {
                 noExit = false;
                 var role = "引退";
                 if(users[key].status == 1) {role = "退部";}
+
+                totalMembers --;
 
                 document.getElementById("exitMembers").innerHTML += '<li class="list-group-item" onclick="openInfo('+i+')" data-bs-toggle="modal" data-bs-target="#exampleModal"><h6>'+users[key].name + '<span class="badge bg-danger mx-1">'+role+'</span></h6><span class="text-secondary small mx-1">'+users[key].nameKana+' ' + users[key].studentNumber + '</span></li>';
                 return;
@@ -96,6 +105,7 @@ window.onload = function() {
                 Object.keys(buhiRecords).forEach((key2, ib) => {
                     buhiRecords[key2].name = users[key].name;
                     buhiList = buhiList.concat(buhiRecords[key2]);
+                    buhiTotal += Number(buhiRecords[key2].amount);
                 });   
             }
         });
@@ -111,12 +121,16 @@ window.onload = function() {
             document.getElementById("buhiList").innerHTML += '<li class="list-group-item">'+buhi.name+'<span class="fw-bold mx-1">￥' + Number(buhi.amount).toLocaleString() + '</span><span class="text-secondary mx-1 small">'+buhi.date+' 記録者 : '+buhi.recorderName+'</span></li>';
         });
 
+        document.getElementById("totalMoney").textContent = buhiTotal.toLocaleString();
+
         create_csv(toCsvData);
 
         //引退・退部部員がいる
         if(!noExit) {
             document.getElementById("noExit").style.display = "none";
         }
+
+        document.getElementById("totalMember").innerHTML = '合計 ' + totalMembers + "人";
     })
     .catch((error) => {
         document.getElementById("loadingControl").style.display = "none";
@@ -132,6 +146,12 @@ function openInfo(i) {
     if(users[userKeys[i]].status == 1 || users[userKeys[i]].status == 2) {
         document.getElementById("mbPR").textContent = users[userKeys[i]].reason;
         document.getElementById("detailTitle").textContent = "退部理由";
+
+        document.getElementById("mbBirth").textContent = "---------" + "生";
+        document.getElementById("mbTel").textContent = "----------";
+        document.getElementById("mbSex").textContent = "----";
+        document.getElementById("mbDepartment").textContent = "----------";
+        document.getElementById("mbGrade").textContent = "-- 年生";
     } else {
         document.getElementById("mbBirth").textContent = users[userKeys[i]].birth + "生";
         document.getElementById("mbTel").textContent = users[userKeys[i]].phoneNumber;
@@ -267,3 +287,75 @@ function deleteBuhi(member, buhi) {
 
 window.deleteBuhi = deleteBuhi;
 export{deleteBuhi}
+
+
+//部員の退部処理
+function exit() {
+    var result = confirm(users[userKeys[editting]].name + " さんの情報を退部させますが、よろしいですか？（名前と学籍番号のみ保持されます）");
+
+    if(!result) {return;}
+
+    var userData = users[userKeys[editting]];
+
+    var setData = {
+        name : userData.name,
+        nameKana : userData.nameKana,
+        studentNumber : userData.studentNumber,
+        time : (new Date()).getTime(),
+        status : 1, //status 1 : 途中退部者
+        reason : "（管理者による退部処理）",
+    }
+
+    if(userData.buhiRecord) {
+        setData.buhiRecord = userData.buhiRecord;
+    }
+
+    if(userData.point) {
+        setData.point = userData.point;
+    }
+
+    if(userData.pointHistory) {
+        setData.pointHistory = userData.pointHistory;
+    }
+
+    set(ref(db, "users/" + userKeys[editting]), setData)
+    .then(() => {
+        alert("退部処理をしました。");
+        window.location.reload();
+    });
+}
+
+window.exit = exit;
+export{exit}
+
+
+//部費情報を指定期間に絞って表示
+function reshowBuhi() {
+    var startDate = document.getElementById("startDate");
+    var endDate = document.getElementById("endDate");
+
+    if(!startDate || !endDate) {return;}
+
+    var startDate2 = new Date(startDate.value);
+    var endDate2 = new Date(endDate.value);
+    buhiTotal = 0;
+    var paidNum= 0;
+
+    document.getElementById("buhiList").innerHTML = "";
+
+    buhiList.forEach((buhi, il) => {
+        var buhiDate = new Date(buhi.date);
+        if(startDate2 < buhiDate && endDate2 > buhiDate) {
+            document.getElementById("buhiList").innerHTML += '<li class="list-group-item">'+buhi.name+'<span class="fw-bold mx-1">￥' + Number(buhi.amount).toLocaleString() + '</span><span class="text-secondary mx-1 small">'+buhi.date+' 記録者 : '+buhi.recorderName+'</span></li>';
+
+            buhiTotal += buhi.amount;
+            paidNum ++;
+        }
+    });
+
+    document.getElementById("totalMoney").textContent = buhiTotal.toLocaleString();
+    document.getElementById("buhiRatio").textContent = Math.floor(paidNum/totalMembers*1000)/10;
+}
+
+window.reshowBuhi = reshowBuhi;
+export{reshowBuhi}

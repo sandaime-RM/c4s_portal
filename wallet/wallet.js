@@ -39,6 +39,8 @@ var data;
 window.onload = function() {
     var nowYear = (new Date()).getFullYear();
 
+    document.getElementById("moneyList").innerHTML = '<div class="text-center py-3"><div class="spinner-border" role="status"><span class="visually-hidden">Loading...</span></div></div>';
+
     document.getElementById("year").addEventListener('change', dispList);
     
     for(var i=2022; i<=nowYear; i++) {
@@ -205,6 +207,7 @@ function getParam(name, url) {
 //履歴の表示
 function dispList() {
     var total = 0;
+
     document.getElementById("moneyList").innerHTML = '<div class="text-center py-3"><div class="spinner-border" role="status"><span class="visually-hidden">Loading...</span></div></div>';
 
     get(ref(db, 'users/'+user.uid + "/pointHistory")).then((snapshot) => {

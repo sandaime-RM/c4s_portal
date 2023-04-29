@@ -168,7 +168,11 @@ window.onload = function() {
                             break;
                     }
 
-                    document.getElementById("eventList").innerHTML += '<div class="col-lg-4 px-3 py-2"><div class="card shadow-sm" style="border-left: 6px solid '+color+'; cursor:pointer;" ><div class="card-body"><div onclick="openInfo('+index+')" data-bs-toggle="modal" data-bs-target="#exampleModal"><h5 class="card-title">'+events[key].title+'</h5><h6 class="card-subtitle mb-2 text-muted small">'+events[key].date+'<br>'+events[key].place+'</h6><p class="card-text small">'+events[key].description+'<br><span class="mx-1 text-primary">'+tagText+'</span></p></div><div class="card-link" style="text-decoration: none;"><span id="like_'+index+'" onclick="pushLike('+index+')">'+likeIcon+'</span><span class="text-secondary mx-1 me-3" id="num_'+index+'">'+likeNum[key]+'</span><span id="attend_'+index+'" onclick="pushAttend('+index+')">'+attendIcon+'</span><span class="text-secondary mx-1 me-3" id="num2_'+index+'">'+attendNum[key]+'</span><span id="absent_'+index+'" onclick="pushAbsent('+index+')">'+absentIcon+'</span><span class="text-secondary mx-1 me-2" id="num3_'+index+'">'+absentNum[key]+'</span></div><div class="position-absolute end-0 top-0" id="attended_'+index+'"><div></div></div></div>';
+                    if(events[key].end) {
+                        document.getElementById("endEvents").innerHTML += '<div class="col-lg-4 px-3 py-2"><div class="card shadow-sm" style="border-left: 6px solid '+color+'; cursor:pointer;" ><div class="card-body"><div onclick="openInfo('+index+')" data-bs-toggle="modal" data-bs-target="#exampleModal"><h5 class="card-title">'+events[key].title+'</h5><h6 class="card-subtitle mb-2 text-muted small">'+events[key].date+'<br>'+events[key].place+'</h6><p class="card-text small">'+events[key].description+'<br><span class="mx-1 text-primary">'+tagText+'</span></p></div><div class="card-link" style="text-decoration: none;"><span id="like_'+index+'" onclick="pushLike('+index+')">'+likeIcon+'</span><span class="text-secondary mx-1 me-3" id="num_'+index+'">'+likeNum[key]+'</span><span id="attend_'+index+'" onclick="pushAttend('+index+')">'+attendIcon+'</span><span class="text-secondary mx-1 me-3" id="num2_'+index+'">'+attendNum[key]+'</span><span id="absent_'+index+'" onclick="pushAbsent('+index+')">'+absentIcon+'</span><span class="text-secondary mx-1 me-2" id="num3_'+index+'">'+absentNum[key]+'</span></div><div class="position-absolute end-0 top-0" id="attended_'+index+'"><div></div></div></div>';
+                    } else {
+                        document.getElementById("eventList").innerHTML += '<div class="col-lg-4 px-3 py-2"><div class="card shadow-sm" style="border-left: 6px solid '+color+'; cursor:pointer;" ><div class="card-body"><div onclick="openInfo('+index+')" data-bs-toggle="modal" data-bs-target="#exampleModal"><h5 class="card-title">'+events[key].title+'</h5><h6 class="card-subtitle mb-2 text-muted small">'+events[key].date+'<br>'+events[key].place+'</h6><p class="card-text small">'+events[key].description+'<br><span class="mx-1 text-primary">'+tagText+'</span></p></div><div class="card-link" style="text-decoration: none;"><span id="like_'+index+'" onclick="pushLike('+index+')">'+likeIcon+'</span><span class="text-secondary mx-1 me-3" id="num_'+index+'">'+likeNum[key]+'</span><span id="attend_'+index+'" onclick="pushAttend('+index+')">'+attendIcon+'</span><span class="text-secondary mx-1 me-3" id="num2_'+index+'">'+attendNum[key]+'</span><span id="absent_'+index+'" onclick="pushAbsent('+index+')">'+absentIcon+'</span><span class="text-secondary mx-1 me-2" id="num3_'+index+'">'+absentNum[key]+'</span></div><div class="position-absolute end-0 top-0" id="attended_'+index+'"><div></div></div></div>';
+                    }
                 });
             }
         } else {
@@ -192,7 +196,8 @@ function upload() {
         type : document.getElementById("type").selectedIndex,
         tags : tags,
         code : document.getElementById("attendNum").value,
-        point : Number(document.getElementById("point").value)
+        point : Number(document.getElementById("point").value),
+        end : document.getElementById("ended").checked
     }
 
     if(editting == -1) {

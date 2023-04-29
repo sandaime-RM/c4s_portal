@@ -123,12 +123,27 @@
 
       <p class="text-secondary text-center" id="noEvent" style="display : none;">イベントはありません</p>
     
-      <div class="py-2 row mb-5" id="eventList">
+      <div class="py-2 row mb-3" id="eventList">
       </div>
+
+      <div class="accordion accordion mb-4" id="accordionFlushExample">
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="flush-headingOne">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+              終了したイベント
+            </button>
+          </h2>
+          <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
+            <div class="my-2" id="endEvents">
+              
+            </div>
+          </div>
+        </div>
+      </div>
+
     </div>
 
     <br>
-
     
     <div class="position-fixed end-0 bottom-0 mx-3 my-3">
       <!--出席ボタン-->
@@ -170,6 +185,13 @@
                 <div class="py-2">
                   <label>日程 <span class="text-danger">*</span></label>
                   <input class="form-control" type="text" id="dateForm">
+
+                  <div class="form-check mt-2 mx-2">
+                    <input class="form-check-input" type="checkbox" value="" id="ended">
+                    <label class="form-check-label" for="ended">
+                      終了済み
+                    </label>
+                  </div>
                 </div>
 
                 <div class="py-2">

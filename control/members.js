@@ -30,6 +30,10 @@ var users;
 var menNum = 0;
 var totalNum = 0;
 var grades = [0, 0, 0, 0];
+var departments = {
+    name : [],
+    num : []
+}
 
 //ユーザー情報の取得
 onAuthStateChanged(auth, (us) => {
@@ -42,18 +46,39 @@ function restart() {
     get(ref(db, "users")).then((snapshot) => {
         users = snapshot.val();
 
-        totalNum = Object.keys(users).length;
+        totalNum = Object.keys(users).length - 1;
+        var date = new Date();
+
+        document.getElementById("tableBirth").innerHTML = "";
 
         Object.keys(users).forEach((key, index) => {
+            if(key == "admin-users") { return;}
             if(users[key].status) {totalNum --; return;}
 
             if(users[key].sex == "man") {menNum ++;}
 
             grades[users[key].grade - 1] ++;
+
+            if(departments.name.indexOf(users[key].department) == -1) {
+                departments.name.push(users[key].department);
+                departments.num.push(1);
+            } else {
+                var indexDepart = departments.name.indexOf(users[key].department);
+                departments.num[indexDepart] ++;
+            }
+
+            if(users[key].birth) {
+                var birthDate = new Date(users[key].birth);
+            
+                if(date.getMonth() == birthDate.getMonth()) {
+                    document.getElementById("tableBirth").innerHTML += '<tr><th scope="row">'+users[key].name+' さん</th><td>'+users[key].grade+'年生</td><td>'+(birthDate.getMonth() + 1)+'月'+(birthDate.getDate())+'日</td></tr>';
+                }
+            }
         });
 
         dispGenderRatio();
         dispGradeRatio();
+        dispDepartRatio();
     });
 }
 
@@ -61,8 +86,8 @@ function restart() {
 function dispGenderRatio() {
     document.getElementById("menNum").textContent = menNum;
     document.getElementById("womenNum").textContent = totalNum - menNum;
-    document.getElementById("menPercent").textContent = Math.floor(menNum/totalNum*1000)/10;
-    document.getElementById("womenPercent").textContent = Math.floor((totalNum - menNum)/totalNum*1000)/10;
+    document.getElementById("menPercent").textContent = (Math.floor(menNum/totalNum*1000)/10).toString() + "%";
+    document.getElementById("womenPercent").textContent = (Math.floor((totalNum - menNum)/totalNum*1000)/10).toString() + "%";
 
     const ctx1 = document.getElementById('genderGraph');
 
@@ -87,7 +112,7 @@ function dispGenderRatio() {
 function dispGradeRatio() {
     for(var i=1; i<=4; i++) {
         document.getElementById("grade"+i).textContent = grades[i-1];
-        document.getElementById("grade"+i + "Ratio").textContent = Math.floor(grades[i-1]/totalNum * 1000)/10;
+        document.getElementById("grade"+i + "Ratio").textContent = (Math.floor(grades[i-1]/totalNum * 1000)/10).toString() + "%";
     }
 
     const ctx2 = document.getElementById('gradeGraph');
@@ -104,6 +129,40 @@ function dispGradeRatio() {
                     '#51bf22',
                     '#18acd9',
                     '#7947ed'
+                ],
+                hoverOffset: 4
+            }]
+        }
+    });
+}
+
+//学科別人数比
+function dispDepartRatio() {
+    var length = departments.name.length;
+
+    document.getElementById("tableDepart").innerHTML = "";
+
+    for(var i=0; i<length; i++) {
+        document.getElementById("tableDepart").innerHTML += '<tr><th scope="row">' + departments.name[i] + '</th><td>'+departments.num[i]+'</td><td>' + (Math.floor(departments.num[i] / totalNum * 1000)/10).toString() + '%</td></tr>';
+    }
+
+    const ctx3 = document.getElementById('departGraph');
+
+    new Chart(ctx3, {
+        type: 'doughnut',
+        data: {
+            labels: departments.name,
+            datasets: [{
+                label: '学科別人数比',
+                data: departments.num,
+                backgroundColor: [
+                    '#e83c2c',
+                    '#51bf22',
+                    '#18acd9',
+                    '#7947ed',
+                    '#2cdb98',
+                    '#d4d006',
+                    '#363ce3'
                 ],
                 hoverOffset: 4
             }]

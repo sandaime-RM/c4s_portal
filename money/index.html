@@ -11,6 +11,8 @@
     <!-- JavaScript Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
     <script src="../script/login.js" type="module"></script>
     <script src="money.js" type="module"></script>
 
@@ -96,22 +98,30 @@
 
       <p id="errorMoney"></p>
 
-      <div style="max-width: 600px;">
-        <div class="my-3 mx-2 py-2 border rounded px-3 shadow-sm bg-white">
-          <h5 class="fw-normal">残高</h5>
-          <div class="fw-bold fs-3">￥<span id="total">---</span></div>
-          <div class="text-secondary small" id="date"></div>
+      <div class="row">
+        <div class="col-lg-5">
+          <div class="my-3 mx-2 py-2 border rounded px-3 shadow-sm bg-white">
+            <h5 class="fw-normal">残高</h5>
+            <div class="fw-bold fs-3">￥<span id="total">---</span></div>
+            <div class="text-secondary small" id="date"></div>
+          </div>
+  
+          <div class="py-3">
+            <h5 class="text-secondary fs-5">詳細</h5>
+            <select class="form-select mb-3" id="year" style="width: 50%">
+            </select>
+            <ul class="list-group mx-2 mb-5" id="moneyList">
+  
+            </ul>
+          </div>
         </div>
 
-        <div class="py-3">
-          <h5 class="text-secondary fs-5">詳細</h5>
-          <select class="form-select mb-3" id="year" style="width: 50%">
-          </select>
-          <ul class="list-group mx-2 mb-5" id="moneyList">
-
-          </ul>
+        <div class="col-lg-6">
+          <h5 class="fw-normal">資産推移</h5>
+          <canvas id="graphMoney"></canvas>
         </div>
       </div>
+      
       
     </div>
 

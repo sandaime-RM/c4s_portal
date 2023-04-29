@@ -27,6 +27,8 @@ const auth = getAuth();
 var user;
 var data, keys;
 var editting = -1;
+var fullData = {};
+var first = true;
 
 //部費情報の取得・表示
 window.onload = function() {
@@ -132,6 +134,8 @@ function dispList() {
                     total += Number(data2[element].price);
                 }
             });
+
+            Object.assign(fullData, data2);
         }
 
         document.getElementById("total").textContent = total.toLocaleString();
@@ -149,6 +153,11 @@ function dispList() {
         Object.keys(data).forEach((element, index) => {
             dispMoneyInfo(data[element], index);
         });
+
+        if(first) {
+            dispGraph();
+            first = false;
+        }
 
         return;
     })
@@ -209,3 +218,60 @@ function delItem() {
 
 window.delItem = delItem;
 export{delItem}
+
+function dispGraph() {
+    const ctx1 = document.getElementById('graphMoney');
+    var date = new Date();
+    var labels = [];
+    var data = []
+
+    for(var i=0; i<(Number(date.getFullYear()) - 2022); i++) {
+        var year = i + 2022
+        for(var j=1; j<=12; j++) {
+            labels.push(year + "-" + j);
+            data.push(0);
+        }
+    }
+
+    for(var i=1; i<=(date.getMonth()+1); i++) {
+        labels.push(date.getFullYear() + "-" + i);
+        data.push(0);
+    }
+
+    for(var i=0; i < data.length; i++) {
+        var thisDate = new Date(labels[i] + "-1");
+        thisDate.setMonth(thisDate.getMonth() + 1);
+        console.log(thisDate.toLocaleDateString);
+
+        Object.keys(fullData).forEach((key, index) => {
+            var dataDate = new Date(fullData[key].date);
+
+            if(thisDate > dataDate) {
+                if(fullData[key].type == 2) {
+                    data[i]  += Number(fullData[key].price);
+                } else {
+                    data[i]  -= Number(fullData[key].price);
+                }
+            }
+        });
+    }
+
+    data = data.slice(-12);
+    labels = labels.slice(-12);
+
+    console.log(data)
+
+    new Chart(ctx1, {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: '資産推移',
+                data: data,
+                fill: false,
+                borderColor: 'rgb(75, 192, 192)',
+                tension: 0.1
+            }]
+        }
+    });
+}

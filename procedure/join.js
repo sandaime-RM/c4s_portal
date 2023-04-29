@@ -74,8 +74,10 @@ onAuthStateChanged(auth, (us) => {
 
     get(ref(db, "users/" + user.uid)).then((snapshot) =>{
         if(snapshot.exists()) {
-            alert("既に入部手続きを終えています。部員情報の更新は、アカウント画面からお願いします。");
-            window.location.href = "../account";
+            if(!snapshot.val().status) {
+                alert("既に入部手続きを終えています。部員情報の更新は、アカウント画面からお願いします。");
+                window.location.href = "../account";
+            }
         }
     });
 });

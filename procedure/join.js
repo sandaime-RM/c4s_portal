@@ -41,6 +41,33 @@ function upload() {
     var phoneNumber = document.getElementById("phoneNumber");
     var otherDepart = document.getElementById("otherDepart");
 
+    var defective = false;
+    var errorList = ""
+
+    //空欄だったらエラー
+    if(name.value == "") {defective = true; errorList += "氏名 ";}
+    if(nameKana.value == "") {defective = true; errorList += "氏名（よみがな） ";}
+    if(number.value == "") {defective = true; errorList +="学籍番号 ";}
+    if(birth.value == "") {defective = true; errorList +="生年月日 ";}
+    if(!grade.value) {defective = true; errorList += "学年 ";}
+    if(phoneNumber.value == "") {defective = true; errorList += "電話番号 ";}
+
+    if(defective) {
+        document.getElementById("errorText").textContent = errorList;
+        document.getElementById("error").style.display = "";
+
+        return;
+    }
+
+    if(!user) {
+        errorList += "未ログイン";
+        document.getElementById("errorText").textContent = errorList;
+        document.getElementById("error").style.display = "";
+        return;
+    }
+
+    document.getElementById("Passed");
+
     set(ref(db, "users/" + user.uid), {
         name : name.value,
         nameKana : nameKana.value,

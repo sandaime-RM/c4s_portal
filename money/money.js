@@ -268,8 +268,9 @@ function dispGraph() {
             datasets: [{
                 label: '資産推移',
                 data: data,
-                fill: false,
-                borderColor: 'rgb(75, 192, 192)',
+                fill: true,
+                borderColor: '#f28005',
+                backgroundColor : '#f0bb8180',
                 tension: 0.1
             }]
         }

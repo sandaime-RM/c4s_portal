@@ -101,7 +101,7 @@
 
       <div class="py-3 px-3" style="max-width: 600px">
         <div class="mb-3">
-            <label>氏名</label>
+            <label>氏名（フルネーム）</label>
             <input class="form-control" type="text" id="name">
         </div>
         
@@ -191,6 +191,11 @@
         <div class="mb-3">
             <label>過去の制作経験、目標、楽しみなこと、など</label>
             <textarea class="form-control" id="detail"></textarea>
+        </div>
+
+        <div class="alert alert-danger" id="error" style="display:none;">
+          <h6>エラー</h6>
+          <p class="small" id="errorText"></p>
         </div>
 
         <div class="text-end">

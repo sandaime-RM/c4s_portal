@@ -27,7 +27,7 @@ const db = getDatabase(app);
 const auth = getAuth();
 var user = {};
 
-var reasons = ["内容に興味なし", "大学の授業・研究活動", "アルバイト", "他サークル", "体調不良", "帰省", "家庭の用事", "その他個人的な用事"];
+var reasons = ["内容に興味なし", "大学の授業・研究活動", "アルバイト", "他サークル", "体調不良", "帰省", "家庭の用事", "その他"];
 
 //データベースのデータ格納用
 var events = {};
@@ -414,6 +414,8 @@ function attend() {
         if(code == Number(events[key].code)) {
             successed = true;
 
+            set(ref(db, "eventReactions/" + key + "/attended/" + user.uid), true);
+
             set(ref(db, "users/" + user.uid + "/attend/" + key), {
                 date : (new Date()).getTime(),
                 title : events[key].title
@@ -587,6 +589,45 @@ function dispAttend2() {
                 Object.keys(reactions[eventId[editting]].attend).forEach((key, i) => {
                     if(users[key]) {
                         document.getElementById("attendList").innerHTML += '<li class="list-group-item"><h6>'+users[key].name + '<span class="text-secondary mx-1">' + users[key].studentNumber + '</span></h6><div class="small text-secondary">'+users[key].department+' '+users[key].grade+'年</div></li>';
+                    }
+                });
+            }
+        }
+    }
+}
+
+
+//いいね一覧の表示
+function dispAttended() {
+    if(!users) {
+        get(ref(db, "users"))
+        .then((snapshot) => {
+            users = snapshot.val();
+            dispAttended2();
+        })
+        .catch((error) => {
+            document.getElementById("noAttended").textContent = error;
+        })
+    } else {
+        dispAttended2();
+    }
+}
+
+window.dispAttended = dispAttended;
+export{dispAttended}
+
+//いいね一覧（実際に表示するのはこっち）
+function dispAttended2() {
+    document.getElementById("attendedList").innerHTML = "";
+
+    if(reactions) {
+        if(reactions[eventId[editting]]) {
+            if(reactions[eventId[editting]].likes) {
+                document.getElementById("noAttended").style.display = "none";
+
+                Object.keys(reactions[eventId[editting]].attended).forEach((key, i) => {
+                    if(users[key]) {
+                        document.getElementById("attendedList").innerHTML += '<li class="list-group-item"><h6>'+users[key].name + '<span class="text-secondary mx-1">' + users[key].studentNumber + '</span></h6><div class="small text-secondary">'+users[key].department+' '+users[key].grade+'年</div></li>';
                     }
                 });
             }

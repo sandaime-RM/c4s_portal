@@ -102,6 +102,33 @@ onAuthStateChanged(auth, (us) => {
         department.selectedIndex = data.departmentIndex;
         sex.value = data.sex;
 
+        //ポイントのランク表示
+        if(data.point) {
+            var point = data.point;
+            var color = "#c95700";
+
+            document.getElementById("myPoint").textContent = point;
+
+            document.getElementById("normal").style.display = "";
+            
+            if(point >= 8000) {
+              color = "#aba9a1";
+              document.getElementById("silver").style.display = "";
+            }
+  
+            if(point >= 15000) {
+              color = "#decb00";
+              document.getElementById("gold").style.display = "";
+            }
+  
+            if(point >= 3000) {
+              document.getElementById("userName").innerHTML += '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" style="color: '+color+'" class="ms-2 bi bi-check-circle-fill" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/></svg>';
+              document.getElementById("userIcon").style.border = "solid 4px " + color;
+              document.getElementById("bronze").style.display = "";
+            }
+        }
+
+        //部費支払い記録表時
         if(data.buhiRecord) {
             var buhiRecord = data.buhiRecord;
             document.getElementById("buhiRecord").innerHTML = "";
@@ -113,6 +140,7 @@ onAuthStateChanged(auth, (us) => {
             document.getElementById("buhiRecord").innerHTML = '<p class="text-secondary small text-center py-2 mx-1">履歴はありません</p>';
         }
 
+        //イベント出席記録表時
         if(data.attend) {
             var attends = data.attend;
             document.getElementById("attendHistory").innerHTML = "";

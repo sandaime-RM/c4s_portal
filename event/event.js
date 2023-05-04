@@ -414,6 +414,13 @@ function attend() {
         if(code == Number(events[key].code)) {
             successed = true;
 
+            if(userAttend) {
+                if(userAttend[key]) {
+                    alert("既に出席登録しています。");
+                    return;
+                }
+            }
+
             set(ref(db, "eventReactions/" + key + "/attended/" + user.uid), true);
 
             set(ref(db, "users/" + user.uid + "/attend/" + key), {
@@ -622,7 +629,7 @@ function dispAttended2() {
 
     if(reactions) {
         if(reactions[eventId[editting]]) {
-            if(reactions[eventId[editting]].likes) {
+            if(reactions[eventId[editting]].attended) {
                 document.getElementById("noAttended").style.display = "none";
 
                 Object.keys(reactions[eventId[editting]].attended).forEach((key, i) => {

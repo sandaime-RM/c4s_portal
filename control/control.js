@@ -74,6 +74,7 @@ function restart() {
                 return;
             }
 
+
             var sex = "女性";
             if(users[key].sex == "man") {sex="男性";}
 

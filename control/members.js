@@ -34,6 +34,8 @@ var departments = {
     name : [],
     num : []
 }
+var totalPoint = 0;
+var pointYen = 30000;
 
 //ユーザー情報の取得
 onAuthStateChanged(auth, (us) => {
@@ -54,6 +56,11 @@ function restart() {
         Object.keys(users).forEach((key, index) => {
             if(key == "admin-users") { return;}
             if(users[key].status) {totalNum --; return;}
+
+            //合計ポイントの計算
+            if(users[key].point) {
+                totalPoint += users[key].point;
+            }
 
             if(users[key].sex == "man") {menNum ++;}
 
@@ -79,6 +86,9 @@ function restart() {
         dispGenderRatio();
         dispGradeRatio();
         dispDepartRatio();
+
+        document.getElementById("pointTotal").textContent = Math.floor(totalPoint).toLocaleString();
+        document.getElementById("pointYen").textContent = "100 pt = ￥" + String(Math.round((pointYen/totalPoint) * 10000)/100) ;
     });
 }
 

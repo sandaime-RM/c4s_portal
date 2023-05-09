@@ -28,6 +28,7 @@ const auth = getAuth();
 const storage = getStorage();
 var user, storeData;
 var editting = -1;
+var selecting = -1;
 
 //ユーザー情報の取得
 onAuthStateChanged(auth, (us) => {
@@ -44,6 +45,11 @@ window.onload = function() {
 function restart() {
 
     get(ref(db, "store")).then((snapshot) => {
+        if(!snapshot.exists()) {
+            document.getElementById("noItem").style.display = "";
+            return;
+        }
+        
         storeData = snapshot.val();
         document.getElementById("loadingStore").style.display = "none";
         document.getElementById("itemList").innerHTML = "";
@@ -71,7 +77,7 @@ function restart() {
                 });
             }
             
-            document.getElementById("itemList").innerHTML += '<div class="card shadow-sm mx-2 my-2" style="width: 18rem; cursor: pointer;"><img id="img_'+index+'" class="card-img-top" alt="..."><div class="card-body"><h5 class="card-title">'+storeData[key].name+'</h5><p class="card-text small mb-1">'+storeData[key].detail+'</p><div class="text-end fw-bold fs-5 mb-2">'+priceText+'</div></div></div>';
+            document.getElementById("itemList").innerHTML += '<div class="card shadow-sm mx-2 my-2" style="width: 18rem; cursor: pointer;" data-bs-toggle="modal"  data-bs-target="#itemModal" onclick="openItemInfo('+index+')"><img id="img_'+index+'" class="card-img-top" alt="..."><div class="card-body"><h5 class="card-title">'+storeData[key].name+'</h5><p class="card-text small mb-1">'+storeData[key].detail+'</p><div class="text-end fw-bold fs-5 mb-2">'+priceText+'</div></div></div>';
         });
     });
 }
@@ -156,7 +162,8 @@ function upload() {
         num : Number(num2.value),
         detail : detail.value,
         tag : tag,
-        img : fileNames
+        img : fileNames,
+        uid : user.uid
     };
 
     if(editting == -1) {
@@ -197,3 +204,109 @@ function clearForm() {
 
 window.clearForm = clearForm;
 export{clearForm}
+
+//商品情報表示
+function openItemInfo(index) {
+    selecting = index;
+    var itemData = storeData[Object.keys(storeData)[index]];
+
+    document.getElementById("itemName").textContent = itemData.name;
+    document.getElementById("itemDetail").innerHTML = itemData.detail;
+    document.getElementById("itemNum").textContent = itemData.num;
+
+    document.getElementById("itemImages").innerHTML = "";
+
+    itemData.urls.forEach((url, index2) => {
+        console.log(url);
+
+        var active = "";
+        if(index2 == 0) {active = " active";}
+
+        document.getElementById("itemImages").innerHTML += '<div class="carousel-item'+active+'"><img src="'+url+'" class="d-block w-100" style="max-height: 300px; object-fit: contain;" alt="商品画像"></div>';
+    });
+
+    if(itemData.payType == 0) {
+        document.getElementById("itemPriceType").textContent = "CPT";
+        document.getElementById("itemPrice").textContent = itemData.price.toLocaleString() + " pt";
+    } else {
+        document.getElementById("itemPriceType").textContent = "JPY";
+        document.getElementById("itemPrice").textContent = "￥" + itemData.price.toLocaleString();
+    }
+
+    calcTotal();
+}
+
+window.openItemInfo = openItemInfo;
+export{openItemInfo}
+
+//合計金額の計算
+function calcTotal() {
+    var itemData = storeData[Object.keys(storeData)[selecting]];
+
+    var buyNum = document.getElementById("buyNum");
+
+    if(Number(buyNum.value) > itemData.num) {
+        buyNum.value = itemData.num;
+    }
+
+    if(Number(buyNum.value) < 1) {
+        buyNum.value = 1;
+    }
+
+    if(itemData.payType == 0) {
+        document.getElementById("totalPrice").textContent = (itemData.price * Number(buyNum.value)).toLocaleString() + " pt";
+    } else {
+        document.getElementById("totalPrice").textContent = "￥" + (itemData.price * Number(buyNum.value)).toLocaleString();
+    }
+    
+}
+
+window.calcTotal = calcTotal;
+export{calcTotal}
+
+//購入手続き
+function buy() {
+    var buyNum = document.getElementById("buyNum");
+    var itemData = storeData[Object.keys(storeData)[selecting]];
+    var total = itemData.price * Number(buyNum.value);
+
+    var result = confirm("購入を確定してよろしいでしょうか？");
+    if(!result) {return;}
+
+    get(ref(db, "users/" + user.uid)).then((snapshot) => {
+        var userData = snapshot.val();
+
+        if(itemData.payType == 0) {
+            if(userData.point < total) {
+                alert("エラー：ポイントが不足しています。");
+                return;
+            }
+
+            push(ref(db, "users/"+user.uid+"/pointHistory/"+((new Date()).getFullYear()) + "/"), {
+                amount : total,
+                date : (new Date()).getTime(),
+                title : itemData.name + " の購入",
+                mode : 2
+            });
+
+            push(ref(db, "storePay/" + Object.keys(storeData)[selecting]), {
+                email : user.email,
+                uid : user.uid,
+                userName : user.displayName,
+                num : Number(document.getElementById("buyNum").value),
+                message : document.getElementById("message").value,
+                date : (new Date()).getTime(),
+                paidPrice : total,
+                getPrice : Math.ceil(total * 0.9)
+            }).then(() => {
+                set(ref(db, "users/" + user.uid + "/point"), Number(userData.point - total))
+                .then(() => {
+                    alert("購入しました。");
+                });
+            });
+        }
+    });
+}
+
+window.buy = buy;
+export{buy}

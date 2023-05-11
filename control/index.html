@@ -157,6 +157,32 @@
             <ul class="list-group mb-5" id="buhiList" style="cursor: pointer;">
               
             </ul>
+
+            <h5 class="fw-normal">ストア売上</h5>
+            <div class="py-2">
+              <h6 class="text-danger">対応が必要な取引</h6>
+              <ul class="list-group" id="needTrans">
+
+                
+
+              </ul>
+            </div>
+
+            <div class="accordion accordion mb-5 mt-2" id="accordionTransaction">
+              <div class="accordion-item">
+                <h2 class="accordion-header" id="flush-headingOne3">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne3" aria-expanded="false" aria-controls="flush-collapseOne3">
+                    その他の取引
+                  </button>
+                </h2>
+                <div id="flush-collapseOne3" class="accordion-collapse collapse" aria-labelledby="flush-headingOne3" data-bs-parent="#accordionTransaction">
+                  <div class="my-3 text-center text-secondary" id="noExit">データがありません</div>
+                  <ul class="list-group mx-2 my-2" id="otherTransactions" style="cursor: pointer;">
+                    
+                  </ul>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -172,7 +198,7 @@
           </div>
           <div class="modal-body">
             <div class="py-2">
-              <div id="mbName" class="fs-5 fw-bold">松浦竜征</div>
+              <div id="mbName" class="fs-5 fw-bold"></div>
               <div class="text-secondary small py-1 mb-2" id="mbYomi"></div>
 
               <p><span id="mbSex" class="mx-1"></span><span class="mx-1" id="mbBirth"></span>
@@ -235,6 +261,50 @@
             <button type="button" class="btn btn-outline-danger" onclick="delItem()">削除</button>
             <button type="button" class="btn btn-outline-danger" onclick="exit()">退部</button>
             <button type="button" class="btn btn-dark" onclick="upload()">
+              <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" id="uploading" style="display: none;"></span>
+                保存
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="modal fade" id="transModal" tabindex="-1" aria-labelledby="transModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="transModalLabel">ストア取引情報</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <div class="py-2">
+              <div id="itemName" class="fs-5 fw-bold"></div>
+
+              <p>購入者：<span id="itemUserName" class="mx-1"></span>
+              <br>Eメール：<span id="itemEmail" class="mx-1"></span>
+              <br>購入数量：<span class="mx-1" id="itemNum"></span>
+              <br>支払い金額/ポイント：<span id="itemPaidPrice" class="mx-1"></span>
+              <br>購入日時：<span id="itemDate" class="mx-1"></span></p>
+              <label class="mt-1">取引メッセージ</label>
+              <p class="small mx-1 my-2" id="itemMessage"></p>
+            </div>
+
+            <hr>
+
+            <div class="py-2">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="transEnd">
+                <label class="form-check-label" for="transEnd">
+                  取引終了
+                </label>
+              </div>
+            </div>
+              
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-outline-danger" onclick="delStoreItem()">削除</button>
+            <button type="button" class="btn btn-dark" onclick="storeUpload()">
               <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" id="uploading" style="display: none;"></span>
                 保存
             </button>

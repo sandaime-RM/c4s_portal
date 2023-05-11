@@ -35,6 +35,7 @@ var buhiList = [];
 var noExit = true;
 var buhiTotal = 0;
 var totalMembers = 0;
+var storeTasks, storeData;
 
 //ユーザー情報の取得
 onAuthStateChanged(auth, (us) => {
@@ -117,9 +118,9 @@ function restart() {
             (x, y) => ((new Date(y.date)).getTime()) - ((new Date(x.date)).getTime()),
         )
 
-        buhiList.forEach((buhi, il) => {
-            document.getElementById("buhiList").innerHTML += '<li class="list-group-item">'+buhi.name+'<span class="fw-bold mx-1">￥' + Number(buhi.amount).toLocaleString() + '</span><span class="text-secondary mx-1 small">'+buhi.date+' 記録者 : '+buhi.recorderName+'</span></li>';
-        });
+        // buhiList.forEach((buhi, il) => {
+        //     document.getElementById("buhiList").innerHTML += '<li class="list-group-item">'+buhi.name+'<span class="fw-bold mx-1">￥' + Number(buhi.amount).toLocaleString() + '</span><span class="text-secondary mx-1 small">'+buhi.date+' 記録者 : '+buhi.recorderName+'</span></li>';
+        // });
 
         document.getElementById("totalMoney").textContent = buhiTotal.toLocaleString();
 
@@ -136,6 +137,31 @@ function restart() {
         document.getElementById("loadingControl").style.display = "none";
         document.getElementById("errorControl").innerHTML = '<span class="text-danger small">'+error+'</span>';
     });
+
+    //ストアの取引情報の表示
+    get(ref(db, "store")).then((snapshot2) => {
+        storeData = snapshot2.val();
+
+        get(ref(db, "storePay")).then((snapshot) => {
+            storeTasks = snapshot.val();
+    
+            Object.keys(storeTasks).forEach((key, index) => {
+                var itemTask = storeTasks[key];
+    
+                Object.keys(itemTask).forEach((key2, index2) => {
+                    //取引完了済みかどうか
+                    if(!itemTask.done) {
+                        document.getElementById("needTrans").innerHTML += '<li style="cursor:pointer;" data-bs-toggle="modal" data-bs-target="#transModal" class="list-group-item" onclick="openItemInfo('+index + ","+ index2 + ')"><div><span class="fw-bold">'+storeData[key].name+'<span class="text-secondary mx-1">×'+itemTask[key2].num+'</span></span></div><div class="text-secondary small">購入者：<span id="buyerName">'+itemTask[key2].userName+'</span> さん<br>購入日時：<span id="boughtDate">'+(new Date(itemTask[key2].date)).toLocaleString()+'</span></div></li>';
+                    } else {
+                        document.getElementById("noExit").style.display = "none";
+                        
+                        document.getElementById("otherTransactions").innerHTML += '<li style="cursor:pointer;" data-bs-toggle="modal" data-bs-target="#transModal" class="list-group-item" onclick="openItemInfo('+index + ","+ index2 + ')"><div><span class="fw-bold">'+storeData[key].name+'<span class="text-secondary mx-1">×'+itemTask[key2].num+'</span></span></div><div class="text-secondary small">購入者：<span id="buyerName">'+itemTask[key2].userName+'</span> さん<br>購入日時：<span id="boughtDate">'+(new Date(itemTask[key2].date)).toLocaleString()+'</span></div></li>';
+                    }
+                });
+            });
+        });
+    });
+    
 }
 
 //部員情報の表示
@@ -359,3 +385,21 @@ function reshowBuhi() {
 
 window.reshowBuhi = reshowBuhi;
 export{reshowBuhi}
+
+
+//ストア取引情報の表示
+function openItemInfo(itemNum, num) {
+    var itemKey = Object.keys(storeTasks)[itemNum];
+    var NumKey = Object.keys(storeTasks[itemKey])[num];
+
+    document.getElementById("itemName").textContent = storeData[itemKey].name;
+    document.getElementById("itemUserName").textContent = storeTasks[itemKey][NumKey].userName;
+    document.getElementById("itemEmail").innerHTML = "<a href='mailto:"+storeTasks[itemKey][NumKey].email+"'>" + storeTasks[itemKey][NumKey].email +"</a>";
+    document.getElementById("itemDate").textContent = (new Date(storeTasks[itemKey][NumKey].date)).toLocaleString();
+    document.getElementById("itemMessage").textContent = storeTasks[itemKey][NumKey].message;
+    document.getElementById("itemNum").textContent = storeTasks[itemKey][NumKey].num;
+    document.getElementById("itemPaidPrice").textContent = storeTasks[itemKey][NumKey].paidPrice;
+}
+
+window.openItemInfo = openItemInfo;
+export{openItemInfo}

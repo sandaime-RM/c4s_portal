@@ -253,6 +253,10 @@ function calcTotal() {
         buyNum.value = 1;
     }
 
+    if(Math.floor(Number(buyNum.value)) != Number(buyNum.value)) {
+        buyNum.value = Math.floor(Number(buyNum.value));
+    }
+
     if(itemData.payType == 0) {
         document.getElementById("totalPrice").textContent = (itemData.price * Number(buyNum.value)).toLocaleString() + " pt";
     } else {

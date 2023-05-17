@@ -47,6 +47,7 @@ function restart() {
     get(ref(db, "store")).then((snapshot) => {
         if(!snapshot.exists()) {
             document.getElementById("noItem").style.display = "";
+            document.getElementById("loadingStore").style.display = "none";
             return;
         }
         

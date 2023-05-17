@@ -110,7 +110,7 @@ function restart() {
                     buhiRecords[key2].name = users[key].name;
                     buhiList = buhiList.concat(buhiRecords[key2]);
                     buhiTotal += Number(buhiRecords[key2].amount);
-                });   
+                });  
             }
         });
 
@@ -215,6 +215,15 @@ function openInfo(i) {
         });
     } else {
         document.getElementById("buhiRecord").innerHTML = '<p class="text-secondary small text-center py-2 mx-1">履歴はありません</p>';
+    }
+
+    document.getElementById("accessRecord").innerHTML = "";
+    if(users[userKeys[i]].accessHistory) {
+        var accessRecord = users[userKeys[i]].accessHistory;
+
+        Object.keys(accessRecord).forEach((key, index) => {
+            document.getElementById("accessRecord").innerHTML = (new Date(accessRecord[key].date)).toLocaleString() + " " + accessRecord[key].path + "<br>" + document.getElementById("accessRecord").innerHTML;
+        });
     }
 
     editting = i;

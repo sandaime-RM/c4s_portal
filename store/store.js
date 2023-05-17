@@ -293,6 +293,15 @@ function buy() {
                 mode : 2
             });
 
+            push(ref(db, "users/"+user.uid+"/storeHistory/"), {
+                userName : user.displayName,
+                num : Number(document.getElementById("buyNum").value),
+                message : document.getElementById("message").value,
+                date : (new Date()).getTime(),
+                paidPrice : total,
+                itemName : itemData.name
+            });
+
             push(ref(db, "storePay/" + Object.keys(storeData)[selecting]), {
                 email : user.email,
                 uid : user.uid,
@@ -306,6 +315,7 @@ function buy() {
                 set(ref(db, "users/" + user.uid + "/point"), Number(userData.point - total))
                 .then(() => {
                     alert("購入しました。");
+                    window.location.reload();
                 });
             });
         }

@@ -2,7 +2,7 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-app.js";
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-analytics.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-auth.js";
-import { getDatabase, ref, onChildAdded, push, remove, set, get } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-database.js";
+import { getDatabase, ref, update, push, remove, set, get } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-database.js";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -36,6 +36,7 @@ var noExit = true;
 var buhiTotal = 0;
 var totalMembers = 0;
 var storeTasks, storeData;
+var edittingStore = ["", ""];
 
 //ユーザー情報の取得
 onAuthStateChanged(auth, (us) => {
@@ -150,10 +151,10 @@ function restart() {
     
                 Object.keys(itemTask).forEach((key2, index2) => {
                     //取引完了済みかどうか
-                    if(!itemTask.done) {
+                    if(!itemTask[key2].done) {
                         document.getElementById("needTrans").innerHTML += '<li style="cursor:pointer;" data-bs-toggle="modal" data-bs-target="#transModal" class="list-group-item" onclick="openItemInfo('+index + ","+ index2 + ')"><div><span class="fw-bold">'+storeData[key].name+'<span class="text-secondary mx-1">×'+itemTask[key2].num+'</span></span></div><div class="text-secondary small">購入者：<span id="buyerName">'+itemTask[key2].userName+'</span> さん<br>購入日時：<span id="boughtDate">'+(new Date(itemTask[key2].date)).toLocaleString()+'</span></div></li>';
                     } else {
-                        document.getElementById("noExit").style.display = "none";
+                        document.getElementById("noExit2").style.display = "none";
                         
                         document.getElementById("otherTransactions").innerHTML += '<li style="cursor:pointer;" data-bs-toggle="modal" data-bs-target="#transModal" class="list-group-item" onclick="openItemInfo('+index + ","+ index2 + ')"><div><span class="fw-bold">'+storeData[key].name+'<span class="text-secondary mx-1">×'+itemTask[key2].num+'</span></span></div><div class="text-secondary small">購入者：<span id="buyerName">'+itemTask[key2].userName+'</span> さん<br>購入日時：<span id="boughtDate">'+(new Date(itemTask[key2].date)).toLocaleString()+'</span></div></li>';
                     }
@@ -392,6 +393,8 @@ function openItemInfo(itemNum, num) {
     var itemKey = Object.keys(storeTasks)[itemNum];
     var NumKey = Object.keys(storeTasks[itemKey])[num];
 
+    edittingStore = [itemKey, NumKey]
+
     document.getElementById("itemName").textContent = storeData[itemKey].name;
     document.getElementById("itemUserName").textContent = storeTasks[itemKey][NumKey].userName;
     document.getElementById("itemEmail").innerHTML = "<a href='mailto:"+storeTasks[itemKey][NumKey].email+"'>" + storeTasks[itemKey][NumKey].email +"</a>";
@@ -399,7 +402,25 @@ function openItemInfo(itemNum, num) {
     document.getElementById("itemMessage").textContent = storeTasks[itemKey][NumKey].message;
     document.getElementById("itemNum").textContent = storeTasks[itemKey][NumKey].num;
     document.getElementById("itemPaidPrice").textContent = storeTasks[itemKey][NumKey].paidPrice;
+
+    if(storeTasks[itemKey][NumKey].done) {
+        document.getElementById("transEnd").checked = true;
+    } else {
+        document.getElementById("transEnd").checked = false;
+    }
 }
 
 window.openItemInfo = openItemInfo;
 export{openItemInfo}
+
+//ストア取引情報の更新
+function storeUpload() {
+    update(ref(db, "storePay/" + edittingStore[0] + "/" + edittingStore[1]), {
+        done : document.getElementById("transEnd").checked
+    }).then(() => {
+        alert("保存しました。");
+    });
+}
+
+window.storeUpload = storeUpload;
+export{storeUpload}

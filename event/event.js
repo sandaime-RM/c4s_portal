@@ -258,6 +258,15 @@ function openInfo(index) {
     document.getElementById("attendList").innerHTML = "";
     document.getElementById("noAttend").style.display = "";
 
+    document.getElementById("totalAttended").textContent = "";
+    if(reactions) {
+        if(reactions[eventId[editting]]) {
+            if(reactions[eventId[editting]].attended) {
+                document.getElementById("totalAttended").textContent = Object.keys(reactions[eventId[editting]].attended).length + "人";
+            }
+        }
+    }
+
     if(events[eventId[index]].code) {
         document.getElementById("codeSet").style.display = "";
     } else {
@@ -604,7 +613,7 @@ function dispAttend2() {
 }
 
 
-//いいね一覧の表示
+//出席済み一覧の表示
 function dispAttended() {
     if(!users) {
         get(ref(db, "users"))
@@ -623,7 +632,7 @@ function dispAttended() {
 window.dispAttended = dispAttended;
 export{dispAttended}
 
-//いいね一覧（実際に表示するのはこっち）
+//出席済み一覧（実際に表示するのはこっち）
 function dispAttended2() {
     document.getElementById("attendedList").innerHTML = "";
 

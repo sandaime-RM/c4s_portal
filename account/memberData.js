@@ -151,5 +151,11 @@ onAuthStateChanged(auth, (us) => {
         } else {
             document.getElementById("attendHistory").innerHTML = '<p class="text-secondary small text-center py-2 mx-1">履歴はありません</p>';
         }
+
+        //ストア購入履歴
+        var storeHistory = data.storeHistory;
+        Object.keys(storeHistory).forEach((key, index) => {
+             document.getElementById("storeHistory").innerHTML += '<li class="list-group-item"><span class="fw-bold mx-1">' + storeHistory[key].itemName + '<span class="text-secondary mx-1">×'+storeHistory[key].num+'</span></span><span class="text-secondary mx-1 small">'+(new Date(storeHistory[key].date)).toLocaleString()+'</span></li>';
+        });
     });
 });

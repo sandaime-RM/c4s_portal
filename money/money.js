@@ -29,6 +29,7 @@ var data, keys;
 var editting = -1;
 var fullData = {};
 var first = true;
+var exportData = [];
 
 //部費情報の取得・表示
 window.onload = function() {
@@ -116,6 +117,7 @@ function dispMoneyInfo(e, index) {
 function dispList() {
     var total = 0;
     document.getElementById("moneyList").innerHTML = '<div class="text-center py-3"><div class="spinner-border" role="status"><span class="visually-hidden">Loading...</span></div></div>';
+    exportData = [["日付", "項目", "収入/支出", "清算済み", "金額", "備考"]];
 
     get(ref(db, 'money')).then((snapshot) => {
         document.getElementById("errorMoney").innerHTML = "";
@@ -152,12 +154,15 @@ function dispList() {
 
         Object.keys(data).forEach((element, index) => {
             dispMoneyInfo(data[element], index);
+            pushExportData(data[element], index);
         });
 
         if(first) {
             dispGraph();
             first = false;
         }
+
+        exportCSV();
 
         return;
     })
@@ -184,6 +189,8 @@ function openInfo(index) {
 
     if(thisData.detail) {
         detail.value = thisData.detail;
+    } else {
+        detail.value = "";
     }
 
     if(thisData.type == 1) {
@@ -219,6 +226,7 @@ function delItem() {
 window.delItem = delItem;
 export{delItem}
 
+//推移グラフの表示
 function dispGraph() {
     const ctx1 = document.getElementById('graphMoney');
     var date = new Date();
@@ -276,3 +284,43 @@ function dispGraph() {
         }
     });
 }
+
+//出力用データに追加
+function pushExportData(pushData, index) {
+    var dataType = "収入";
+
+    if(pushData.type == 1) {
+        dataType = "支出";
+    }
+
+    var liquid2 = false;
+    if(pushData.liquid) {
+        liquid2 = true;
+    }
+
+    exportData.push([pushData.date, pushData.name, dataType, liquid2, pushData.price, pushData.detail]);
+}
+
+//データを出力
+function exportCSV() {
+    console.log(exportData);
+
+    //作った二次元配列をCSV文字列に直す。
+    let csv_string  = ""; 
+    for (let d of exportData) {
+        csv_string += d.join(",");
+        csv_string += '\r\n';
+    }   
+
+    //ファイル名の指定
+    let file_name   = "test.csv";
+
+    //CSVのバイナリデータを作る
+    let blob        = new Blob([csv_string], {type: "text/csv"});
+    let uri         = URL.createObjectURL(blob);
+
+    document.getElementById("exportBtn").href = uri;
+}
+
+window.exportCSV = exportCSV;
+export{exportCSV}

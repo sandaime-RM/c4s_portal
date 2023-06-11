@@ -78,7 +78,7 @@ function restart() {
                 });
             }
             
-            document.getElementById("itemList").innerHTML += '<div class="card shadow-sm mx-2 my-2" style="width: 18rem; cursor: pointer;" data-bs-toggle="modal"  data-bs-target="#itemModal" onclick="openItemInfo('+index+')"><img id="img_'+index+'" class="card-img-top" alt="..."><div class="card-body"><h5 class="card-title">'+storeData[key].name+'</h5><p class="card-text small mb-1">'+storeData[key].detail+'</p><div class="text-end fw-bold fs-5 mb-2">'+priceText+'</div></div></div>';
+            document.getElementById("itemList").innerHTML += '<div class="card shadow-sm mx-2 my-2" style="width: 18rem; cursor: pointer;" data-bs-toggle="modal"  data-bs-target="#itemModal" onclick="openItemInfo('+index+')"><img id="img_'+index+'" class="card-img-top" style="max-height: 220px;"><div class="card-body"><h5 class="card-title">'+storeData[key].name+'</h5><p class="card-text small mb-1">'+storeData[key].detail+'</p><div class="text-end fw-bold fs-5 mb-2">'+priceText+'</div></div></div>';
         });
     });
 }

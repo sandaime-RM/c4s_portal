@@ -115,7 +115,13 @@
 
       <p id="errorDoc" class="text-danger small"></p>
 
-      <div class="py-3 mb-5 row" id="documents">
+      <div class="text-center" id="loading">
+        <div class="spinner-border" role="status">
+            <span class="visually-hidden">Loading...</span>
+          </div>
+      </div>
+      
+      <div class="py-3 mb-5 row px-2" id="documents">
         <!-- <div class="card shadow-sm m-2 p-1" style="width: 18rem;">
             <div class="card-body">
                 <h5 class="card-title">理大祭配布資料Vol1.0</h5>
@@ -211,23 +217,6 @@
               </div>
             </div>
           </div>
-        </div>
-
-        <!-- ポイント受信完了 -->
-        <div class="modal fade" id="getModal" tabindex="-1" aria-labelledby="getModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title" id="getModalLabel">ポイント受け取り完了</h5>
-                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body text-center">
-                    <img src="../icons/check2-circle.svg" width="80px" class="mb-3">
-                    <h5 class="text-center py-2 my-0"><span id="getPoint"></span> pt</h5>
-                    <p class="text-secondary my-1"><span id="senderName"></span> さんより</p>
-                    <div class="mb-3">受け取り完了しました。</div>
-                </div>
-            </div>
         </div>
 </body>
 </html>

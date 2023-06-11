@@ -108,6 +108,7 @@ function restart() {
             if(buhiRecords) {
                 Object.keys(buhiRecords).forEach((key2, ib) => {
                     buhiRecords[key2].name = users[key].name;
+                    buhiRecords[key2].uid = key;
                     buhiList = buhiList.concat(buhiRecords[key2]);
                     buhiTotal += Number(buhiRecords[key2].amount);
                 });  
@@ -376,8 +377,11 @@ function reshowBuhi() {
     var endDate2 = new Date(endDate.value);
     buhiTotal = 0;
     var paidNum= 0;
+    var notPaidNum = 0;
+    var buhiUids = [];
 
     document.getElementById("buhiList").innerHTML = "";
+    document.getElementById("buhiNotList").innerHTML = "";
 
     buhiList.forEach((buhi, il) => {
         var buhiDate = new Date(buhi.date);
@@ -386,9 +390,24 @@ function reshowBuhi() {
 
             buhiTotal += buhi.amount;
             paidNum ++;
+            buhiUids.push(buhi.uid);
         }
     });
 
+    Object.keys(users).forEach((key) => {
+        if(key == "admin-users") {return;}
+
+        if(users[key].status == 1 || users[key].status == 2) {
+            return;
+        }
+
+        if(buhiUids.indexOf(key) == -1) {
+            notPaidNum ++;
+            document.getElementById("buhiNotList").innerHTML += '<li class="list-group-item">'+users[key].studentNumber+' ' + users[key].name + '<div class="small text-secondary">'+users[key].department+' '+users[key].grade+'年</div></li>';
+        }
+    });
+
+    document.getElementById("notBuhiNum").textContent = notPaidNum + "人";
     document.getElementById("totalMoney").textContent = buhiTotal.toLocaleString();
     document.getElementById("buhiRatio").textContent = Math.floor(paidNum/totalMembers*1000)/10;
 }

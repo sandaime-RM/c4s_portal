@@ -57,16 +57,15 @@ function restart() {
     get(ref(db, 'users')).then((snapshot) => {
         document.getElementById("loadingControl").style.display = "none";
         users = snapshot.val();
-        
-        //といとんより：部員をソートするプログラムを追加してみました。
-        //不都合あればこれを削除してください
-        users= sort(users);
-
         userKeys = Object.keys(users);
+
+        //ユーザーキーをソートするプログラムを追加しました
+        userKeys = sort(users);
+        
         var date = new Date();
         totalMembers = userKeys.length - 1;
 
-        Object.keys(users).forEach((key, i) => {
+        userKeys.forEach((key, i) => {
             if(key == "admin-users") {return;}
 
             //引退・退部した部員
@@ -142,7 +141,7 @@ function restart() {
     })
     .catch((error) => {
         document.getElementById("loadingControl").style.display = "none";
-        document.getElementById("errorControl").innerHTML = '<span class="text-danger small">'+error+'</span>';
+        document.getElementById("errorControl").innerHTML = '<span class="text-danger small">'+error.lineNumber+':'+error.message+'</span>';
     });
 
     //ストアの取引情報の表示
@@ -465,48 +464,44 @@ window.storeUpload = storeUpload;
 export{storeUpload}
 
 
-//部員をソートします。みんな大好き再帰関数です。
-export function sort(users, index){
-    if(index == null){
-        //部長を先頭に持ってくるプログラム
-        Object.keys(users).forEach((i) => {
-            if(users[i].role == "leader") { 
-                var picked = users[i];
-                delete users[i];
-                return [picked, sort(users, "subleader")]
-            }
-        });
-    }
-    else if(index == "subleader"){
-        //副部長を先頭に持ってくるプログラム
-        Object.keys(users).forEach((i) => {
-            if(users[i].role == "subleader") { 
-                var picked = users[i];
-                delete users[i];
-                return [picked, sort(users, "treasurer")]
-            }
-        });
-    }
-    else if(index == "treasurer"){
-        //会計を先頭に持ってくるプログラム
-        Object.keys(users).forEach((i) => {
-            if(users[i].role == "treasurer") { 
-                var picked = users[i];
-                delete users[i];
-                return [picked, sort(users, "active")]
-            }
-        });
-    }
-    else if(index == "active"){
-        //現役を先頭に持ってくるプログラム
-        Object.keys(users).forEach((i) => {
-            if(users[i].role == "active") {
-                var picked = users[i];
-                delete users[i];
-                return [picked, sort(users, "active")]
-            }
-        });
-        return users;
-    }
+//部員をソートします。
+export function sort(users){
+    var leader_key;
+    var subleader_key;
+    var treasurer_key;
+    var active_keys = [];
+    var new_keys = [];
+    var rest = Object.keys(users);
+
+    //部長を抽出
+    Object.keys(users).forEach((i) => {
+        if(users[i].role == "leader") { leader_key = i; }
+    })
+    rest.splice(rest.indexOf(leader_key),1);
+    //副部長を抽出
+    Object.keys(users).forEach((i) => {
+        if(users[i].role == "subleader") { subleader_key = i; }
+    })
+    rest.splice(rest.indexOf(subleader_key),1);
+    //会計を抽出
+    Object.keys(users).forEach((i) => {
+        if(users[i].role == "treasurer") { treasurer_key = i; }
+    })
+    rest.splice(rest.indexOf(treasurer_key),1);
+    //現役を抽出
+    Object.keys(users).forEach((i) => {
+        if(users[i].role == "active") { active_keys.unshift(i); }
+    })
+    active_keys.forEach(element => {
+        rest.splice(rest.indexOf(element),1);
+    });
+    //新入部員を抽出
+    Object.keys(users).forEach((i) => {
+        if(users[i].role == "new") { new_keys.unshift(i); }
+    })
+    new_keys.forEach(element => {
+        rest.splice(rest.indexOf(element),1);
+    });
+    return [leader_key, subleader_key, treasurer_key, ...active_keys, ...new_keys, ...rest];
 }
 window.sort = sort;

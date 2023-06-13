@@ -50,7 +50,7 @@ function restart() {
     var date = new Date();
     document.getElementById("endDate").value = date.getFullYear() + "-" + ("0" + (date.getMonth() + 1)).slice(-2) + "-" + ("0" + date.getDate()).slice(-2);
     date.setMonth(date.getMonth() - 1);
-    document.getElementById("startDate").value = date.getFullYear() + "-" + ("0" + (date.getMonth() + 1)).slice(-2) + "-" + ("0" + date.getDate()).slice(-2);
+    document.getElementById("startDate").value = "2023-04-01";
 
     toCsvData = [["名前", "名前（ふりがな）", "学籍番号", "学部学科", "大学名・学部学科（他大学）", "学年", "性別", "誕生日", "電話番号"]];
 

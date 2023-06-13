@@ -57,6 +57,11 @@ function restart() {
     get(ref(db, 'users')).then((snapshot) => {
         document.getElementById("loadingControl").style.display = "none";
         users = snapshot.val();
+        
+        //といとんより：部員をソートするプログラムを追加してみました。
+        //不都合あればこれを削除してください
+        users= sort(users);
+
         userKeys = Object.keys(users);
         var date = new Date();
         totalMembers = userKeys.length - 1;
@@ -205,6 +210,9 @@ function openInfo(i) {
         document.getElementById("role1").checked = false;
     }
 
+    //役職を表示
+    document.getElementById("role2").value = users[userKeys[i]].role;
+
     if(users[userKeys[i]].buhiRecord) {
         var buhiRecord = users[userKeys[i]].buhiRecord;
         document.getElementById("buhiRecord").innerHTML = "";
@@ -275,6 +283,9 @@ function upload() {
             userId : user.uid
         });
     }
+
+    //役職を登録
+    set(ref(db, "users/" + userKeys[editting] + "/role"), document.getElementById("role2").value)
 
     if(document.getElementById("role1").checked) {
         set(ref(db, "users/admin-users/" + userKeys[editting]), true)
@@ -452,3 +463,50 @@ function storeUpload() {
 
 window.storeUpload = storeUpload;
 export{storeUpload}
+
+
+//部員をソートします。みんな大好き再帰関数です。
+export function sort(users, index){
+    if(index == null){
+        //部長を先頭に持ってくるプログラム
+        Object.keys(users).forEach((i) => {
+            if(users[i].role == "leader") { 
+                var picked = users[i];
+                delete users[i];
+                return [picked, sort(users, "subleader")]
+            }
+        });
+    }
+    else if(index == "subleader"){
+        //副部長を先頭に持ってくるプログラム
+        Object.keys(users).forEach((i) => {
+            if(users[i].role == "subleader") { 
+                var picked = users[i];
+                delete users[i];
+                return [picked, sort(users, "treasurer")]
+            }
+        });
+    }
+    else if(index == "treasurer"){
+        //会計を先頭に持ってくるプログラム
+        Object.keys(users).forEach((i) => {
+            if(users[i].role == "treasurer") { 
+                var picked = users[i];
+                delete users[i];
+                return [picked, sort(users, "active")]
+            }
+        });
+    }
+    else if(index == "active"){
+        //現役を先頭に持ってくるプログラム
+        Object.keys(users).forEach((i) => {
+            if(users[i].role == "active") {
+                var picked = users[i];
+                delete users[i];
+                return [picked, sort(users, "active")]
+            }
+        });
+        return users;
+    }
+}
+window.sort = sort;

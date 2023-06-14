@@ -38,7 +38,6 @@ var storeTasks, storeData;
 var edittingStore = ["", ""];
 
 var adminusers;
-var admin;
 
 //ユーザー情報の取得
 onAuthStateChanged(auth, (us) => {
@@ -49,7 +48,6 @@ onAuthStateChanged(auth, (us) => {
 window.onload = restart();
 
 function restart() {
-
     var date = new Date();
     document.getElementById("endDate").value = date.getFullYear() + "-" + ("0" + (date.getMonth() + 1)).slice(-2) + "-" + ("0" + date.getDate()).slice(-2);
     date.setMonth(date.getMonth() - 1);
@@ -65,12 +63,11 @@ function restart() {
         //管理者IDリストを作成しておく(連想配列({ID:BOOL,ID:BOOL,...})の形式で格納されます)
         get(ref(db, "admin-users")).then((data) => {
           adminusers = data.val();
-          admin = adminusers[userKeys];
           //ユーザーキーをソート
           userKeys = sort(users);
         
           var date = new Date();
-          totalMembers = userKeys.length - 1;
+          totalMembers = userKeys.length;
   
           userKeys.forEach((key, i) => {
               //引退・退部した部員
@@ -93,34 +90,31 @@ function restart() {
               var roles = "";
               if(users[key].role) {
                   var role = users[key].role;
-                  var roleText = "";
-                  var color = "";
                   
-                  //ロールのバッジ表示
-                  switch(role) {
-                      case "leader" :
-                          roleText = "部長"; color = "primary";
-                          break;
-                      case "subleader" :
-                          roleText = "副部長"; color = "primary";
-                          break;
-                      case "treasurer" :
-                          roleText = "会計"; color = "primary";
-                          break;
-                      case "active" :
-                          roleText = "現役"; color = "success";
-                          break;
-                      case "new" :
-                          roleText = "新規"; color = "warning";
-                          break;
+                  //幹部はバッジをつける
+                  switch (role) {
+                    case "leader":
+                      roles += '<span class="mx-1 badge bg-primary">部長</span>';
+                      break;
+                    case "subleader":
+                      roles += '<span class="mx-1 badge bg-primary">副部長</span>';
+                      break;
+                    case "treasurer":
+                      roles += '<span class="mx-1 badge bg-primary">会計</span>';
+                      break;
+                    default:
+                      break;
                   }
-  
-                  roles += '<span class="mx-1 badge bg-'+color+'">'+roleText+'</span>';
+
+                  //新入部員もバッジをつける
+                  if(role == "new"){
+                    roles += '<i class="bi bi-stars" style="color: #FFD700;"></i>'
+                  }
               }
   
   
   
-              if(users[key].admin) {
+              if(adminusers[key]) {
                   roles += '<span class="badge bg-secondary mx-1">管理者</span>';
               }
   
@@ -200,38 +194,32 @@ function openInfo(i) {
     document.getElementById("mbYomi").textContent = users[userKeys[i]].nameKana;
 
     if(users[userKeys[i]].status == 1 || users[userKeys[i]].status == 2) {
-        document.getElementById("mbPR").textContent = users[userKeys[i]].reason;
-        document.getElementById("detailTitle").textContent = "退部理由";
+      //退部引退した人
+      document.getElementById("mbPR").textContent = users[userKeys[i]].reason;
+      document.getElementById("detailTitle").textContent = "退部理由";
 
-        document.getElementById("mbBirth").textContent = "---------" + "生";
-        document.getElementById("mbTel").textContent = "----------";
-        document.getElementById("mbSex").textContent = "----";
-        document.getElementById("mbDepartment").textContent = "----------";
-        document.getElementById("mbGrade").textContent = "-- 年生";
+      document.getElementById("mbBirth").textContent = "---------" + "生";
+      document.getElementById("mbTel").textContent = "----------";
+      document.getElementById("mbSex").textContent = "----";
+      document.getElementById("mbDepartment").textContent = "----------";
+      document.getElementById("mbGrade").textContent = "-- 年生";
     } else {
-        document.getElementById("mbBirth").textContent = users[userKeys[i]].birth + "生";
-        document.getElementById("mbTel").textContent = users[userKeys[i]].phoneNumber;
-    
-        var sex = "男性";
-        if(users[userKeys[i]].sex == "woman") {
-            sex = "女性";
-        }
-    
-        document.getElementById("mbSex").textContent = sex;
-        document.getElementById("mbDepartment").textContent = users[userKeys[i]].department;
-        document.getElementById("mbGrade").textContent = users[userKeys[i]].grade + "年生";
-        document.getElementById("mbPR").textContent = users[userKeys[i]].detail;
-        document.getElementById("detailTitle").textContent = "自己PR";
+      //在籍している人
+      document.getElementById("mbBirth").textContent = users[userKeys[i]].birth + "生";
+      document.getElementById("mbTel").textContent = users[userKeys[i]].phoneNumber;
+  
+      var sex = "男性";
+      if(users[userKeys[i]].sex == "woman") { sex = "女性"; }
+  
+      document.getElementById("mbSex").textContent = sex;
+      document.getElementById("mbDepartment").textContent = users[userKeys[i]].department;
+      document.getElementById("mbGrade").textContent = users[userKeys[i]].grade + "年生";
+      document.getElementById("mbPR").textContent = users[userKeys[i]].detail;
+      document.getElementById("detailTitle").textContent = "自己PR";
     }
-    
     
     document.getElementById("mbStudentNumber").textContent = users[userKeys[i]].studentNumber;
-
-    if(users[userKeys[i]][admin]) {
-        document.getElementById("role1").checked = true;
-    } else {
-        document.getElementById("role1").checked = false;
-    }
+    document.getElementById("role1").checked = adminusers[userKeys[i]];
 
     //役職を表示
     document.getElementById("role2").value = users[userKeys[i]].role;
@@ -287,7 +275,7 @@ function create_csv(data){
     document.getElementById("exportBtn").href = uri;
 }
 
-//役職情報の保存
+//ユーザー情報の保存
 function upload() {
     if(document.getElementById("buhiPrice").value) {
         push(ref(db, "users/" + userKeys[editting] + "/buhiRecord/"), {
@@ -310,7 +298,7 @@ function upload() {
     //役職を登録
     set(ref(db, "users/" + userKeys[editting] + "/role"), document.getElementById("role2").value)
 
-    set(ref(db, "users/" + userKeys[editting] + "/admin"), document.getElementById("role1").checked).then(() => {
+    set(ref(db, "admin-users/" + userKeys[editting]), document.getElementById("role1").checked).then(() => {
       alert('保存しました');
     })
 }

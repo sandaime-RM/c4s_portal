@@ -85,13 +85,34 @@ function restart() {
 
             var tags = "";
             var roles = "";
-            if(users[key].fields) {
-                tags = '<div class="text-primary small">';
-                users[key].fields.forEach(element => {
-                    tags += '<span class="mx-1">'+element+'</span>';
-                });
-                tags += '</div>';
+            if(users[key].role) {
+                var role = users[key].role;
+                var roleText = "";
+                var color = "";
+                
+                //ロールのバッジ表示
+                switch(role) {
+                    case "leader" :
+                        roleText = "部長"; color = "primary";
+                        break;
+                    case "subleader" :
+                        roleText = "副部長"; color = "primary";
+                        break;
+                    case "treasurer" :
+                        roleText = "会計"; color = "primary";
+                        break;
+                    case "active" :
+                        roleText = "現役"; color = "success";
+                        break;
+                    case "new" :
+                        roleText = "新規"; color = "warning";
+                        break;
+                }
+
+                roles += '<span class="mx-1 badge bg-'+color+'">'+roleText+'</span>';
             }
+
+
 
             if(users["admin-users"][key]) {
                 roles += '<span class="badge bg-secondary mx-1">管理者</span>';
@@ -101,6 +122,7 @@ function restart() {
             var birth = new Date(users[key].birth);
             age = Math.floor((date - birth) / (86400000 * 365));
 
+            //リストに表示
             document.getElementById("memberList").innerHTML += '<li class="list-group-item" onclick="openInfo('+i+')" data-bs-toggle="modal" data-bs-target="#exampleModal"><h6>'+users[key].name + '<span class="text-secondary mx-1">' + users[key].studentNumber + '</span>' + roles + '</h6><div class="small text-secondary">'+users[key].department+' '+users[key].grade+'年 '+sex+' '+age+'歳</div>'+tags+'</li>'
             
             toCsvData.push([users[key].name, users[key].nameKana, users[key].studentNumber, users[key].department, users[key].otherDepart, users[key].grade, sex, users[key].birth, String(users[key].phoneNumber)]);

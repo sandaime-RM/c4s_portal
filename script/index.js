@@ -33,6 +33,9 @@ var reactions;
 var userAttend;
 var amount;
 
+//HTML要素
+var attendmodal = new bootstrap.Modal(document.getElementById("attendModal"));
+
 //ユーザー情報の取得
 onAuthStateChanged(auth, (us) => {
     user = us;
@@ -51,16 +54,25 @@ onAuthStateChanged(auth, (us) => {
 
 //読み込み時に実行
 window.onload = function() {
-    get(ref(db, "event")).then((snapshot) => {
-        if(snapshot.exists()) {
-            //イベントリストの表示
-            if(Object.keys(snapshot.val()).length != Object.keys(events).length) {
-                events = snapshot.val();
-            }
+  //開催中のイベントをトップに表示するプログラム
+  //複数同時開催には対応していません
+  get(ref(db, "event")).then((events) => {
+    Object.keys(events.val()).forEach((i) => {
+      var data = events.val()[i];
+      if(data.term != null){
+        if(new Date(data.term.begin) <= new Date() && new Date() <= new Date(data.term.end)){
+          document.getElementById("heldevent").style.display = "block";
+          document.getElementById("heldevent_title").innerText = data.title;
+          document.getElementById("heldevent_place").innerText = data.place;
+          data.tags.forEach(tag => {
+            document.getElementById("heldevent_tags").innerText += "#" + tag;
+          });
+          document.getElementById("heldevent_description").innerText = data.description;
         }
-    });
+      }
+    })
+  });
 }
-
 
 //出席登録
 function attend() {
@@ -117,12 +129,10 @@ function attend() {
         document.getElementById("errorAttend").innerHTML = "入力された出席コードは無効です。";
     }
 }
-
 window.attend = attend;
 export{attend}
 
 //QR表示
-
 function showQR() {
     // 入力された文字列を取得
     var userInput = user.uid;
@@ -141,8 +151,18 @@ function showQR() {
     qr.level = 'L'; // QRコードの誤り訂正レベル
     qr.size = 240; // QRコードのサイズ
     })();
-  
 }
-
 window.showQR = showQR;
 export{showQR}
+
+export function openmodal(target) {
+  switch (target) {
+    case "attend":
+      attendmodal.show();
+      break;
+  
+    default:
+      break;
+  }
+}
+window.openmodal = openmodal;

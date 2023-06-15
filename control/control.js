@@ -48,6 +48,15 @@ onAuthStateChanged(auth, (us) => {
 window.onload = restart();
 
 function restart() {
+    //admin-usersを移動
+    //すぐ消す
+    get(ref(db, "users")).then((data) => {
+      Object.keys(data.val()).forEach((id) => {
+        set(ref(db, "admin-users/" + id), data.val()[id].admin).then(() => {
+        });
+      });
+    })
+
     var date = new Date();
     document.getElementById("endDate").value = date.getFullYear() + "-" + ("0" + (date.getMonth() + 1)).slice(-2) + "-" + ("0" + date.getDate()).slice(-2);
     date.setMonth(date.getMonth() - 1);

@@ -26,6 +26,7 @@ const analytics = getAnalytics(app);
 const db = getDatabase(app);
 const auth = getAuth();
 var user = {};
+var c4suser = {};
 
 //データベースのデータ格納用
 var events = {};
@@ -38,23 +39,41 @@ var attendmodal = new bootstrap.Modal(document.getElementById("attendModal"));
 
 //ユーザー情報の取得
 onAuthStateChanged(auth, (us) => {
-    user = us;
+  user = us;
 
+  //ログイン状態
+  if(user){
     get(ref(db, "users/" + user.uid)).then((snapshot) => {
-        var userData = snapshot.val();
+      c4suser = snapshot.val();
+      
+      //プロフィールを表示
+      document.getElementById("userPic").innerHTML = '<img src="' + user.photoURL + '" style="width: 100%; height: 100%; border-radius: 50%;">'
+      document.getElementById("userName").innerText = user.displayName;
+      document.getElementById("userTUS").innerHTML = c4suser.department + " " + c4suser.grade + "年生" + "<br>" + c4suser.studentNumber;
 
-        amount = userData.point;
-        userAttend = userData.attend;
+      document.getElementById("pointbar").style.width = c4suser.point / 10000;
+      document.getElementById("pointnum").innerText = c4suser.point;
+      
 
-        document.getElementById("info1").textContent = userData.studentNumber + " " + userData.name;
-        document.getElementById("info2").textContent = userData.department + " " + userData.grade + "年生";
-        showQR();
+      document.getElementById("profile").style.display = "block";
+
+      amount = c4suser.point;
+      userAttend = c4suser.attend;
+
+      document.getElementById("info1").textContent = c4suser.studentNumber + " " + c4suser.name;
+      document.getElementById("info2").textContent = c4suser.department + " " + c4suser.grade + "年生";
+      showQR();
     });
+  }
+  //ログアウト状態
+  else{
+
+  }
 });
 
 //読み込み時に実行
 window.onload = function() {
-  //開催中のイベントをトップに表示するプログラム
+  //開催中のイベントをトップに表示:made by toyton
   //複数同時開催には対応していません
   get(ref(db, "event")).then((events) => {
     Object.keys(events.val()).forEach((i) => {
@@ -155,6 +174,7 @@ function showQR() {
 window.showQR = showQR;
 export{showQR}
 
+//モーダルを開くだけのプログラム:made by toyton
 export function openmodal(target) {
   switch (target) {
     case "attend":

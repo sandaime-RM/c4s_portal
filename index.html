@@ -108,11 +108,13 @@
   <!--メインの画面-->
   <main>
     <div class="container">
+      <!--タイトル-->
       <div class="py-3 text-center">
         <h2 class="fs-2 fw-normal">C4's Portal</h2>
         <p class="text-secondary">～ワクワクを作りつづける～</p>
       </div>
 
+      <!--開催中のイベントがあれば表示-->
       <div id="heldevent" style="max-width: 480px; margin: 20px auto; text-align: center; border-radius: 15px; padding: 10px 10px; outline: solid 1px darkgreen; background-color: rgb(226, 250, 226); display: none;">
         <h5 style="text-align: center; color: darkgreen;">開催中のイベント</h5>
         <div class="card shadow-sm" style="border-bottom: 12px solid green; cursor: pointer; border-radius: 10px;" onclick="openmodal('attend');">
@@ -131,6 +133,28 @@
               出席登録する
             </div>
           </div>
+        </div>
+      </div>
+
+      <!--ログイン時に表示するプロフィール-->
+      <div id="profile" class="row" style="max-width: 480px; margin: 20px auto; padding: 10px 10px; outline: solid 1px lightgray; border-radius: 10px; display: none;">
+        <div class="col-sm-4">
+          <div id="userPic" style="width: 80%; max-width: 100px; height: auto; margin: 0 auto;">
+            <img src="icons/person-circle-gray.svg" style="width: 100%; height: 100%;">
+          </div>
+        </div>
+        <div class="col-sm-8" style="text-align: center;">
+          <h5 id="userName"></h5>
+          <p id="userTUS" style="color: gray;"></p>
+        </div>
+
+        <!--ポイント-->
+        <div style="text-align: center;">
+          <div class="progress" style="height: 10px;">
+            <div class="progress-bar progress-bar-striped bg-success" role="progressbar" style="width: 25%;" id="pointbar"></div>
+          </div>
+          <p>現在のC4'sポイント</p>
+          <h1 id="pointnum">----</h1>
         </div>
       </div>
 

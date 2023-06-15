@@ -51,7 +51,7 @@ onAuthStateChanged(auth, (us) => {
       document.getElementById("userName").innerText = user.displayName;
       document.getElementById("userTUS").innerHTML = c4suser.department + " " + c4suser.grade + "年生" + "<br>" + c4suser.studentNumber;
 
-      document.getElementById("pointbar").style.width = c4suser.point / 10000;
+      document.getElementById("pointbar").style.width = String(c4suser.point / 10000 * 100) + "%";
       document.getElementById("pointnum").innerText = c4suser.point;
       
 

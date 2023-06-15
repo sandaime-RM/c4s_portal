@@ -137,24 +137,26 @@
       </div>
 
       <!--ログイン時に表示するプロフィール-->
-      <div id="profile" class="row" style="max-width: 480px; margin: 20px auto; padding: 10px 10px; outline: solid 1px lightgray; border-radius: 10px; display: none;">
-        <div class="col-sm-4">
-          <div id="userPic" style="width: 80%; max-width: 100px; height: auto; margin: 0 auto;">
-            <img src="icons/person-circle-gray.svg" style="width: 100%; height: 100%;">
+      <div id="profile" style="max-width: 480px; margin: 20px auto; padding: 10px 10px; outline: solid 1px lightgray; border-radius: 10px; display: none;">
+        <div class="row mb-2">
+          <div class="col-sm-4">
+            <div id="userPic" style="width: 80%; max-width: 100px; height: auto; margin: 0 auto;">
+              <img src="icons/person-circle-gray.svg" style="width: 100%; height: 100%;">
+            </div>
           </div>
-        </div>
-        <div class="col-sm-8" style="text-align: center;">
-          <h5 id="userName"></h5>
-          <p id="userTUS" style="color: gray;"></p>
+          <div class="col-sm-8" style="text-align: center;">
+            <h5 id="userName"></h5>
+            <p id="userTUS" style="color: gray;"></p>
+          </div>
         </div>
 
         <!--ポイント-->
         <div style="text-align: center;">
-          <div class="progress" style="height: 10px;">
-            <div class="progress-bar progress-bar-striped bg-success" role="progressbar" style="width: 25%;" id="pointbar"></div>
-          </div>
           <p>現在のC4'sポイント</p>
           <h1 id="pointnum">----</h1>
+          <div class="progress" style="height: 10px;">
+            <div class="progress-bar progress-bar-striped" role="progressbar" id="pointbar"></div>
+          </div>
         </div>
       </div>
 

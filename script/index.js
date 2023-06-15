@@ -9,14 +9,14 @@ import { getDatabase, ref, push, remove, set, get } from "https://www.gstatic.co
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-    apiKey: "AIzaSyBE60G8yImWlENWpCnQZzqqVUrwWa_torg",
-    authDomain: "c4s-portal.firebaseapp.com",
-    databaseURL: "https://c4s-portal-default-rtdb.asia-southeast1.firebasedatabase.app",
-    projectId: "c4s-portal",
-    storageBucket: "c4s-portal.appspot.com",
-    messagingSenderId: "863775995414",
-    appId: "1:863775995414:web:82eb9557a13a099dfbe737",
-    measurementId: "G-K2SR1WSNRC"
+  apiKey: "AIzaSyBE60G8yImWlENWpCnQZzqqVUrwWa_torg",
+  authDomain: "c4s-portal.firebaseapp.com",
+  databaseURL: "https://c4s-portal-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "c4s-portal",
+  storageBucket: "c4s-portal.appspot.com",
+  messagingSenderId: "863775995414",
+  appId: "1:863775995414:web:82eb9557a13a099dfbe737",
+  measurementId: "G-K2SR1WSNRC"
 };
 
 
@@ -49,12 +49,45 @@ onAuthStateChanged(auth, (us) => {
       //プロフィールを表示
       document.getElementById("userPic").innerHTML = '<img src="' + user.photoURL + '" style="width: 100%; height: 100%; border-radius: 50%;">'
       document.getElementById("userName").innerText = user.displayName;
-      document.getElementById("userTUS").innerHTML = c4suser.department + " " + c4suser.grade + "年生" + "<br>" + c4suser.studentNumber;
+      document.getElementById("userNum").innerText = c4suser.studentNumber;
 
-      document.getElementById("pointbar").style.width = String(c4suser.point / 10000 * 100) + "%";
+      //ランク計算
+      // 0-     ビギナー
+      // 3000-  アマチュア
+      // 8000-  エキスパート
+      // 15000- ベテラン
+      var rankname = ["ビギナー", "アマチュア", "エキスパート", "ベテラン"];
+      var rankcolor = ["cornflowerblue", "darkgreen", "purple", "goldenrod"];
       document.getElementById("pointnum").innerText = c4suser.point;
+      var ranknum;
+      var ratio;
+      var messageHTML;
+      if ( c4suser.point < 3000 ) {
+        ranknum = 0;
+        ratio = String(c4suser.point / 3000 * 100) + "%";
+        messageHTML = '<p>' + rankname[1] + 'まであと<span style="color: darkred; font-weight: bold;">' + String(3000 - c4suser.point) + '</span>pt</p>';
+      }
+      else if ( c4suser.point < 8000 ) {
+        ranknum = 1;
+        ratio = String((c4suser.point - 3000) / 5000 * 100) + "%";
+        messageHTML = '<p>' + rankname[2] + 'まであと<span style="color: darkred; font-weight: bold;">' + String(8000 - c4suser.point) + '</span>pt</p>';
+      }
+      else if ( c4suser.point < 15000 ) {
+        ranknum = 2;
+        ratio = String((c4suser.point - 8000) / 7000 * 100) + "%";
+        messageHTML = '<p>' + rankname[3] + 'まであと<span style="color: darkred; font-weight: bold;">' + String(15000 - c4suser.point) + '</span>pt</p>';
+      }
+      else {
+        ranknum = 3;
+        ratio = "100%";
+        messageHTML = '<p style="color: darkred;">最高ランク会員</p>';
+      }
+      document.getElementById("pointbar").style.width = ratio;
+      document.getElementById("pointbar").style.backgroundColor = rankcolor[ranknum];
+      document.getElementById("restpoint").innerHTML = messageHTML;
+      document.getElementById("ranktext").innerText = rankname[ranknum];
+      document.getElementById("ranktext").style.backgroundColor = rankcolor[ranknum];
       
-
       document.getElementById("profile").style.display = "block";
 
       amount = c4suser.point;

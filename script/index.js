@@ -48,7 +48,7 @@ onAuthStateChanged(auth, (us) => {
       
       //プロフィールを表示
       document.getElementById("userPic").innerHTML = '<img src="' + user.photoURL + '" style="width: 100%; height: 100%; border-radius: 50%;">'
-      document.getElementById("userName").innerText = user.displayName;
+      document.getElementById("userName").innerText = c4suser.name;
       document.getElementById("userNum").innerText = c4suser.studentNumber;
 
       //ランク計算
@@ -87,6 +87,20 @@ onAuthStateChanged(auth, (us) => {
       document.getElementById("restpoint").innerHTML = messageHTML;
       document.getElementById("ranktext").innerText = rankname[ranknum];
       document.getElementById("ranktext").style.backgroundColor = rankcolor[ranknum];
+
+      //ポイントモーダルに履歴を表示
+      var y = new Date().getFullYear();
+      var pointHistory = Object.keys(c4suser.pointHistory[new Date().getFullYear()]).reverse();
+      pointHistory.forEach((id) => {
+        var data = c4suser.pointHistory[new Date().getFullYear()][id];
+        var date = getdatetext(new Date(data.date));
+        if (data.mode == 1) {
+          document.getElementById("pointHistory").innerHTML += '<li class="list-group-item"><h6 class="mb-0">' + data.title + '</h6><div class="row"><p class="text-secondary small col-6 mb-0">' + date + '</p><h4 class="col-6" style="text-align: right; margin-bottom: 0;">' + data.amount + 'pt</h4></div></li>';
+        }
+        else {
+          document.getElementById("pointHistory").innerHTML += '<li class="list-group-item"><h6 class="mb-0">' + data.title + '</h6><div class="row"><p class="text-secondary small col-6 mb-0">' + date + '</p><h4 class="col-6" style="text-align: right; color: darkred; margin-bottom: 0;">-' + data.amount + 'pt</h4></div></li>';
+        }
+      });
       
       document.getElementById("profile").style.display = "block";
 
@@ -219,3 +233,24 @@ export function openmodal(target) {
   }
 }
 window.openmodal = openmodal;
+
+//Twitterみたいな日付を文字列で取得:made by toyton
+export function getdatetext(date) {
+  var dif = Math.floor((new Date() - date) / 1000 / 60 / 60 / 24);
+  if(dif < 7){
+    if(new Date().getDate() == date.getDate()){
+      return "きょう";
+    }
+    else{
+      switch (Math.floor(dif)) {
+        case 0: return "きのう";
+        case 1: return "一昨日";
+        default: return String(Math.floor(dif)) + "日前";
+      }
+    }
+  }
+  else{
+    return String(date.getMonth() + 1) + "月" + String(date.getDate()) + "日"
+  }
+}
+window.getdatetext = getdatetext;

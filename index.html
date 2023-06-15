@@ -92,7 +92,7 @@
           <li><a href="event" class="nav-link px-2 mx-1"><svg viewBox="0 0 16 16" x="0" y="0" width="24px" height="24px"><use class="text-dark" xlink:href="#calendar"></use></svg></a></li>
           <li><a href="equips" class="nav-link px-2 mx-1"><svg viewBox="0 0 16 16" x="0" y="0" width="24px" height="24px"><use class="text-dark" xlink:href="#box"></use></svg></a></li>
           <li><a href="money" class="nav-link px-2 mx-1"><svg viewBox="0 0 16 16" x="0" y="0" width="24px" height="24px"><use class="text-dark" xlink:href="#cash"></use></svg></a></li>
-          <li><a href="wallet" class="nav-link px-2 mx-1"><svg viewBox="0 0 16 16" x="0" y="0" width="24px" height="24px"><use class="text-dark" xlink:href="#wallet"></use></svg></a></li>
+          <!--<li><a href="wallet" class="nav-link px-2 mx-1"><svg viewBox="0 0 16 16" x="0" y="0" width="24px" height="24px"><use class="text-dark" xlink:href="#wallet"></use></svg></a></li>-->
           <li><a href="store" class="nav-link px-2 mx-1"><svg viewBox="0 0 16 16" x="0" y="0" width="24px" height="24px"><use class="text-dark" xlink:href="#basket"></use></svg></a></li>
           <li><a href="procedure" class="nav-link px-2 mx-1"><svg viewBox="0 0 16 16" x="0" y="0" width="24px" height="24px"><use class="text-dark" xlink:href="#textFile"></use></svg></a></li>
         </ul>
@@ -156,11 +156,35 @@
         <!--ポイント-->
         <div style="text-align: center;">
           <p style="margin-bottom: 0;">あなたのC4'sポイント</p>
-          <h1 id="pointnum" style="font-weight: bold;">----</h1>
+          <h1 id="pointnum" style="font-weight: bold;"></h1>
           <div class="progress" style="height: 10px;">
             <div class="progress-bar progress-bar-striped" role="progressbar" id="pointbar"></div>
           </div>
-          <div id="restpoint" style="text-align: right; margin-top: 0;"></div>
+          <div id="restpoint" style="text-align: right; margin: 0;"></div>
+          <!--<div style="margin: 0;">ランク制度についてくわしくは<a href="" style="text-decoration: none;">こちら</a></div>-->
+          <button type="button" class="btn btn-outline-secondary btn-sm w-50 mx-auto" style="border-radius: 15px;" data-bs-toggle="modal" data-bs-target="#pointModal">
+            ポイント履歴
+          </button>
+        </div>
+
+        <!--ポイント履歴モーダル-->
+        <div class="modal fade" id="pointModal" tabindex="-1" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title">ポイント履歴</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <ul class="list-group list-group-flush w-100" id="pointHistory">
+
+                </ul>
+              </div>
+              <div class="modal-footer">
+                ...
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 

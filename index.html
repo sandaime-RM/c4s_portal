@@ -162,9 +162,18 @@
           </div>
           <div id="restpoint" style="text-align: right; margin: 0;"></div>
           <!--<div style="margin: 0;">ランク制度についてくわしくは<a href="" style="text-decoration: none;">こちら</a></div>-->
-          <button type="button" class="btn btn-outline-secondary btn-sm w-50 mx-auto" style="border-radius: 15px;" data-bs-toggle="modal" data-bs-target="#pointModal">
-            ポイント履歴
-          </button>
+          <div class="row mx-auto" style="width: 100%; max-width: 300px;">
+            <div class="w-50 px-1">
+              <button type="button" class="btn btn-outline-secondary btn-sm w-100" style="border-radius: 15px;" data-bs-toggle="modal" data-bs-target="#pointModal">
+                ポイント履歴
+              </button>
+            </div>
+            <div class="w-50 px-1">
+              <button type="button" class="btn btn-outline-secondary btn-sm w-100" style="border-radius: 15px;" data-bs-toggle="modal" data-bs-target="#giftModal" disabled>
+                ポイントをおくる
+              </button>
+            </div>
+          </div>
         </div>
 
         <!--ポイント履歴モーダル-->
@@ -182,6 +191,45 @@
               </div>
               <div class="modal-footer">
                 ...
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!--ポイントギフトモーダル-->
+        <div class="modal fade" id="giftModal" tabindex="-1" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title">ポイントをおくる</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body py-3">
+                <h5 style="text-align: center;">部員にポイントをプレゼント</h5>
+                <div class="w-50 mx-auto" style="min-width: 300px;" id="giftForm">
+                  <div class="form-floating mb-1">
+                    <input type="number" class="form-control" id="giftNum" placeholder="0">
+                    <label for="giftNum">送信するポイント数</label>
+                  </div>
+                  <button class="btn btn-dark w-100" onclick="sendgift()">リンクを作成</button>
+                  <div class="alert alert-dark mt-1" role="alert" id="giftalert" style="display: none;"></div>
+                </div>
+                <!--リンクが存在するならこれを追加-->
+                <hr>
+                <div class="mx-2">
+                  <b class="mb-0">ポイント受け取り用URL</b>
+                  <div class="row">
+                    <div class="col-10" style="outline: solid 1px lightgray; border-radius: 5px; padding: 0;">
+                      <p style="margin: 1em 0.5em;">https://portal.c4-s.net/wallet?get=...</p>
+                    </div>
+                    <div class="col-2">
+                      <button class="btn btn-outline-dark w-100 h-100" style="text-align: center;" onclick="copylink('-NY1qcjvxgSCjsQXTt0s')"><i class="bi bi-share-fill"></i></button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="modal-footer" style="text-align: left;">
+                
               </div>
             </div>
           </div>

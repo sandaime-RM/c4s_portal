@@ -254,3 +254,30 @@ export function getdatetext(date) {
   }
 }
 window.getdatetext = getdatetext;
+
+//ポイント送信リンクを作成
+export function sendgift(num) {
+  var num = document.getElementById('giftNum').value;
+
+  if(num){
+    if(num <= 0) { showalert("値が不正です"); }
+    else if(c4suser.point < num) { showalert("ポイントが足りません") }
+    else if(Math.floor(num) != num) { showalert("小数の値は送信できません"); }
+    else {
+      showalert();
+      alert("成功？");
+    }
+  }
+
+  function showalert(text) {
+    if(text) {
+      document.getElementById('giftalert').innerText = text;
+      document.getElementById('giftalert').style.display = "block";
+    }
+    else{
+      document.getElementById('giftalert').style.display = "none";
+    }
+  }
+  window.showalert = showalert;
+}
+window.sendgift = sendgift;

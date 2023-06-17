@@ -88,11 +88,6 @@ onAuthStateChanged(auth, (us) => {
       document.getElementById("userName").innerText = c4suser.name;
       document.getElementById("userNum").innerText = c4suser.studentNumber;
 
-      //repoint(c4suser.point);
-      //historynum = 0;
-      //document.getElementById("pointHistory").innerHTML = "";
-      //showhistory();
-
       document.getElementById("profile").style.display = "block";
 
       amount = c4suser.point;
@@ -369,41 +364,39 @@ window.copylink = copylink;
 
 //プロフィールのポイント画面を更新
 export function repoint(amount) {
-  if(!amount) { amount = c4suser.point; }
-  //ランク計算
-  // 0-     ビギナー
-  // 3000-  アマチュア
-  // 8000-  エキスパート
-  // 15000- ベテラン
   var rankname = ["ビギナー", "アマチュア", "エキスパート", "ベテラン"];
   var rankcolor = ["cornflowerblue", "darkgreen", "purple", "goldenrod"];
+  var rankbasis = [0, 1000, 3000, 8000];
   document.getElementById("pointnum").innerText = amount;
-  var ranknum;
-  var ratio;
-  var messageHTML;
-  if ( amount < 3000 ) {
-    ranknum = 0;
-    ratio = String(amount / 3000 * 100) + "%";
-    messageHTML = '<p>' + rankname[1] + 'まであと<span style="color: darkred; font-weight: bold;">' + String(3000 - amount) + '</span>pt</p>';
+  var ranknum = rankbasis.length - 1;
+  //0以下または未定義なら0にリセット
+  if ( amount < rankbasis[0] || !amount) { set(ref(db, "users/" + user.uid + "/point"), 0); amount = 0; }
+  //最高ランクなら最高ランク表示にする
+  if ( rankbasis.slice(-1)[0] <= amount ) {
+    document.getElementById("pointbar" + String(rankname.length - 1)).style.width = "100%";
+    document.getElementById("pointbar" + String(rankname.length - 1)).style.display = "block";
+    document.getElementById("pointbar" + String(rankname.length - 1)).style.backgroundColor = rankcolor[ranknum];
+    document.getElementById("restpoint").innerHTML = '<p style="color: darkred;">最高ランク会員</p>';
+    for (let i = 0; i < rankname.length - 1; i++) {
+      document.getElementById("pointbar" + String(i)).style.display = "none";
+    }
   }
-  else if ( amount < 8000 ) {
-    ranknum = 1;
-    ratio = String((amount - 3000) / 5000 * 100) + "%";
-    messageHTML = '<p>' + rankname[2] + 'まであと<span style="color: darkred; font-weight: bold;">' + String(8000 - amount) + '</span>pt</p>';
+  //それ以外ならランク番号を取得
+  else{
+    document.getElementById("pointbar" + String(rankname.length - 1)).style.display = "none";
+    for (let i = 0; i < rankbasis.length; i++) { if(rankbasis[i] <= amount) { ranknum = i; } }
+    document.getElementById("restpoint").innerHTML = '<p>' + rankname[ranknum+1] + 'まであと<span style="color: darkred; font-weight: bold;">' + String(rankbasis[ranknum+1] - amount) + '</span>pt</p>';
+    for (let i = 0; i < rankcolor.length - 1; i++) {
+      var bar = document.getElementById("pointbar" + String(i));
+      bar.style.backgroundColor = rankcolor[i];
+      var ratio = (amount - rankbasis[i]) / rankbasis.slice(-1)[0];
+      ratio = Math.max(ratio, 0);
+      ratio = Math.min(ratio, (rankbasis[i+1] - rankbasis[i]) / rankbasis.slice(-1)[0]);
+      bar.style.width = String(ratio * 100) + "%";
+      bar.style.display = "block";
+    }
+    console.log("---------------------------");
   }
-  else if ( amount < 15000 ) {
-    ranknum = 2;
-    ratio = String((amount - 8000) / 7000 * 100) + "%";
-    messageHTML = '<p>' + rankname[3] + 'まであと<span style="color: darkred; font-weight: bold;">' + String(15000 - amount) + '</span>pt</p>';
-  }
-  else {
-    ranknum = 3;
-    ratio = "100%";
-    messageHTML = '<p style="color: darkred;">最高ランク会員</p>';
-  }
-  document.getElementById("pointbar").style.width = ratio;
-  document.getElementById("pointbar").style.backgroundColor = rankcolor[ranknum];
-  document.getElementById("restpoint").innerHTML = messageHTML;
   document.getElementById("ranktext").innerText = rankname[ranknum];
   document.getElementById("ranktext").style.backgroundColor = rankcolor[ranknum];
 }

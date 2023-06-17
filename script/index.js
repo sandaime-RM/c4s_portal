@@ -62,6 +62,23 @@ onAuthStateChanged(auth, (us) => {
       document.getElementById("pointHistory").innerHTML = "";
       showhistory(snapshot.val());
     })
+    //ポイントリンクを表示
+    onValue(ref(db, "pointGift"), (snapshot) => {
+      document.getElementById("giftList").innerHTML = '<h5 style="text-align: center;">受け取り用URL</h5>';
+      if(snapshot.val()){
+        Object.keys(snapshot.val()).forEach(id => {
+          if(snapshot.val()[id].senderID == user.uid) {
+            var amount = snapshot.val()[id].amount;
+            document.getElementById("giftNum").value = "";
+            document.getElementById("giftList-footer").style.display = "block";
+            document.getElementById("giftList").innerHTML += '<div class="row mb-1"><div class="col-10" style="outline: solid 1px lightgray; border-radius: 5px; padding: 0;"><p style="margin: 1em 0.5em;"><span style="font-weight: bold;">' + amount + 'pt</span> : https://portal.c4-s.net?getpoint=...</p></div><div class="col-2"><button class="btn btn-outline-dark w-100 h-100" style="text-align: center;" onclick="copylink(\'' + id + '\')"))"><i class="bi bi-share-fill"></i></button></div></div>';
+          }
+        });
+      }
+      else{
+        document.getElementById("giftList-footer").style.display = "none";
+      };
+    });
 
     get(ref(db, "users/" + user.uid)).then((snapshot) => {
       c4suser = snapshot.val();
@@ -77,17 +94,6 @@ onAuthStateChanged(auth, (us) => {
       //showhistory();
 
       document.getElementById("profile").style.display = "block";
-
-      //ポイントリンクを表示
-      get(ref(db, "pointGift")).then((snapshot) => {
-        if(snapshot.val()){
-          Object.keys(snapshot.val()).forEach(id => {
-            if(snapshot.val()[id].senderID == user.uid) {
-              addgift(id, snapshot.val()[id].amount);
-            }
-          });
-        }
-      });
 
       amount = c4suser.point;
       userAttend = c4suser.attend;
@@ -306,7 +312,6 @@ export function sendgift() {
         }).then(() => {
           set(ref(db, "users/" + user.uid + "/point"), c4suser.point - num).then(() => {
             c4suser.point -= num;
-            addgift(id, num);
           });
           push(ref(db, "users/" + user.uid + "/pointHistory/" + new Date().getFullYear().toString()), {
             date : new Date().getTime(),
@@ -332,14 +337,6 @@ export function sendgift() {
 }
 window.sendgift = sendgift;
 
-//ポイント送信リンクをモーダル内のリストに追加
-export function addgift(id, amount) {
-  document.getElementById("giftNum").value = "";
-  document.getElementById("giftList-footer").style.display = "block";
-  document.getElementById("giftList").innerHTML += '<div class="row mb-1"><div class="col-10" style="outline: solid 1px lightgray; border-radius: 5px; padding: 0;"><p style="margin: 1em 0.5em;"><span style="font-weight: bold;">' + amount + 'pt</span> : https://portal.c4-s.net?getpoint=...</p></div><div class="col-2"><button class="btn btn-outline-dark w-100 h-100" style="text-align: center;" onclick="copylink(\'' + id + '\')"))"><i class="bi bi-share-fill"></i></button></div></div>';
-}
-window.addgift = addgift;
-
 //ポイント送信リンクを取り消し
 export function cancel_gift() {
   document.getElementById("cancel-getpoint").style.display = "none";
@@ -348,9 +345,11 @@ export function cancel_gift() {
   giftID = url.searchParams.get("getpoint");
   get(ref(db, "pointGift/" + giftID + "/amount")).then((giftamount) => {
     set(ref(db, "users/" + user.uid + "/point"), (Number(c4suser.point) + Number(giftamount.val()))).then(() => {
-      set(ref(db, "pointGift/" + giftID), null).then(() => {
-        if(!alert("取り消しました")) { location.href = "/"; }
-      })
+      remove(ref(db, "pointGift/" + giftID));
+      document.getElementById("pointsender").innerText = c4suser.name;
+      document.getElementById("pointamount").innerText = giftamount.val() + "pt";
+      document.getElementById("loading-getpoint").style.display = "none";
+      document.getElementById("success-getpoint").style.display = "block";
     })
     push(ref(db, "users/" + user.uid + "/pointHistory/" + new Date().getFullYear().toString()), {
       date : new Date().getTime(),

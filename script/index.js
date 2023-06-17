@@ -100,20 +100,21 @@ onAuthStateChanged(auth, (us) => {
       //ポイント受け取り画面
       giftID = url.searchParams.get("getpoint");
       if(giftID){
+        openmodal("getpoint");
         get(ref(db, "pointGift/" + giftID)).then((snapshot) => {
+          document.getElementById("loading-getpoint").style.display = "none";
           var giftdata = snapshot.val();
           if(giftdata){
-            openmodal("getpoint");
             //自分のギフト
             if(giftdata.senderID == user.uid){
               document.getElementById("cancel-getpoint").style.display = "block";
             }
             //受け取り処理
             else{
+              document.getElementById("success-getpoint").style.display = "block";
               document.getElementById("pointsender").innerText = giftdata.senderName;
               document.getElementById("pointamount").innerText = giftdata.amount + "pt";
               set(ref(db, "users/" + user.uid + "/point"), (Number(c4suser.point) + Number(giftdata.amount))).then(() => {
-                c4suser.point += giftdata.amount;
                 remove(ref(db, "pointGift/" + giftID));
               });
               push(ref(db, "users/" + user.uid + "/pointHistory/" + new Date().getFullYear().toString()), {
@@ -122,9 +123,10 @@ onAuthStateChanged(auth, (us) => {
                 amount : giftdata.amount,
                 title : giftdata.senderName + "さんからのギフト"
               });
-              document.getElementById("success-getpoint").style.display = "block";
             }
-            document.getElementById("loading-getpoint").style.display = "none";
+          }
+          else{
+            document.getElementById("failed-getpoint").style.display = "block";
           }
         });
       }
@@ -305,9 +307,7 @@ export function sendgift() {
           senderName : c4suser.name,
           amount : num
         }).then(() => {
-          set(ref(db, "users/" + user.uid + "/point"), c4suser.point - num).then(() => {
-            c4suser.point -= num;
-          });
+          set(ref(db, "users/" + user.uid + "/point"), c4suser.point - num);
           push(ref(db, "users/" + user.uid + "/pointHistory/" + new Date().getFullYear().toString()), {
             date : new Date().getTime(),
             mode : 2,
@@ -364,6 +364,7 @@ window.copylink = copylink;
 
 //プロフィールのポイント画面を更新
 export function repoint(amount) {
+  c4suser.point = amount;
   var rankname = ["ビギナー", "アマチュア", "エキスパート", "ベテラン"];
   var rankcolor = ["cornflowerblue", "darkgreen", "purple", "goldenrod"];
   var rankbasis = [0, 1000, 3000, 8000];

@@ -46,8 +46,6 @@ var giftID;
 
 //ユーザー情報の取得
 onAuthStateChanged(auth, (us) => {
-  alert("メンテナンス中です");
-
   user = us;
 
   //ログイン状態

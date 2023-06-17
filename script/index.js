@@ -37,6 +37,9 @@ var amount;
 //HTML要素
 var attendmodal = new bootstrap.Modal(document.getElementById("attendModal"));
 
+//ポイント履歴のうち現在表示されている数
+var historynum;
+
 //ユーザー情報の取得
 onAuthStateChanged(auth, (us) => {
   user = us;
@@ -89,18 +92,8 @@ onAuthStateChanged(auth, (us) => {
       document.getElementById("ranktext").style.backgroundColor = rankcolor[ranknum];
 
       //ポイントモーダルに履歴を表示
-      var y = new Date().getFullYear();
-      var pointHistory = Object.keys(c4suser.pointHistory[new Date().getFullYear()]).reverse();
-      pointHistory.forEach((id) => {
-        var data = c4suser.pointHistory[new Date().getFullYear()][id];
-        var date = getdatetext(new Date(data.date));
-        if (data.mode == 1) {
-          document.getElementById("pointHistory").innerHTML += '<li class="list-group-item"><h6 class="mb-0">' + data.title + '</h6><div class="row"><p class="text-secondary small col-6 mb-0">' + date + '</p><h4 class="col-6" style="text-align: right; margin-bottom: 0;">' + data.amount + 'pt</h4></div></li>';
-        }
-        else {
-          document.getElementById("pointHistory").innerHTML += '<li class="list-group-item"><h6 class="mb-0">' + data.title + '</h6><div class="row"><p class="text-secondary small col-6 mb-0">' + date + '</p><h4 class="col-6" style="text-align: right; color: darkred; margin-bottom: 0;">-' + data.amount + 'pt</h4></div></li>';
-        }
-      });
+      historynum = 0;
+      showhistory();
       
       document.getElementById("profile").style.display = "block";
 
@@ -233,6 +226,22 @@ export function openmodal(target) {
   }
 }
 window.openmodal = openmodal;
+
+//ポイント履歴を件表示
+export function showhistory() {
+  var historykeys = Object.keys(c4suser.pointHistory[new Date().getFullYear()]).reverse();
+  for (let i = 0; i < 7; i++) {
+    document.getElementById("addhistory").style.display = "block";
+    var id = historykeys[historynum];
+    var data = c4suser.pointHistory[new Date().getFullYear()][id];
+    var date = getdatetext(new Date(data.date));
+    var pointcolor = ["black", "darkred"];
+    document.getElementById("pointHistory").innerHTML += '<li class="list-group-item"><h6 class="mb-0">' + data.title + '</h6><div class="row"><p class="text-secondary small col-6 mb-0">' + date + '</p><h4 class="col-6" style="text-align: right; color: ' + pointcolor[data.mode - 1] + ';margin-bottom: 0;">' + (-2 * data.mode + 3) * data.amount + 'pt</h4></div></li>';
+    historynum++;
+    if(historynum == historykeys.length) { document.getElementById("addhistory").style.display = "none"; return; }
+  }
+}
+window.showhistory = showhistory;
 
 //Twitterみたいな日付を文字列で取得:made by toyton
 export function getdatetext(date) {

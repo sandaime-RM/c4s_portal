@@ -25,7 +25,24 @@
   <link rel="icon" href="img/logo_mini.png">
   <link rel="manifest" href="manifest.json">
 </head>
+
 <body class="bg-light">
+  <!--最初のロード画面-->
+  <div id="overray" style="position: fixed; left: 0; top: 0; width: 100%; height: 100%; background-color: white; z-index: 2147483647;">
+    <div style="width: 100%; max-width: 150px; margin: 30px auto;">
+      <img src="img/top-loading.svg" style="width: 100%">
+    </div>
+    <div class="text-center mt-5" id="loading-overray">
+      <div class="spinner-grow" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
+    <div class="text-center mt-5" id="login-overray" style="display: none;">
+      <h6 class="mb-3">Googleアカウントが必要です</h6>
+      <a class="h4" style="text-decoration: none; color: Darkblue; cursor: pointer;" onclick="login()">ログイン</a>
+    </div>
+  </div>
+
   <!--SVGの定義-->
   <svg display="none">
     <defs>
@@ -136,7 +153,7 @@
         </div>
       </div>
 
-      <!--ログイン時に表示するプロフィール-->
+      <!--プロフィール-->
       <div id="profile" style="max-width: 480px; margin: 20px auto; padding: 10px 10px; outline: solid 1px lightgray; border-radius: 10px; display: none;">
         <div class="row mb-2" style="display: flex; align-items: flex-end;">
           <div class="col-sm-4 mt-2">
@@ -146,18 +163,16 @@
           </div>
           <div class="col-sm-8 mt-2" style="text-align: center; padding: auto 0;">
             <h4 id="userName"></h4>
-            <p id="userNum" style="color: gray;" class="small"></p>
+            <p id="userRole" style="color: darkslateblue;" class="small"></p>
             <h5 style="width: 50%; margin: auto;"><span class="badge w-100" id="ranktext"></span></h5>
           </div>
         </div>
-
         <hr>
-
         <!--ポイント-->
         <div style="text-align: center;">
           <p style="margin-bottom: 0;">あなたのC4'sポイント</p>
           <h1 id="pointnum" style="font-weight: bold;"></h1>
-          <div class="progress" style="height: 10px;">
+          <div class="progress" style="height: 10px;" id="pointbars">
             <div class="progress-bar progress-bar-striped" style="width: 0%;" role="progressbar" id="pointbar0"></div>
             <div class="progress-bar progress-bar-striped" style="width: 0%;" role="progressbar" id="pointbar1"></div>
             <div class="progress-bar progress-bar-striped" style="width: 0%;" role="progressbar" id="pointbar2"></div>
@@ -179,33 +194,6 @@
           </div>
         </div>
       </div>
-
-      <!--今後の予定もここに表示出来たらいいね-->
-      <!--
-      <div id="events" class="row my-3 mx-2">
-        <div class="col-md-4 px-3 py-2">
-          <div class="card shadow-sm" style="border-left: 12px solid green; cursor: pointer; border-radius: 10px;">
-            <div class="card-body">
-              <div onclick="EventInfo('+index+')">
-                <h5 class="card-title">イベントタイトル</h5>
-                <h6 class="card-subtitle mb-2 text-muted small">
-                  開催期間<br>開催場所
-                </h6>
-                <p class="card-text small">
-                  <span class="mx-1 text-primary">#タグ</span>
-                </p>
-              </div>
-              <div class="card-link" style="text-decoration: none; text-align: right;">
-                <span id="attend_'+index+'" onclick="pushAttend('+index+')" style="color: darkblue;"><i class="bi-check-circle"></i></span>
-                <span class="text-secondary mx-1 me-3" id="num2_'+index+'">1</span>
-                <span id="absent_'+index+'" onclick="pushAbsent('+index+')" style="color: darkred;"><i class="bi-x-circle"></i></span>
-                <span class="text-secondary mx-1 me-2" id="num3_'+index+'">1</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      -->
 
       <div class="row py-3">
         <h3 class="text-center fw-normal text-secondary">メニュー</h3>

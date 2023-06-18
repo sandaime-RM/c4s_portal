@@ -42,14 +42,34 @@ var getpointmodal = new bootstrap.Modal(document.getElementById("getpointModal")
 
 //ポイント履歴のうち現在表示されている数
 var historynum;
+//URLでパラメータ指定されたときのGIFTID
 var giftID;
 
-//ユーザー情報の取得
-onAuthStateChanged(auth, (us) => {
-  user = us;
+//ユーザーランクの定義
+var ranks = {
+  name : ["ビギナー", "アマチュア", "エキスパート", "ベテラン"],
+  color : ["cornflowerblue", "darkgreen", "purple", "goldenrod"],
+  basis : [0, 1000, 3000, 8000]
+}
 
+//ユーザー情報の取得
+onAuthStateChanged(auth, (snapshot) => {
+  user = snapshot;
+  
+  document.getElementById("loading-overray").style.display = "block";
+  document.getElementById("login-overray").style.display = "none";
+
+  document.getElementById("overray").style.display = "block";
+  
   //ログイン状態
-  if(user){
+  if(user) {
+    //ページトップにする
+    window.scrollTo({ top: 0 });
+
+    //HTMLにランクバーを表示
+    for (let i = 0; i < ranks.name.length; i++) {
+      document.getElementById("pointbars").innerHTML += '<div class="progress-bar progress-bar-striped" style="width: 0%;" role="progressbar" id="pointbar' + i + '"></div>'; 
+    }
     var url = new URL(window.location.href);
     var giftID = url.searchParams.get("getpoint");
 
@@ -86,7 +106,8 @@ onAuthStateChanged(auth, (us) => {
       //プロフィールを表示
       document.getElementById("userPic").innerHTML = '<img src="' + user.photoURL + '" style="width: 100%; height: 100%; border-radius: 50%;">'
       document.getElementById("userName").innerText = c4suser.name;
-      document.getElementById("userNum").innerText = c4suser.studentNumber;
+      var roles = { leader : "部長", subleader : "副部長", treasurer : "会計", active : "現役", new : "新入部員", obog : "卒業生", other : "部員ではありません" };
+      document.getElementById("userRole").innerText = roles[c4suser.role];
 
       document.getElementById("profile").style.display = "block";
 
@@ -130,6 +151,12 @@ onAuthStateChanged(auth, (us) => {
           }
         });
       }
+
+      //ローディング解除
+      document.getElementById("loading-overray").style.display = "none";
+      document.getElementById("login-overray").style.display = "none";
+
+      document.getElementById("overray").style.display = "none";
     });
 
     //開催中のイベントをトップに表示:made by toyton
@@ -154,7 +181,8 @@ onAuthStateChanged(auth, (us) => {
   }
   //ログアウト状態
   else{
-
+    document.getElementById("loading-overray").style.display = "none";
+    document.getElementById("login-overray").style.display = "block";
   }
 });
 
@@ -365,39 +393,35 @@ window.copylink = copylink;
 //プロフィールのポイント画面を更新
 export function repoint(amount) {
   c4suser.point = amount;
-  var rankname = ["ビギナー", "アマチュア", "エキスパート", "ベテラン"];
-  var rankcolor = ["cornflowerblue", "darkgreen", "purple", "goldenrod"];
-  var rankbasis = [0, 1000, 3000, 8000];
   document.getElementById("pointnum").innerText = amount;
-  var ranknum = rankbasis.length - 1;
+  var ranknum = ranks.basis.length - 1;
   //0以下または未定義なら0にリセット
-  if ( amount < rankbasis[0] || !amount) { set(ref(db, "users/" + user.uid + "/point"), 0); amount = 0; }
+  if ( amount < ranks.basis[0] || !amount) { set(ref(db, "users/" + user.uid + "/point"), 0); amount = 0; }
   //最高ランクなら最高ランク表示にする
-  if ( rankbasis.slice(-1)[0] <= amount ) {
-    document.getElementById("pointbar" + String(rankname.length - 1)).style.width = "100%";
-    document.getElementById("pointbar" + String(rankname.length - 1)).style.display = "block";
-    document.getElementById("pointbar" + String(rankname.length - 1)).style.backgroundColor = rankcolor[ranknum];
+  if ( ranks.basis.slice(-1)[0] <= amount ) {
+    document.getElementById("pointbar" + String(ranks.name.length - 1)).style.width = "100%";
+    document.getElementById("pointbar" + String(ranks.name.length - 1)).style.display = "block";
+    document.getElementById("pointbar" + String(ranks.name.length - 1)).style.backgroundColor = ranks.color[ranknum];
     document.getElementById("restpoint").innerHTML = '<p style="color: darkred;">最高ランク会員</p>';
-    for (let i = 0; i < rankname.length - 1; i++) {
+    for (let i = 0; i < ranks.name.length - 1; i++) {
       document.getElementById("pointbar" + String(i)).style.display = "none";
     }
   }
   //それ以外ならランク番号を取得
   else{
-    document.getElementById("pointbar" + String(rankname.length - 1)).style.display = "none";
-    for (let i = 0; i < rankbasis.length; i++) { if(rankbasis[i] <= amount) { ranknum = i; } }
-    document.getElementById("restpoint").innerHTML = '<p>' + rankname[ranknum+1] + 'まであと<span style="color: darkred; font-weight: bold;">' + String(rankbasis[ranknum+1] - amount) + '</span>pt</p>';
-    for (let i = 0; i < rankcolor.length - 1; i++) {
+    document.getElementById("pointbar" + String(ranks.name.length - 1)).style.display = "none";
+    for (let i = 0; i < ranks.basis.length; i++) { if(ranks.basis[i] <= amount) { ranknum = i; } }
+    document.getElementById("restpoint").innerHTML = '<p>' + ranks.name[ranknum+1] + 'まであと<span style="color: darkred; font-weight: bold;">' + String(ranks.basis[ranknum+1] - amount) + '</span>pt</p>';
+    for (let i = 0; i < ranks.color.length - 1; i++) {
       var bar = document.getElementById("pointbar" + String(i));
-      bar.style.backgroundColor = rankcolor[i];
-      var ratio = (amount - rankbasis[i]) / rankbasis.slice(-1)[0];
+      bar.style.backgroundColor = ranks.color[i];
+      var ratio = (amount - ranks.basis[i]) / ranks.basis.slice(-1)[0];
       ratio = Math.max(ratio, 0);
-      ratio = Math.min(ratio, (rankbasis[i+1] - rankbasis[i]) / rankbasis.slice(-1)[0]);
+      ratio = Math.min(ratio, (ranks.basis[i+1] - ranks.basis[i]) / ranks.basis.slice(-1)[0]);
       bar.style.width = String(ratio * 100) + "%";
       bar.style.display = "block";
     }
-    console.log("---------------------------");
   }
-  document.getElementById("ranktext").innerText = rankname[ranknum];
-  document.getElementById("ranktext").style.backgroundColor = rankcolor[ranknum];
+  document.getElementById("ranktext").innerText = ranks.name[ranknum];
+  document.getElementById("ranktext").style.backgroundColor = ranks.color[ranknum];
 }

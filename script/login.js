@@ -76,7 +76,12 @@ function login() {
         // The AuthCredential type that was used.
         const credential = GoogleAuthProvider.credentialFromError(error);
         // ...
-        document.getElementById("error").innerHTML = error.message;
+        if (errorMessage == "Firebase: Error (auth/unauthorized-domain).") {
+          alert("ドメインが承認されていません")
+        }
+        else{
+          alert(errorMessage);
+        }
       });
 }
 
@@ -85,7 +90,7 @@ export{login}
 
 //アカウントページへ
 function goAccount() {
-    window.location.href = "https://portal.c4-s.net/account";
+    window.location.href = "/account";
 }
 
 window.goAccount = goAccount;

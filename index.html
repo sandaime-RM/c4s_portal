@@ -125,71 +125,74 @@
   <!--メインの画面-->
   <main>
     <div class="container">
-      <!--タイトル-->
+      <!--タイトル・カルーセルに置き換えてもいいかも-->
+      <!--<iframe src="/iframe/carousel" frameborder="0"></iframe>-->
       <div class="py-3 text-center">
         <h2 class="fs-2 fw-normal">C4's Portal</h2>
         <p class="text-secondary">～ワクワクを作りつづける～</p>
       </div>
 
-      <!--開催中のイベントがあれば表示-->
-      <div id="heldevent" style="max-width: 480px; margin: 20px auto; text-align: center; border-radius: 15px; padding: 10px 10px; outline: solid 1px darkgreen; background-color: rgb(226, 250, 226); display: none;">
-        <h5 style="text-align: center; color: darkgreen;">開催中のイベント</h5>
-        <div class="card shadow-sm" style="border-bottom: 12px solid green; cursor: pointer; border-radius: 10px;" onclick="openmodal('attend');">
-          <div class="card-body">
-            <div>
-              <h5 class="card-title" id="heldevent_title"></h5>
-              <h5 class="card-subtitle mb-2">
-                <span class="badge bg-danger"><span id="heldevent_place"></span>にて開催中!</span>
-              </h5>
-              <p class="card-text small">
-                <div class="alert alert-light" style="padding: 5px 10px; border-radius: 5px; text-align: justify;" id="heldevent_description"></div>
-                <p class="my-1 text-primary" id="heldevent_tags"></p>
-              </p>
-            </div>
-            <div class="card-link small mt-3" style="text-decoration: none; text-align: center;">
-              出席登録する
+      <div class="row mx-auto my-3">
+        <!--開催中のイベントがあれば表示-->
+        <div id="heldevent" class="col-lg-6 mx-auto" style="max-width: 480px; text-align: center; border-radius: 15px; padding: 10px 10px; outline: solid 1px darkgreen; background-color: rgb(226, 250, 226); display: none;">
+          <h5 style="text-align: center; color: darkgreen;">開催中のイベント</h5>
+          <div class="card shadow-sm" style="border-bottom: 12px solid green; cursor: pointer; border-radius: 10px;" onclick="openmodal('attend');">
+            <div class="card-body">
+              <div>
+                <h5 class="card-title" id="heldevent_title"></h5>
+                <h5 class="card-subtitle mb-2">
+                  <span class="badge bg-danger"><span id="heldevent_place"></span>にて開催中!</span>
+                </h5>
+                <p class="card-text small">
+                  <div class="alert alert-light" style="padding: 5px 10px; border-radius: 5px; text-align: justify;" id="heldevent_description"></div>
+                  <p class="my-1 text-primary" id="heldevent_tags"></p>
+                </p>
+              </div>
+              <div class="card-link small mt-3" style="text-decoration: none; text-align: center;">
+                出席登録する
+              </div>
             </div>
           </div>
         </div>
-      </div>
-
-      <!--プロフィール-->
-      <div id="profile" style="max-width: 480px; margin: 20px auto; padding: 10px 10px; outline: solid 1px lightgray; border-radius: 10px; display: none;">
-        <div class="row mb-2" style="display: flex; align-items: flex-end;">
-          <div class="col-sm-4 mt-2">
-            <div id="userPic" style="width: 80%; max-width: 100px; height: auto; margin: 0 auto;">
-              <img src="icons/person-circle-gray.svg" style="width: 100%; height: 100%;">
+  
+        <!--プロフィール-->
+        <div id="profile" class="col-lg-6 mx-auto" style="max-width: 480px; margin: 20px auto; padding: 10px 10px; outline: solid 1px lightgray; border-radius: 10px; display: none;">
+          <div class="row mb-2" style="display: flex; align-items: flex-end;">
+            <div class="col-sm-4 mt-2">
+              <div id="userPic" style="width: 80%; max-width: 100px; height: auto; margin: 0 auto;">
+                <img src="icons/person-circle-gray.svg" style="width: 100%; height: 100%;">
+              </div>
+            </div>
+            <div class="col-sm-8 mt-2" style="text-align: center; padding: auto 0;">
+              <h4 id="userName"></h4>
+              <p id="userRole" style="color: darkslateblue;" class="small"></p>
+              <h5 style="width: 50%; margin: auto;"><span class="badge w-100" id="ranktext"></span></h5>
             </div>
           </div>
-          <div class="col-sm-8 mt-2" style="text-align: center; padding: auto 0;">
-            <h4 id="userName"></h4>
-            <p id="userRole" style="color: darkslateblue;" class="small"></p>
-            <h5 style="width: 50%; margin: auto;"><span class="badge w-100" id="ranktext"></span></h5>
-          </div>
-        </div>
-        <hr>
-        <!--ポイント-->
-        <div style="text-align: center;">
-          <p style="margin-bottom: 0;">あなたのC4'sポイント</p>
-          <h1 id="pointnum" style="font-weight: bold;"></h1>
-          <div class="progress" style="height: 10px;" id="pointbars">
-            <div class="progress-bar progress-bar-striped" style="width: 0%;" role="progressbar" id="pointbar0"></div>
-            <div class="progress-bar progress-bar-striped" style="width: 0%;" role="progressbar" id="pointbar1"></div>
-            <div class="progress-bar progress-bar-striped" style="width: 0%;" role="progressbar" id="pointbar2"></div>
-            <div class="progress-bar progress-bar-striped" style="width: 0%;" role="progressbar" id="pointbar3"></div>
-          </div>
-          <div id="restpoint" style="text-align: right; margin: 0;"></div>
-          <!--<div style="margin: 0;">ランク制度についてくわしくは<a href="" style="text-decoration: none;">こちら</a></div>-->
-          <div class="row mx-auto" style="width: 100%; max-width: 300px;">
-            <div class="w-50 px-1">
-              <button type="button" class="btn btn-outline-secondary btn-sm w-100" style="border-radius: 15px;" data-bs-toggle="modal" data-bs-target="#pointModal">
-                ポイント履歴
-              </button>
+          <hr>
+          <!--ポイント-->
+          <div style="text-align: center;">
+            <p style="margin-bottom: 0;">あなたのC4'sポイント</p>
+            <h1 id="pointnum" style="font-weight: bold;"></h1>
+            <div class="progress" style="height: 10px;" id="pointbars">
+              <div class="progress-bar progress-bar-striped" style="width: 0%;" role="progressbar" id="pointbar0"></div>
+              <div class="progress-bar progress-bar-striped" style="width: 0%;" role="progressbar" id="pointbar1"></div>
+              <div class="progress-bar progress-bar-striped" style="width: 0%;" role="progressbar" id="pointbar2"></div>
+              <div class="progress-bar progress-bar-striped" style="width: 0%;" role="progressbar" id="pointbar3"></div>
             </div>
-            <div class="w-50 px-1">
-              <button type="button" class="btn btn-outline-secondary btn-sm w-100" style="border-radius: 15px;" data-bs-toggle="modal" data-bs-target="#giftModal">
-                ポイントをおくる
-              </button>
+            <div id="restpoint" style="text-align: right; margin: 0;"></div>
+            <!--<div style="margin: 0;">ランク制度についてくわしくは<a href="" style="text-decoration: none;">こちら</a></div>-->
+            <div class="row mx-auto" style="width: 100%; max-width: 300px;">
+              <div class="w-50 px-1">
+                <button type="button" class="btn btn-outline-secondary btn-sm w-100" style="border-radius: 15px;" data-bs-toggle="modal" data-bs-target="#pointModal">
+                  ポイント履歴
+                </button>
+              </div>
+              <div class="w-50 px-1">
+                <button type="button" class="btn btn-outline-secondary btn-sm w-100" style="border-radius: 15px;" data-bs-toggle="modal" data-bs-target="#giftModal">
+                  ポイントをおくる
+                </button>
+              </div>
             </div>
           </div>
         </div>

@@ -101,62 +101,75 @@ onAuthStateChanged(auth, (snapshot) => {
     });
 
     get(ref(db, "users/" + user.uid)).then((snapshot) => {
-      c4suser = snapshot.val();
-      
-      //プロフィールを表示
-      document.getElementById("userPic").innerHTML = '<img src="' + user.photoURL + '" style="width: 100%; height: 100%; border-radius: 50%;">'
-      document.getElementById("userName").innerText = c4suser.name;
-      var roles = { leader : "部長", subleader : "副部長", treasurer : "会計", active : "現役", new : "新入部員", obog : "卒業生", other : "部員ではありません" };
-      document.getElementById("userRole").innerText = roles[c4suser.role];
-
-      document.getElementById("profile").style.display = "block";
-
-      amount = c4suser.point;
-      userAttend = c4suser.attend;
-
-      document.getElementById("info1").textContent = c4suser.studentNumber + " " + c4suser.name;
-      document.getElementById("info2").textContent = c4suser.department + " " + c4suser.grade + "年生";
-      showQR();
-
-      //ポイント受け取り画面
-      giftID = url.searchParams.get("getpoint");
-      if(giftID){
-        openmodal("getpoint");
-        get(ref(db, "pointGift/" + giftID)).then((snapshot) => {
-          document.getElementById("loading-getpoint").style.display = "none";
-          var giftdata = snapshot.val();
-          if(giftdata){
-            //自分のギフト
-            if(giftdata.senderID == user.uid){
-              document.getElementById("cancel-getpoint").style.display = "block";
+      //部員
+      if(snapshot.val()){
+        c4suser = snapshot.val();
+        
+        //プロフィールを表示
+        document.getElementById("userPic").innerHTML = '<img src="' + user.photoURL + '" style="width: 100%; height: 100%; border-radius: 50%;">'
+        document.getElementById("userName").innerText = c4suser.name;
+        var roles = { leader : "部長", subleader : "副部長", treasurer : "会計", active : "現役", new : "新入部員", obog : "卒業生", other : "部員ではありません" };
+        document.getElementById("userRole").innerText = roles[c4suser.role];
+  
+        document.getElementById("profile").style.display = "block";
+  
+        amount = c4suser.point;
+        userAttend = c4suser.attend;
+  
+        document.getElementById("info1").textContent = c4suser.studentNumber + " " + c4suser.name;
+        document.getElementById("info2").textContent = c4suser.department + " " + c4suser.grade + "年生";
+        showQR();
+  
+        //ポイント受け取り画面
+        giftID = url.searchParams.get("getpoint");
+        if(giftID){
+          openmodal("getpoint");
+          get(ref(db, "pointGift/" + giftID)).then((snapshot) => {
+            document.getElementById("loading-getpoint").style.display = "none";
+            var giftdata = snapshot.val();
+            if(giftdata){
+              //自分のギフト
+              if(giftdata.senderID == user.uid){
+                document.getElementById("cancel-getpoint").style.display = "block";
+              }
+              //受け取り処理
+              else{
+                document.getElementById("success-getpoint").style.display = "block";
+                document.getElementById("pointsender").innerText = giftdata.senderName;
+                document.getElementById("pointamount").innerText = giftdata.amount + "pt";
+                set(ref(db, "users/" + user.uid + "/point"), (Number(c4suser.point) + Number(giftdata.amount))).then(() => {
+                  remove(ref(db, "pointGift/" + giftID));
+                });
+                push(ref(db, "users/" + user.uid + "/pointHistory/" + new Date().getFullYear().toString()), {
+                  date : new Date().getTime(),
+                  mode : 1,
+                  amount : giftdata.amount,
+                  title : giftdata.senderName + "さんからのギフト"
+                });
+              }
             }
-            //受け取り処理
             else{
-              document.getElementById("success-getpoint").style.display = "block";
-              document.getElementById("pointsender").innerText = giftdata.senderName;
-              document.getElementById("pointamount").innerText = giftdata.amount + "pt";
-              set(ref(db, "users/" + user.uid + "/point"), (Number(c4suser.point) + Number(giftdata.amount))).then(() => {
-                remove(ref(db, "pointGift/" + giftID));
-              });
-              push(ref(db, "users/" + user.uid + "/pointHistory/" + new Date().getFullYear().toString()), {
-                date : new Date().getTime(),
-                mode : 1,
-                amount : giftdata.amount,
-                title : giftdata.senderName + "さんからのギフト"
-              });
+              document.getElementById("failed-getpoint").style.display = "block";
             }
-          }
-          else{
-            document.getElementById("failed-getpoint").style.display = "block";
-          }
-        });
+          });
+        }
+  
+        //ローディング解除
+        document.getElementById("loading-overray").style.display = "none";
+        document.getElementById("login-overray").style.display = "none";
+  
+        document.getElementById("overray").style.display = "none";
       }
-
-      //ローディング解除
-      document.getElementById("loading-overray").style.display = "none";
-      document.getElementById("login-overray").style.display = "none";
-
-      document.getElementById("overray").style.display = "none";
+      //ゲスト
+      else{
+        
+  
+        //ローディング解除
+        document.getElementById("loading-overray").style.display = "none";
+        document.getElementById("login-overray").style.display = "none";
+  
+        document.getElementById("overray").style.display = "none";
+      }
     });
 
     //開催中のイベントをトップに表示:made by toyton

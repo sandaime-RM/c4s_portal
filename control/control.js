@@ -41,135 +41,133 @@ var adminusers;
 
 //ユーザー情報の取得
 onAuthStateChanged(auth, (us) => {
-    user = us;
+  user = us;
+
+  //ローディング画面
+  document.getElementById("overray").style.display = "block";
+
+  //ログアウト状態ならトップ画面に遷移
+  if(!user) { if(!alert("ログインしてください")) { location.href = "/"; } }
+  
+  //管理者一覧を取得
+  get(ref(db, "admin-users")).then((snapshot) => {
+    adminusers = snapshot.val();
+    //管理者権限のないゲストはアクセス拒否
+    if(!adminusers[user.uid]) { if(!alert("管理者権限がありません")) { location.href = "/"; }}
+    //でなければアクセス許可
+    else { 
+      //ユーザー情報を全取得
+      get(ref(db, "users")).then((snapshot) => {
+        users = snapshot.val()
+        restart(); 
+      })
+    }
+  })
 });
 
-//読み込み時に実行
-window.onload = restart();
-
 function restart() {
-    //admin-usersを移動
-    //すぐ消す
-    get(ref(db, "users")).then((data) => {
-      Object.keys(data.val()).forEach((id) => {
-        set(ref(db, "admin-users/" + id), data.val()[id].admin).then(() => {
-        });
-      });
-    })
+  //とりあえず仮で即ローディング解除
+  document.getElementById("overray").style.display = "none";
 
-    var date = new Date();
-    document.getElementById("endDate").value = date.getFullYear() + "-" + ("0" + (date.getMonth() + 1)).slice(-2) + "-" + ("0" + date.getDate()).slice(-2);
-    date.setMonth(date.getMonth() - 1);
-    document.getElementById("startDate").value = "2023-04-01";
+  //部費支払い一覧(あとでタームごとに管理できるようにする)
+  var date = new Date();
+  document.getElementById("endDate").value = date.getFullYear() + "-" + ("0" + (date.getMonth() + 1)).slice(-2) + "-" + ("0" + date.getDate()).slice(-2);
+  document.getElementById("startDate").value = "2023-04-01";
 
-    toCsvData = [["名前", "名前（ふりがな）", "学籍番号", "学部学科", "大学名・学部学科（他大学）", "学年", "性別", "誕生日", "電話番号"]];
+  //CSVデータ作成用
+  toCsvData = [["名前", "名前（ふりがな）", "学籍番号", "学部学科", "大学名・学部学科（他大学）", "学年", "性別", "誕生日", "電話番号"]];
 
-    get(ref(db, 'users')).then((snapshot) => {
-        document.getElementById("loadingControl").style.display = "none";
-        users = snapshot.val();
-        userKeys = Object.keys(users);
+  //ユーザー一覧をソート:by toyton
+  userKeys = sort(users);
 
-        //管理者IDリストを作成しておく(連想配列({ID:BOOL,ID:BOOL,...})の形式で格納されます)
-        get(ref(db, "admin-users")).then((data) => {
-          adminusers = data.val();
-          //ユーザーキーをソート
-          userKeys = sort(users);
+  var date = new Date();
+  totalMembers = userKeys.length;
+
+  userKeys.forEach((key, i) => {
+    //引退・退部した部員
+    if(users[key].status == 1 || users[key].status == 2) {
+        noExit = false;
+        var role = "引退";
+        if(users[key].status == 1) {role = "退部";}
+
+        totalMembers --;
+
+        document.getElementById("exitMembers").innerHTML += '<li class="list-group-item" onclick="openInfo('+i+')" data-bs-toggle="modal" data-bs-target="#exampleModal"><h6>'+users[key].name + '<span class="badge bg-danger mx-1">'+role+'</span></h6><span class="text-secondary small mx-1">'+users[key].nameKana+' ' + users[key].studentNumber + '</span></li>';
+        return;
+    }
+
+    var sex = "女性";
+    if(users[key].sex == "man") {sex="男性";}
+
+    var tags = "";
+    var roles = "";
+    if(users[key].role) {
+        var role = users[key].role;
         
-          var date = new Date();
-          totalMembers = userKeys.length;
-  
-          userKeys.forEach((key, i) => {
-              //引退・退部した部員
-              if(users[key].status == 1 || users[key].status == 2) {
-                  noExit = false;
-                  var role = "引退";
-                  if(users[key].status == 1) {role = "退部";}
-  
-                  totalMembers --;
-  
-                  document.getElementById("exitMembers").innerHTML += '<li class="list-group-item" onclick="openInfo('+i+')" data-bs-toggle="modal" data-bs-target="#exampleModal"><h6>'+users[key].name + '<span class="badge bg-danger mx-1">'+role+'</span></h6><span class="text-secondary small mx-1">'+users[key].nameKana+' ' + users[key].studentNumber + '</span></li>';
-                  return;
-              }
-  
-  
-              var sex = "女性";
-              if(users[key].sex == "man") {sex="男性";}
-  
-              var tags = "";
-              var roles = "";
-              if(users[key].role) {
-                  var role = users[key].role;
-                  
-                  //幹部はバッジをつける
-                  switch (role) {
-                    case "leader":
-                      roles += '<span class="mx-1 badge bg-primary">部長</span>';
-                      break;
-                    case "subleader":
-                      roles += '<span class="mx-1 badge bg-primary">副部長</span>';
-                      break;
-                    case "treasurer":
-                      roles += '<span class="mx-1 badge bg-primary">会計</span>';
-                      break;
-                    default:
-                      break;
-                  }
+        //幹部はバッジをつける
+        switch (role) {
+          case "leader":
+            roles += '<span class="mx-1 badge bg-primary">部長</span>';
+            break;
+          case "subleader":
+            roles += '<span class="mx-1 badge bg-primary">副部長</span>';
+            break;
+          case "treasurer":
+            roles += '<span class="mx-1 badge bg-primary">会計</span>';
+            break;
+          default:
+            break;
+        }
 
-                  //新入部員もバッジをつける
-                  if(role == "new"){
-                    roles += '<i class="bi bi-stars" style="color: #FFD700;"></i>'
-                  }
-              }
-  
-  
-  
-              if(adminusers[key]) {
-                  roles += '<span class="badge bg-secondary mx-1">管理者</span>';
-              }
-  
-              var age = 0;
-              var birth = new Date(users[key].birth);
-              age = Math.floor((date - birth) / (86400000 * 365));
-  
-              //リストに表示
-              document.getElementById("memberList").innerHTML += '<li class="list-group-item" onclick="openInfo('+i+')" data-bs-toggle="modal" data-bs-target="#exampleModal"><h6>'+users[key].name + '<span class="text-secondary mx-1">' + users[key].studentNumber + '</span>' + roles + '</h6><div class="small text-secondary">'+users[key].department+' '+users[key].grade+'年 '+sex+' '+age+'歳</div>'+tags+'</li>'
-              
-              toCsvData.push([users[key].name, users[key].nameKana, users[key].studentNumber, users[key].department, users[key].otherDepart, users[key].grade, sex, users[key].birth, String(users[key].phoneNumber)]);
-  
-  
-              var buhiRecords = users[key].buhiRecord;
-  
-              if(buhiRecords) {
-                  Object.keys(buhiRecords).forEach((key2, ib) => {
-                      buhiRecords[key2].name = users[key].name;
-                      buhiRecords[key2].uid = key;
-                      buhiList = buhiList.concat(buhiRecords[key2]);
-                      buhiTotal += Number(buhiRecords[key2].amount);
-                  });  
-              }
-          });
-  
-  
-          buhiList.sort(
-              (x, y) => ((new Date(y.date)).getTime()) - ((new Date(x.date)).getTime()),
-          )
-  
-          // buhiList.forEach((buhi, il) => {
-          //     document.getElementById("buhiList").innerHTML += '<li class="list-group-item">'+buhi.name+'<span class="fw-bold mx-1">￥' + Number(buhi.amount).toLocaleString() + '</span><span class="text-secondary mx-1 small">'+buhi.date+' 記録者 : '+buhi.recorderName+'</span></li>';
-          // });
-  
-          document.getElementById("totalMoney").textContent = buhiTotal.toLocaleString();
-  
-          create_csv(toCsvData);
-  
-          //引退・退部部員がいる
-          if(!noExit) {
-              document.getElementById("noExit").style.display = "none";
-          }
-  
-          document.getElementById("totalMember").innerHTML = '合計 ' + totalMembers + "人";
-        })
-    })
+        //新入部員もバッジをつける
+        if(role == "new"){
+          roles += '<i class="bi bi-stars" style="color: #FFD700;"></i>'
+        }
+    }
+
+    if(adminusers[key]) {
+        roles += '<span class="badge bg-secondary mx-1">管理者</span>';
+    }
+
+    var age = 0;
+    var birth = new Date(users[key].birth);
+    age = Math.floor((date - birth) / (86400000 * 365));
+
+    //リストに表示
+    document.getElementById("memberList").innerHTML += '<li class="list-group-item" onclick="openInfo('+i+')" data-bs-toggle="modal" data-bs-target="#exampleModal"><h6>'+users[key].name + '<span class="text-secondary mx-1">' + users[key].studentNumber + '</span>' + roles + '</h6><div class="small text-secondary">'+users[key].department+' '+users[key].grade+'年 '+sex+' '+age+'歳</div>'+tags+'</li>'
+    
+    toCsvData.push([users[key].name, users[key].nameKana, users[key].studentNumber, users[key].department, users[key].otherDepart, users[key].grade, sex, users[key].birth, String(users[key].phoneNumber)]);
+
+    var buhiRecords = users[key].buhiRecord;
+
+    if(buhiRecords) {
+      Object.keys(buhiRecords).forEach((key2, ib) => {
+        buhiRecords[key2].name = users[key].name;
+        buhiRecords[key2].uid = key;
+        buhiList = buhiList.concat(buhiRecords[key2]);
+        buhiTotal += Number(buhiRecords[key2].amount);
+      });  
+    }
+  });
+
+  buhiList.sort(
+      (x, y) => ((new Date(y.date)).getTime()) - ((new Date(x.date)).getTime()),
+  )
+
+  // buhiList.forEach((buhi, il) => {
+  //     document.getElementById("buhiList").innerHTML += '<li class="list-group-item">'+buhi.name+'<span class="fw-bold mx-1">￥' + Number(buhi.amount).toLocaleString() + '</span><span class="text-secondary mx-1 small">'+buhi.date+' 記録者 : '+buhi.recorderName+'</span></li>';
+  // });
+
+  document.getElementById("totalMoney").textContent = buhiTotal.toLocaleString();
+
+  create_csv(toCsvData);
+
+  //引退・退部部員がいる
+  if(!noExit) {
+      document.getElementById("noExit").style.display = "none";
+  }
+
+  document.getElementById("totalMember").innerHTML = '合計 ' + totalMembers + "人";
 
     //ストアの取引情報の表示
     get(ref(db, "store")).then((snapshot2) => {
@@ -194,7 +192,6 @@ function restart() {
             });
         });
     });
-    
 }
 
 //部員情報の表示
@@ -329,7 +326,6 @@ function delItem() {
 
 window.delItem = delItem;
 export{delItem}
-
 
 //部費情報の削除
 function deleteBuhi(member, buhi) {
@@ -515,26 +511,25 @@ export function sort(users){
   });
 
   return [leader_key, subleader_key, treasurer_key, ...active_keys, ...new_keys, ...rest];
+
+  //学年でソート:made by toyton
+  function sort_grade(data, keys){
+    var others = [];
+    var fours = [];
+    var threes = [];
+    var twoes = [];
+    var ones = [];
+  
+    keys.forEach(id => {
+      switch (data[id].grade) {
+        case 4: fours.push(id);   break;
+        case 3: threes.push(id);  break;
+        case 2: twoes.push(id);   break;
+        case 1: ones.push(id);    break;
+        default: others.push(id); break;
+      }
+    });
+    return [...others, ...fours, ...threes, ...twoes, ...ones];
+  }
 }
 window.sort = sort;
-
-//学年でソート:made by toyton
-export function sort_grade(data, keys){
-  var fours = [];
-  var threes = [];
-  var twoes = [];
-  var ones = [];
-
-  keys.forEach(id => {
-    switch (data[id].grade) {
-      case 4: fours.push(id);  break;
-      case 3: threes.push(id); break;
-      case 2: twoes.push(id);  break;
-      case 1: ones.push(id);   break;
-    
-      default: break;
-    }
-  });
-  return [...fours, ...threes, ...twoes, ...ones];
-}
-window.sort_grade = sort_grade;

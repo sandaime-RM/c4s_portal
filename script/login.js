@@ -30,6 +30,10 @@ const db = getDatabase();
 //ログイン状態の確認
 onAuthStateChanged(auth, (user) => {
     if (user) {
+      //更新情報を表示
+      if(!c4suser.accessHistory || new Date(c4suser.accessHistory[Object.keys(c4suser.accessHistory).slice(-1)[0]].date) < new Date("2023-06-20 18:05"))
+      { alert("C4's Portal Update:イベント一覧画面が新しくなりました！"); }
+
         console.log(user);
         document.getElementById("account").innerHTML = '<img id="userpic" src="'+user.photoURL+'" width="32px" height="32px" class="rounded-pill mx-2" onclick="goAccount()" style="cursor: pointer;"> <span class="fs-5" style="user-select: none; cursor: pointer;" onclick="goAccount()">'+user.displayName+' <span id="topUserTag"></span></span>'
     

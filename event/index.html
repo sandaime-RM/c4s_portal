@@ -10,6 +10,8 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <!-- JavaScript Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <!--BootstrapIcon-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.0/font/bootstrap-icons.css">
 
     <script src="../script/login.js" type="module"></script>
     <script src="event.js" type="module"></script>
@@ -18,7 +20,21 @@
     <link rel="icon" href="../img/logo_mini.png">
     <link rel="manifest" href="../manifest.json">
 </head>
+<!--誰でもアクセス可能-->
 <body class="bg-light">
+  <!--最初のロード画面-->
+  <div id="overray" style="position: fixed; left: 0; top: 0; width: 100%; height: 100%; background-color: white; z-index: 2147483647;">
+    <div style="width: 100%; max-width: 150px; margin: 30px auto;">
+      <img src="/img/loading.svg" style="width: 100%">
+    </div>
+    <h5 class="mt-3 text-center">イベント・企画一覧</h5>
+    <div class="text-center mt-5" id="loading-overray">
+      <div class="spinner-grow" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
+  </div>
+
   <!--SVGの定義-->
   <svg display="none">
     <defs>
@@ -68,34 +84,34 @@
     </defs>
   </svg>
 
-    <!--ヘッダー-->
-    <div class="container">
-        <header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom">
-          <a href="/" class="d-flex align-items-center col-md-3 mb-2 mb-md-0 text-dark text-decoration-none fs-5">
-            <img src="../img/logo.png" width="38px" class="rounded-3"> C4's Portal
-          </a>
-    
-          <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
-            <li><a href="../" class="nav-link px-2 mx-1"><svg viewBox="0 0 16 16" x="0" y="0" width="24px" height="24px"><use class="text-dark" xlink:href="#house"></use></svg></a></li>
-            <li><a href="../event" class="nav-link px-2 mx-1"><svg viewBox="0 0 16 16" x="0" y="0" width="24px" height="24px"><use class="text-secondary" xlink:href="#calendar"></use></svg></a></li>
-            <li><a href="../equips" class="nav-link px-2 mx-1"><svg viewBox="0 0 16 16" x="0" y="0" width="24px" height="24px"><use class="text-dark" xlink:href="#box"></use></svg></a></li>
-            <li><a href="../money" class="nav-link px-2 mx-1"><svg viewBox="0 0 16 16" x="0" y="0" width="24px" height="24px"><use class="text-dark" xlink:href="#cash"></use></svg></a></li>
-            <!--<li><a href="../wallet" class="nav-link px-2 mx-1"><svg viewBox="0 0 16 16" x="0" y="0" width="24px" height="24px"><use class="text-dark" xlink:href="#wallet"></use></svg></a></li>-->
-            <li><a href="../store" class="nav-link px-2 mx-1"><svg viewBox="0 0 16 16" x="0" y="0" width="24px" height="24px"><use class="text-dark" xlink:href="#basket"></use></svg></a></li>
-            <li><a href="../procedure" class="nav-link px-2 mx-1"><svg viewBox="0 0 16 16" x="0" y="0" width="24px" height="24px"><use class="text-dark" xlink:href="#textFile"></use></svg></a></li>
-          </ul>
-    
-          <div class="col-md-3 text-end" id="account">
-            <div class="spinner-border" role="status">
-              <span class="visually-hidden">Loading...</span>
-            </div>
-          </div>
-        </header>
+  <!--ヘッダー-->
+  <div class="container">
+    <header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom">
+      <a href="/" class="d-flex align-items-center col-md-3 mb-2 mb-md-0 text-dark text-decoration-none fs-5">
+        <img src="../img/logo.png" width="38px" class="rounded-3"> C4's Portal
+      </a>
+
+      <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
+        <li><a href="../" class="nav-link px-2 mx-1"><svg viewBox="0 0 16 16" x="0" y="0" width="24px" height="24px"><use class="text-dark" xlink:href="#house"></use></svg></a></li>
+        <li><a href="../event" class="nav-link px-2 mx-1"><svg viewBox="0 0 16 16" x="0" y="0" width="24px" height="24px"><use class="text-secondary" xlink:href="#calendar"></use></svg></a></li>
+        <li><a href="../equips" class="nav-link px-2 mx-1"><svg viewBox="0 0 16 16" x="0" y="0" width="24px" height="24px"><use class="text-dark" xlink:href="#box"></use></svg></a></li>
+        <li><a href="../money" class="nav-link px-2 mx-1"><svg viewBox="0 0 16 16" x="0" y="0" width="24px" height="24px"><use class="text-dark" xlink:href="#cash"></use></svg></a></li>
+        <!--<li><a href="../wallet" class="nav-link px-2 mx-1"><svg viewBox="0 0 16 16" x="0" y="0" width="24px" height="24px"><use class="text-dark" xlink:href="#wallet"></use></svg></a></li>-->
+        <li><a href="../store" class="nav-link px-2 mx-1"><svg viewBox="0 0 16 16" x="0" y="0" width="24px" height="24px"><use class="text-dark" xlink:href="#basket"></use></svg></a></li>
+        <li><a href="../procedure" class="nav-link px-2 mx-1"><svg viewBox="0 0 16 16" x="0" y="0" width="24px" height="24px"><use class="text-dark" xlink:href="#textFile"></use></svg></a></li>
+      </ul>
+
+      <div class="col-md-3 text-end" id="account">
+        <div class="spinner-border" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
       </div>
+    </header>
+  </div>
 
     <div class="container">
-      <h2 class="fs-2 fw-normal"><svg class="me-3 ms-2" viewBox="0 0 16 16" x="0" y="0" width="36px" height="36px"><use xlink:href="#calendar"></use></svg>イベント予定</h2>
-      <p class="text-secondary">リアクションにはログインが必要です<br>
+      <h2 class="text-center"><i class="bi bi-calendar-week"> </i>イベント・企画一覧</h2>
+      <p class="text-secondary text-center">リアクションにはログインが必要です<br>
         <span class="mx-2">
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="text-danger bi bi-suit-heart-fill" viewBox="0 0 16 16">
           <path d="M4 1c2.21 0 4 1.755 4 3.92C8 2.755 9.79 1 12 1s4 1.755 4 3.92c0 3.263-3.234 4.414-7.608 9.608a.513.513 0 0 1-.784 0C3.234 9.334 0 8.183 0 4.92 0 2.755 1.79 1 4 1z"/>
@@ -117,6 +133,38 @@
         </span>
       </p>
 
+      <!--イベント/企画を切り替える-->
+      <div class="text-center" style="margin: 30px auto;">
+        <ul id="tab-event" class="nav nav-tabs justify-content-center">
+          <li class="nav-item">
+            <a style="width: 8em;" class="nav-link h6 active" aria-current="page">イベント</a>
+          </li>
+          <li class="nav-item">
+            <a style="width: 8em; cursor: pointer;" class="nav-link h6" onclick="switchtab(1)">企画</a>
+          </li>
+        </ul>
+        <ul id="tab-project" class="nav nav-tabs justify-content-center">
+          <li class="nav-item">
+            <a style="width: 8em; cursor: pointer;" class="nav-link h6" onclick="switchtab(0)">イベント</a>
+          </li>
+          <li class="nav-item">
+            <a style="width: 8em;" class="nav-link active h6" aria-current="page">企画</a>
+          </li>
+        </ul>
+      </div>
+
+      <!--イベントタブ-->
+      <div id="event" class="mx-auto mb-5" style="max-width: 960px;">
+        <p class="text-danger text-center" id="noEvent" style="display: none;">イベント予定がありません</p>
+        <div id="eventList_future" class="row">
+          <!--ここにカード-->
+        </div>
+      </div>
+      <!--企画タブ-->
+      <div id="project">
+
+      </div>
+
       <p id="errorEvent" class="text-danger small"></p>
 
       <h5 style="text-align: center; color: gray;">開催予定のイベント</h5>
@@ -126,10 +174,7 @@
         </div>
       </div>
 
-      <p class="text-secondary text-center" id="noEvent" style="display : none;">イベントはありません</p>
-    
-      <div class="py-2 row mb-3" id="eventList">
-      </div>
+      <p class="text-secondary text-center" style="display : none;">イベントはありません</p>
 
       <!--終了したイベント-->
       <div>
@@ -138,47 +183,28 @@
 
         </div>
       </div>
-
-      <!--
-      <div class="accordion accordion mb-4" id="accordionFlushExample2">
-        <div class="accordion-item">
-          <h2 class="accordion-header" id="flush-headingOne2">
-            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne2" aria-expanded="false" aria-controls="flush-collapseOne2">
-              終了したイベント
-            </button>
-          </h2>
-          <div id="flush-collapseOne2" class="accordion-collapse collapse" aria-labelledby="flush-headingOne2" data-bs-parent="#accordionFlushExample2">
-            <div class="my-2 row" id="endEvents">
-              
-            </div>
-          </div>
-        </div>
-      </div>
-      --> 
     </div>
 
     <br>
     
-    <div class="position-fixed end-0 bottom-0 mx-3 my-3">
-      <!--出席ボタン-->
+    <div class="position-fixed end-0 bottom-0 m-3">
+      <!--出席ボタン
       <div class="bg-light text-dark shadow rounded-pill px-4 py-3 pb-4 mb-2 border border-dark text-center position-relative" style="cursor: pointer;" data-bs-target="#attendModal" data-bs-toggle="modal">
         <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor" class="bi bi-person-check" viewBox="0 0 16 16">
           <path d="M6 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H1s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C9.516 10.68 8.289 10 6 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z"/>
           <path fill-rule="evenodd" d="M15.854 5.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 0 1 .708-.708L12.5 7.793l2.646-2.647a.5.5 0 0 1 .708 0z"/>
         </svg>
         <div class="text-secondary position-absolute bottom-0 start-50 translate-middle-x pb-2" style="font-size: 12px;">出席</div>
-      </div>
+      </div>-->
 
-      <!--追加ボタン-->
-      <div class="bg-dark text-light px-3 py-3 shadow rounded-pill text-center" style="cursor: pointer;" data-bs-toggle="modal"  data-bs-target="#exampleModal" onclick="clearForm()">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-plus-lg" viewBox="0 0 16 16">
-          <path fill-rule="evenodd" d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2Z"/>
-        </svg>
+      <!--イベント追加ボタン-->
+      <div class="bg-dark text-light shadow rounded-circle text-center" style="cursor: pointer; width: 50px; height: 50px;" onclick="eventcontrol('', 'new')">
+        <i class="bi bi-plus-lg" style="line-height: 50px;"></i>
       </div>
     </div>
     
 
-        <!-- 新規イベント情報モーダル -->
+        <!-- 新規イベント情報モーダル  -->
         <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
           <div class="modal-dialog modal-lg">
             <div class="modal-content">
@@ -399,5 +425,101 @@
             width: 100%;
           }
         </style>
+
+<!--イベント編集モーダル-->
+<div class="modal fade" id="editeventModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">イベントを編集</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="form-floating mb-3">
+          <input type="text" class="form-control" id="eventID" placeholder="id" disabled>
+          <label for="eventID">イベントID(編集できません)</label>
+        </div>
+
+        <div class="form-floating mb-1">
+          <input type="text" class="form-control" id="eventTitle" placeholder="title">
+          <label for="eventTitle">イベント名</label>
+        </div>
+        <div class="form-floating mb-1">
+          <textarea class="form-control" placeholder="description" id="eventDescription"></textarea>
+          <label for="eventDescription">概要</label>
+        </div>
+        <div class="row mx-2 my-1 d-flex justify-content-around">
+          <input type="radio" class="btn-check" name="eventDateRadio" id="eventDateRadio-allday" autocomplete="off">
+          <label class="btn btn-sm btn-outline-secondary rounded-pill my-1" style="width: 40%;" for="eventDateRadio-allday" onclick="alldaytab(true)">終日</label>
+          <input type="radio" class="btn-check" name="eventDateRadio" id="eventDateRadio-time" autocomplete="off">
+          <label class="btn btn-sm btn-outline-secondary rounded-pill my-1" style="width: 40%;" for="eventDateRadio-time" onclick="alldaytab(false)">時刻指定</label>
+        </div>
+        <div class="row mb-1" id="eventDateTab-allday">
+          <div class="form-floating col-6">
+            <input type="date" class="form-control" id="eventDateBegin" placeholder="date.begin">
+            <label for="eventDateBegin">開始日</label>
+          </div>
+          <div class="form-floating col-6">
+            <input type="date" class="form-control" id="eventDateEnd" placeholder="date.end">
+            <label for="eventDateEnd">終了日</label>
+          </div>
+        </div>
+        <div class="row mb-1" id="eventDateTab-time">
+          <div class="form-floating mb-1">
+            <input type="date" class="form-control" id="eventDate" placeholder="date.begin">
+            <label for="eventDate">開催日</label>
+          </div>
+          <div class="form-floating col-6">
+            <input type="time" class="form-control" id="eventTimeBegin" placeholder="time.begin">
+            <label for="eventTimeBegin">開始時刻</label>
+          </div>
+          <div class="form-floating col-6">
+            <input type="time" class="form-control" id="eventTimeEnd" placeholder="time.end">
+            <label for="eventTimeEnd">終了時刻</label>
+          </div>
+        </div>
+        <div class="form-floating mb-1">
+          <input type="text" class="form-control" id="eventLocation" placeholder="location">
+          <label for="eventLocation">開催場所</label>
+        </div>
+        <div class="form-floating mb-1">
+          <input type="text" class="form-control" id="eventTags" placeholder="tags">
+          <label for="eventTags">タグ(半角空白で区切る)</label>
+        </div>
+        <div class="form-floating mb-1" style="position: relative;">
+          <input type="password" class="form-control" id="eventCode" placeholder="code">
+          <label for="eventCode">出席コード</label>
+          <a style="text-decoration: none; position: absolute; top: 25%; right: 10%; color: black;" class="h3" onclick="toggleshowcode()" id="eye"><i class="bi bi-eye-slash"></i></a>
+        </div>
+        <div class="form-floating mb-1">
+          <input type="number" class="form-control" id="eventPoint" placeholder="points">
+          <label for="eventPoint">獲得ポイント</label>
+        </div>
+        <div class="accordion accordion-flush" id="attender-accordion-div">
+          <div class="accordion-item">
+            <h2 class="accordion-header">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#attender-accordion" aria-expanded="false" aria-controls="flush-collapseOne">
+                出席者一覧
+              </button>
+            </h2>
+            <div id="attender-accordion" class="accordion-collapse collapse" data-bs-parent="#attender-accordion-div">
+              <div class="accordion-body">
+                <ul class="list-group list-group-flush" id="attendersList">
+                  <li class="list-group-item">
+                    <span class="text-secondary">6322007</span> <span class="h6">今井悠人</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-sm btn-secondary w-25" data-bs-dismiss="modal">キャンセル</button>
+        <button type="button" class="btn btn-sm btn-primary w-25" onclick="eventcontrol('', 'event')">保存</button>
+      </div>
+    </div>
+  </div>
+</div>
 </body>
 </html>

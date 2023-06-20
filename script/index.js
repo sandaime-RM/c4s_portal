@@ -47,9 +47,10 @@ var giftID;
 
 //ユーザーランクの定義
 var ranks = {
-  name : ["ビギナー", "アマチュア", "エキスパート", "ベテラン"],
-  color : ["cornflowerblue", "darkgreen", "purple", "goldenrod"],
-  basis : [0, 1000, 3000, 8000]
+  name : ["ノーマル", "ブロンズ", "シルバー", "ゴールド"],
+  //color : ["cornflowerblue", "darkgreen", "purple", "goldenrod"],
+  color : ["cornflowerblue", "#c95700", "#aba9a1", "#decb00"],
+  basis : [0, 1000, 5000, 12000]
 }
 
 //ユーザー情報の取得
@@ -162,8 +163,6 @@ onAuthStateChanged(auth, (snapshot) => {
       }
       //ゲスト
       else{
-        
-  
         //ローディング解除
         document.getElementById("loading-overray").style.display = "none";
         document.getElementById("login-overray").style.display = "none";

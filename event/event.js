@@ -45,25 +45,122 @@ var userAttend;
 var edittingAbsent = -1;
 var amount;
 
-var absentModal = new bootstrap.Modal(document.getElementById('absentModal'))
+var absentModal = new bootstrap.Modal(document.getElementById('absentModal'));
+
+//ユーザー状態(0:ゲスト、1:部員、2:管理者)
+var status;
 
 //ユーザー情報の取得
-onAuthStateChanged(auth, (us) => {
-    user = us;
+onAuthStateChanged(auth, (snapshot) => {
+  user = snapshot;
 
-    get(ref(db, "users/" + user.uid + "/attend")).then((snapshot) => {
-        userAttend = snapshot.val();
+  if(!user) { window.location.href = "/"; }
+  else{
+    get(ref(db, "users/" + user.uid)).then((snapshot) => {
+      if(snapshot.val()) { 
+        get(ref(db, "admin-users/" + user.uid)).then((snapshot) => {
+          if(snapshot.val()) { status = 2; } else { status = 1; }
+        });
+      }
+      else { status = 0; }
+      start(function end() { document.getElementById("overray").style.display = "none"; });
+    })
+  }
+  if(status == 2) { get(ref(db, ("users"))).then((snapshot) => { users = snapshot.val(); })}
 
-        attendCheck();
-    });
+  get(ref(db, "users/" + user.uid + "/attend")).then((snapshot) => {
+    userAttend = snapshot.val();
+    //attendCheck();
+  });
 
-    get(ref(db, "users/" + user.uid + "/point")).then((snapshot) => {
-        amount = snapshot.val();
-    });
+  get(ref(db, "users/" + user.uid + "/point")).then((snapshot) => {
+    amount = snapshot.val();
+  });
 });
 
 //読み込み時に実行
-window.onload = function() {
+export function start(callback) {
+  //タブはデフォルトでイベント状態にする
+  switchtab(0);
+
+  //イベントリストを表示
+  get(ref(db, "event")).then((snapshot) => {
+    events = snapshot.val();
+
+    sorteventKeys(snapshot.val()).forEach(eventID => {
+      var element = events[eventID];
+      //終了していないイベントを表示
+      if(element.term && new Date() < new Date(element.term.end)) {
+        document.getElementById("eventList_future").innerHTML += 
+        '<div class="col-lg-6 p-2"><div class="card w-100 shadow-sm position-relative" style="border-left: solid green 10px;"><div class="card-body"><h5 class="card-title">' + element.title + '</h5><h6 class="card-subtitle mb-2 text-muted">' + TermString(element.term) + ' <span class="badge bg-secondary" id="codeexist' + eventID + '">出席登録あり</span><br>' + element.place + '</h6><p class="text-primary text-small m-0">' + Tags(element.tags) + '</p><p class="card-text" style="height: 5em;">' + element.description + '</p><div style="display: none;" id="adminbtn' + eventID + '"><div class="h5 card-link d-flex justify-content-around mb-0 text-secondary"><div><a style="cursor: pointer;" onclick="eventcontrol(\'' + eventID + '\', \'edit\')"><i class="bi bi-pencil-square"></i></a></div><div><a style="cursor: pointer;" onclick="eventcontrol(\'' + eventID + '\', \'del\')"><i class="bi bi-trash"></i></a></div></div></div></div><div id="attended-check' + eventID + '" style="display: none;" class="position-absolute top-0 end-0"><h1><i class="bi bi-check" style="color: green;"></i></h1></div></div></div>';
+        //出席コードがあるイベントはバッジを表示
+        if(element.code) { document.getElementById("codeexist" + eventID).style.display = "inline"; }
+        else { document.getElementById("codeexist" + eventID).style.display = "none"; }
+        
+        //出席登録済みのイベントはチェックボタンを表示
+        if(element.attender && element.attender[user.uid]) { document.getElementById("attended-check" + eventID).style.display = "block;" }
+        //管理者権限があれば編集ボタンを表示
+        if(status == 2) { document.getElementById("adminbtn" + eventID).style.display = "block"; }
+      }
+      //終了済みのイベントは下の方に簡易表示
+      else{
+        //あとでつくる
+      }
+    });
+
+    callback();
+  });
+
+  //選択ソートでイベントを時系列順に並び替え
+  function sorteventKeys(data) {
+    var minkey = Object.keys(data)[0];
+    Object.keys(data).forEach((key) => {
+      if(new Date(data[key].term.begin) < new Date(data[minkey].term.begin)) { minkey = key; }
+    });
+    delete data[minkey];
+    if(0 < Object.keys(data).length) { return [minkey, ...sorteventKeys(data)]; }
+    else { return [minkey]; }
+  }
+
+  //期間をStringに変換
+  function TermString(term) {
+    var begin = new Date(term.begin); var end = new Date(term.end); var now = new Date();
+    var allday = term.allday;
+    var output = "";
+
+    if(begin.getFullYear() != end.getFullYear()) { output += begin.getFullYear() + "年"; }
+    output += begin.getMonth() + 1 + "月" + begin.getDate() + "日";
+
+    //終日の予定は日付だけ
+    if(allday){
+      if(begin.getFullYear() != end.getFullYear() || begin.getMonth() != end.getMonth() || begin.getDate() != end.getDate()) {
+        output += " - ";
+        if(begin.getFullYear() != end.getFullYear()) { output += end.getFullYear() + "年"; }
+        output += end.getMonth() + 1 + "月" + end.getDate() + "日";
+      }
+    }
+    //時刻が含まれる場合はそれも出力
+    else{
+      output += " " + full(begin.getHours()) + ":" + full(begin.getMinutes());
+      output += " - ";
+      if(begin.getFullYear() != end.getFullYear()) { output += end.getFullYear() + "年"; }
+      if(begin.getFullYear() != end.getFullYear() || begin.getMonth() != end.getMonth() || begin.getDate() != end.getDate()) {
+        output += end.getMonth() + 1 + "月" + end.getDate() + "日 ";
+      }
+      output += full(end.getHours()) + ":" + full(end.getMinutes());
+    }
+    return output;
+
+    function full(str) { str = String(str); if(str.length < 2) { return full("0" + str); } else { return str; } }
+  }
+
+  //タグを文字列に変換、またまた再帰関数大活躍、これ完全にOCaml
+  function Tags(tags) {
+    if(tags[0]) { return "#" + tags.shift() + Tags(tags); }
+    else{ return ""; }
+  }
+
+  /*
     setTextareaSize();
     document.getElementById("detail").style.height = "120px";
 
@@ -182,9 +279,12 @@ window.onload = function() {
     .catch((error) => {
         document.getElementById("errorEvent").innerHTML = error
     });
+    */
 }
+window.start = start;
 
 //イベント情報のアップロード
+/*
 function upload() {
     var tags = document.getElementById("tag").value.split(" ");
 
@@ -215,8 +315,9 @@ function upload() {
 
 window.upload = upload;
 export{upload}
+*/
 
-
+/*
 //フォームをクリア
 function clearForm() {
     editting = -1;
@@ -233,8 +334,9 @@ function clearForm() {
 
 window.clearForm = clearForm;
 export{clearForm}
+*/
 
-
+/*
 //イベント情報の表示
 function openInfo(index) {
     editting = index;
@@ -276,7 +378,9 @@ function openInfo(index) {
 
 window.openInfo = openInfo;
 export{openInfo}
+*/
 
+/*
 //いいねを押す
 function pushLike(index) {
     if(user == null) {return;}
@@ -304,7 +408,9 @@ function pushLike(index) {
 
 window.pushLike = pushLike;
 export{pushLike}
+*/
 
+/*
 //テキストエリアの高さを自動調整
 function setTextareaSize() {
     // textareaタグを全て取得
@@ -323,7 +429,9 @@ function setTextareaSize() {
       this.style.height = `${this.scrollHeight}px`;
     }
   };
+  */
 
+  /*
 //イベント情報の削除
 function delItem() {
     if(editting == -1) {alert("現在開いているイベントは未保存です。"); return;}
@@ -341,7 +449,9 @@ function delItem() {
 
 window.delItem = delItem;
 export{delItem}
+*/
 
+/*
 //いいね一覧の表示
 function dispHeart() {
     if(!users) {
@@ -360,8 +470,10 @@ function dispHeart() {
 
 window.dispHeart = dispHeart;
 export{dispHeart}
+*/
 
 //いいね一覧（実際に表示するのはこっち）
+/*
 function dispHeart2() {
     document.getElementById("heartList").innerHTML = "";
 
@@ -379,7 +491,9 @@ function dispHeart2() {
         }
     }
 }
+*/
 
+/*
 //参加ボタンを押したら
 function pushAttend(index) {
     if(user == null) {return;}
@@ -407,6 +521,7 @@ function pushAttend(index) {
 
 window.pushAttend = pushAttend;
 export{pushAttend}
+*/
 
 //出席登録
 function attend() {
@@ -467,7 +582,7 @@ function attend() {
 window.attend = attend;
 export{attend}
 
-
+/*
 //出席済みかの確認
 function attendCheck() {
     if(!user) {return;}
@@ -484,7 +599,9 @@ function attendCheck() {
         }
     });
 }
+*/
 
+/*
 //不参加ボタンを押したら
 function pushAbsent(index) {
     if(user == null) {return;}
@@ -515,7 +632,9 @@ function pushAbsent(index) {
 
 window.pushAbsent = pushAbsent;
 export{pushAbsent}
+*/
 
+/*
 //欠席理由送信
 function absent() {
     if(!user) {alert("ログインしてください。"); return;}
@@ -534,8 +653,9 @@ function absent() {
 
 window.absent = absent;
 export{absent}
+*/
 
-
+/*
 //不参加一覧の表示
 function dispAbsent() {
     if(!users) {
@@ -554,7 +674,9 @@ function dispAbsent() {
 
 window.dispAbsent = dispAbsent;
 export{dispAbsent}
+*/
 
+/*
 //不参加一覧（実際に表示するのはこっち）
 function dispAbsent2() {
     document.getElementById("absentList").innerHTML = "";
@@ -573,8 +695,10 @@ function dispAbsent2() {
         }
     }
 }
+*/
 
 //参加者一覧の表示
+/*
 function dispAttend() {
     if(!users) {
         get(ref(db, "users"))
@@ -592,7 +716,9 @@ function dispAttend() {
 
 window.dispAttend = dispAttend;
 export{dispAttend}
+*/
 
+/*
 //参加者一覧（実際に表示するのはこっち）
 function dispAttend2() {
     document.getElementById("attendList").innerHTML = "";
@@ -611,8 +737,9 @@ function dispAttend2() {
         }
     }
 }
+*/
 
-
+/*
 //出席済み一覧の表示
 function dispAttended() {
     if(!users) {
@@ -631,7 +758,9 @@ function dispAttended() {
 
 window.dispAttended = dispAttended;
 export{dispAttended}
+*/
 
+/*
 //出席済み一覧（実際に表示するのはこっち）
 function dispAttended2() {
     document.getElementById("attendedList").innerHTML = "";
@@ -650,3 +779,209 @@ function dispAttended2() {
         }
     }
 }
+*/
+
+//タブ切り替え
+export function switchtab(i) {
+  var display = [];
+  if(i) { display = ["none", "flex"]; }
+  else  { display = ["flex", "none"]; }
+
+  document.getElementById("tab-event").style.display = display[0];
+  document.getElementById("event").style.display = display[0];
+  document.getElementById("tab-project").style.display = display[1];
+  document.getElementById("project").style.display = display[1];
+}
+window.switchtab = switchtab;
+
+var editeventModal = new bootstrap.Modal(document.getElementById("editeventModal"));
+//イベントコントロール
+export function eventcontrol(eventID, type) {
+  if(status != 2) { alert("管理者権限がありません"); return; }
+  switch (type) {
+    //新規作成
+    case "new":
+      document.getElementById("eventID").value = new Date().getTime().toString(16).toUpperCase();
+      document.getElementById("eventTitle").value = "";
+      document.getElementById("eventDescription").value = "";
+      document.getElementById("eventDescription").style.height = "8em";
+      document.getElementById("eventDateRadio-allday").checked = true;
+      document.getElementById("eventDateRadio-time").checked = false;
+      alldaytab(true, true);
+      document.getElementById("eventDateBegin").value = DateString(new Date(), true);
+      document.getElementById("eventDateEnd").value = DateString(new Date(), true);
+      document.getElementById("eventDate").value = DateString(new Date(), true);
+      document.getElementById("eventTimeBegin").value = "18:05";
+      document.getElementById("eventTimeEnd").value = "20:00";
+      document.getElementById("eventLocation").value = "";
+      document.getElementById("eventTags").value = "";
+      document.getElementById("eventCode").value = "";
+      document.getElementById("eventCode").type = "password";
+      document.getElementById("eye").innerHTML = '<i class="bi bi-eye-slash"></i>';
+      document.getElementById("eventPoint").value = 300;
+        
+      editeventModal.show();
+    break;
+    //編集する
+    case "edit":
+      get(ref(db, "event/" + eventID)).then((snapshot) => {
+        var data = snapshot.val();
+        document.getElementById("eventID").value = eventID;
+        document.getElementById("eventTitle").value = data.title;
+        document.getElementById("eventDescription").value = data.description;
+        document.getElementById("eventDescription").style.height = "8em";
+        document.getElementById("eventDateRadio-allday").checked = data.term.allday;
+        document.getElementById("eventDateRadio-time").checked = !data.term.allday;
+        alldaytab(data.term.allday, true);
+        document.getElementById("eventDateBegin").value = DateString(new Date(data.term.begin), true);
+        document.getElementById("eventDateEnd").value = DateString(new Date(data.term.end), true);
+        document.getElementById("eventDate").value = DateString(new Date(data.term.begin), true);
+        if(!data.term.allday) {
+          document.getElementById("eventTimeBegin").value = DateString(new Date(data.term.begin), false);
+          document.getElementById("eventTimeEnd").value = DateString(new Date(data.term.end), false);
+        }
+        document.getElementById("eventLocation").value = data.place;
+        document.getElementById("eventTags").value = tagtag(data.tags, true);
+        document.getElementById("eventCode").value = data.code;
+        document.getElementById("eventCode").type = "password";
+        document.getElementById("eye").innerHTML = '<i class="bi bi-eye-slash"></i>';
+        document.getElementById("eventPoint").value = data.point;
+        if(data.attenders){
+          Object.keys(data.attenders).forEach((ID) => {
+            document.getElementById("attendersList").innerHTML +=
+            '<li class="list-group-item"><span class="text-secondary">' + users[ID].studentNumber + '</span> <span class="h6">' + users[0].name + '</span></li>'
+          })
+        }
+        
+        editeventModal.show();
+      })
+    break;
+    //保存する
+    case "save":
+      eventID = document.getElementById("eventID").value;
+      //不備チェック
+      try {
+        if(!document.getElementById("eventTitle").value) { e("タイトルが入力されていません") }
+        if(new Date(document.getElementById("eventDateBegin").value) > new Date(document.getElementById("eventDateEnd").value)) { e("日付が不正です"); }
+        if(new Date(document.getElementById("eventTimeBegin").value) > new Date(document.getElementById("eventTimeEnd").value)) { e("時刻が不正です"); }
+        if(!document.getElementById("eventDateBegin").value || !document.getElementById("eventDate")) { e("日付が入力されていません") }
+        if(!document.getElementById("eventDateBegin").value && (!document.getElementById("eventTimeBegin").value || !document.getElementById("eventTimeEnd").value)) { e("日時が入力されていません"); }
+        if(document.getElementById("eventDateBegin").value && !document.getElementById("eventDateEnd").value) {
+          document.getElementById("eventDateEnd").value = document.getElementById("eventDateBegin").value
+        }
+        if(document.getElementById("eventTimeBegin") && !document.getElementById("eventTimeEnd")) {
+          document.getElementById("eventTimeEnd").value = DateString(new Date(document.getElementById("eventTimeEnd").value) + (1000 * 60 * 60)); 
+        }
+        if(document.getElementById("eventCode").value < 0) { e("出席するとポイント奪われるとか何考えてるんですか"); }
+        function e(msg) { throw new Error(msg); }
+      } catch (error) {
+        alert(error); return;
+      }
+
+      //日付は先にセット
+      var term = {};
+      if(document.getElementById("eventDateRadio-allday").checked){
+        term = {
+          allday : true,
+          begin : document.getElementById("eventDateBegin").value,
+          end : document.getElementById("eventDateEnd").value
+        }
+      }
+      else{
+        term = {
+          allday : false,
+          begin : document.getElementById("eventDate").value + " " + document.getElementById("eventTimeBegin").value,
+          end : document.getElementById("eventDate").value + " " + document.getElementById("eventTimeEnd").value
+        }
+      }
+
+      get(ref(db, "event/" + eventID + "/attenders")).then((snapshot) => {
+        set(ref(db, "event/" + eventID), {
+          title : document.getElementById("eventTitle").value,
+          description : document.getElementById("eventDescription").value,
+          term : term,
+          place : document.getElementById("eventLocation").value,
+          tags : tagtag(document.getElementById("eventTags", false)),
+          code : document.getElementById("eventCode").value,
+          point : document.getElementById("eventPoint").value,
+          attenders : snapshot.val()
+        })
+        .catch((error) => {
+          alert(error.message);
+          editeventModal.show();
+        })
+      })
+
+      editeventModal.hide();
+    break;
+    //削除する
+    case "del":
+      alert("イベント削除機能はありません。データベースを操作してください。");
+    break;
+    default: console.error("undefined type of edit function"); break;
+  }
+
+  //タグ(配列) <-> タグ(String)の変換
+  //第二引数trueで順方向、falseで逆方向の変換
+  function tagtag(tag, direction){
+    if(direction){
+      if(tag[0]){
+        if(tag[1]){ return tag.shift() + " " + tagtag(tag, true); }
+        else{ return tag[0]; }
+      }
+      else { return ""; }
+    }
+    else{ return tag.split(" "); }
+  }
+
+  //終日・時刻ありを切り替える
+  function alldaytab(allday, start) {
+    if(!start && allday == document.getElementById("eventDateRadio-allday").checked) { return; }
+    if(allday){
+      document.getElementById("eventDateTab-allday").style.display = "flex";
+      document.getElementById("eventDateTab-time").style.display = "none";
+      if(!start){
+        document.getElementById("eventDateBegin").value = DateString(new Date(document.getElementById("eventDate").value), true);
+        document.getElementById("eventDateEnd").value = DateString(new Date(document.getElementById("eventDate").value), true);
+      }
+    }
+    else {
+      document.getElementById("eventDateTab-allday").style.display = "none";
+      document.getElementById("eventDateTab-time").style.display = "flex";
+      if(!start){
+        document.getElementById("eventDate").value = DateString(new Date(document.getElementById("eventDateBegin").value), true);
+        if(document.getElementById("eventTimeBegin").value == null && document.getElementById("eventTimeEnd").value == null){
+          document.getElementById("eventTimeBegin").value = "18:05";
+          document.getElementById("eventTimeEnd").value = "20:00";
+        }
+      }
+    }
+  }
+  window.alldaytab = alldaytab;
+
+  //日付の書式をちゃんとする
+  function DateString(data, date) {
+    if(date){ return String(data.getFullYear()) + "-" + addzero(data.getMonth() + 1) + "-" + addzero(data.getDate()) }
+    else{ return addzero(data.getHours()) + ":" + addzero(data.getMinutes()) }
+
+    function addzero(str) {
+      if(String(str).length < 2) { return addzero("0" + String(str)); }
+      else { return String(str); }
+    }
+  }
+  window.DateString = DateString;
+
+  //パスワードの表示/非表示の切り替え
+  function toggleshowcode() {
+    if(document.getElementById("eventCode").type == "password"){
+      document.getElementById("eventCode").type = "text";
+      document.getElementById("eye").innerHTML = '<i class="bi bi-eye"></i>';
+    }
+    else {
+      document.getElementById("eventCode").type = "password";
+      document.getElementById("eye").innerHTML = '<i class="bi bi-eye-slash"></i>';
+    }
+  }
+  window.toggleshowcode = toggleshowcode;
+}
+window.eventcontrol = eventcontrol;

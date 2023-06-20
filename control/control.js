@@ -45,9 +45,6 @@ onAuthStateChanged(auth, (us) => {
 
   //ローディング画面
   document.getElementById("overray").style.display = "block";
-
-  //ログアウト状態ならトップ画面に遷移
-  if(!user) { if(!alert("ログインしてください")) { location.href = "/"; } }
   
   //管理者一覧を取得
   get(ref(db, "admin-users")).then((snapshot) => {

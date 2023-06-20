@@ -102,7 +102,7 @@ export function start(callback) {
         //管理者権限があれば編集ボタンを表示
         if(status == 2) { document.getElementById("adminbtn" + eventID).style.display = "block"; }
       }
-      //終了済みのイベントは下の方に簡易表示
+      //終了済みのイベントを表示
       else{
         //あとでつくる
       }
@@ -862,8 +862,8 @@ export function eventcontrol(eventID, type) {
       //不備チェック
       try {
         if(!document.getElementById("eventTitle").value) { e("タイトルが入力されていません") }
-        if(new Date(document.getElementById("eventDateBegin").value) > new Date(document.getElementById("eventDateEnd").value)) { e("日付が不正です"); }
-        if(new Date(document.getElementById("eventTimeBegin").value) > new Date(document.getElementById("eventTimeEnd").value)) { e("時刻が不正です"); }
+        if(document.getElementById("eventDateRadio-allday").checked && new Date(document.getElementById("eventDateBegin").value) > new Date(document.getElementById("eventDateEnd").value)) { e("日付が不正です"); }
+        if(document.getElementById("eventDateRadio-time").checked && new Date("1983-04-15 " + document.getElementById("eventTimeBegin").value) > new Date("1983-04-15 " + document.getElementById("eventTimeEnd").value)) { e("時刻が不正です"); }
         if(!document.getElementById("eventDateBegin").value || !document.getElementById("eventDate")) { e("日付が入力されていません") }
         if(!document.getElementById("eventDateBegin").value && (!document.getElementById("eventTimeBegin").value || !document.getElementById("eventTimeEnd").value)) { e("日時が入力されていません"); }
         if(document.getElementById("eventDateBegin").value && !document.getElementById("eventDateEnd").value) {
@@ -872,7 +872,7 @@ export function eventcontrol(eventID, type) {
         if(document.getElementById("eventTimeBegin") && !document.getElementById("eventTimeEnd")) {
           document.getElementById("eventTimeEnd").value = DateString(new Date(document.getElementById("eventTimeEnd").value) + (1000 * 60 * 60)); 
         }
-        if(document.getElementById("eventCode").value < 0) { e("出席するとポイント奪われるとか何考えてるんですか"); }
+        if(document.getElementById("eventPoint").value < 0) { e("出席するとポイント奪われるとか何考えてるんですか"); }
         function e(msg) { throw new Error(msg); }
       } catch (error) {
         alert(error); return;
@@ -901,18 +901,19 @@ export function eventcontrol(eventID, type) {
           description : document.getElementById("eventDescription").value,
           term : term,
           place : document.getElementById("eventLocation").value,
-          tags : tagtag(document.getElementById("eventTags", false)),
+          tags : tagtag(document.getElementById("eventTags", false).value),
           code : document.getElementById("eventCode").value,
           point : document.getElementById("eventPoint").value,
           attenders : snapshot.val()
         })
         .catch((error) => {
           alert(error.message);
-          editeventModal.show();
+          return;
+        }).then(() => {
+          alert("保存しました");
+          location.reload();
         })
       })
-
-      editeventModal.hide();
     break;
     //削除する
     case "del":
@@ -931,7 +932,7 @@ export function eventcontrol(eventID, type) {
       }
       else { return ""; }
     }
-    else{ return tag.split(" "); }
+    else{ return String(tag).split(' '); }
   }
 
   //終日・時刻ありを切り替える

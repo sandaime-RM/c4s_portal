@@ -29,43 +29,40 @@ const db = getDatabase();
 
 //ログイン状態の確認
 onAuthStateChanged(auth, (user) => {
-    if (user) {
-      //更新情報を表示
-      if(!c4suser.accessHistory || new Date(c4suser.accessHistory[Object.keys(c4suser.accessHistory).slice(-1)[0]].date) < new Date("2023-06-20 18:05"))
-      { alert("C4's Portal Update:イベント一覧画面が新しくなりました！"); }
+  if (user) {
+    console.log(user);
+    document.getElementById("account").innerHTML = '<img id="userpic" src="'+user.photoURL+'" width="32px" height="32px" class="rounded-pill mx-2" onclick="goAccount()" style="cursor: pointer;"> <span class="fs-5" style="user-select: none; cursor: pointer;" onclick="goAccount()">'+user.displayName+' <span id="topUserTag"></span></span>'
 
-        console.log(user);
-        document.getElementById("account").innerHTML = '<img id="userpic" src="'+user.photoURL+'" width="32px" height="32px" class="rounded-pill mx-2" onclick="goAccount()" style="cursor: pointer;"> <span class="fs-5" style="user-select: none; cursor: pointer;" onclick="goAccount()">'+user.displayName+' <span id="topUserTag"></span></span>'
-    
-        get(ref(db, "users/" + user.uid)).then((snapshot) => {
-          if(snapshot.child("point").exists()) {
-            var point = snapshot.child("point").val();
-            var color = "#c95700";
-            
-            if(point >= 8000) {
-              color = "#aba9a1";
-            }
-  
-            if(point >= 15000) {
-              color = "#decb00";
-            }
-  
-            if(point >= 3000) {
-              document.getElementById("topUserTag").innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" style="color: '+color+'" class="ms-1 bi bi-check-circle-fill" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/></svg>';
-              document.getElementById("userpic").style.border = "solid 3px " + color;
-            }
-          }
+    get(ref(db, "users/" + user.uid)).then((snapshot) => {
+      if(snapshot.child("point").exists()) {
+        var point = snapshot.child("point").val();
+        var color = "#c95700";
+        
+        if(point >= 8000) {
+          color = "#aba9a1";
+        }
 
-          if(snapshot.exists()) {
-            push(ref(db, "users/"+user.uid+"/accessHistory"), {
-              date : (new Date()).getTime(),
-              path : location.pathname
-            });
-          }
+        if(point >= 15000) {
+          color = "#decb00";
+        }
+
+        if(point >= 3000) {
+          document.getElementById("topUserTag").innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" style="color: '+color+'" class="ms-1 bi bi-check-circle-fill" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/></svg>';
+          document.getElementById("userpic").style.border = "solid 3px " + color;
+        }
+      }
+
+      if(snapshot.exists()) {
+        push(ref(db, "users/" + user.uid + "/accessHistory"), {
+          date : (new Date()).getTime(),
+          path : location.pathname
         });
-    } else {
-      document.getElementById("account").innerHTML = '<button type="button" class="btn btn-sm btn-outline-dark me-2" style="width: 100%; border-radius: 20px;" onclick="login()"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-google" viewBox="0 0 16 16"><path d="M15.545 6.558a9.42 9.42 0 0 1 .139 1.626c0 2.434-.87 4.492-2.384 5.885h.002C11.978 15.292 10.158 16 8 16A8 8 0 1 1 8 0a7.689 7.689 0 0 1 5.352 2.082l-2.284 2.284A4.347 4.347 0 0 0 8 3.166c-2.087 0-3.86 1.408-4.492 3.304a4.792 4.792 0 0 0 0 3.063h.003c.635 1.893 2.405 3.301 4.492 3.301 1.078 0 2.004-.276 2.722-.764h-.003a3.702 3.702 0 0 0 1.599-2.431H8v-3.08h7.545z"/></svg> ログイン</button><div class="text-danger small" id="error"></div>';
-    }
+      }
+    });
+  } else {
+    if(location.pathname != "/") { location.href = "/"; }
+    document.getElementById("account").innerHTML = '<button type="button" class="btn btn-sm btn-outline-dark me-2" style="width: 100%; border-radius: 20px;" onclick="login()"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-google" viewBox="0 0 16 16"><path d="M15.545 6.558a9.42 9.42 0 0 1 .139 1.626c0 2.434-.87 4.492-2.384 5.885h.002C11.978 15.292 10.158 16 8 16A8 8 0 1 1 8 0a7.689 7.689 0 0 1 5.352 2.082l-2.284 2.284A4.347 4.347 0 0 0 8 3.166c-2.087 0-3.86 1.408-4.492 3.304a4.792 4.792 0 0 0 0 3.063h.003c.635 1.893 2.405 3.301 4.492 3.301 1.078 0 2.004-.276 2.722-.764h-.003a3.702 3.702 0 0 0 1.599-2.431H8v-3.08h7.545z"/></svg> ログイン</button><div class="text-danger small" id="error"></div>';
+  }
 });
 
 //ログイン
@@ -81,7 +78,7 @@ function login() {
         const credential = GoogleAuthProvider.credentialFromError(error);
         // ...
         if (errorMessage == "Firebase: Error (auth/unauthorized-domain).") {
-          alert("ドメインが承認されていません")
+          alert("不正なドメインです")
         }
         else{
           alert(errorMessage);

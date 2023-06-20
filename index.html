@@ -136,7 +136,7 @@
         <!--開催中のイベントがあれば表示-->
         <div id="heldevent" class="col-lg-6 mx-auto" style="max-width: 480px; text-align: center; border-radius: 15px; padding: 10px 10px; outline: solid 1px darkgreen; background-color: rgb(226, 250, 226); display: none;">
           <h5 style="text-align: center; color: darkgreen;">開催中のイベント</h5>
-          <div class="card shadow-sm" style="border-bottom: 12px solid green; cursor: pointer; border-radius: 10px;" onclick="openmodal('attend');">
+          <div class="card shadow-sm" style="border-bottom: 12px solid green; border-radius: 10px;">
             <div class="card-body">
               <div>
                 <h5 class="card-title" id="heldevent_title"></h5>
@@ -148,8 +148,8 @@
                   <p class="my-1 text-primary" id="heldevent_tags"></p>
                 </p>
               </div>
-              <div class="card-link small mt-3" style="text-decoration: none; text-align: center;">
-                出席登録する
+              <div class="card-link small mt-3" style="color: darkred; text-align: center;" id="attendbtn-text" onclick="openmodal('attend')">
+                <h6>出席登録する</h6>
               </div>
             </div>
           </div>

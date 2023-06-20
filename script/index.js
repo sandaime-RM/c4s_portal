@@ -78,11 +78,28 @@ onAuthStateChanged(auth, (snapshot) => {
     onValue(ref(db, "users/" + user.uid + "/point"), (snapshot) => {
       repoint(snapshot.val());
     });
+    //ポイント履歴も更新
     onValue(ref(db, "users/" + user.uid + "/pointHistory/" + new Date().getFullYear()), (snapshot) => {
       historynum = 0;
       document.getElementById("pointHistory").innerHTML = "";
       showhistory(snapshot.val());
-    })
+    });
+    //ポイント履歴を5件表示
+    function showhistory(datas) {
+      if(!datas) { datas = c4suser.pointHistory[new Date().getFullYear()]; }
+      var historykeys = Object.keys(datas).reverse();
+      for (let i = 0; i < 5; i++) {
+        document.getElementById("addhistory").style.display = "block";
+        var id = historykeys[historynum];
+        var data = datas[id];
+        var date = getdatetext(new Date(data.date));
+        var pointcolor = ["black", "darkred"];
+        document.getElementById("pointHistory").innerHTML += '<li class="list-group-item"><h6 class="mb-0">' + data.title + '</h6><div class="row"><p class="text-secondary small col-6 mb-0">' + date + '</p><h4 class="col-6" style="text-align: right; color: ' + pointcolor[data.mode - 1] + ';margin-bottom: 0;">' + (-2 * data.mode + 3) * data.amount + 'pt</h4></div></li>';
+        historynum++;
+        if(historynum == historykeys.length) { document.getElementById("addhistory").style.display = "none"; return; }
+      }
+    }
+    window.showhistory = showhistory;
     //ポイントリンクを表示
     onValue(ref(db, "pointGift"), (snapshot) => {
       document.getElementById("giftList").innerHTML = '<h5 style="text-align: center;">受け取り用URL</h5>';
@@ -105,6 +122,9 @@ onAuthStateChanged(auth, (snapshot) => {
       //部員
       if(snapshot.val()){
         c4suser = snapshot.val();
+        //更新情報を表示
+        if(!c4suser.accessHistory || new Date(c4suser.accessHistory[Object.keys(c4suser.accessHistory).slice(-1)[0]].date) < new Date("2023-06-20 18:05"))
+        { alert("C4's Portal Update:イベント一覧画面が新しくなりました！"); }
         
         //プロフィールを表示
         document.getElementById("userPic").innerHTML = '<img src="' + user.photoURL + '" style="width: 100%; height: 100%; border-radius: 50%;">'
@@ -177,7 +197,7 @@ onAuthStateChanged(auth, (snapshot) => {
       events = snapshot.val();
       Object.keys(events).forEach((i) => {
         var data = events[i];
-        if(data.term != null){
+        if(data.term){
           if(new Date(data.term.begin) <= new Date() && new Date() <= new Date(data.term.end)){
             document.getElementById("heldevent").style.display = "block";
             document.getElementById("heldevent_title").innerText = data.title;
@@ -186,6 +206,15 @@ onAuthStateChanged(auth, (snapshot) => {
               document.getElementById("heldevent_tags").innerText += "#" + tag;
             });
             document.getElementById("heldevent_description").innerText = data.description;
+
+            if(data.code){
+              document.getElementById("attendbtn-text").style.display = "block";
+              document.getElementById("heldevent").style.cursor = "pointer"
+            }
+            else{
+              document.getElementById("attendbtn-text").style.display = "none"; 
+              document.getElementById("heldevent").style.cursor = "default";
+            }
           }
         }
       })
@@ -288,23 +317,6 @@ export function openmodal(target) {
   }
 }
 window.openmodal = openmodal;
-
-//ポイント履歴を5件表示
-export function showhistory(datas) {
-  if(!datas) { datas = c4suser.pointHistory[new Date().getFullYear()]; }
-  var historykeys = Object.keys(datas).reverse();
-  for (let i = 0; i < 5; i++) {
-    document.getElementById("addhistory").style.display = "block";
-    var id = historykeys[historynum];
-    var data = datas[id];
-    var date = getdatetext(new Date(data.date));
-    var pointcolor = ["black", "darkred"];
-    document.getElementById("pointHistory").innerHTML += '<li class="list-group-item"><h6 class="mb-0">' + data.title + '</h6><div class="row"><p class="text-secondary small col-6 mb-0">' + date + '</p><h4 class="col-6" style="text-align: right; color: ' + pointcolor[data.mode - 1] + ';margin-bottom: 0;">' + (-2 * data.mode + 3) * data.amount + 'pt</h4></div></li>';
-    historynum++;
-    if(historynum == historykeys.length) { document.getElementById("addhistory").style.display = "none"; return; }
-  }
-}
-window.showhistory = showhistory;
 
 //Twitterみたいな日付を文字列で取得:made by toyton
 export function getdatetext(date) {

@@ -103,7 +103,7 @@ export function start(callback) {
         else { document.getElementById("codeexist" + eventID).style.display = "none"; }
         
         //出席登録済みのイベントはチェックボタンを表示
-        if(element.attender && element.attender[user.uid]) { document.getElementById("attended-check" + eventID).style.display = "block;" }
+        if(element.attenders && element.attenders[user.uid]) { document.getElementById("attended-check" + eventID).style.display = "block;" }
         //管理者権限があれば編集ボタンを表示
         if(status == 2) { document.getElementById("adminbtn" + eventID).style.display = "block"; }
       }
@@ -116,8 +116,9 @@ export function start(callback) {
         if(element.attenders) { document.getElementById("codeexist" + eventID).style.display = "inline"; }
         else { document.getElementById("codeexist" + eventID).style.display = "none"; }
         
+        console.log(document.getElementById("attended-check" + eventID));
         //出席登録済みのイベントはチェックボタンを表示
-        if(element.attender && element.attender[user.uid]) { document.getElementById("attended-check" + eventID).style.display = "block;" }
+        if(element.attenders && element.attenders[user.uid]) { document.getElementById("attended-check" + eventID).style.display = "block"; }
         //管理者権限があれば編集ボタンを表示
         if(status == 2) { document.getElementById("adminbtn" + eventID).style.display = "block"; }
       }

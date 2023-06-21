@@ -248,67 +248,19 @@ function attend() {
       });
       set(ref(db, "users/" + user.uid + "/point"), Number(c4suser.point) + Number(events[heldeventID].point)).then(() => {
         c4suser.point += Number(events[heldeventID].point);
-      })
+      });
+      push(ref(db, "users/" + user.uid + "/pointHistory/" + String(new Date().getFullYear())), {
+        title : "【出席登録】" + events[heldeventID].title,
+        amount : Number(events[heldeventID].point),
+        date : new Date().getTime(),
+        mode : 1
+      });
     }
     //しっぱい
     else{
       show("attend-failed");
     }
   }
-  /*
-    getObj("errorAttend").innerHTML = "";
-
-    if(getObj("code").value == "") {
-        return;
-    }
-
-    var code = getObj("code").value;
-    var successed = false;
-
-    Object.keys(events).forEach((key, index) => {
-        if(code == Number(events[key].code)) {
-            successed = true;
-
-            if(userAttend) {
-                if(userAttend[key]) {
-                    alert("既に出席登録しています。");
-                    return;
-                }
-            }
-
-            set(ref(db, "eventReactions/" + key + "/attended/" + user.uid), true);
-
-            set(ref(db, "users/" + user.uid + "/attend/" + key), {
-                date : (new Date()).getTime(),
-                title : events[key].title
-            })
-            .then(() => {
-                getObj("pointText").textContent = "";
-
-                if(events[key].point) {
-                    amount += events[key].point;
-                    set(ref(db, "users/" + user.uid + "/point/"), amount);
-                    push(ref(db, "users/" + user.uid + "/pointHistory/"+ (new Date()).getFullYear() + "/"), {
-                        date : (new Date()).getTime(),
-                        mode : 1,
-                        amount : events[key].point,
-                        title : events[key].title+" への出席登録"
-                    });
-
-                    getObj("pointText").textContent = events[key].point+"pt 受け取りました";
-                }
-
-                getObj("success").style.display = "";
-                getObj("successText").textContent = events[key].title;
-                getObj("attendBtn").disabled = true;
-            });
-        }
-    });
-
-    if(!successed) {
-        getObj("errorAttend").innerHTML = "入力された出席コードは無効です。";
-    }
-    */
 }
 window.attend = attend;
 export{attend}

@@ -111,6 +111,7 @@
 
     <div class="container">
       <h2 class="text-center"><i class="bi bi-calendar-week"> </i>イベント・企画一覧</h2>
+      <!--
       <p class="text-secondary text-center">リアクションにはログインが必要です<br>
         <span class="mx-2">
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="text-danger bi bi-suit-heart-fill" viewBox="0 0 16 16">
@@ -132,6 +133,7 @@
            不参加
         </span>
       </p>
+      -->
 
       <!--イベント/企画を切り替える-->
       <div class="text-center" style="margin: 30px auto;">
@@ -156,26 +158,24 @@
       <!--イベントタブ-->
       <div id="event" class="mx-auto mb-5" style="max-width: 960px;">
         <p class="text-danger text-center" id="noEvent" style="display: none;">イベント予定がありません</p>
+
         <div id="eventList_future" class="row">
           <!--ここにカード-->
+        </div>
+  
+        <!--終了したイベント-->
+        <h5 class="text-center text-secondary mt-5">終了したイベント</h5>
+        <div class="my-2 row" id="endEvents">
+          <!--終了したイベントの簡易表示-->
         </div>
       </div>
       <!--企画タブ-->
       <div id="project">
+        <p class="text-danger text-center">企画データがありません</p>
 
       </div>
 
       <p id="errorEvent" class="text-danger small"></p>
-
-      <p class="text-secondary text-center" style="display: none;">イベントはありません</p>
-
-      <!--終了したイベント-->
-      <div>
-        <h5 style="text-align: center; color: gray;">終了したイベント</h5>
-        <div class="my-2 row" id="endEvents">
-
-        </div>
-      </div>
     </div>
 
     <br>
@@ -191,7 +191,10 @@
       </div>-->
 
       <!--イベント追加ボタン-->
-      <div class="bg-dark text-light shadow rounded-circle text-center" style="cursor: pointer; width: 50px; height: 50px;" onclick="eventcontrol('', 'new')">
+      <div id="addEventBtn" class="bg-dark text-light shadow rounded-circle text-center" style="cursor: pointer; width: 50px; height: 50px;" onclick="eventcontrol('', 'new')">
+        <i class="bi bi-plus-lg" style="line-height: 50px;"></i>
+      </div>
+      <div id="addProjectBtn" class="bg-dark text-light shadow rounded-circle text-center" style="cursor: pointer; width: 50px; height: 50px;">
         <i class="bi bi-plus-lg" style="line-height: 50px;"></i>
       </div>
     </div>
@@ -424,7 +427,7 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title">イベントを編集</h5>
+        <h5 class="modal-title">イベント情報</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">

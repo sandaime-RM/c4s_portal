@@ -87,12 +87,17 @@ export function start(callback) {
   get(ref(db, "event")).then((snapshot) => {
     events = snapshot.val();
 
+    if(!events) { document.getElementById("noEvent").style.display = "block"; }
+
     sorteventKeys(snapshot.val()).forEach(eventID => {
       var element = events[eventID];
       //終了していないイベントを表示
-      if(element.term && new Date() < new Date(element.term.end)) {
+      if(new Date() < new Date(element.term.end)) {
+        var eventcolor;
+        var timecolor;
+        if(new Date(element.term.begin) < new Date()) { eventcolor = "darkred"; timecolor = "text-danger"; } else { eventcolor = "green"; timecolor = "text-muted"}
         document.getElementById("eventList_future").innerHTML += 
-        '<div class="col-lg-6 p-2"><div class="card w-100 shadow-sm position-relative" style="border-left: solid green 10px;"><div class="card-body"><h5 class="card-title">' + element.title + '</h5><h6 class="card-subtitle mb-2 text-muted">' + TermString(element.term) + ' <span class="badge bg-secondary" id="codeexist' + eventID + '">出席登録あり</span><br>' + element.place + '</h6><p class="text-primary text-small m-0">' + Tags(element.tags) + '</p><p class="card-text" style="height: 5em;">' + element.description + '</p><div style="display: none;" id="adminbtn' + eventID + '"><div class="h5 card-link d-flex justify-content-around mb-0 text-secondary"><div><a style="cursor: pointer;" onclick="eventcontrol(\'' + eventID + '\', \'edit\')"><i class="bi bi-pencil-square"></i></a></div><div><a style="cursor: pointer;" onclick="eventcontrol(\'' + eventID + '\', \'del\')"><i class="bi bi-trash"></i></a></div></div></div></div><div id="attended-check' + eventID + '" style="display: none;" class="position-absolute top-0 end-0"><h1><i class="bi bi-check" style="color: green;"></i></h1></div></div></div>';
+        '<div class="col-lg-6 p-2"><div class="card w-100 shadow-sm position-relative" style="border-left: solid ' + eventcolor + ' 10px;"><div class="card-body"><h5 class="card-title">' + element.title + '</h5><h6 class="card-subtitle mb-2 ' + timecolor + '">' + TermString(element.term) + ' <span class="badge bg-secondary" id="codeexist' + eventID + '">出席登録あり</span><br>' + element.place + '</h6><p class="text-primary text-small m-0">' + Tags(element.tags) + '</p><p class="card-text" style="height: 5em;">' + element.description + '</p><div class="mt-2" style="display: none;" id="adminbtn' + eventID + '"><div class="h5 card-link d-flex justify-content-around mb-0 text-secondary"><div><a style="cursor: pointer;" onclick="eventcontrol(\'' + eventID + '\', \'edit\')"><i class="bi bi-pencil-square"></i></a></div><div><a style="cursor: pointer;" onclick="eventcontrol(\'' + eventID + '\', \'del\')"><i class="bi bi-trash"></i></a></div></div></div></div><div id="attended-check' + eventID + '" style="display: none;" class="position-absolute top-0 end-0"><h1><i class="bi bi-check" style="color: green;"></i></h1></div></div></div>';
         //出席コードがあるイベントはバッジを表示
         if(element.code) { document.getElementById("codeexist" + eventID).style.display = "inline"; }
         else { document.getElementById("codeexist" + eventID).style.display = "none"; }
@@ -104,7 +109,19 @@ export function start(callback) {
       }
       //終了済みのイベントを表示
       else{
-        //あとでつくる
+        //管理者は上と同じ表示
+        if(status == 2) {
+          document.getElementById("endEvents").innerHTML += 
+          '<div class="col-lg-6 p-2"><div class="card w-100 shadow-sm position-relative" style="border-left: solid gray 10px;"><div class="card-body"><h5 class="card-title">' + element.title + '</h5><h6 class="card-subtitle mb-2 text-muted">' + TermString(element.term) + ' <span class="badge bg-secondary" id="codeexist' + eventID + '">出席登録あり</span><br>' + element.place + '</h6><p class="text-primary text-small m-0">' + Tags(element.tags) + '</p><div class="mt-2" style="display: none;" id="adminbtn' + eventID + '"><div class="h5 card-link d-flex justify-content-around mb-0 text-secondary"><div><a style="cursor: pointer;" onclick="eventcontrol(\'' + eventID + '\', \'edit\')"><i class="bi bi-pencil-square"></i></a></div><div><a style="cursor: pointer;" onclick="eventcontrol(\'' + eventID + '\', \'del\')"><i class="bi bi-trash"></i></a></div></div></div></div><div id="attended-check' + eventID + '" style="display: none;" class="position-absolute top-0 end-0"><h1><i class="bi bi-check" style="color: green;"></i></h1></div></div></div>';
+        }
+        //出席コードがあったイベントはバッジを表示
+        if(element.attenders) { document.getElementById("codeexist" + eventID).style.display = "inline"; }
+        else { document.getElementById("codeexist" + eventID).style.display = "none"; }
+        
+        //出席登録済みのイベントはチェックボタンを表示
+        if(element.attender && element.attender[user.uid]) { document.getElementById("attended-check" + eventID).style.display = "block;" }
+        //管理者権限があれば編集ボタンを表示
+        if(status == 2) { document.getElementById("adminbtn" + eventID).style.display = "block"; }
       }
     });
 
@@ -149,6 +166,10 @@ export function start(callback) {
       }
       output += full(end.getHours()) + ":" + full(end.getMinutes());
     }
+
+    //開催中には末尾に(開催中)をつける
+    if(begin < now && now < end) { output += "(開催中!)"; }
+
     return output;
 
     function full(str) { str = String(str); if(str.length < 2) { return full("0" + str); } else { return str; } }
@@ -783,14 +804,16 @@ function dispAttended2() {
 
 //タブ切り替え
 export function switchtab(i) {
-  var display = [];
-  if(i) { display = ["none", "flex"]; }
-  else  { display = ["flex", "none"]; }
+  var display = []; //eventtab, projecttab, event, project
+  if(i) { display = ["none", "flex", "none", "block"]; }
+  else  { display = ["flex", "none", "block", "none"]; }
 
   document.getElementById("tab-event").style.display = display[0];
-  document.getElementById("event").style.display = display[0];
   document.getElementById("tab-project").style.display = display[1];
-  document.getElementById("project").style.display = display[1];
+  document.getElementById("event").style.display = display[2];
+  document.getElementById("project").style.display = display[3];
+  document.getElementById("addEventBtn").style.display = display[2];
+  document.getElementById("addProjectBtn").style.display = display[3];
 }
 window.switchtab = switchtab;
 
@@ -951,7 +974,7 @@ export function eventcontrol(eventID, type) {
       document.getElementById("eventDateTab-time").style.display = "flex";
       if(!start){
         document.getElementById("eventDate").value = DateString(new Date(document.getElementById("eventDateBegin").value), true);
-        if(document.getElementById("eventTimeBegin").value == null && document.getElementById("eventTimeEnd").value == null){
+        if(!document.getElementById("eventTimeBegin").value && !document.getElementById("eventTimeEnd").value){
           document.getElementById("eventTimeBegin").value = "18:05";
           document.getElementById("eventTimeEnd").value = "20:00";
         }

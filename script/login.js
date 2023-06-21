@@ -114,3 +114,9 @@ function logout() {
 
 window.logout = logout;
 export{logout}
+
+//誰かが出席登録をしたら管理者に通知する
+export function AttendanceNotification() {
+
+}
+window.AttendanceNotification = AttendanceNotification;

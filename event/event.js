@@ -109,12 +109,9 @@ export function start(callback) {
       }
       //終了済みのイベントを表示
       else{
-        //終了済みは最新を下にする
-        if(status == 2) {
-          document.getElementById("endEvents").innerHTML =
-          '<div class="col-lg-6 p-2"><div class="card w-100 shadow-sm position-relative" style="border-left: solid gray 10px;"><div class="card-body"><h5 class="card-title">' + element.title + '</h5><h6 class="card-subtitle mb-2 text-muted">' + TermString(element.term) + ' <span class="badge bg-secondary" id="codeexist' + eventID + '">出席登録あり</span><br>' + element.place + '</h6><p class="text-primary text-small m-0">' + Tags(element.tags) + '</p><div class="mt-2" style="display: none;" id="adminbtn' + eventID + '"><div class="h5 card-link d-flex justify-content-around mb-0 text-secondary"><div><a style="cursor: pointer;" onclick="eventcontrol(\'' + eventID + '\', \'edit\')"><i class="bi bi-pencil-square"></i></a></div><div><a style="cursor: pointer;" onclick="eventcontrol(\'' + eventID + '\', \'del\')"><i class="bi bi-trash"></i></a></div></div></div></div><div id="attended-check' + eventID + '" style="display: none;" class="position-absolute top-0 end-0"><h1><i class="bi bi-check" style="color: green;"></i></h1></div></div></div>'
-          + document.getElementById("endEvents").innerHTML;
-        }
+        document.getElementById("endEvents").innerHTML =
+        '<div class="col-lg-6 p-2"><div class="card w-100 shadow-sm position-relative" style="border-left: solid gray 10px;"><div class="card-body"><h5 class="card-title">' + element.title + '</h5><h6 class="card-subtitle mb-2 text-muted">' + TermString(element.term) + ' <span class="badge bg-secondary" id="codeexist' + eventID + '">出席登録者あり</span><br>' + element.place + '</h6><p class="text-primary text-small m-0">' + Tags(element.tags) + '</p><div class="mt-2" style="display: none;" id="adminbtn' + eventID + '"><div class="h5 card-link d-flex justify-content-around mb-0 text-secondary"><div><a style="cursor: pointer;" onclick="eventcontrol(\'' + eventID + '\', \'edit\')"><i class="bi bi-pencil-square"></i></a></div><div><a style="cursor: pointer;" onclick="eventcontrol(\'' + eventID + '\', \'del\')"><i class="bi bi-trash"></i></a></div></div></div></div><div id="attended-check' + eventID + '" style="display: none;" class="position-absolute top-0 end-0"><h1><i class="bi bi-check" style="color: green;"></i></h1></div></div></div>'
+        + document.getElementById("endEvents").innerHTML;
         //出席コードがあったイベントはバッジを表示
         if(element.attenders) { document.getElementById("codeexist" + eventID).style.display = "inline"; }
         else { document.getElementById("codeexist" + eventID).style.display = "none"; }

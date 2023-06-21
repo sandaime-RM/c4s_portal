@@ -2,7 +2,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/9.17.2/firebas
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-analytics.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-auth.js";
 import { getDatabase, ref, push, remove, set, get } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-database.js";
-import { getObj } from "/script/methods.js";
+import { getObj, show, hide } from "/script/methods.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBE60G8yImWlENWpCnQZzqqVUrwWa_torg",
@@ -33,20 +33,18 @@ var status;
 onAuthStateChanged(auth, (snapshot) => {
   user = snapshot;
 
-  if(!user) { window.location.href = "/"; }
-  else{
-    get(ref(db, "users/" + user.uid)).then((snapshot) => {
-      if(snapshot.val()) { 
-        get(ref(db, "admin-users/" + user.uid)).then((snapshot) => {
-          if(snapshot.val()) { status = 2; } else { status = 1; }
-          if(status == 2) { get(ref(db, ("users"))).then((snapshot) => { users = snapshot.val(); })}
-        });
-      }
-      else { status = 0; }
-    })
-    while(!status);
-    start(function end() { getObj("overray").style.display = "none"; });
-  }
+  get(ref(db, "users/" + user.uid)).then((snapshot) => {
+    if(snapshot.val()) { 
+      get(ref(db, "admin-users/" + user.uid)).then((snapshot) => {
+        if(snapshot.val()) { status = 2; } else { status = 1; }
+        if(status == 2) { get(ref(db, ("users"))).then((snapshot) => { users = snapshot.val(); })}
+        start(end);
+      });
+    }
+    else { status = 0; start(end); }
+  })
+
+  function end() { hide("overray"); }
 });
 
 //読み込み時に実行

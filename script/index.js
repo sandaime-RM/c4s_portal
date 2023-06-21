@@ -1,13 +1,9 @@
-// Import the functions you need from the SDKs you need
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-app.js";
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-analytics.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-auth.js";
 import { getDatabase, ref, push, remove, set, get, onValue } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-database.js";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
+import { getObj, hide, show, addhead, addtail } from "/script/methods.js";
 
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
   apiKey: "AIzaSyBE60G8yImWlENWpCnQZzqqVUrwWa_torg",
   authDomain: "c4s-portal.firebaseapp.com",
@@ -29,6 +25,7 @@ var c4suser = {};
 
 //データベースのデータ格納用
 var events = {};
+var heldeventID;
 var reactions;
 var userAttend;
 var amount;
@@ -37,8 +34,8 @@ var amount;
 const url = new URL(window.location.href);
 
 //HTML要素
-var attendmodal = new bootstrap.Modal(document.getElementById("attendModal"));
-var getpointmodal = new bootstrap.Modal(document.getElementById("getpointModal"));
+var attendmodal = new bootstrap.Modal(getObj("attendModal"));
+var getpointmodal = new bootstrap.Modal(getObj("getpointModal"));
 
 //ポイント履歴のうち現在表示されている数
 var historynum;
@@ -54,13 +51,13 @@ var ranks = {
 }
 
 //ユーザー情報の取得
-onAuthStateChanged(auth, (snapshot) => {
+onAuthStateChanged(auth, (snapshot) => {  
   user = snapshot;
   
-  document.getElementById("loading-overray").style.display = "block";
-  document.getElementById("login-overray").style.display = "none";
+  getObj("loading-overray").style.display = "block";
+  getObj("login-overray").style.display = "none";
 
-  document.getElementById("overray").style.display = "block";
+  getObj("overray").style.display = "block";
   
   //ログイン状態
   if(user) {
@@ -69,7 +66,7 @@ onAuthStateChanged(auth, (snapshot) => {
 
     //HTMLにランクバーを表示
     for (let i = 0; i < ranks.name.length; i++) {
-      document.getElementById("pointbars").innerHTML += '<div class="progress-bar progress-bar-striped" style="width: 0%;" role="progressbar" id="pointbar' + i + '"></div>'; 
+      addhead("pointbars", '<div class="progress-bar progress-bar-striped" style="width: 0%;" role="progressbar" id="pointbar' + i + '"></div>'); 
     }
     var url = new URL(window.location.href);
     var giftID = url.searchParams.get("getpoint");
@@ -81,7 +78,7 @@ onAuthStateChanged(auth, (snapshot) => {
     //ポイント履歴も更新
     onValue(ref(db, "users/" + user.uid + "/pointHistory/" + new Date().getFullYear()), (snapshot) => {
       historynum = 0;
-      document.getElementById("pointHistory").innerHTML = "";
+      getObj("pointHistory").innerHTML = "";
       showhistory(snapshot.val());
     });
     //ポイント履歴を5件表示
@@ -89,32 +86,32 @@ onAuthStateChanged(auth, (snapshot) => {
       if(!datas) { datas = c4suser.pointHistory[new Date().getFullYear()]; }
       var historykeys = Object.keys(datas).reverse();
       for (let i = 0; i < 5; i++) {
-        document.getElementById("addhistory").style.display = "block";
+        show("addhistory");
         var id = historykeys[historynum];
         var data = datas[id];
         var date = getdatetext(new Date(data.date));
         var pointcolor = ["black", "darkred"];
-        document.getElementById("pointHistory").innerHTML += '<li class="list-group-item"><h6 class="mb-0">' + data.title + '</h6><div class="row"><p class="text-secondary small col-6 mb-0">' + date + '</p><h4 class="col-6" style="text-align: right; color: ' + pointcolor[data.mode - 1] + ';margin-bottom: 0;">' + (-2 * data.mode + 3) * data.amount + 'pt</h4></div></li>';
+        addhead("pointHistory", '<li class="list-group-item"><h6 class="mb-0">' + data.title + '</h6><div class="row"><p class="text-secondary small col-6 mb-0">' + date + '</p><h4 class="col-6" style="text-align: right; color: ' + pointcolor[data.mode - 1] + ';margin-bottom: 0;">' + (-2 * data.mode + 3) * data.amount + 'pt</h4></div></li>');
         historynum++;
-        if(historynum == historykeys.length) { document.getElementById("addhistory").style.display = "none"; return; }
+        if(historynum == historykeys.length) { hide("addhistory"); return; }
       }
     }
     window.showhistory = showhistory;
     //ポイントリンクを表示
     onValue(ref(db, "pointGift"), (snapshot) => {
-      document.getElementById("giftList").innerHTML = '<h5 style="text-align: center;">受け取り用URL</h5>';
+      getObj("giftList").innerHTML = '<h5 style="text-align: center;">受け取り用URL</h5>';
       if(snapshot.val()){
         Object.keys(snapshot.val()).forEach(id => {
           if(snapshot.val()[id].senderID == user.uid) {
             var amount = snapshot.val()[id].amount;
-            document.getElementById("giftNum").value = "";
-            document.getElementById("giftList-footer").style.display = "block";
-            document.getElementById("giftList").innerHTML += '<div class="row mb-1"><div class="col-10" style="outline: solid 1px lightgray; border-radius: 5px; padding: 0;"><p style="margin: 1em 0.5em;"><span style="font-weight: bold;">' + amount + 'pt</span> : https://portal.c4-s.net?getpoint=...</p></div><div class="col-2"><button class="btn btn-outline-dark w-100 h-100" style="text-align: center;" onclick="copylink(\'' + id + '\')"))"><i class="bi bi-share-fill"></i></button></div></div>';
+            getObj("giftNum").value = "";
+            show("giftList-footer");
+            addhead("giftList", '<div class="row mb-1"><div class="col-10" style="outline: solid 1px lightgray; border-radius: 5px; padding: 0;"><p style="margin: 1em 0.5em;"><span style="font-weight: bold;">' + amount + 'pt</span> : https://portal.c4-s.net?getpoint=...</p></div><div class="col-2"><button class="btn btn-outline-dark w-100 h-100" style="text-align: center;" onclick="copylink(\'' + id + '\')"))"><i class="bi bi-share-fill"></i></button></div></div>');
           }
         });
       }
       else{
-        document.getElementById("giftList-footer").style.display = "none";
+        hide("giftList-footer");
       };
     });
 
@@ -127,18 +124,18 @@ onAuthStateChanged(auth, (snapshot) => {
         { alert("C4's Portal Update:イベント一覧画面が新しくなりました！"); }
         
         //プロフィールを表示
-        document.getElementById("userPic").innerHTML = '<img src="' + user.photoURL + '" style="width: 100%; height: 100%; border-radius: 50%;">'
-        document.getElementById("userName").innerText = c4suser.name;
+        getObj("userPic").innerHTML = '<img src="' + user.photoURL + '" style="width: 100%; height: 100%; border-radius: 50%;">'
+        getObj("userName").innerText = c4suser.name;
         var roles = { leader : "部長", subleader : "副部長", treasurer : "会計", active : "現役", new : "新入部員", obog : "卒業生", other : "部員ではありません" };
-        document.getElementById("userRole").innerText = roles[c4suser.role];
+        getObj("userRole").innerText = roles[c4suser.role];
   
-        document.getElementById("profile").style.display = "block";
+        getObj("profile").style.display = "block";
   
         amount = c4suser.point;
         userAttend = c4suser.attend;
   
-        document.getElementById("info1").textContent = c4suser.studentNumber + " " + c4suser.name;
-        document.getElementById("info2").textContent = c4suser.department + " " + c4suser.grade + "年生";
+        getObj("info1").textContent = c4suser.studentNumber + " " + c4suser.name;
+        getObj("info2").textContent = c4suser.department + " " + c4suser.grade + "年生";
         showQR();
   
         //ポイント受け取り画面
@@ -146,18 +143,18 @@ onAuthStateChanged(auth, (snapshot) => {
         if(giftID){
           openmodal("getpoint");
           get(ref(db, "pointGift/" + giftID)).then((snapshot) => {
-            document.getElementById("loading-getpoint").style.display = "none";
+            getObj("loading-getpoint").style.display = "none";
             var giftdata = snapshot.val();
             if(giftdata){
               //自分のギフト
               if(giftdata.senderID == user.uid){
-                document.getElementById("cancel-getpoint").style.display = "block";
+                getObj("cancel-getpoint").style.display = "block";
               }
               //受け取り処理
               else{
-                document.getElementById("success-getpoint").style.display = "block";
-                document.getElementById("pointsender").innerText = giftdata.senderName;
-                document.getElementById("pointamount").innerText = giftdata.amount + "pt";
+                getObj("success-getpoint").style.display = "block";
+                getObj("pointsender").innerText = giftdata.senderName;
+                getObj("pointamount").innerText = giftdata.amount + "pt";
                 set(ref(db, "users/" + user.uid + "/point"), (Number(c4suser.point) + Number(giftdata.amount))).then(() => {
                   remove(ref(db, "pointGift/" + giftID));
                 });
@@ -170,50 +167,51 @@ onAuthStateChanged(auth, (snapshot) => {
               }
             }
             else{
-              document.getElementById("failed-getpoint").style.display = "block";
+              getObj("failed-getpoint").style.display = "block";
             }
           });
         }
   
         //ローディング解除
-        document.getElementById("loading-overray").style.display = "none";
-        document.getElementById("login-overray").style.display = "none";
+        getObj("loading-overray").style.display = "none";
+        getObj("login-overray").style.display = "none";
   
-        document.getElementById("overray").style.display = "none";
+        getObj("overray").style.display = "none";
       }
       //ゲスト
       else{
         //ローディング解除
-        document.getElementById("loading-overray").style.display = "none";
-        document.getElementById("login-overray").style.display = "none";
+        getObj("loading-overray").style.display = "none";
+        getObj("login-overray").style.display = "none";
   
-        document.getElementById("overray").style.display = "none";
+        getObj("overray").style.display = "none";
       }
     });
 
-    //開催中のイベントをトップに表示:made by toyton
-    //複数同時開催には対応していません
+    //開催中のイベントをトップに表示
     get(ref(db, "event")).then((snapshot) => {
       events = snapshot.val();
-      Object.keys(events).forEach((i) => {
-        var data = events[i];
+      Object.keys(events).forEach((key) => {
+        var data = events[key];
         if(data.term){
           if(new Date(data.term.begin) <= new Date() && new Date() <= new Date(data.term.end)){
-            document.getElementById("heldevent").style.display = "block";
-            document.getElementById("heldevent_title").innerText = data.title;
-            document.getElementById("heldevent_place").innerText = data.place;
+            heldeventID = key;
+
+            getObj("heldevent").style.display = "block";
+            getObj("heldevent_title").innerText = data.title;
+            getObj("heldevent_place").innerText = data.place;
             data.tags.forEach(tag => {
-              document.getElementById("heldevent_tags").innerText += "#" + tag;
+              getObj("heldevent_tags").innerText += "#" + tag;
             });
-            document.getElementById("heldevent_description").innerText = data.description;
+            getObj("heldevent_description").innerText = data.description;
 
             if(data.code){
-              document.getElementById("attendbtn-text").style.display = "block";
-              document.getElementById("heldevent").style.cursor = "pointer"
+              getObj("attendbtn-text").style.display = "block";
+              getObj("heldevent").style.cursor = "pointer";
             }
             else{
-              document.getElementById("attendbtn-text").style.display = "none"; 
-              document.getElementById("heldevent").style.cursor = "default";
+              getObj("attendbtn-text").style.display = "none"; 
+              getObj("heldevent").style.cursor = "default";
             }
           }
         }
@@ -222,20 +220,49 @@ onAuthStateChanged(auth, (snapshot) => {
   }
   //ログアウト状態
   else{
-    document.getElementById("loading-overray").style.display = "none";
-    document.getElementById("login-overray").style.display = "block";
+    getObj("loading-overray").style.display = "none";
+    getObj("login-overray").style.display = "block";
   }
 });
 
 //出席登録
 function attend() {
-    document.getElementById("errorAttend").innerHTML = "";
+  //開催中のイベントがないときのエラー(フォアグラウンド)
+  if(!heldeventID || !events[heldeventID].code || new Date(events[heldeventID].term.end) < new Date()) { alert("出席登録を受け付けているイベントはありません"); }
+  //出席コード未入力時のエラー(バックグラウンド)
+  else if(!getObj("code").value) { console.error("attendance code input is null"); }
+  //ここまで正常、出席コード判定
+  else {
+    //正解
+    if(events[heldeventID].code == getObj("code").value) {
+      hide("attend-btnform");
+      hide("attend-failed");
+      hide("attend-already");
+      show("attend-success");
+      getObj("code").value = "";
+      getObj("attend-points").innerText = events[heldeventID].point;
 
-    if(document.getElementById("code").value == "") {
+      //データベースに登録
+      set(ref(db, "event/" + heldeventID + "/attenders/" + user.uid), true).then(() => {
+        events[heldeventID].attenders = { [user.uid] : true };
+      });
+      set(ref(db, "users/" + user.uid + "/point"), Number(c4suser.point) + Number(events[heldeventID].point)).then(() => {
+        c4suser.point += Number(events[heldeventID].point);
+      })
+    }
+    //しっぱい
+    else{
+      show("attend-failed");
+    }
+  }
+  /*
+    getObj("errorAttend").innerHTML = "";
+
+    if(getObj("code").value == "") {
         return;
     }
 
-    var code = document.getElementById("code").value;
+    var code = getObj("code").value;
     var successed = false;
 
     Object.keys(events).forEach((key, index) => {
@@ -256,7 +283,7 @@ function attend() {
                 title : events[key].title
             })
             .then(() => {
-                document.getElementById("pointText").textContent = "";
+                getObj("pointText").textContent = "";
 
                 if(events[key].point) {
                     amount += events[key].point;
@@ -268,19 +295,20 @@ function attend() {
                         title : events[key].title+" への出席登録"
                     });
 
-                    document.getElementById("pointText").textContent = events[key].point+"pt 受け取りました";
+                    getObj("pointText").textContent = events[key].point+"pt 受け取りました";
                 }
 
-                document.getElementById("success").style.display = "";
-                document.getElementById("successText").textContent = events[key].title;
-                document.getElementById("attendBtn").disabled = true;
+                getObj("success").style.display = "";
+                getObj("successText").textContent = events[key].title;
+                getObj("attendBtn").disabled = true;
             });
         }
     });
 
     if(!successed) {
-        document.getElementById("errorAttend").innerHTML = "入力された出席コードは無効です。";
+        getObj("errorAttend").innerHTML = "入力された出席コードは無効です。";
     }
+    */
 }
 window.attend = attend;
 export{attend}
@@ -293,7 +321,7 @@ function showQR() {
     // QRコードの生成
     (function() {
        var qr = new QRious({
-         element: document.getElementById('qr'),
+         element: getObj('qr'),
          // 入力した文字列でQRコード生成
          value: query
     });
@@ -311,7 +339,18 @@ export{showQR}
 //モーダルを開くだけのプログラム:made by toyton
 export function openmodal(target) {
   switch (target) {
-    case "attend": attendmodal.show(); break;
+    case "attend": 
+      show("attend-btnform");
+      hide("attend-already");
+      hide("attend-failed");
+      hide("attend-success");
+      getObj("code").value = "";
+      
+      //出席登録済みの判定
+      if(events[heldeventID].attenders && events[heldeventID].attenders[user.uid]) { hide("attend-btnform"); show("attend-already"); }
+
+      attendmodal.show();
+    break;
     case "getpoint": getpointmodal.show(); break;
     default: break;
   }
@@ -345,7 +384,7 @@ export function sendgift() {
     alert("通信エラー");
   }
   else{
-    var num = document.getElementById('giftNum').value;
+    var num = getObj('giftNum').value;
   
     if(num){
       if(num <= 0) { showalert("値が不正です"); }
@@ -373,11 +412,11 @@ export function sendgift() {
   
   function showalert(text) {
     if(text) {
-      document.getElementById('giftalert').innerText = text;
-      document.getElementById('giftalert').style.display = "block";
+      getObj('giftalert').innerText = text;
+      getObj('giftalert').style.display = "block";
     }
     else{
-      document.getElementById('giftalert').style.display = "none";
+      getObj('giftalert').style.display = "none";
     }
   }
   window.showalert = showalert;
@@ -386,17 +425,17 @@ window.sendgift = sendgift;
 
 //ポイント送信リンクを取り消し
 export function cancel_gift() {
-  document.getElementById("cancel-getpoint").style.display = "none";
-  document.getElementById("loading-getpoint").style.display = "block";
+  getObj("cancel-getpoint").style.display = "none";
+  getObj("loading-getpoint").style.display = "block";
 
   giftID = url.searchParams.get("getpoint");
   get(ref(db, "pointGift/" + giftID + "/amount")).then((giftamount) => {
     set(ref(db, "users/" + user.uid + "/point"), (Number(c4suser.point) + Number(giftamount.val()))).then(() => {
       remove(ref(db, "pointGift/" + giftID));
-      document.getElementById("pointsender").innerText = c4suser.name;
-      document.getElementById("pointamount").innerText = giftamount.val() + "pt";
-      document.getElementById("loading-getpoint").style.display = "none";
-      document.getElementById("success-getpoint").style.display = "block";
+      getObj("pointsender").innerText = c4suser.name;
+      getObj("pointamount").innerText = giftamount.val() + "pt";
+      getObj("loading-getpoint").style.display = "none";
+      getObj("success-getpoint").style.display = "block";
     })
     push(ref(db, "users/" + user.uid + "/pointHistory/" + new Date().getFullYear().toString()), {
       date : new Date().getTime(),
@@ -417,27 +456,27 @@ window.copylink = copylink;
 //プロフィールのポイント画面を更新
 export function repoint(amount) {
   c4suser.point = amount;
-  document.getElementById("pointnum").innerText = amount;
+  getObj("pointnum").innerText = amount;
   var ranknum = ranks.basis.length - 1;
   //0以下または未定義なら0にリセット
   if ( amount < ranks.basis[0] || !amount) { set(ref(db, "users/" + user.uid + "/point"), 0); amount = 0; }
   //最高ランクなら最高ランク表示にする
   if ( ranks.basis.slice(-1)[0] <= amount ) {
-    document.getElementById("pointbar" + String(ranks.name.length - 1)).style.width = "100%";
-    document.getElementById("pointbar" + String(ranks.name.length - 1)).style.display = "block";
-    document.getElementById("pointbar" + String(ranks.name.length - 1)).style.backgroundColor = ranks.color[ranknum];
-    document.getElementById("restpoint").innerHTML = '<p style="color: darkred;">最高ランク会員</p>';
+    getObj("pointbar" + String(ranks.name.length - 1)).style.width = "100%";
+    getObj("pointbar" + String(ranks.name.length - 1)).style.display = "block";
+    getObj("pointbar" + String(ranks.name.length - 1)).style.backgroundColor = ranks.color[ranknum];
+    getObj("restpoint").innerHTML = '<p style="color: darkred;">最高ランク会員</p>';
     for (let i = 0; i < ranks.name.length - 1; i++) {
-      document.getElementById("pointbar" + String(i)).style.display = "none";
+      getObj("pointbar" + String(i)).style.display = "none";
     }
   }
   //それ以外ならランク番号を取得
   else{
-    document.getElementById("pointbar" + String(ranks.name.length - 1)).style.display = "none";
+    getObj("pointbar" + String(ranks.name.length - 1)).style.display = "none";
     for (let i = 0; i < ranks.basis.length; i++) { if(ranks.basis[i] <= amount) { ranknum = i; } }
-    document.getElementById("restpoint").innerHTML = '<p>' + ranks.name[ranknum+1] + 'まであと<span style="color: darkred; font-weight: bold;">' + String(ranks.basis[ranknum+1] - amount) + '</span>pt</p>';
+    getObj("restpoint").innerHTML = '<p>' + ranks.name[ranknum+1] + 'まであと<span style="color: darkred; font-weight: bold;">' + String(ranks.basis[ranknum+1] - amount) + '</span>pt</p>';
     for (let i = 0; i < ranks.color.length - 1; i++) {
-      var bar = document.getElementById("pointbar" + String(i));
+      var bar = getObj("pointbar" + String(i));
       bar.style.backgroundColor = ranks.color[i];
       var ratio = (amount - ranks.basis[i]) / ranks.basis.slice(-1)[0];
       ratio = Math.max(ratio, 0);
@@ -446,6 +485,6 @@ export function repoint(amount) {
       bar.style.display = "block";
     }
   }
-  document.getElementById("ranktext").innerText = ranks.name[ranknum];
-  document.getElementById("ranktext").style.backgroundColor = ranks.color[ranknum];
+  getObj("ranktext").innerText = ranks.name[ranknum];
+  getObj("ranktext").style.backgroundColor = ranks.color[ranknum];
 }

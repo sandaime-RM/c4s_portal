@@ -270,40 +270,58 @@
   </main>
 
   <div class="position-fixed end-0 bottom-0 mx-3 my-3">
-    <!--出席ボタン-->
+    <!--出席ボタン
     <div class="bg-light text-dark shadow rounded-pill px-4 py-3 pb-4 mb-2 border border-dark text-center position-relative" style="cursor: pointer;" data-bs-target="#attendModal" data-bs-toggle="modal">
       <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor" class="bi bi-person-check" viewBox="0 0 16 16">
         <path d="M6 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H1s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C9.516 10.68 8.289 10 6 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z"/>
         <path fill-rule="evenodd" d="M15.854 5.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 0 1 .708-.708L12.5 7.793l2.646-2.647a.5.5 0 0 1 .708 0z"/>
       </svg>
       <div class="text-secondary position-absolute bottom-0 start-50 translate-middle-x pb-2" style="font-size: 12px;">出席</div>
-    </div>
+    </div>-->
 
     <!--QRボタン-->
-    <div class="bg-light text-dark shadow rounded-pill px-3 py-3 mb-2 border border-dark text-center position-relative" style="cursor: pointer;" data-bs-target="#qrModal" data-bs-toggle="modal">
-      <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor" class="bi bi-qr-code" viewBox="0 0 16 16">
-        <path d="M2 2h2v2H2V2Z"/>
-        <path d="M6 0v6H0V0h6ZM5 1H1v4h4V1ZM4 12H2v2h2v-2Z"/>
-        <path d="M6 10v6H0v-6h6Zm-5 1v4h4v-4H1Zm11-9h2v2h-2V2Z"/>
-        <path d="M10 0v6h6V0h-6Zm5 1v4h-4V1h4ZM8 1V0h1v2H8v2H7V1h1Zm0 5V4h1v2H8ZM6 8V7h1V6h1v2h1V7h5v1h-4v1H7V8H6Zm0 0v1H2V8H1v1H0V7h3v1h3Zm10 1h-1V7h1v2Zm-1 0h-1v2h2v-1h-1V9Zm-4 0h2v1h-1v1h-1V9Zm2 3v-1h-1v1h-1v1H9v1h3v-2h1Zm0 0h3v1h-2v1h-1v-2Zm-4-1v1h1v-2H7v1h2Z"/>
-        <path d="M7 12h1v3h4v1H7v-4Zm9 2v2h-3v-1h2v-1h1Z"/>
-      </svg>
+    <div class="bg-dark text-light shadow rounded-circle position-fixed end-0 bottom-0 m-3 text-center" style="cursor: pointer; width: 50px; height: 50px;" data-bs-target="#qrModal" data-bs-toggle="modal">
+      <i class="bi bi-qr-code h4" style="line-height: 50px;"></i>
     </div>
   </div>
   
 
   <!-- 出席登録モーダル -->
-  <div class="modal fade" id="attendModal" tabindex="-1" aria-labelledby="attendModalLabel" aria-hidden="true">
+  <div class="modal fade" id="attendModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" id="attendModalLabel">出席登録</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-        <div class="modal-body">
+        <div class="modal-body" class="py-5">
+          <div id="attend-btnform">
+            <h5 class="text-center">出席コード</h5>
+            <input type="number" class="form-control text-center w-75 mx-auto"
+              style="
+                font-weight: bold; font-size: 20px;
+                letter-spacing: 1.5em; text-indent: 1.5em;
+                line-height: 35px; caret-color: white;
+                border: none; border-bottom: solid 1px gray; border-radius: 0;
+                " id="code">
+            <div class="w-75 mx-auto">
+              <button type="button" class="col-12 btn btn-outline-dark mt-5 rounded-pill w-100" onclick="attend()" id="attendBtn"><i class="bi bi-check"> </i>出席登録</button>
+            </div>
+            <div id="attend-failed" class="text-center text-danger mt-5">
+              <h1><i class="bi bi-x-lg"></i></h1>
+              <h3>出席コードが違います！</h3>
+            </div>
+          </div>
+          <div id="attend-success" class="text-center text-success">
+            <h1><i class="bi bi-check-lg"></i></h1>
+            <h3>出席が登録されました！</h3>
+            <b><span id="attend-points"></span>ポイント獲得！</b>
+          </div>
+          <div id="attend-already" class="text-primary text-center">
+            <h1><i class="bi bi-check-lg"></i></h1>
+            <h3>すでに出席登録されています</h3>
+          </div>
           <div class="py-2">
-            <label for="attendCode">出席コード</label>
-            <input type="number" class="form-control" id="code">
           </div>
 
           <p class="text-danger small" id="errorAttend"></p>
@@ -313,12 +331,6 @@
             <div class="text-secondary small text-center" id="successText"></div>
             <div class="small py-1 text-center" id="pointText"></div>
           </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="col-12 btn btn-dark" onclick="attend()" id="attendBtn">
-            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" id="uploading" style="display: none;"></span>
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="me-2 bi bi-check" viewBox="4 3 7 10"><path d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.267.267 0 0 1 .02-.022z"/></svg>登録
-          </button>
         </div>
       </div>
     </div>

@@ -40,7 +40,7 @@ var attendNum = [];
 var attendList = [];
 var absentNum = [];
 var absentList = [];
-var users = null;
+var users = {};
 var userAttend;
 var edittingAbsent = -1;
 var amount;
@@ -60,13 +60,13 @@ onAuthStateChanged(auth, (snapshot) => {
       if(snapshot.val()) { 
         get(ref(db, "admin-users/" + user.uid)).then((snapshot) => {
           if(snapshot.val()) { status = 2; } else { status = 1; }
+          if(status == 2) { get(ref(db, ("users"))).then((snapshot) => { users = snapshot.val(); })}
         });
       }
       else { status = 0; }
       start(function end() { document.getElementById("overray").style.display = "none"; });
     })
   }
-  if(status == 2) { get(ref(db, ("users"))).then((snapshot) => { users = snapshot.val(); })}
 
   get(ref(db, "users/" + user.uid + "/attend")).then((snapshot) => {
     userAttend = snapshot.val();
@@ -109,10 +109,11 @@ export function start(callback) {
       }
       //終了済みのイベントを表示
       else{
-        //管理者は上と同じ表示
+        //終了済みは最新を下にする
         if(status == 2) {
-          document.getElementById("endEvents").innerHTML += 
-          '<div class="col-lg-6 p-2"><div class="card w-100 shadow-sm position-relative" style="border-left: solid gray 10px;"><div class="card-body"><h5 class="card-title">' + element.title + '</h5><h6 class="card-subtitle mb-2 text-muted">' + TermString(element.term) + ' <span class="badge bg-secondary" id="codeexist' + eventID + '">出席登録あり</span><br>' + element.place + '</h6><p class="text-primary text-small m-0">' + Tags(element.tags) + '</p><div class="mt-2" style="display: none;" id="adminbtn' + eventID + '"><div class="h5 card-link d-flex justify-content-around mb-0 text-secondary"><div><a style="cursor: pointer;" onclick="eventcontrol(\'' + eventID + '\', \'edit\')"><i class="bi bi-pencil-square"></i></a></div><div><a style="cursor: pointer;" onclick="eventcontrol(\'' + eventID + '\', \'del\')"><i class="bi bi-trash"></i></a></div></div></div></div><div id="attended-check' + eventID + '" style="display: none;" class="position-absolute top-0 end-0"><h1><i class="bi bi-check" style="color: green;"></i></h1></div></div></div>';
+          document.getElementById("endEvents").innerHTML =
+          '<div class="col-lg-6 p-2"><div class="card w-100 shadow-sm position-relative" style="border-left: solid gray 10px;"><div class="card-body"><h5 class="card-title">' + element.title + '</h5><h6 class="card-subtitle mb-2 text-muted">' + TermString(element.term) + ' <span class="badge bg-secondary" id="codeexist' + eventID + '">出席登録あり</span><br>' + element.place + '</h6><p class="text-primary text-small m-0">' + Tags(element.tags) + '</p><div class="mt-2" style="display: none;" id="adminbtn' + eventID + '"><div class="h5 card-link d-flex justify-content-around mb-0 text-secondary"><div><a style="cursor: pointer;" onclick="eventcontrol(\'' + eventID + '\', \'edit\')"><i class="bi bi-pencil-square"></i></a></div><div><a style="cursor: pointer;" onclick="eventcontrol(\'' + eventID + '\', \'del\')"><i class="bi bi-trash"></i></a></div></div></div></div><div id="attended-check' + eventID + '" style="display: none;" class="position-absolute top-0 end-0"><h1><i class="bi bi-check" style="color: green;"></i></h1></div></div></div>'
+          + document.getElementById("endEvents").innerHTML;
         }
         //出席コードがあったイベントはバッジを表示
         if(element.attenders) { document.getElementById("codeexist" + eventID).style.display = "inline"; }
@@ -870,9 +871,10 @@ export function eventcontrol(eventID, type) {
         document.getElementById("eye").innerHTML = '<i class="bi bi-eye-slash"></i>';
         document.getElementById("eventPoint").value = data.point;
         if(data.attenders){
+          document.getElementById("attendersList").innerHTML = "";
           Object.keys(data.attenders).forEach((ID) => {
             document.getElementById("attendersList").innerHTML +=
-            '<li class="list-group-item"><span class="text-secondary">' + users[ID].studentNumber + '</span> <span class="h6">' + users[0].name + '</span></li>'
+            '<li class="list-group-item"><span class="text-secondary">' + users[ID].studentNumber + '</span> <span class="h6">' + users[ID].name + '</span></li>'
           })
         }
         

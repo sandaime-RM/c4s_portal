@@ -13,7 +13,7 @@
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.js"></script>
 
-    <script src="../script/login.js" type="module"></script>
+    <!-- <script src="../script/login.js" type="module"></script> -->
     <script src="room.js" type="module"></script>
 
     <title>C4's Portal</title>
@@ -115,26 +115,8 @@
 
       <p id="errorRoom"></p>
 
-      <ul class="list-group">
-        <li class="list-group-item">
-            <div class="row">
-                <div class="col-4">
-                    <div class="fs-5 fw-bold">06/29</div>
-                    <div class="small">18:00～21:00</div>
-                </div>
-                <div class="col-5">
-                    <div class="fs-5 fw-bold">講義棟</div>
-                    <div>K409</div>
-                </div>
-                <div class="col-3 text-success text-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="my-2 bi bi-check-circle-fill" viewBox="0 0 16 16">
-                        <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
-                    </svg>
-                    <div class="small">予約済</div>
-                </div>
-            </div>
-            
-        </li>
+      <ul class="list-group" id="bookList">
+        
       </ul>
       
     </div>
@@ -158,29 +140,33 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
               <div class="modal-body">
-                <div class="py-2">
-                    <label>日時</label>
+                <div>
+                    <label>日付</label>
+                    <input type="date" class="form-control mt-1 mb-3" id="rdate">
+
                     <div class="row mt-1 mb-3">
-                        <div class="col-7">
-                            <input type="date" class="form-control">
+                        <div class="col-6">
+                          <label>開始</label>
+                          <input type="time" class="form-control" value="18:00" id="rstart">
                         </div>
-                        <div class="col-5">
-                            <input type="time" class="form-control">
+                        <div class="col-6">
+                          <label>終了</label>
+                          <input type="time" class="form-control" value="21:00" id="rend">
                         </div>
                     </div>
 
                     <label>場所</label>
                     <div class="row mt-1 mb-3">
                         <div class="col-7">
-                            <input class="form-control" type="text" placeholder="講義棟">
+                            <input class="form-control" type="text" value="講義棟" placeholder="建物名" id="rbuilding">
                         </div>
                         <div class="col-5">
-                            <input class="form-control" type="text" placeholder="K409">
+                            <input class="form-control" type="text" value="K409" placeholder="部屋番号" id="rroomNum">
                         </div>
                     </div>
 
                     <label>状態</label>
-                    <select class="form-select mt-1 mb-3">
+                    <select class="form-select mt-1 mb-3" id="rstatus">
                         <option>申請中</option>
                         <option>予約済</option>
                         <option>不可</option>

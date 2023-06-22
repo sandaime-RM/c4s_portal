@@ -71,11 +71,16 @@
       <hr>
       <div style="margin-left: 30px;">
         <h4 style="line-height: 45px;" onclick="location.href='/'"><i class="bi bi-house mx-3"></i>トップページ</h4>
-        <h4 style="line-height: 45px;" onclick="location.href='/store'"><i class="bi bi-cart mx-3"></i>C4's ショップ</h4>
         <h4 style="line-height: 45px;" onclick="location.href='/event'"><i class="bi bi-calendar-check mx-3"></i>企画・イベント一覧</h4>
-        <h4 style="line-height: 45px;" onclick="location.href='/room'"><i class="bi bi-door-open mx-3"></i>場所予約</h4>
+        <h4 style="line-height: 45px;" onclick="location.href='/document'"><i class="bi bi-clipboard mx-3"></i>掲示板</h4>
+        <h4 style="line-height: 45px;" onclick="location.href='/store'"><i class="bi bi-cart mx-3"></i>C4's ショップ</h4>
         <h4 style="line-height: 45px;" onclick="location.href='/equips'"><i class="bi bi-usb-symbol mx-3"></i>備品一覧</h4>
         <h4 style="line-height: 45px;" onclick="location.href='/money'"><i class="bi bi-cash mx-3"></i>部費</h4>
+        <h4 style="line-height: 45px;" onclick="location.href='/procedure'"><i class="bi bi-file-earmark-text mx-3"></i>各種手続き</h4>
+        <p class="small text-secondary mt-3 adminonly">管理者のみ</p>
+        <h4 style="line-height: 45px;" onclick="location.href='/control'" class="adminonly"><i class="bi bi-info-circle mx-3"></i>部内情報</h4>
+        <h4 style="line-height: 45px;" onclick="location.href='/room'" class="adminonly"><i class="bi bi-door-open mx-3"></i>場所予約(制作中)</h4>
+        <h4 style="line-height: 45px;" onclick="location.href='/wallet'" class="adminonly"><i class="bi bi-wallet mx-3"></i>ウォレット(旧ページ)</h4>
       </div>
     </div>
   </div>
@@ -133,31 +138,6 @@
       </symbol>
     </defs>
   </svg>
-
-  <!--ヘッダー-->
-  <div class="container">
-      <header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom">
-        <a href="/" class="d-flex align-items-center col-md-3 mb-2 mb-md-0 text-dark text-decoration-none fs-5">
-          <img src="img/logo.png" width="38px" class="rounded-3"> C4's Portal
-        </a>
-  
-        <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
-          <li><a href="#" class="nav-link px-2 mx-1"><svg viewBox="0 0 16 16" x="0" y="0" width="24px" height="24px"><use class="text-secondary" xlink:href="#house"></use></svg></a></li>
-          <li><a href="event" class="nav-link px-2 mx-1"><svg viewBox="0 0 16 16" x="0" y="0" width="24px" height="24px"><use class="text-dark" xlink:href="#calendar"></use></svg></a></li>
-          <li><a href="equips" class="nav-link px-2 mx-1"><svg viewBox="0 0 16 16" x="0" y="0" width="24px" height="24px"><use class="text-dark" xlink:href="#box"></use></svg></a></li>
-          <li><a href="money" class="nav-link px-2 mx-1"><svg viewBox="0 0 16 16" x="0" y="0" width="24px" height="24px"><use class="text-dark" xlink:href="#cash"></use></svg></a></li>
-          <!--<li><a href="wallet" class="nav-link px-2 mx-1"><svg viewBox="0 0 16 16" x="0" y="0" width="24px" height="24px"><use class="text-dark" xlink:href="#wallet"></use></svg></a></li>-->
-          <li><a href="store" class="nav-link px-2 mx-1"><svg viewBox="0 0 16 16" x="0" y="0" width="24px" height="24px"><use class="text-dark" xlink:href="#basket"></use></svg></a></li>
-          <li><a href="procedure" class="nav-link px-2 mx-1"><svg viewBox="0 0 16 16" x="0" y="0" width="24px" height="24px"><use class="text-dark" xlink:href="#textFile"></use></svg></a></li>
-        </ul>
-  
-        <div class="col-md-3 text-end" id="account" onclick="login()" >
-          <div class="spinner-border" role="status">
-            <span class="visually-hidden">Loading...</span>
-          </div>
-        </div>
-      </header>
-  </div>
 
   <!--メインの画面-->
   <main>

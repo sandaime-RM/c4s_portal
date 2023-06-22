@@ -38,49 +38,63 @@ onAuthStateChanged(auth, (snapshot) => {
   user = snapshot;
   if (user) {
     console.log(user);
-    document.getElementById("account").innerHTML = '<img id="userpic" src="'+user.photoURL+'" width="32px" height="32px" class="rounded-pill mx-2" onclick="goAccount()" style="cursor: pointer;"> <span class="fs-5" style="user-select: none; cursor: pointer;" onclick="goAccount()">'+user.displayName+' <span id="topUserTag"></span></span>'
 
     get(ref(db, "users/" + user.uid)).then((snapshot) => {
       c4suser = snapshot.val();
       get(ref(db, "admin-users")).then((snapshot) => {
         adminusers = snapshot.val();
 
-        //ヘッダーとオフキャンバスメニューを構成
-        getObj("menuBtn").src = user.photoURL;
-        getObj("userPic_offcanvas").src = user.photoURL;
-        getObj("userName_offcanvas").innerText = c4suser.name;
-        if(adminusers[user.uid]) { getObj("admin-check").style.display = "inline"; }
-        getObj("userData_offcanvas").innerText = c4suser.department.split(' ').splice(-1)[0];
-        //メニューを開く
-        getObj("menuBtn").onclick = function () { new bootstrap.Offcanvas(getObj("menu")).show(); };
+        if(location.pathname == "/") {
+          //ヘッダーとオフキャンバスメニューを構成
+          getObj("menuBtn").src = user.photoURL;
+          getObj("userPic_offcanvas").src = user.photoURL;
+          getObj("userName_offcanvas").innerText = c4suser.name;
+          getObj("userData_offcanvas").innerText = c4suser.department.split(' ').splice(-1)[0];
+  
+          var adminObjs = document.getElementsByClassName("adminonly");
+          //管理者表示
+          if(adminusers[user.uid]) {
+            getObj("admin-check").style.display = "inline";
+            var adminObjs = document.getElementsByClassName("adminonly");
+            Object.keys(adminObjs).forEach(key => { adminObjs[key].style.color = "indigo"; });
+          }
+          //一般部員向け表示
+          else{
+            Object.keys(adminObjs).forEach(key => { adminObjs[key].style.display = "none"; });
+          }
+          //メニューを開く
+          getObj("menuBtn").onclick = function () { new bootstrap.Offcanvas(getObj("menu")).show(); };
+        }
+        else{
+          if(snapshot.child("point").exists()) {
+            var point = snapshot.child("point").val();
+            var color = "#c95700";
+            
+            if(point >= 8000) {
+              color = "#aba9a1";
+            }
+    
+            if(point >= 15000) {
+              color = "#decb00";
+            }
+    
+            if(point >= 3000) {
+              document.getElementById("topUserTag").innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" style="color: '+color+'" class="ms-1 bi bi-check-circle-fill" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/></svg>';
+              document.getElementById("userpic").style.border = "solid 3px " + color;
+            }
+          }
+    
+          if(snapshot.exists()) {
+            push(ref(db, "users/" + user.uid + "/accessHistory"), {
+              date : (new Date()).getTime(),
+              path : location.pathname
+            });
+          }
+          document.getElementById("account").innerHTML = '<img id="userpic" src="'+user.photoURL+'" width="32px" height="32px" class="rounded-pill mx-2" onclick="goAccount()" style="cursor: pointer;"> <span class="fs-5" style="user-select: none; cursor: pointer;" onclick="goAccount()">'+user.displayName+' <span id="topUserTag"></span></span>'
+        }
       })
-
-      if(snapshot.child("point").exists()) {
-        var point = snapshot.child("point").val();
-        var color = "#c95700";
-        
-        if(point >= 8000) {
-          color = "#aba9a1";
-        }
-
-        if(point >= 15000) {
-          color = "#decb00";
-        }
-
-        if(point >= 3000) {
-          document.getElementById("topUserTag").innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" style="color: '+color+'" class="ms-1 bi bi-check-circle-fill" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/></svg>';
-          document.getElementById("userpic").style.border = "solid 3px " + color;
-        }
-      }
-
-      if(snapshot.exists()) {
-        push(ref(db, "users/" + user.uid + "/accessHistory"), {
-          date : (new Date()).getTime(),
-          path : location.pathname
-        });
-      }
     });
-  } else {
+    } else {
     if(location.pathname != "/") { location.href = "/"; }
   }
 });

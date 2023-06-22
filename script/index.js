@@ -120,8 +120,8 @@ onAuthStateChanged(auth, (snapshot) => {
       if(snapshot.val()){
         c4suser = snapshot.val();
         //更新情報を表示
-        if(!c4suser.accessHistory || new Date(c4suser.accessHistory[Object.keys(c4suser.accessHistory).slice(-1)[0]].date) < new Date("2023-06-20 18:05"))
-        { alert("C4's Portal Update:イベント一覧画面が新しくなりました！"); }
+        if(!c4suser.accessHistory || new Date(c4suser.accessHistory[Object.keys(c4suser.accessHistory).slice(-1)[0]].date) < new Date("2023-06-22 13:50"))
+        { alert("アップデート：トップ画面のメニュー画面が新しくなりました！"); alert("左上のプロフィールアイコンを押してみよう！"); }
         
         //プロフィールを表示
         getObj("userPic").innerHTML = '<img src="' + user.photoURL + '" style="width: 100%; height: 100%; border-radius: 50%;">'

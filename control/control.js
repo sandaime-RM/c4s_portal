@@ -3,6 +3,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/9.17.2/firebas
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-analytics.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-auth.js";
 import { getDatabase, ref, update, push, remove, set, get } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-database.js";
+import { sortMembers } from "/script/methods.js";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -26,7 +27,7 @@ const db = getDatabase(app);
 const auth = getAuth();
 var user;
 var userKeys = [];
-var users;
+var users = {};
 var editting = -1;
 var toCsvData = []; //CSV変換用のデータ
 var buhiKeys = [];
@@ -56,7 +57,7 @@ onAuthStateChanged(auth, (us) => {
       //ユーザー情報を全取得
       get(ref(db, "users")).then((snapshot) => {
         users = snapshot.val()
-        restart(); 
+        restart();
       })
     }
   })
@@ -75,7 +76,7 @@ function restart() {
   toCsvData = [["名前", "名前（ふりがな）", "学籍番号", "学部学科", "大学名・学部学科（他大学）", "学年", "性別", "誕生日", "電話番号"]];
 
   //ユーザー一覧をソート:by toyton
-  userKeys = sort(users);
+  userKeys = sortMembers(users, Object.keys(users));
 
   var date = new Date();
   totalMembers = userKeys.length;
@@ -118,7 +119,7 @@ function restart() {
 
         //新入部員もバッジをつける
         if(role == "new"){
-          roles += '<i class="bi bi-stars" style="color: #FFD700;"></i>'
+          roles += '<i class="bi bi-stars" style="color: orange;"></i>'
         }
     }
 
@@ -259,7 +260,7 @@ export{openInfo}
 //現在スタックされているデータをCSVに変換してダウンロードする
 function create_csv(data){
 
-    console.log(data);
+    console.table(data);
 
     //作った二次元配列をCSV文字列に直す。
     let csv_string  = ""; 
@@ -464,69 +465,3 @@ function storeUpload() {
 
 window.storeUpload = storeUpload;
 export{storeUpload}
-
-
-//部員をソート:made by Toyton
-export function sort(users){
-  var leader_key;
-  var subleader_key;
-  var treasurer_key;
-  var active_keys = [];
-  var new_keys = [];
-  var rest = Object.keys(users);
-
-  //部長を抽出
-  rest.forEach((i) => {
-    if(users[i].role == "leader") { leader_key = i; }
-  })
-  rest.splice(rest.indexOf(leader_key),1);
-  //副部長を抽出
-  rest.forEach((i) => {
-    if(users[i].role == "subleader") { subleader_key = i; }
-  })
-  rest.splice(rest.indexOf(subleader_key),1);
-  //会計を抽出
-  rest.forEach((i) => {
-    if(users[i].role == "treasurer") { treasurer_key = i; }
-  })
-  rest.splice(rest.indexOf(treasurer_key),1);
-  //現役を抽出
-  rest.forEach((i) => {
-    if(users[i].role == "active") { active_keys.push(i); }
-  })
-  active_keys = sort_grade(users, active_keys);
-  active_keys.forEach(element => {
-    rest.splice(rest.indexOf(element),1);
-  });
-  //新入部員を抽出
-  rest.forEach((i) => {
-    if(users[i].role == "new") { new_keys.push(i); }
-  })
-  new_keys = sort_grade(users, new_keys);
-  new_keys.forEach(element => {
-    rest.splice(rest.indexOf(element),1);
-  });
-
-  return [leader_key, subleader_key, treasurer_key, ...active_keys, ...new_keys, ...rest];
-
-  //学年でソート:made by toyton
-  function sort_grade(data, keys){
-    var others = [];
-    var fours = [];
-    var threes = [];
-    var twoes = [];
-    var ones = [];
-  
-    keys.forEach(id => {
-      switch (data[id].grade) {
-        case 4: fours.push(id);   break;
-        case 3: threes.push(id);  break;
-        case 2: twoes.push(id);   break;
-        case 1: ones.push(id);    break;
-        default: others.push(id); break;
-      }
-    });
-    return [...others, ...fours, ...threes, ...twoes, ...ones];
-  }
-}
-window.sort = sort;

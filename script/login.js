@@ -83,14 +83,15 @@ onAuthStateChanged(auth, (snapshot) => {
               document.getElementById("userpic").style.border = "solid 3px " + color;
             }
           }
-    
-          if(snapshot.exists()) {
-            push(ref(db, "users/" + user.uid + "/accessHistory"), {
-              date : (new Date()).getTime(),
-              path : location.pathname
-            });
-          }
           document.getElementById("account").innerHTML = '<img id="userpic" src="'+user.photoURL+'" width="32px" height="32px" class="rounded-pill mx-2" onclick="goAccount()" style="cursor: pointer;"> <span class="fs-5" style="user-select: none; cursor: pointer;" onclick="goAccount()">'+user.displayName+' <span id="topUserTag"></span></span>'
+        }
+    
+        //アクセス履歴を表示
+        if(snapshot.exists()) {
+          push(ref(db, "users/" + user.uid + "/accessHistory"), {
+            date : (new Date()).getTime(),
+            path : location.pathname
+          });
         }
       })
     });

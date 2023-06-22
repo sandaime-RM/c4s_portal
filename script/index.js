@@ -54,10 +54,10 @@ var ranks = {
 onAuthStateChanged(auth, (snapshot) => {  
   user = snapshot;
   
-  getObj("loading-overray").style.display = "block";
-  getObj("login-overray").style.display = "none";
+  show("loading-overray");
+  hide("login-overray");
 
-  getObj("overray").style.display = "block";
+  show("overray");
   
   //ログイン状態
   if(user) {
@@ -66,7 +66,7 @@ onAuthStateChanged(auth, (snapshot) => {
 
     //HTMLにランクバーを表示
     for (let i = 0; i < ranks.name.length; i++) {
-      addhead("pointbars", '<div class="progress-bar progress-bar-striped" style="width: 0%;" role="progressbar" id="pointbar' + i + '"></div>'); 
+      addtail("pointbars", '<div class="progress-bar progress-bar-striped" style="width: 0%;" role="progressbar" id="pointbar' + i + '"></div>'); 
     }
     var url = new URL(window.location.href);
     var giftID = url.searchParams.get("getpoint");
@@ -91,7 +91,7 @@ onAuthStateChanged(auth, (snapshot) => {
         var data = datas[id];
         var date = getdatetext(new Date(data.date));
         var pointcolor = ["black", "darkred"];
-        addhead("pointHistory", '<li class="list-group-item"><h6 class="mb-0">' + data.title + '</h6><div class="row"><p class="text-secondary small col-6 mb-0">' + date + '</p><h4 class="col-6" style="text-align: right; color: ' + pointcolor[data.mode - 1] + ';margin-bottom: 0;">' + (-2 * data.mode + 3) * data.amount + 'pt</h4></div></li>');
+        addtail("pointHistory", '<li class="list-group-item"><h6 class="mb-0">' + data.title + '</h6><div class="row"><p class="text-secondary small col-6 mb-0">' + date + '</p><h4 class="col-6" style="text-align: right; color: ' + pointcolor[data.mode - 1] + ';margin-bottom: 0;">' + (-2 * data.mode + 3) * data.amount + 'pt</h4></div></li>');
         historynum++;
         if(historynum == historykeys.length) { hide("addhistory"); return; }
       }
@@ -106,7 +106,7 @@ onAuthStateChanged(auth, (snapshot) => {
             var amount = snapshot.val()[id].amount;
             getObj("giftNum").value = "";
             show("giftList-footer");
-            addhead("giftList", '<div class="row mb-1"><div class="col-10" style="outline: solid 1px lightgray; border-radius: 5px; padding: 0;"><p style="margin: 1em 0.5em;"><span style="font-weight: bold;">' + amount + 'pt</span> : https://portal.c4-s.net?getpoint=...</p></div><div class="col-2"><button class="btn btn-outline-dark w-100 h-100" style="text-align: center;" onclick="copylink(\'' + id + '\')"))"><i class="bi bi-share-fill"></i></button></div></div>');
+            addtail("giftList", '<div class="row mb-1"><div class="col-10" style="outline: solid 1px lightgray; border-radius: 5px; padding: 0;"><p style="margin: 1em 0.5em;"><span style="font-weight: bold;">' + amount + 'pt</span> : https://portal.c4-s.net?getpoint=...</p></div><div class="col-2"><button class="btn btn-outline-dark w-100 h-100" style="text-align: center;" onclick="copylink(\'' + id + '\')"))"><i class="bi bi-share-fill"></i></button></div></div>');
           }
         });
       }
@@ -226,7 +226,7 @@ onAuthStateChanged(auth, (snapshot) => {
 });
 
 //出席登録
-function attend() {
+export function attend() {
   //開催中のイベントがないときのエラー(フォアグラウンド)
   if(!heldeventID || !events[heldeventID].code || new Date(events[heldeventID].term.end) < new Date()) { alert("出席登録を受け付けているイベントはありません"); }
   //出席コード未入力時のエラー(バックグラウンド)
@@ -263,7 +263,6 @@ function attend() {
   }
 }
 window.attend = attend;
-export{attend}
 
 //QR表示
 function showQR() {

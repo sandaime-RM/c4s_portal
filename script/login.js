@@ -3,6 +3,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/9.17.2/firebas
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-analytics.js";
 import { GoogleAuthProvider, getAuth, onAuthStateChanged, signInWithPopup, signOut } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-auth.js";
 import { getDatabase, ref, get, push } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-database.js";
+import { getObj, show, hide } from "/script/methods.js";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -27,13 +28,33 @@ const auth = getAuth();
 const provider = new GoogleAuthProvider();
 const db = getDatabase();
 
+//データ格納用
+var user = {};
+var c4suser = {};
+var adminusers = {};
+
 //ログイン状態の確認
-onAuthStateChanged(auth, (user) => {
+onAuthStateChanged(auth, (snapshot) => {
+  user = snapshot;
   if (user) {
     console.log(user);
     document.getElementById("account").innerHTML = '<img id="userpic" src="'+user.photoURL+'" width="32px" height="32px" class="rounded-pill mx-2" onclick="goAccount()" style="cursor: pointer;"> <span class="fs-5" style="user-select: none; cursor: pointer;" onclick="goAccount()">'+user.displayName+' <span id="topUserTag"></span></span>'
 
     get(ref(db, "users/" + user.uid)).then((snapshot) => {
+      c4suser = snapshot.val();
+      get(ref(db, "admin-users")).then((snapshot) => {
+        adminusers = snapshot.val();
+
+        //ヘッダーとオフキャンバスメニューを構成
+        getObj("menuBtn").src = user.photoURL;
+        getObj("userPic_offcanvas").src = user.photoURL;
+        getObj("userName_offcanvas").innerText = c4suser.name;
+        if(adminusers[user.uid]) { getObj("admin-check").style.display = "inline"; }
+        getObj("userData_offcanvas").innerText = c4suser.department.split(' ').splice(-1)[0];
+        //メニューを開く
+        getObj("menuBtn").onclick = function () { new bootstrap.Offcanvas(getObj("menu")).show(); };
+      })
+
       if(snapshot.child("point").exists()) {
         var point = snapshot.child("point").val();
         var color = "#c95700";
@@ -66,57 +87,49 @@ onAuthStateChanged(auth, (user) => {
 
 //ログイン
 function login() {
-    signInWithPopup(auth, provider)
-    .catch((error) => {
-        // Handle Errors here.
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        // The email of the user's account used.
-        const email = error.customData.email;
-        // The AuthCredential type that was used.
-        const credential = GoogleAuthProvider.credentialFromError(error);
-        // ...
-        if (errorMessage == "Firebase: Error (auth/unauthorized-domain).") {
-          alert("不正なドメインです");
-        }
-        else{
-          alert(errorMessage);
-        }
-      });
+  signInWithPopup(auth, provider)
+  .catch((error) => {
+    // Handle Errors here.
+    const errorCode = error.code;
+    const errorMessage = error.message;
+    // The email of the user's account used.
+    const email = error.customData.email;
+    // The AuthCredential type that was used.
+    const credential = GoogleAuthProvider.credentialFromError(error);
+    // ...
+    if (errorMessage == "Firebase: Error (auth/unauthorized-domain).") {
+      alert("不正なドメインです");
+    }
+    else{
+      alert(errorMessage);
+    }
+  });
 }
 
 window.login = login;
 export{login}
 
 //アカウントページへ
-function goAccount() {
-    window.location.href = "/account";
-}
-
-window.goAccount = goAccount;
-export{goAccount}
+export function goAccount() { window.location.href = "/account"; } window.goAccount = goAccount;
 
 //ログアウト
-function logout() {
-    signOut(auth).then(() => {
-      var accountName = document.getElementById("userName");
-      var accountIcon = document.getElementById("userIcon");
-      var accountEmail = document.getElementById("userEmail");
-      
-      accountName.innerHTML = "";
-      accountIcon.src = "";
-      accountEmail.innerHTML = "ログインしていません";
-      
-      }).catch((error) => {
-        document.getElementById("error").innerHTML = error.message;
-      });
+export function logout() {
+  signOut(auth).then(() => {
+    var accountName = document.getElementById("userName");
+    var accountIcon = document.getElementById("userIcon");
+    var accountEmail = document.getElementById("userEmail");
+    
+    accountName.innerHTML = "";
+    accountIcon.src = "";
+    accountEmail.innerHTML = "ログインしていません";
+  }).catch((error) => {
+    document.getElementById("error").innerHTML = error.message;
+  });
 }
-
 window.logout = logout;
-export{logout}
 
 //誰かが出席登録をしたら管理者に通知する
 export function AttendanceNotification() {
-
+  console.error("function AttendanceNotification is not built.")
 }
 window.AttendanceNotification = AttendanceNotification;

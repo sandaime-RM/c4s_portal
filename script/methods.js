@@ -6,28 +6,26 @@ export function addtail(id, HTML) { getObj(id).innerHTML = getObj(id).innerHTML 
 
 //部員をソート(users:全ユーザーのデータ、keys:ソートしたい部員のIDリスト)
 export function sortMembers(users, keys){
-  var leader_key;
-  var subleader_key;
-  var treasurer_key;
+  var leaders = []
   var active_keys = [];
   var new_keys = [];
   var rest = keys;
 
   //部長を抽出
   rest.forEach((i) => {
-    if(users[i].role == "leader") { leader_key = i; }
+    if(users[i].role == "leader") { leaders[leaders.length] = i; }
   });
-  rest.splice(rest.indexOf(leader_key),1);
   //副部長を抽出
   rest.forEach((i) => {
-    if(users[i].role == "subleader") { subleader_key = i; }
+    if(users[i].role == "subleader") { leaders[leaders.length] = i; }
   });
-  rest.splice(rest.indexOf(subleader_key),1);
   //会計を抽出
   rest.forEach((i) => {
-    if(users[i].role == "treasurer") { treasurer_key = i; }
+    if(users[i].role == "treasurer") { leaders[leaders.length] = i; }
   });
-  rest.splice(rest.indexOf(treasurer_key),1);
+  leaders.forEach(element => {
+    rest.splice(rest.indexOf(element),1);
+  });
   //現役を抽出
   rest.forEach((i) => {
     if(users[i].role == "active") { active_keys.push(i); }
@@ -45,7 +43,7 @@ export function sortMembers(users, keys){
     rest.splice(rest.indexOf(element),1);
   });
 
-  return [leader_key, subleader_key, treasurer_key, ...active_keys, ...new_keys, ...rest];
+  return [...leaders, ...active_keys, ...new_keys, ...rest];
 
   //学年でソート:made by toyton
   function sort_grade(data, keys){

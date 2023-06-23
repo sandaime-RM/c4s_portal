@@ -76,7 +76,7 @@ onAuthStateChanged(auth, (snapshot) => {
         }
         //外部用
         else{
-          if(location.pathname != "/" || location.pathname != "/event" || location.pathname != "/equips") { location.href = "/"; }
+          if(location.pathname != "/" && location.pathname != "/event/" && location.pathname != "/equips/") { location.href = "/"; }
 
           var outsideonly = document.getElementsByClassName("outsideonly");
           Object.keys(outsideonly).forEach((key) => { outsideonly[key].style.display = "inherit"; })

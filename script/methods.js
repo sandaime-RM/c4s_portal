@@ -4,7 +4,7 @@ export function show(id) { getObj(id).style.display = "block"; }
 export function addhead(id, HTML) { getObj(id).innerHTML = HTML + getObj(id).innerHTML; }
 export function addtail(id, HTML) { getObj(id).innerHTML = getObj(id).innerHTML + HTML; }
 
-//部員をソート
+//部員をソート(users:全ユーザーのデータ、keys:ソートしたい部員のIDリスト)
 export function sortMembers(users, keys){
   var leader_key;
   var subleader_key;
@@ -16,22 +16,22 @@ export function sortMembers(users, keys){
   //部長を抽出
   rest.forEach((i) => {
     if(users[i].role == "leader") { leader_key = i; }
-  })
+  });
   rest.splice(rest.indexOf(leader_key),1);
   //副部長を抽出
   rest.forEach((i) => {
     if(users[i].role == "subleader") { subleader_key = i; }
-  })
+  });
   rest.splice(rest.indexOf(subleader_key),1);
   //会計を抽出
   rest.forEach((i) => {
     if(users[i].role == "treasurer") { treasurer_key = i; }
-  })
+  });
   rest.splice(rest.indexOf(treasurer_key),1);
   //現役を抽出
   rest.forEach((i) => {
     if(users[i].role == "active") { active_keys.push(i); }
-  })
+  });
   active_keys = sort_grade(users, active_keys);
   active_keys.forEach(element => {
     rest.splice(rest.indexOf(element),1);
@@ -39,7 +39,7 @@ export function sortMembers(users, keys){
   //新入部員を抽出
   rest.forEach((i) => {
     if(users[i].role == "new") { new_keys.push(i); }
-  })
+  });
   new_keys = sort_grade(users, new_keys);
   new_keys.forEach(element => {
     rest.splice(rest.indexOf(element),1);

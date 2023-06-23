@@ -64,57 +64,6 @@ onAuthStateChanged(auth, (snapshot) => {
     //ページトップにする
     window.scrollTo({ top: 0 });
 
-    //HTMLにランクバーを表示
-    for (let i = 0; i < ranks.name.length; i++) {
-      addtail("pointbars", '<div class="progress-bar progress-bar-striped" style="width: 0%;" role="progressbar" id="pointbar' + i + '"></div>'); 
-    }
-    var url = new URL(window.location.href);
-    var giftID = url.searchParams.get("getpoint");
-
-    //ポイント情報が更新されたとき
-    onValue(ref(db, "users/" + user.uid + "/point"), (snapshot) => {
-      repoint(snapshot.val());
-    });
-    //ポイント履歴も更新
-    onValue(ref(db, "users/" + user.uid + "/pointHistory/" + new Date().getFullYear()), (snapshot) => {
-      historynum = 0;
-      getObj("pointHistory").innerHTML = "";
-      showhistory(snapshot.val());
-    });
-    //ポイント履歴を5件表示
-    function showhistory(datas) {
-      if(!datas) { datas = c4suser.pointHistory[new Date().getFullYear()]; }
-      var historykeys = Object.keys(datas).reverse();
-      for (let i = 0; i < 5; i++) {
-        show("addhistory");
-        var id = historykeys[historynum];
-        var data = datas[id];
-        var date = getdatetext(new Date(data.date));
-        var pointcolor = ["black", "darkred"];
-        addtail("pointHistory", '<li class="list-group-item"><h6 class="mb-0">' + data.title + '</h6><div class="row"><p class="text-secondary small col-6 mb-0">' + date + '</p><h4 class="col-6" style="text-align: right; color: ' + pointcolor[data.mode - 1] + ';margin-bottom: 0;">' + (-2 * data.mode + 3) * data.amount + 'pt</h4></div></li>');
-        historynum++;
-        if(historynum == historykeys.length) { hide("addhistory"); return; }
-      }
-    }
-    window.showhistory = showhistory;
-    //ポイントリンクを表示
-    onValue(ref(db, "pointGift"), (snapshot) => {
-      getObj("giftList").innerHTML = '<h5 style="text-align: center;">受け取り用URL</h5>';
-      if(snapshot.val()){
-        Object.keys(snapshot.val()).forEach(id => {
-          if(snapshot.val()[id].senderID == user.uid) {
-            var amount = snapshot.val()[id].amount;
-            getObj("giftNum").value = "";
-            show("giftList-footer");
-            addtail("giftList", '<div class="row mb-1"><div class="col-10" style="outline: solid 1px lightgray; border-radius: 5px; padding: 0;"><p style="margin: 1em 0.5em;"><span style="font-weight: bold;">' + amount + 'pt</span> : https://portal.c4-s.net?getpoint=...</p></div><div class="col-2"><button class="btn btn-outline-dark w-100 h-100" style="text-align: center;" onclick="copylink(\'' + id + '\')"))"><i class="bi bi-share-fill"></i></button></div></div>');
-          }
-        });
-      }
-      else{
-        hide("giftList-footer");
-      };
-    });
-
     get(ref(db, "users/" + user.uid)).then((snapshot) => {
       //部員
       if(snapshot.val()){
@@ -137,7 +86,57 @@ onAuthStateChanged(auth, (snapshot) => {
         getObj("info1").textContent = c4suser.studentNumber + " " + c4suser.name;
         getObj("info2").textContent = c4suser.department + " " + c4suser.grade + "年生";
         showQR();
-  
+
+        //HTMLにランクバーを表示
+        for (let i = 0; i < ranks.name.length; i++) {
+          addtail("pointbars", '<div class="progress-bar progress-bar-striped" style="width: 0%;" role="progressbar" id="pointbar' + i + '"></div>'); 
+        }
+        var url = new URL(window.location.href);
+        var giftID = url.searchParams.get("getpoint");
+    
+        //ポイント情報が更新されたとき
+        onValue(ref(db, "users/" + user.uid + "/point"), (snapshot) => {
+          repoint(snapshot.val());
+        });
+        //ポイント履歴も更新
+        onValue(ref(db, "users/" + user.uid + "/pointHistory/" + new Date().getFullYear()), (snapshot) => {
+          historynum = 0;
+          getObj("pointHistory").innerHTML = "";
+          showhistory(snapshot.val());
+        });
+        //ポイント履歴を5件表示
+        function showhistory(datas) {
+          if(!datas) { datas = c4suser.pointHistory[new Date().getFullYear()]; }
+          var historykeys = Object.keys(datas).reverse();
+          for (let i = 0; i < 5; i++) {
+            show("addhistory");
+            var id = historykeys[historynum];
+            var data = datas[id];
+            var date = getdatetext(new Date(data.date));
+            var pointcolor = ["black", "darkred"];
+            addtail("pointHistory", '<li class="list-group-item"><h6 class="mb-0">' + data.title + '</h6><div class="row"><p class="text-secondary small col-6 mb-0">' + date + '</p><h4 class="col-6" style="text-align: right; color: ' + pointcolor[data.mode - 1] + ';margin-bottom: 0;">' + (-2 * data.mode + 3) * data.amount + 'pt</h4></div></li>');
+            historynum++;
+            if(historynum == historykeys.length) { hide("addhistory"); return; }
+          }
+        }
+        window.showhistory = showhistory;
+        //ポイントリンクを表示
+        onValue(ref(db, "pointGift"), (snapshot) => {
+          getObj("giftList").innerHTML = '<h5 style="text-align: center;">受け取り用URL</h5>';
+          if(snapshot.val()){
+            Object.keys(snapshot.val()).forEach(id => {
+              if(snapshot.val()[id].senderID == user.uid) {
+                var amount = snapshot.val()[id].amount;
+                getObj("giftNum").value = "";
+                show("giftList-footer");
+                addtail("giftList", '<div class="row mb-1"><div class="col-10" style="outline: solid 1px lightgray; border-radius: 5px; padding: 0;"><p style="margin: 1em 0.5em;"><span style="font-weight: bold;">' + amount + 'pt</span> : https://portal.c4-s.net?getpoint=...</p></div><div class="col-2"><button class="btn btn-outline-dark w-100 h-100" style="text-align: center;" onclick="copylink(\'' + id + '\')"))"><i class="bi bi-share-fill"></i></button></div></div>');
+              }
+            });
+          }
+          else{
+            hide("giftList-footer");
+          };
+        });
         //ポイント受け取り画面
         giftID = url.searchParams.get("getpoint");
         if(giftID){
@@ -180,6 +179,8 @@ onAuthStateChanged(auth, (snapshot) => {
       }
       //ゲスト
       else{
+
+
         //ローディング解除
         getObj("loading-overray").style.display = "none";
         getObj("login-overray").style.display = "none";

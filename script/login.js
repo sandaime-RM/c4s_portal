@@ -44,28 +44,58 @@ onAuthStateChanged(auth, (snapshot) => {
       get(ref(db, "admin-users")).then((snapshot) => {
         adminusers = snapshot.val();
 
-        if(location.pathname == "/") {
-          //ヘッダーとオフキャンバスメニューを構成
+        //ユーザー写真をメニューボタンとメニュー内に表示
+        if(getObj("menu")) {
           getObj("menuBtn").src = user.photoURL;
           getObj("userPic_offcanvas").src = user.photoURL;
-          getObj("userName_offcanvas").innerText = c4suser.name;
-          getObj("userData_offcanvas").innerText = c4suser.department.split(' ').splice(-1)[0];
-  
-          var adminObjs = document.getElementsByClassName("adminonly");
-          //管理者表示
-          if(adminusers[user.uid]) {
-            getObj("admin-check").style.display = "inline";
-            var adminObjs = document.getElementsByClassName("adminonly");
-            Object.keys(adminObjs).forEach(key => { adminObjs[key].style.color = "indigo"; });
-          }
-          //一般部員向け表示
-          else{
-            Object.keys(adminObjs).forEach(key => { adminObjs[key].style.display = "none"; });
-          }
+          
           //メニューを開く
           getObj("menuBtn").onclick = function () { new bootstrap.Offcanvas(getObj("menu")).show(); };
         }
+
+        //部員用
+        if(c4suser){
+          var outsideonly = document.getElementsByClassName("outsideonly");
+          Object.keys(outsideonly).forEach((key) => { outsideonly[key].style.display = "none"; })
+          
+          var activeonly = document.getElementsByClassName("activeonly");
+          Object.keys(activeonly).forEach((key) => { activeonly[key].style.display = "inherit"; })
+
+          //名前&学科を表示
+          if(getObj("menu")) {
+            getObj("userName_offcanvas").innerText = c4suser.name;
+            getObj("userData_offcanvas").innerText = c4suser.department.split(' ').splice(-1)[0];
+          }
+          
+          //管理者用
+          if(adminusers[user.uid]) {
+            var adminonly = document.getElementsByClassName("adminonly");
+            Object.keys(adminonly).forEach((key) => { adminonly[key].style.display = "inherit"; })
+
+          }
+        }
+        //外部用
         else{
+          if(location.pathname != "/" || location.pathname != "/event" || location.pathname != "/equips") { location.href = "/"; }
+
+          var outsideonly = document.getElementsByClassName("outsideonly");
+          Object.keys(outsideonly).forEach((key) => { outsideonly[key].style.display = "inherit"; })
+          
+          var activeonly = document.getElementsByClassName("activeonly");
+          Object.keys(activeonly).forEach((key) => { activeonly[key].style.display = "none"; })
+          
+          var adminonly = document.getElementsByClassName("adminonly");
+          Object.keys(adminonly).forEach((key) => { adminonly[key].style.display = "none"; })
+
+          //氏名と未所属だよ～を表示
+          if(getObj("menu")) {
+            getObj("userName_offcanvas").innerText = user.displayName;
+            getObj("userData_offcanvas").innerText = "部員登録されていません";
+          }
+        }
+
+        //まだメニューがないページは旧スクリプト
+        if(!getObj("menu")){
           if(snapshot.child("point").exists()) {
             var point = snapshot.child("point").val();
             var color = "#c95700";
@@ -87,7 +117,7 @@ onAuthStateChanged(auth, (snapshot) => {
         }
     
         //アクセス履歴を表示
-        if(snapshot.exists()) {
+        if(c4suser && location.hostname != "localhost") {
           push(ref(db, "users/" + user.uid + "/accessHistory"), {
             date : (new Date()).getTime(),
             path : location.pathname
@@ -95,7 +125,7 @@ onAuthStateChanged(auth, (snapshot) => {
         }
       })
     });
-    } else {
+  } else {
     if(location.pathname != "/") { location.href = "/"; }
   }
 });

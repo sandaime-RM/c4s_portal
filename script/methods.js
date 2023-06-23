@@ -1,8 +1,17 @@
-export function getObj(id) { return document.getElementById(id); }
-export function hide(id) { getObj(id).style.display = "none"; }
-export function show(id) { getObj(id).style.display = "block"; }
-export function addhead(id, HTML) { getObj(id).innerHTML = HTML + getObj(id).innerHTML; }
-export function addtail(id, HTML) { getObj(id).innerHTML = getObj(id).innerHTML + HTML; }
+export function getObj(id) {
+  var obj = document.getElementById(id);
+  if(obj){
+    obj.hide = function () { this.style.display = "none"; }
+    obj.show = function () { this.style.display = "inherit"; }
+    obj.head = function ( HTML ) { this.innerHTML = HTML + obj.innerHTML; }
+    obj.tail = function ( HTML ) { this.innerHTML += HTML; }
+    return obj;
+  }
+  //オブジェクトが見つからなかった場合
+  else{
+    return undefined;
+  }
+}
 
 //部員をソート(users:全ユーザーのデータ、keys:ソートしたい部員のIDリスト)
 export function sortMembers(users, keys){

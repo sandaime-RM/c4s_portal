@@ -2,7 +2,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/9.17.2/firebas
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-analytics.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-auth.js";
 import { getDatabase, ref, push, remove, set, get, onValue } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-database.js";
-import { getObj, hide, show, addhead, addtail } from "/script/methods.js";
+import { getObj } from "/script/methods.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBE60G8yImWlENWpCnQZzqqVUrwWa_torg",
@@ -54,10 +54,10 @@ var ranks = {
 onAuthStateChanged(auth, (snapshot) => {  
   user = snapshot;
   
-  show("loading-overray");
-  hide("login-overray");
+  getObj("loading-overray").show();
+  getObj("login-overray").hide();
 
-  show("overray");
+  getObj("overray").show();
   
   //ログイン状態
   if(user) {
@@ -89,7 +89,7 @@ onAuthStateChanged(auth, (snapshot) => {
 
         //HTMLにランクバーを表示
         for (let i = 0; i < ranks.name.length; i++) {
-          addtail("pointbars", '<div class="progress-bar progress-bar-striped" style="width: 0%;" role="progressbar" id="pointbar' + i + '"></div>'); 
+          getObj("pointbars").tail('<div class="progress-bar progress-bar-striped" style="width: 0%;" role="progressbar" id="pointbar' + i + '"></div>'); 
         }
         var url = new URL(window.location.href);
         var giftID = url.searchParams.get("getpoint");
@@ -109,14 +109,14 @@ onAuthStateChanged(auth, (snapshot) => {
           if(!datas) { datas = c4suser.pointHistory[new Date().getFullYear()]; }
           var historykeys = Object.keys(datas).reverse();
           for (let i = 0; i < 5; i++) {
-            show("addhistory");
+            getObj("addhistory").show();
             var id = historykeys[historynum];
             var data = datas[id];
             var date = getdatetext(new Date(data.date));
             var pointcolor = ["black", "darkred"];
-            addtail("pointHistory", '<li class="list-group-item"><h6 class="mb-0">' + data.title + '</h6><div class="row"><p class="text-secondary small col-6 mb-0">' + date + '</p><h4 class="col-6" style="text-align: right; color: ' + pointcolor[data.mode - 1] + ';margin-bottom: 0;">' + (-2 * data.mode + 3) * data.amount + 'pt</h4></div></li>');
+            getObj("pointHistory").tail('<li class="list-group-item"><h6 class="mb-0">' + data.title + '</h6><div class="row"><p class="text-secondary small col-6 mb-0">' + date + '</p><h4 class="col-6" style="text-align: right; color: ' + pointcolor[data.mode - 1] + ';margin-bottom: 0;">' + (-2 * data.mode + 3) * data.amount + 'pt</h4></div></li>');
             historynum++;
-            if(historynum == historykeys.length) { hide("addhistory"); return; }
+            if(historynum == historykeys.length) { getObj("addhistory").hide(); return; }
           }
         }
         window.showhistory = showhistory;
@@ -128,13 +128,13 @@ onAuthStateChanged(auth, (snapshot) => {
               if(snapshot.val()[id].senderID == user.uid) {
                 var amount = snapshot.val()[id].amount;
                 getObj("giftNum").value = "";
-                show("giftList-footer");
-                addtail("giftList", '<div class="row mb-1"><div class="col-10" style="outline: solid 1px lightgray; border-radius: 5px; padding: 0;"><p style="margin: 1em 0.5em;"><span style="font-weight: bold;">' + amount + 'pt</span> : https://portal.c4-s.net?getpoint=...</p></div><div class="col-2"><button class="btn btn-outline-dark w-100 h-100" style="text-align: center;" onclick="copylink(\'' + id + '\')"))"><i class="bi bi-share-fill"></i></button></div></div>');
+                getObj("giftList-footer").show();
+                getObj("giftList").tail('<div class="row mb-1"><div class="col-10" style="outline: solid 1px lightgray; border-radius: 5px; padding: 0;"><p style="margin: 1em 0.5em;"><span style="font-weight: bold;">' + amount + 'pt</span> : https://portal.c4-s.net?getpoint=...</p></div><div class="col-2"><button class="btn btn-outline-dark w-100 h-100" style="text-align: center;" onclick="copylink(\'' + id + '\')"))"><i class="bi bi-share-fill"></i></button></div></div>');
               }
             });
           }
           else{
-            hide("giftList-footer");
+            getObj("giftList-footer").hide();
           };
         });
         //ポイント受け取り画面
@@ -179,8 +179,6 @@ onAuthStateChanged(auth, (snapshot) => {
       }
       //ゲスト
       else{
-
-
         //ローディング解除
         getObj("loading-overray").style.display = "none";
         getObj("login-overray").style.display = "none";
@@ -236,10 +234,10 @@ export function attend() {
   else {
     //正解
     if(events[heldeventID].code == getObj("code").value) {
-      hide("attend-btnform");
-      hide("attend-failed");
-      hide("attend-already");
-      show("attend-success");
+      getObj("attend-btnform").hide();
+      getObj("attend-failed").hide();
+      getObj("attend-already").hide();
+      getObj("attend-success").show();
       getObj("code").value = "";
       getObj("attend-points").innerText = events[heldeventID].point;
 
@@ -259,7 +257,7 @@ export function attend() {
     }
     //しっぱい
     else{
-      show("attend-failed");
+      getObj("attend-failed").show();
     }
   }
 }
@@ -292,14 +290,14 @@ export{showQR}
 export function openmodal(target) {
   switch (target) {
     case "attend": 
-      show("attend-btnform");
-      hide("attend-already");
-      hide("attend-failed");
-      hide("attend-success");
+      getObj("attend-btnform").show();
+      getObj("attend-already").hide();
+      getObj("attend-failed").hide();
+      getObj("attend-success").hide();
       getObj("code").value = "";
       
       //出席登録済みの判定
-      if(events[heldeventID].attenders && events[heldeventID].attenders[user.uid]) { hide("attend-btnform"); show("attend-already"); }
+      if(events[heldeventID].attenders && events[heldeventID].attenders[user.uid]) { getObj("attend-btnform").hide(); getObj("attend-already").show(); }
 
       attendmodal.show();
     break;

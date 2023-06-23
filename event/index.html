@@ -200,7 +200,7 @@
 
 <!--イベント編集モーダル-->
 <div class="modal fade" id="editeventModal" tabindex="-1" aria-hidden="true">
-  <div class="modal-dialog">
+  <div class="modal-dialog modal-dialog-scrollable">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title">イベント情報</h5>
@@ -267,22 +267,15 @@
           <input type="number" class="form-control" id="eventPoint" placeholder="points">
           <label for="eventPoint">獲得ポイント</label>
         </div>
-        <div class="accordion accordion-flush" id="attender-accordion-div">
-          <div class="accordion-item">
-            <h2 class="accordion-header">
-              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#attender-accordion" aria-expanded="false" aria-controls="flush-collapseOne">
-                出席者一覧
-              </button>
-            </h2>
-            <div id="attender-accordion" class="accordion-collapse collapse" data-bs-parent="#attender-accordion-div">
-              <div class="accordion-body">
-                <ul class="list-group list-group-flush" id="attendersList">
-
-                </ul>
-              </div>
-            </div>
-          </div>
-        </div>
+        <h5 class="my-3 text-center" id="attendList_title">出席連絡</h5>
+        <ul class="list-group list-group-flush" id="attendList">
+        </ul>
+        <h5 class="my-3 text-center" id="absentList_title">欠席連絡</h5>
+        <ul class="list-group list-group-flush" id="absentList">
+        </ul>
+        <h5 class="my-3 text-center" id="attendersList_title">出席登録者</h5>
+        <ul class="list-group list-group-flush" id="attendersList">
+        </ul>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-sm btn-secondary w-25" data-bs-dismiss="modal">キャンセル</button>

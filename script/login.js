@@ -3,7 +3,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/9.17.2/firebas
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-analytics.js";
 import { GoogleAuthProvider, getAuth, onAuthStateChanged, signInWithPopup, signOut } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-auth.js";
 import { getDatabase, ref, get, push } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-database.js";
-import { getObj, show, hide } from "/script/methods.js";
+import { getObj } from "/script/methods.js";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -33,6 +33,9 @@ var user = {};
 var c4suser = {};
 var adminusers = {};
 
+//0:外部、1:部員、2:管理者
+var status = 0;
+
 //ログイン状態の確認
 onAuthStateChanged(auth, (snapshot) => {
   user = snapshot;
@@ -55,6 +58,8 @@ onAuthStateChanged(auth, (snapshot) => {
 
         //部員用
         if(c4suser){
+          status = 1;
+
           var outsideonly = document.getElementsByClassName("outsideonly");
           Object.keys(outsideonly).forEach((key) => { outsideonly[key].style.display = "none"; })
           
@@ -69,9 +74,10 @@ onAuthStateChanged(auth, (snapshot) => {
           
           //管理者用
           if(adminusers[user.uid]) {
+            status = 2;
+
             var adminonly = document.getElementsByClassName("adminonly");
             Object.keys(adminonly).forEach((key) => { adminonly[key].style.display = "inherit"; })
-
           }
         }
         //外部用

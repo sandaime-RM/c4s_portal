@@ -133,3 +133,20 @@ function clearForm() {
 
 window.clearForm = clearForm;
 export{clearForm}
+
+
+//予約情報の削除
+function delItem() {
+    if(editting == -1) {return;}
+
+    var conf = confirm("この予約情報を削除しますか？");
+    if(!conf) {return;}
+
+    remove(ref(db, "rooms/" + roomIds[editting]))
+    .then(() => {
+        window.location.reload();
+    })
+}
+
+window.delItem = delItem;
+export{delItem}

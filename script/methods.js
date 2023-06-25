@@ -20,6 +20,11 @@ export function sortMembers(users, keys){
   var new_keys = [];
   var rest = keys;
 
+  //部員ではないユーザーを排除
+  rest.forEach((i) => {
+    if(!users[i]) { console.error("部員ではないユーザーIDが検出されました。ユーザーID:" + i); rest.splice(rest.indexOf(i)); }
+  });
+  
   //部長を抽出
   rest.forEach((i) => {
     if(users[i].role == "leader") { leaders[leaders.length] = i; }

@@ -195,6 +195,9 @@ export function eventcontrol(eventID, type) {
       getObj("eventCode").type = "password";
       getObj("eye").innerHTML = '<i class="bi bi-eye-slash"></i>';
       getObj("eventPoint").value = 300;
+      getObj("attendList_title").hide();
+      getObj("absentList_title").hide();
+      getObj("attendersList_title").hide();
         
       editeventModal.show();
     break;

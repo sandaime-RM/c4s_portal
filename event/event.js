@@ -298,6 +298,9 @@ export function eventcontrol(eventID, type) {
       }
 
       get(ref(db, "event/" + eventID)).then((snapshot) => {
+        var data = snapshot.val();
+        if(!data.attenders) { data.attenders = ""; }
+        if(!data.notice) { data.notice = ""; }
         set(ref(db, "event/" + eventID), {
           title : getObj("eventTitle").value,
           description : getObj("eventDescription").value,
@@ -306,8 +309,8 @@ export function eventcontrol(eventID, type) {
           tags : tagtag(getObj("eventTags", false).value),
           code : getObj("eventCode").value,
           point : getObj("eventPoint").value,
-          attenders : snapshot.val().attenders,
-          notice : snapshot.val().notice
+          attenders : data.attenders,
+          notice : data.notice
         })
         .catch((error) => {
           alert(error.message);

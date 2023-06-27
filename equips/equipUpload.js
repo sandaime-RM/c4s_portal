@@ -1,26 +1,21 @@
-// Import the functions you need from the SDKs you need
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-app.js";
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-analytics.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-auth.js";
 import { getDatabase, ref, onChildAdded, push, remove, set, get } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-database.js";
 import { getStorage, ref as ref_st, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-storage.js";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
+import { getObj } from "/script/methods.js"
 
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-    apiKey: "AIzaSyBE60G8yImWlENWpCnQZzqqVUrwWa_torg",
-    authDomain: "c4s-portal.firebaseapp.com",
-    databaseURL: "https://c4s-portal-default-rtdb.asia-southeast1.firebasedatabase.app",
-    projectId: "c4s-portal",
-    storageBucket: "c4s-portal.appspot.com",
-    messagingSenderId: "863775995414",
-    appId: "1:863775995414:web:82eb9557a13a099dfbe737",
-    measurementId: "G-K2SR1WSNRC"
+  apiKey: "AIzaSyBE60G8yImWlENWpCnQZzqqVUrwWa_torg",
+  authDomain: "c4s-portal.firebaseapp.com",
+  databaseURL: "https://c4s-portal-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "c4s-portal",
+  storageBucket: "c4s-portal.appspot.com",
+  messagingSenderId: "863775995414",
+  appId: "1:863775995414:web:82eb9557a13a099dfbe737",
+  measurementId: "G-K2SR1WSNRC"
 };
 
-// Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
 const db = getDatabase(app);
@@ -32,7 +27,8 @@ var equipNum = 0;
 var editting = -1;
 const storage = getStorage(app);
 const categories = 10; //カテゴリーの数
-const categoryNames = ["書籍", "電子工作", "映像・写真", "3Dプリンター", "ケーブル・アダプタ", "部室用インテリア", "工具", "音響", "VR", "テープ"];
+const categoryNames = ["書籍", "電子工作", "映像・写真", "3Dプリンター", "ケーブル・アダプタ", "部室用インテリア", "工具", "音響", "VR", "工作"];
+var catSelected = Array(categoryNames.length).fill(false);
 var loadingEquips = document.getElementById("loadingEquips");
 var urls = [];
 
@@ -40,13 +36,71 @@ var photoModal = new bootstrap.Modal(document.getElementById('photoModal'))
 
 //備品追加時に実行
 window.onload = function() {
+  //カテゴリボタンを設置
+  for (let i = 0; i < categoryNames.length; i++) {
+    getObj("cats").tail('<h6 id="cat' + i + '">' + categoryNames[i] + '</h6>')
+    getObj("cat" + i).setAttribute("class", "unclicked");
 
-    get(ref(db, 'equips')).then((snapshot) => {
-        loadingEquips.style.display = "none";
-        data = snapshot.val();
-        
-        showList();
-    });
+    //onclick属性を追加
+    getObj("cat" + i).setAttribute("onclick", "setcats(" + i + ")")
+  }
+
+  //リストの表示
+  get(ref(db, 'equips')).then((snapshot) => {
+    data = snapshot.val();
+
+    loadingEquips.style.display = "none";
+    
+    //カテゴリを設定かつ画像を設定
+    Object.keys(data).forEach((key) => {
+      data[key].cat = -1;
+      var imgname;
+      var equipname = data[key].name;
+      for (let i = 0; i < categoryNames.length; i++) {
+        if(data[key].category[i]) { data[key].cat = i; imgname = "cat" + String(i); break; }
+      }
+      if (data[key].cat == -1) { imgname = "noimage"; } 
+      if (data[key].number != 1) { equipname += "(x" + String(data[key].number) + ")"; }
+      getObj("list").tail('<div class="col-lg-6 mb-1" style="display: flex;" id="equip' + key + '"><img class="rounded-3" src="cats/' + imgname + '.svg" style="width: 100px; height: 100px;"><div class="px-3" style="height: 100px;"><h5>' + equipname + '</h5><p class="mb-0">' + data[key].detail + '</p></div></div>');
+    })
+
+    getObj("equipLoader").hide();
+    getObj("overray").hide();
+  });
+
+  //カテゴリ切り替え
+  function setcats (i) {
+    //いったん全部消してロード画面
+    getObj("equipLoader").show();
+    Object.keys(data).forEach((key) => { getObj("equip" + key).hide(); })
+
+    //変数の書き換え
+    catSelected[i] = !catSelected[i];
+    //HTML上での表示切替
+    if(catSelected[i]) { getObj("cat" + i).setAttribute("class", "clicked"); }
+    else { getObj("cat" + i).setAttribute("class", "unclicked"); }
+
+    //表示するcatの番号リスト
+    var displays = [];
+    for (let i = 0; i < categoryNames.length; i++) {
+      if(catSelected[i]) { displays.push(i); }
+    }
+    //それぞれの要素に対して表示・非表示の設定
+    Object.keys(data).forEach((key) => { 
+      var display = false;
+      if(displays[0] === undefined) { display = true; }
+      else {
+        displays.forEach((n) => {
+          if(data[key].category[n]) { display = true; }
+        })
+      }
+      if(display) { getObj("equip" + key).style.display = "flex"; }
+    })
+
+    //ロードを消して表示させる
+    getObj("equipLoader").hide();
+  }
+  window.setcats = setcats;
 }
 
 

@@ -18,24 +18,31 @@ export function sortMembers(users, keys){
   var leaders = []
   var active_keys = [];
   var new_keys = [];
+  var outsiders = [];
   var rest = keys;
 
-  //部員ではないユーザーを排除
+  //部員ではないユーザー
   rest.forEach((i) => {
-    if(!users[i]) { console.error("部員ではないユーザーIDが検出されました。ユーザーID:" + i); rest.splice(rest.indexOf(i)); }
+    if(!users[i]) {
+      console.warn("ID:" + i + "は部員ではありません");
+      outsiders.push(i);
+    }
+  });
+  outsiders.forEach((element) => { 
+    rest.splice(rest.indexOf(element), 1);
   });
   
   //部長を抽出
   rest.forEach((i) => {
-    if(users[i].role == "leader") { leaders[leaders.length] = i; }
+    if(users[i].role == "leader") { leaders.push(i); }
   });
   //副部長を抽出
   rest.forEach((i) => {
-    if(users[i].role == "subleader") { leaders[leaders.length] = i; }
+    if(users[i].role == "subleader") { leaders.push(i); }
   });
   //会計を抽出
   rest.forEach((i) => {
-    if(users[i].role == "treasurer") { leaders[leaders.length] = i; }
+    if(users[i].role == "treasurer") { leaders.push(i); }
   });
   leaders.forEach(element => {
     rest.splice(rest.indexOf(element),1);

@@ -9,7 +9,7 @@ export function getObj(id) {
   }
   //オブジェクトが見つからなかった場合
   else{
-    return undefined;
+    return null;
   }
 }
 

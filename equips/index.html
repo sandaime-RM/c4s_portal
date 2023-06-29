@@ -156,8 +156,6 @@
 
       <hr>
 
-      <div class="loader" id="equipLoader">Loading...</div>
-
       <div class="row mx-auto mt-3" style="max-width: 960px" id="list">
         
       </div>
@@ -252,6 +250,7 @@
 
       </div>
 
+      <!--
       <div class="text-center py-3" id="loadingEquips">
         <div class="spinner-border" role="status">
           <span class="visually-hidden">Loading...</span>
@@ -270,18 +269,18 @@
           
           </ul>
         </div>
-      </div>
+      </div>-->
       
     </div>
 
     <!--追加ボタン-->
-    <div class="bg-dark text-light position-fixed end-0 bottom-0 mx-3 my-3 px-3 py-3 shadow rounded-pill" style="cursor: pointer;" data-bs-toggle="modal" data-bs-target="#exampleModal" onclick="clearForm()">
+    <div class="adminonly bg-dark text-light position-fixed end-0 bottom-0 mx-3 my-3 px-3 py-3 shadow rounded-pill" style="cursor: pointer; display: none;" data-bs-toggle="modal" data-bs-target="#exampleModal" onclick="clearForm()">
       <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-plus-lg" viewBox="0 0 16 16">
         <path fill-rule="evenodd" d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2Z"/>
       </svg>
     </div>
 
-    <!-- 新規備品モーダル -->
+    <!-- 備品詳細モーダル -->
     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
@@ -430,18 +429,17 @@
       </div>
     </div>
 
-  <!--編集モーダル-->
-  <div class="modal" id="detailModal" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">Modal title</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <p>Modal body text goes here.</p>
-        </div>
-      </div>
+  <!--詳細オフキャンバス(管理者以外)-->
+  <div class="offcanvas offcanvas-end" tabindex="-1" id="detailOffcanvas">
+    <div class="offcanvas-header">
+      <h5>備品情報</h5>
+      <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body" style="padding: 5%;">
+      <img id="equipPic" class="rounded-3 shadow" style="width: 100%;">
+      <h4 class="text-center my-5" id="equipName"></h4>
+      <b class="text-center" id="equipTags"></b>
+      <p class="mt-1 px-3 py-2 border rounded-3" id="equipDetail"></p>
     </div>
   </div>
 </body>

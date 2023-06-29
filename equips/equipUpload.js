@@ -20,6 +20,7 @@ const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
 const db = getDatabase(app);
 const auth = getAuth();
+
 var user, data;
 var equips = [];
 var equipKeys = [];
@@ -33,6 +34,21 @@ var loadingEquips = document.getElementById("loadingEquips");
 var urls = [];
 
 var photoModal = new bootstrap.Modal(document.getElementById('photoModal'))
+
+var status;
+
+onAuthStateChanged(auth, (snapshot) => {
+  user = snapshot;
+
+  get(ref(db, "users/" + user.uid)).then((snapshot) => {
+    if(snapshot.val()) { 
+      get(ref(db, "admin-users/" + user.uid)).then((snapshot) => {
+        if(snapshot.val()) { status = 2; } else { status = 1; }
+      })
+    }
+    else { status = 0; }
+  });
+})
 
 //備品追加時に実行
 window.onload = function() {
@@ -48,11 +64,11 @@ window.onload = function() {
   //リストの表示
   get(ref(db, 'equips')).then((snapshot) => {
     data = snapshot.val();
-
-    loadingEquips.style.display = "none";
     
     //カテゴリを設定かつ画像を設定
-    Object.keys(data).forEach((key) => {
+    Object.keys(data).forEach((key, i) => {
+      equips[i] = data[key];
+
       data[key].cat = -1;
       var imgname;
       var equipname = data[key].name;
@@ -61,17 +77,15 @@ window.onload = function() {
       }
       if (data[key].cat == -1) { imgname = "noimage"; } 
       if (data[key].number != 1) { equipname += "(x" + String(data[key].number) + ")"; }
-      getObj("list").tail('<div class="col-lg-6 mb-1" style="display: flex;" id="equip' + key + '"><img class="rounded-3" src="cats/' + imgname + '.svg" style="width: 100px; height: 100px;"><div class="px-3" style="height: 100px;"><h5>' + equipname + '</h5><p class="mb-0">' + data[key].detail + '</p></div></div>');
+      getObj("list").tail('<div class="col-lg-6 mb-1" style="display: flex; cursor: pointer;" id="equip' + key + '" onclick="ClickEquip(\'' + key + '\')"><img class="rounded-3" src="cats/' + imgname + '.svg" style="width: 100px; height: 100px;"><div class="px-3" style="height: 100px;"><h5>' + equipname + '</h5><p class="mb-0">' + data[key].detail + '</p></div></div>');
     })
 
-    getObj("equipLoader").hide();
     getObj("overray").hide();
   });
 
   //カテゴリ切り替え
   function setcats (i) {
-    //いったん全部消してロード画面
-    getObj("equipLoader").show();
+    //いったん全部消す
     Object.keys(data).forEach((key) => { getObj("equip" + key).hide(); })
 
     //変数の書き換え
@@ -96,9 +110,6 @@ window.onload = function() {
       }
       if(display) { getObj("equip" + key).style.display = "flex"; }
     })
-
-    //ロードを消して表示させる
-    getObj("equipLoader").hide();
   }
   window.setcats = setcats;
 }
@@ -205,6 +216,7 @@ function upload() {
         .then (() => {
             finishDb = true;
             if(finishDb && finishPic) {
+              alert("追加しました");
                 window.location.reload();
             }
         });
@@ -213,6 +225,7 @@ function upload() {
         .then (() => {
             finishDb = true;
             if(finishDb && finishPic) {
+              alert("保存しました");
                 window.location.reload();
             }
         });
@@ -222,46 +235,36 @@ function upload() {
 window.upload = upload;
 export{upload}
 
-//ユーザー情報の取得
-onAuthStateChanged(auth, (us) => {
-    user = us;
-});
-
 //備品情報の表示
-function openInfo(num) {
-    var name = document.getElementById("name");
-    var detail = document.getElementById("detail");
-    var number = document.getElementById("number");
-    var place = document.getElementById("place");
+function openInfo(ID) {
+  let equip = data[ID];
 
-    name.value = equips[num].name;
-    detail.value = equips[num].detail;
-    place.value = equips[num].place;
-    number.value = equips[num].number;
+  getObj("name").value = equip.name;
+  getObj("detail").value = equip.detail;
+  getObj("place").value = equip.place;
+  getObj("number").value = equip.place;
 
-    for(var i=1; i<=categories; i++) {
-        document.getElementById("flexCheck"+i).checked = equips[num].category[i-1];
-    }
+  for (let i = 0; i < categoryNames.length; i++) {
+    getObj("flexCheck" + String(i+1)).checked = equip.category[i]
+  }
 
-    //画像表示
-    document.getElementById("imgs").innerHTML = "";
+  //画像表示
+  getObj("imgs").clear();
     
-    if(equips[num].imgs) {
-        
-        equips[num].imgs.forEach(function(img, index) {
+  if(equip.imgs) {
+    equip.imgs.forEach(function(img, index) {
+      const gsReference = ref_st(storage, "equips/" + img);
 
-            const gsReference = ref_st(storage, "equips/" + img);
-    
-            getDownloadURL(gsReference)
-            .then(async function(url) {
-                urls[index] = url;
-                document.getElementById("imgs").innerHTML += "<img src='"+url+"' style='max-width:130px; max-height: 220px; object-fit: contain;' class='border rounded' onclick='openLargePhoto("+index+")'>";
-            })
-            .catch((err) => console.log(err));
-        });
-    }
-    
-    editting = num;
+      getDownloadURL(gsReference)
+      .then(async function(url) {
+        urls[index] = url;
+        getObj("imgs").tail("<img src='"+url+"' style='max-width:130px; max-height: 220px; object-fit: contain;' class='border rounded' onclick='openLargePhoto("+index+")'>");
+      })
+      .catch((err) => console.error(err));
+    });
+  }
+
+  editting = Object.keys(data).indexOf(ID);
 }
 
 window.openInfo = openInfo;
@@ -373,3 +376,35 @@ function openLargePhoto(index) {
 
 window.openLargePhoto = openLargePhoto;
 export{openLargePhoto}
+
+//備品をクリックされた時
+export function ClickEquip(ID) {
+  //管理者は編集モーダル
+  if(status == 2) {
+    openInfo(ID);
+    new bootstrap.Modal(getObj("exampleModal")).show();
+  }
+  //部員と外部はただの詳細モーダル(じゃなくてオフキャンバス)
+  else {
+    new bootstrap.Offcanvas(getObj("detailOffcanvas")).show();
+
+    let equip = data[ID];
+
+    getObj("equipName").innerText = equip.name;
+    getObj("equipTags").innerHTML = "";
+    equip.category.forEach((bool, i) => {
+      if(bool) { getObj("equipTags").tail('<span class="badge bg-secondary">' + categoryNames[i] + '</span> '); }
+    })
+    if(equip.detail) { getObj("equipDetail").innerHTML = equip.detail; }
+    else { getObj("equipDetail").innerHTML = '<span class="text-secondary">詳細情報はありません</span>'; }
+    
+    getObj("equipPic").src = "/img/noimage.svg";
+    if(equip.imgs[0]) {
+      getDownloadURL(ref_st(storage, "equips/" + equip.imgs[0])).then((url) => {
+        getObj("equipPic").src = url;
+      })
+      .catch((err) => console.error(err));
+    }
+  }
+}
+window.ClickEquip = ClickEquip;

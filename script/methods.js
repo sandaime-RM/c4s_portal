@@ -5,12 +5,8 @@ export function getObj(id) {
     obj.show = function () { this.style.display = "inherit"; }
     obj.head = function ( HTML ) { this.innerHTML = HTML + obj.innerHTML; }
     obj.tail = function ( HTML ) { this.innerHTML += HTML; }
-    return obj;
   }
-  //オブジェクトが見つからなかった場合
-  else{
-    return null;
-  }
+  return obj;
 }
 
 //部員をソート(users:全ユーザーのデータ、keys:ソートしたい部員のIDリスト)

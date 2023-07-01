@@ -249,7 +249,7 @@ function openInfo(ID) {
   }
 
   //画像表示
-  getObj("imgs").clear();
+  getObj("imgs").innerHTML = "";
     
   if(equip.imgs) {
     equip.imgs.forEach(function(img, index) {

@@ -24,6 +24,7 @@ var user = {};
 
 //データベースのデータ格納用
 var events = {};
+var projects = {};
 var users = {};
 
 //ユーザー状態(0:ゲスト、1:部員、2:管理者)
@@ -58,7 +59,7 @@ export function start(callback) {
 
     if(!events) { getObj("noEvent").show(); }
 
-    sorteventKeys(snapshot.val()).forEach(eventID => {
+    sortTermKeys(snapshot.val()).forEach(eventID => {
       var element = events[eventID];
       //終了していないイベントを表示
       if(new Date() < new Date(element.term.end)) {
@@ -107,14 +108,25 @@ export function start(callback) {
     callback();
   });
 
+  //企画リストを表示
+  get(ref(db, "projects")).then((snapshot) => {
+    projects = snapshot.val();
+
+    if(projects) {
+      sortTermKeys(projects).forEach((project) => {
+
+      })
+    }
+  })
+
   //選択ソートでイベントを時系列順に並び替え
-  function sorteventKeys(data) {
+  function sortTermKeys(data) {
     var minkey = Object.keys(data)[0];
     Object.keys(data).forEach((key) => {
       if(new Date(data[key].term.begin) < new Date(data[minkey].term.begin)) { minkey = key; }
     });
     delete data[minkey];
-    if(0 < Object.keys(data).length) { return [minkey, ...sorteventKeys(data)]; }
+    if(0 < Object.keys(data).length) { return [minkey, ...sortMembers(data, Object.keys(data))]; }
     else { return [minkey]; }
   }
 
@@ -389,7 +401,6 @@ export function eventcontrol(eventID, type) {
       else { return String(str); }
     }
   }
-  window.DateString = DateString;
 
   //パスワードの表示/非表示の切り替え
   function toggleshowcode() {
@@ -465,3 +476,59 @@ export function drawEventReaction (eventID, attend) {
   }
 }
 window.drawEventReaction = drawEventReaction;
+
+//企画コントロール
+export function projectcontrol(projectID, type) { 
+  switch (type) {
+    case "new":
+      getObj("projectID").value = new Date().getTime().toString(16).toUpperCase();
+      getObj("projectTitle").value = "";
+      getObj("projectDescription").value = "";
+      getObj("projectDateBegin").value = "";
+      getObj("projectDateEnd").value = "";
+      getObj("MemberList").hide();
+
+      new bootstrap.Modal(getObj("editprojectModal")).show();
+    break;
+    case "edit":
+      let data = projects[projectID];
+
+      getObj("projectID").value = projectID
+      getObj("projectTitle").value = data.title;
+      getObj("projectDescription").value = data.description;
+      getObj("projectDateBegin").value = DateString(data.term.begin);
+      getObj("projectDateEnd").value = DateString(data.term.end);
+      getObj("MemberList").show();
+      if(data.member) {
+        getObj("noMember").hide();
+        var keys = sortMembers(users, Object.keys(data.member));
+        keys.forEach((ID) => {
+          getObj("attendersList").tail('<li class="list-group-item"><span class="text-secondary">' + users[ID].studentNumber + '</span> <span class="h6">' + users[ID].name + '</span></li>');
+        })
+      }
+      else { getObj("noMember").show(); }
+
+      new bootstrap.Modal(getObj("editprojectModal")).show();
+
+      //日付の書式をちゃんとする
+      function DateString(date) {
+        return String(date.getFullYear()) + "-" + addzero(date.getMonth() + 1) + "-" + addzero(date.getDate())
+    
+        function addzero(str) {
+          if(String(str).length < 2) { return addzero("0" + String(str)); }
+          else { return String(str); }
+        }
+      }
+    break;
+    case "save":
+      alert("まだ保存できません")
+    break;
+    case "del":
+      alert("削除はできません")
+    break;
+  
+    default:
+      break;
+  }
+}
+window.projectcontrol = projectcontrol;

@@ -58,6 +58,19 @@ onAuthStateChanged(auth, (snapshot) => {
 
         //部員用
         if(c4suser){
+          //更新情報を表示
+          function news () {
+            //管理者は表示しない
+            if(user.uid == "pSv3N23pJEd1z7wUup73VEF6HHp1") { return; }
+            //ローカル環境でも表示しない
+            if(location.hostname == "localhost") { return; }
+            if(!c4suser.accessHistory || new Date(c4suser.accessHistory[Object.keys(c4suser.accessHistory).slice(-1)[0]].date) < new Date("2023-06-22 13:50"))
+            { alert("アップデート：トップ画面のメニュー画面が新しくなりました！"); alert("左上のプロフィールアイコンを押してみよう！"); }
+            else if(!c4suser.accessHistory || new Date(c4suser.accessHistory[Object.keys(c4suser.accessHistory).slice(-1)[0]].date) < new Date("2023-06-29 15:50"))
+            { alert("アップデート：備品画面のデザインをリニューアルしました。"); }
+          }
+          news();
+
           status = 1;
 
           var outsideonly = document.getElementsByClassName("outsideonly");

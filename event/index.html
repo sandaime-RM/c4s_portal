@@ -179,7 +179,30 @@
 
       <!--企画タブ-->
       <div id="project">
-        <p class="text-danger text-center">企画データがありません</p>
+        <p class="text-danger text-center">進行中の企画がありません</p>
+
+        <div class="col-lg-6 p-2">
+          <div class="card w-100 shadow-sm position-relative" style="border-left: solid green 10px;">
+            <div class="card-body">
+              <h5 class="card-title">企画名</h5>
+              <h6 class="card-subtitle mb-2 text-muted">期間</h6>
+              <p class="card-text" style="height: 5em;"></p>
+              <div class="mt-2">
+                <div class="h5 card-link d-flex justify-content-around mb-0 text-secondary">
+                  <div>
+                    <a style="cursor: pointer;" id="projectJoin' + projectID + '" onclick="projectReaction()"></a> <span id="JoinerNum' + projectID + '"></span>
+                  </div>
+                  <div class="adminonly">
+                    <a style="cursor: pointer;" onclick="projectReaction()"><i class="bi bi-pencil-square"></i></a>
+                  </div>
+                  <div class="adminonly">
+                    <a style="cursor: pointer;" onclick="projectReaction()"><i class="bi bi-trash"></i></a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
 
       </div>
     </div>
@@ -192,7 +215,7 @@
         <i class="bi bi-plus-lg" style="line-height: 50px;"></i>
       </div>
       <!--プロジェクト追加ボタン-->
-      <div id="addProjectBtn" class="bg-dark text-light shadow rounded-circle text-center" style="cursor: pointer; width: 50px; height: 50px;">
+      <div id="addProjectBtn" class="bg-dark text-light shadow rounded-circle text-center" style="cursor: pointer; width: 50px; height: 50px;" onclick="projectcontrol('', 'new')">
         <i class="bi bi-plus-lg" style="line-height: 50px;"></i>
       </div>
     </div>
@@ -279,6 +302,49 @@
       <div class="modal-footer">
         <button type="button" class="btn btn-sm btn-secondary w-25" data-bs-dismiss="modal">キャンセル</button>
         <button type="button" class="btn btn-sm btn-primary w-25" onclick="eventcontrol('', 'save')">保存</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--企画編集モーダル-->
+<div class="modal fade" id="editprojectModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">イベント情報</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="form-floating mb-3">
+          <input type="text" class="form-control" id="projectID" placeholder="id" disabled>
+          <label for="projectID">企画ID(編集できません)</label>
+        </div>
+
+        <div class="form-floating mb-1">
+          <input type="text" class="form-control" id="projectTitle" placeholder="title">
+          <label for="projectTitle">イベント名</label>
+        </div>
+        <div class="form-floating mb-1">
+          <textarea class="form-control" placeholder="description" id="projectDescription"></textarea>
+          <label for="projectDescription">概要</label>
+        </div>
+        <div class="form-floating col-6">
+          <input type="date" class="form-control" id="projectDateBegin" placeholder="date.begin">
+          <label for="projectDateBegin">開始日</label>
+        </div>
+        <div class="form-floating col-6">
+          <input type="date" class="form-control" id="projectDateEnd" placeholder="date.end">
+          <label for="projectDateEnd">終了日</label>
+        </div>
+        <h5 class="my-3 text-center">参加者</h5>
+        <ul class="list-group list-group-flush" id="MemberList">
+          <p id="noMember" class="text-danger text-center">参加者がいません</p>
+        </ul>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-sm btn-secondary w-25" data-bs-dismiss="modal">キャンセル</button>
+        <button type="button" class="btn btn-sm btn-primary w-25" onclick="projectcontrol('', 'save')">保存</button>
       </div>
     </div>
   </div>

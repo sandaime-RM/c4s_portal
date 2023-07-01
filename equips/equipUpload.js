@@ -50,7 +50,6 @@ onAuthStateChanged(auth, (snapshot) => {
   });
 })
 
-//備品追加時に実行
 window.onload = function() {
   //カテゴリボタンを設置
   for (let i = 0; i < categoryNames.length; i++) {
@@ -65,7 +64,6 @@ window.onload = function() {
   get(ref(db, 'equips')).then((snapshot) => {
     data = snapshot.val();
     
-    //カテゴリを設定かつ画像を設定
     Object.keys(data).forEach((key, i) => {
       equips[i] = data[key];
 
@@ -77,7 +75,7 @@ window.onload = function() {
       }
       if (data[key].cat == -1) { imgname = "noimage"; } 
       if (data[key].number != 1) { equipname += "(x" + String(data[key].number) + ")"; }
-      getObj("list").tail('<div class="col-lg-6 mb-1" style="display: flex; cursor: pointer;" id="equip' + key + '" onclick="ClickEquip(\'' + key + '\')"><img class="rounded-3" src="cats/' + imgname + '.svg" style="width: 100px; height: 100px;"><div class="px-3" style="height: 100px;"><h5>' + equipname + '</h5><p class="mb-0">' + data[key].detail + '</p></div></div>');
+      getObj("list").tail('<div class="col-lg-6 mb-1" style="display: flex; cursor: pointer;" id="equip' + key + '" onclick="ClickEquip(\'' + key + '\')"><img class="rounded-3" src="cats/' + imgname + '.svg" style="width: 100px; height: 100px;"><div class="px-3" style="height: 100px;"><p class="mb-0"><span class="h5">' + equipname + '</span> <span class="text-secondary small">' + data[key].place + '</span></p><p class="mb-0 small">' + data[key].detail + '</p></div></div>');
     })
 
     getObj("overray").hide();
@@ -242,7 +240,7 @@ function openInfo(ID) {
   getObj("name").value = equip.name;
   getObj("detail").value = equip.detail;
   getObj("place").value = equip.place;
-  getObj("number").value = equip.place;
+  getObj("number").value = equip.number;
 
   for (let i = 0; i < categoryNames.length; i++) {
     getObj("flexCheck" + String(i+1)).checked = equip.category[i]

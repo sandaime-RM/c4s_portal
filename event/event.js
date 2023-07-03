@@ -59,7 +59,8 @@ export function start(callback) {
 
     if(!events) { getObj("noEvent").show(); }
 
-    sortTermKeys(snapshot.val()).forEach(eventID => {
+    sortTermKeys(events).forEach(eventID => {
+      events = snapshot.val();
       var element = events[eventID];
       //終了していないイベントを表示
       if(new Date() < new Date(element.term.end)) {
@@ -126,7 +127,7 @@ export function start(callback) {
       if(new Date(data[key].term.begin) < new Date(data[minkey].term.begin)) { minkey = key; }
     });
     delete data[minkey];
-    if(0 < Object.keys(data).length) { return [minkey, ...sortMembers(data, Object.keys(data))]; }
+    if(0 < Object.keys(data).length) { return [minkey, ...sortTermKeys(data)]; }
     else { return [minkey]; }
   }
 

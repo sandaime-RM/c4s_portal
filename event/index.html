@@ -1,24 +1,24 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <!--Bootstrap-->
-    <!-- CSS only -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <!-- JavaScript Bundle with Popper -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-    <!--BootstrapIcon-->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.0/font/bootstrap-icons.css">
+  <!--Bootstrap-->
+  <!-- CSS only -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <!-- JavaScript Bundle with Popper -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+  <!--BootstrapIcon-->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.0/font/bootstrap-icons.css">
 
-    <script src="../script/login.js" type="module"></script>
-    <script src="event.js" type="module"></script>
+  <script src="../script/login.js" type="module"></script>
+  <script src="event.js" type="module"></script>
 
-    <title>C4's Portal</title>
-    <link rel="icon" href="../img/logo_mini.png">
-    <link rel="manifest" href="../manifest.json">
+  <title>C4's Portal</title>
+  <link rel="icon" href="../img/logo_mini.png">
+  <link rel="manifest" href="../manifest.json">
 </head>
 <!--誰でもアクセス可能-->
 <body class="bg-light">
@@ -139,215 +139,215 @@
     </defs>
   </svg>
 
-    <div class="container">
-      <h2 class="text-center mt-5"><i class="bi bi-calendar-week"> </i>イベント・企画一覧</h2>
+  <div class="container">
+    <h2 class="text-center mt-5"><i class="bi bi-calendar-week"> </i>イベント・企画一覧</h2>
 
-      <!--イベント/企画切り替えタブ-->
-      <div class="text-center" style="margin: 30px auto;">
-        <ul id="tab-event" class="nav nav-tabs justify-content-center">
-          <li class="nav-item">
-            <a style="width: 8em;" class="nav-link h6 active" aria-current="page">イベント</a>
-          </li>
-          <li class="nav-item">
-            <a style="width: 8em; cursor: pointer;" class="nav-link h6" onclick="switchtab(1)">企画</a>
-          </li>
-        </ul>
-        <ul id="tab-project" class="nav nav-tabs justify-content-center">
-          <li class="nav-item">
-            <a style="width: 8em; cursor: pointer;" class="nav-link h6" onclick="switchtab(0)">イベント</a>
-          </li>
-          <li class="nav-item">
-            <a style="width: 8em;" class="nav-link active h6" aria-current="page">企画</a>
-          </li>
-        </ul>
+    <!--イベント/企画切り替えタブ-->
+    <div class="text-center" style="margin: 30px auto;">
+      <ul id="tab-event" class="nav nav-tabs justify-content-center">
+        <li class="nav-item">
+          <a style="width: 8em;" class="nav-link h6 active" aria-current="page">イベント</a>
+        </li>
+        <li class="nav-item">
+          <a style="width: 8em; cursor: pointer;" class="nav-link h6" onclick="switchtab(1)">企画</a>
+        </li>
+      </ul>
+      <ul id="tab-project" class="nav nav-tabs justify-content-center">
+        <li class="nav-item">
+          <a style="width: 8em; cursor: pointer;" class="nav-link h6" onclick="switchtab(0)">イベント</a>
+        </li>
+        <li class="nav-item">
+          <a style="width: 8em;" class="nav-link active h6" aria-current="page">企画</a>
+        </li>
+      </ul>
+    </div>
+
+    <!--イベントタブ-->
+    <div id="event" class="mx-auto mb-5" style="max-width: 960px;">
+      <p class="text-danger text-center" id="noEvent" style="display: none;">イベント予定がありません</p>
+
+      <div id="eventList_future" class="row">
+        <!--ここにカード-->
       </div>
 
-      <!--イベントタブ-->
-      <div id="event" class="mx-auto mb-5" style="max-width: 960px;">
-        <p class="text-danger text-center" id="noEvent" style="display: none;">イベント予定がありません</p>
-
-        <div id="eventList_future" class="row">
-          <!--ここにカード-->
-        </div>
-  
-        <!--終了したイベント-->
-        <h5 class="text-center text-secondary mt-5">終了したイベント</h5>
-        <div class="my-2 row" id="endEvents">
-          <!--終了したイベントの簡易表示-->
-        </div>
+      <!--終了したイベント-->
+      <h5 class="text-center text-secondary mt-5">終了したイベント</h5>
+      <div class="my-2 row" id="endEvents">
+        <!--終了したイベントの簡易表示-->
       </div>
+    </div>
 
-      <!--企画タブ-->
-      <div id="project">
-        <p class="text-danger text-center">進行中の企画がありません</p>
+    <!--企画タブ-->
+    <div id="project">
+      <p class="text-danger text-center">進行中の企画がありません</p>
 
-        <div class="col-lg-6 p-2">
-          <div class="card w-100 shadow-sm position-relative" style="border-left: solid green 10px;">
-            <div class="card-body">
-              <h5 class="card-title">企画名</h5>
-              <h6 class="card-subtitle mb-2 text-muted">期間</h6>
-              <p class="card-text" style="height: 5em;"></p>
-              <div class="mt-2">
-                <div class="h5 card-link d-flex justify-content-around mb-0 text-secondary">
-                  <div>
-                    <a style="cursor: pointer;" id="projectJoin' + projectID + '" onclick="projectReaction()"></a> <span id="JoinerNum' + projectID + '"></span>
-                  </div>
-                  <div class="adminonly">
-                    <a style="cursor: pointer;" onclick="projectReaction()"><i class="bi bi-pencil-square"></i></a>
-                  </div>
-                  <div class="adminonly">
-                    <a style="cursor: pointer;" onclick="projectReaction()"><i class="bi bi-trash"></i></a>
-                  </div>
+      <div class="col-lg-6 p-2">
+        <div class="card w-100 shadow-sm position-relative" style="border-left: solid green 10px;">
+          <div class="card-body">
+            <h5 class="card-title">企画名</h5>
+            <h6 class="card-subtitle mb-2 text-muted">期間</h6>
+            <p class="card-text" style="height: 5em;"></p>
+            <div class="mt-2">
+              <div class="h5 card-link d-flex justify-content-around mb-0 text-secondary">
+                <div>
+                  <a style="cursor: pointer;" id="projectJoin' + projectID + '" onclick="projectReaction()"></a> <span id="JoinerNum' + projectID + '"></span>
+                </div>
+                <div class="adminonly">
+                  <a style="cursor: pointer;" onclick="projectReaction()"><i class="bi bi-pencil-square"></i></a>
+                </div>
+                <div class="adminonly">
+                  <a style="cursor: pointer;" onclick="projectReaction()"><i class="bi bi-trash"></i></a>
                 </div>
               </div>
             </div>
           </div>
         </div>
-
       </div>
-    </div>
 
-    <br>
+    </div>
+  </div>
+
+  <br>
     
-    <div class="position-fixed end-0 bottom-0 m-3">
-      <!--イベント追加ボタン-->
-      <div id="addEventBtn" class="bg-dark text-light shadow rounded-circle text-center" style="cursor: pointer; width: 50px; height: 50px;" onclick="eventcontrol('', 'new')">
-        <i class="bi bi-plus-lg" style="line-height: 50px;"></i>
-      </div>
-      <!--プロジェクト追加ボタン-->
-      <div id="addProjectBtn" class="bg-dark text-light shadow rounded-circle text-center" style="cursor: pointer; width: 50px; height: 50px;" onclick="projectcontrol('', 'new')">
-        <i class="bi bi-plus-lg" style="line-height: 50px;"></i>
-      </div>
+  <div class="position-fixed end-0 bottom-0 m-3">
+    <!--イベント追加ボタン-->
+    <div id="addEventBtn" class="bg-dark text-light shadow rounded-circle text-center" style="cursor: pointer; width: 50px; height: 50px;" onclick="eventcontrol('', 'new')">
+      <i class="bi bi-plus-lg" style="line-height: 50px;"></i>
     </div>
+    <!--プロジェクト追加ボタン-->
+    <div id="addProjectBtn" class="bg-dark text-light shadow rounded-circle text-center" style="cursor: pointer; width: 50px; height: 50px;" onclick="projectcontrol('', 'new')">
+      <i class="bi bi-plus-lg" style="line-height: 50px;"></i>
+    </div>
+  </div>
 
-<!--イベント編集モーダル-->
-<div class="modal fade" id="editeventModal" tabindex="-1" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-scrollable">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">イベント情報</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <div class="form-floating mb-3">
-          <input type="text" class="form-control" id="eventID" placeholder="id" disabled>
-          <label for="eventID">イベントID(編集できません)</label>
+  <!--イベント編集モーダル-->
+  <div class="modal fade" id="editeventModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">イベント情報</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
+        <div class="modal-body">
+          <div class="form-floating mb-3">
+            <input type="text" class="form-control" id="eventID" placeholder="id" disabled>
+            <label for="eventID">イベントID(編集できません)</label>
+          </div>
 
-        <div class="form-floating mb-1">
-          <input type="text" class="form-control" id="eventTitle" placeholder="title">
-          <label for="eventTitle">イベント名</label>
-        </div>
-        <div class="form-floating mb-1">
-          <textarea class="form-control" placeholder="description" id="eventDescription"></textarea>
-          <label for="eventDescription">概要</label>
-        </div>
-        <div class="row mx-2 my-1 d-flex justify-content-around">
-          <input type="radio" class="btn-check" name="eventDateRadio" id="eventDateRadio-allday" autocomplete="off">
-          <label class="btn btn-sm btn-outline-secondary rounded-pill my-1" style="width: 40%;" for="eventDateRadio-allday" onclick="alldaytab(true)">終日</label>
-          <input type="radio" class="btn-check" name="eventDateRadio" id="eventDateRadio-time" autocomplete="off">
-          <label class="btn btn-sm btn-outline-secondary rounded-pill my-1" style="width: 40%;" for="eventDateRadio-time" onclick="alldaytab(false)">時刻指定</label>
-        </div>
-        <div class="row mb-1" id="eventDateTab-allday">
-          <div class="form-floating col-6">
-            <input type="date" class="form-control" id="eventDateBegin" placeholder="date.begin">
-            <label for="eventDateBegin">開始日</label>
-          </div>
-          <div class="form-floating col-6">
-            <input type="date" class="form-control" id="eventDateEnd" placeholder="date.end">
-            <label for="eventDateEnd">終了日</label>
-          </div>
-        </div>
-        <div class="row mb-1" id="eventDateTab-time">
           <div class="form-floating mb-1">
-            <input type="date" class="form-control" id="eventDate" placeholder="date.begin">
-            <label for="eventDate">開催日</label>
+            <input type="text" class="form-control" id="eventTitle" placeholder="title">
+            <label for="eventTitle">イベント名</label>
           </div>
-          <div class="form-floating col-6">
-            <input type="time" class="form-control" id="eventTimeBegin" placeholder="time.begin">
-            <label for="eventTimeBegin">開始時刻</label>
+          <div class="form-floating mb-1">
+            <textarea class="form-control" placeholder="description" id="eventDescription"></textarea>
+            <label for="eventDescription">概要</label>
           </div>
-          <div class="form-floating col-6">
-            <input type="time" class="form-control" id="eventTimeEnd" placeholder="time.end">
-            <label for="eventTimeEnd">終了時刻</label>
+          <div class="row mx-2 my-1 d-flex justify-content-around">
+            <input type="radio" class="btn-check" name="eventDateRadio" id="eventDateRadio-allday" autocomplete="off">
+            <label class="btn btn-sm btn-outline-secondary rounded-pill my-1" style="width: 40%;" for="eventDateRadio-allday" onclick="alldaytab(true)">終日</label>
+            <input type="radio" class="btn-check" name="eventDateRadio" id="eventDateRadio-time" autocomplete="off">
+            <label class="btn btn-sm btn-outline-secondary rounded-pill my-1" style="width: 40%;" for="eventDateRadio-time" onclick="alldaytab(false)">時刻指定</label>
           </div>
+          <div class="row mb-1" id="eventDateTab-allday">
+            <div class="form-floating col-6">
+              <input type="date" class="form-control" id="eventDateBegin" placeholder="date.begin">
+              <label for="eventDateBegin">開始日</label>
+            </div>
+            <div class="form-floating col-6">
+              <input type="date" class="form-control" id="eventDateEnd" placeholder="date.end">
+              <label for="eventDateEnd">終了日</label>
+            </div>
+          </div>
+          <div class="row mb-1" id="eventDateTab-time">
+            <div class="form-floating mb-1">
+              <input type="date" class="form-control" id="eventDate" placeholder="date.begin">
+              <label for="eventDate">開催日</label>
+            </div>
+            <div class="form-floating col-6">
+              <input type="time" class="form-control" id="eventTimeBegin" placeholder="time.begin">
+              <label for="eventTimeBegin">開始時刻</label>
+            </div>
+            <div class="form-floating col-6">
+              <input type="time" class="form-control" id="eventTimeEnd" placeholder="time.end">
+              <label for="eventTimeEnd">終了時刻</label>
+            </div>
+          </div>
+          <div class="form-floating mb-1">
+            <input type="text" class="form-control" id="eventLocation" placeholder="location">
+            <label for="eventLocation">開催場所</label>
+          </div>
+          <div class="form-floating mb-1">
+            <input type="text" class="form-control" id="eventTags" placeholder="tags">
+            <label for="eventTags">タグ(半角空白で区切る)</label>
+          </div>
+          <div class="form-floating mb-1" style="position: relative;">
+            <input type="password" class="form-control" id="eventCode" placeholder="code">
+            <label for="eventCode">出席コード</label>
+            <a style="text-decoration: none; position: absolute; top: 25%; right: 10%; color: black;" class="h3" onclick="toggleshowcode()" id="eye"><i class="bi bi-eye-slash"></i></a>
+          </div>
+          <div class="form-floating mb-1">
+            <input type="number" class="form-control" id="eventPoint" placeholder="points">
+            <label for="eventPoint">獲得ポイント</label>
+          </div>
+          <h5 class="my-3 text-center" id="attendList_title">出席連絡</h5>
+          <ul class="list-group list-group-flush" id="attendList">
+          </ul>
+          <h5 class="my-3 text-center" id="absentList_title">欠席連絡</h5>
+          <ul class="list-group list-group-flush" id="absentList">
+          </ul>
+          <h5 class="my-3 text-center" id="attendersList_title">出席登録者</h5>
+          <ul class="list-group list-group-flush" id="attendersList">
+          </ul>
         </div>
-        <div class="form-floating mb-1">
-          <input type="text" class="form-control" id="eventLocation" placeholder="location">
-          <label for="eventLocation">開催場所</label>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-sm btn-secondary w-25" data-bs-dismiss="modal">キャンセル</button>
+          <button type="button" class="btn btn-sm btn-primary w-25" onclick="eventcontrol('', 'save')">保存</button>
         </div>
-        <div class="form-floating mb-1">
-          <input type="text" class="form-control" id="eventTags" placeholder="tags">
-          <label for="eventTags">タグ(半角空白で区切る)</label>
-        </div>
-        <div class="form-floating mb-1" style="position: relative;">
-          <input type="password" class="form-control" id="eventCode" placeholder="code">
-          <label for="eventCode">出席コード</label>
-          <a style="text-decoration: none; position: absolute; top: 25%; right: 10%; color: black;" class="h3" onclick="toggleshowcode()" id="eye"><i class="bi bi-eye-slash"></i></a>
-        </div>
-        <div class="form-floating mb-1">
-          <input type="number" class="form-control" id="eventPoint" placeholder="points">
-          <label for="eventPoint">獲得ポイント</label>
-        </div>
-        <h5 class="my-3 text-center" id="attendList_title">出席連絡</h5>
-        <ul class="list-group list-group-flush" id="attendList">
-        </ul>
-        <h5 class="my-3 text-center" id="absentList_title">欠席連絡</h5>
-        <ul class="list-group list-group-flush" id="absentList">
-        </ul>
-        <h5 class="my-3 text-center" id="attendersList_title">出席登録者</h5>
-        <ul class="list-group list-group-flush" id="attendersList">
-        </ul>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-sm btn-secondary w-25" data-bs-dismiss="modal">キャンセル</button>
-        <button type="button" class="btn btn-sm btn-primary w-25" onclick="eventcontrol('', 'save')">保存</button>
       </div>
     </div>
   </div>
-</div>
 
-<!--企画編集モーダル-->
-<div class="modal fade" id="editprojectModal" tabindex="-1" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-scrollable">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">イベント情報</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <div class="form-floating mb-3">
-          <input type="text" class="form-control" id="projectID" placeholder="id" disabled>
-          <label for="projectID">企画ID(編集できません)</label>
+  <!--企画編集モーダル-->
+  <div class="modal fade" id="editprojectModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">イベント情報</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
+        <div class="modal-body">
+          <div class="form-floating mb-3">
+            <input type="text" class="form-control" id="projectID" placeholder="id" disabled>
+            <label for="projectID">企画ID(編集できません)</label>
+          </div>
 
-        <div class="form-floating mb-1">
-          <input type="text" class="form-control" id="projectTitle" placeholder="title">
-          <label for="projectTitle">イベント名</label>
+          <div class="form-floating mb-1">
+            <input type="text" class="form-control" id="projectTitle" placeholder="title">
+            <label for="projectTitle">イベント名</label>
+          </div>
+          <div class="form-floating mb-1">
+            <textarea class="form-control" placeholder="description" id="projectDescription"></textarea>
+            <label for="projectDescription">概要</label>
+          </div>
+          <div class="form-floating col-6">
+            <input type="date" class="form-control" id="projectDateBegin" placeholder="date.begin">
+            <label for="projectDateBegin">開始日</label>
+          </div>
+          <div class="form-floating col-6">
+            <input type="date" class="form-control" id="projectDateEnd" placeholder="date.end">
+            <label for="projectDateEnd">終了日</label>
+          </div>
+          <h5 class="my-3 text-center">参加者</h5>
+          <ul class="list-group list-group-flush" id="MemberList">
+            <p id="noMember" class="text-danger text-center">参加者がいません</p>
+          </ul>
         </div>
-        <div class="form-floating mb-1">
-          <textarea class="form-control" placeholder="description" id="projectDescription"></textarea>
-          <label for="projectDescription">概要</label>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-sm btn-secondary w-25" data-bs-dismiss="modal">キャンセル</button>
+          <button type="button" class="btn btn-sm btn-primary w-25" onclick="projectcontrol('', 'save')">保存</button>
         </div>
-        <div class="form-floating col-6">
-          <input type="date" class="form-control" id="projectDateBegin" placeholder="date.begin">
-          <label for="projectDateBegin">開始日</label>
-        </div>
-        <div class="form-floating col-6">
-          <input type="date" class="form-control" id="projectDateEnd" placeholder="date.end">
-          <label for="projectDateEnd">終了日</label>
-        </div>
-        <h5 class="my-3 text-center">参加者</h5>
-        <ul class="list-group list-group-flush" id="MemberList">
-          <p id="noMember" class="text-danger text-center">参加者がいません</p>
-        </ul>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-sm btn-secondary w-25" data-bs-dismiss="modal">キャンセル</button>
-        <button type="button" class="btn btn-sm btn-primary w-25" onclick="projectcontrol('', 'save')">保存</button>
       </div>
     </div>
   </div>
-</div>
 </body>
 </html>

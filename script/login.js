@@ -95,7 +95,12 @@ onAuthStateChanged(auth, (snapshot) => {
         }
         //外部用
         else{
-          if(location.pathname != "/" && location.pathname != "/event/" && location.pathname != "/equips/") { location.href = "/"; }
+          //外部の人がアクセスできるページリスト
+          //ここに記載されたパス以外はアクセス拒否
+          let accessable = ["/", "/event/", "/equips/", "/procedure/join.html", "/procedure/join2.html"];
+          let reload = true;
+          accessable.forEach((path) => { if(location.pathname == path) { reload = false; } });
+          if(reload) { location.href = "/"; }
 
           var outsideonly = document.getElementsByClassName("outsideonly");
           Object.keys(outsideonly).forEach((key) => { outsideonly[key].style.display = "inherit"; })

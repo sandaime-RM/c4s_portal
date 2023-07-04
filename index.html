@@ -54,13 +54,13 @@
     <hr>
   </div>
   <!--メニュー(トップページ)-->
-  <div class="offcanvas offcanvas-start" tabindex="-1" id="menu">
+  <div class="offcanvas offcanvas-start" tabindex="-1" id="menu" style="overflow: auto;">
     <div class="offcanvas-header">
       <h5 class="offcanvas-title">メニュー</h5>
-      <button type="button" class="btn-close text-reset mx-3 h3" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+      <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
     <div class="offcanvas-body">
-      <div class="mx-2 row ">
+      <div class="mx-2 row">
         <div class="col-4">
           <img style="width: 100%; height: auto;" class="rounded-circle" id="userPic_offcanvas">
         </div>
@@ -72,7 +72,7 @@
       <hr>
       <div style="margin-left: 30px;">
         <!--誰でもアクセスできるページ-->
-        <h4 style="line-height: 45px; cursor: pointer; color: navy" onclick="location.href='/'"><i class="bi bi-house mx-3"></i>トップページ</h4>
+        <h4 style="line-height: 45px; cursor: pointer; color: navy;" onclick="location.href='/'"><i class="bi bi-house mx-3"></i>トップページ</h4>
         <h4 style="line-height: 45px; cursor: pointer;" onclick="location.href='/event'"><i class="bi bi-calendar-check mx-3"></i>イベント・企画一覧</h4>
         <h4 style="line-height: 45px; cursor: pointer;" onclick="location.href='/equips'"><i class="bi bi-usb-symbol mx-3"></i>備品一覧</h4>
         <!--部員にならないとアクセスできないページ-->
@@ -95,7 +95,7 @@
           <h4 style="line-height: 45px; cursor: pointer;" onclick="location.href='/procedure/join.html'"><i class="bi bi-file-earmark-text mx-3"></i>入部する</h4>
         </div>
         <!--ログアウトボタン-->
-          <h4 style="line-height: 45px; cursor: pointer;" onclick="logout()"><i class="bi bi-person-x mx-3"></i>ログアウト</h4>
+        <h4 style="line-height: 45px; cursor: pointer;" onclick="logout()"><i class="bi bi-person-x mx-3"></i>ログアウト</h4>
       </div>
     </div>
   </div>
@@ -370,9 +370,10 @@
           </div>
         </div>
         <!--リンクが存在するならこれを表示-->
-        <div class="modal-footer" style="text-align: left; display: none;" id="giftList-footer">
-          <div class="mx-2 py-2" id="giftList">
+        <div class="modal-footer" id="giftList-footer">
+          <div class="w-100 text-left mb-2" id="giftList">
             <h5 style="text-align: center;">受け取り用URL</h5>
+            
           </div>
         </div>
       </div>

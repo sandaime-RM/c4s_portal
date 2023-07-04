@@ -178,7 +178,7 @@
     </div>
 
     <!--企画タブ-->
-    <div id="project">
+    <div id="project" class="mx-auto mb-5" style="max-width: 960px;">
       <p class="text-danger text-center">進行中の企画がありません</p>
 
       <div class="col-lg-6 p-2">
@@ -193,10 +193,10 @@
                   <a style="cursor: pointer;" id="projectJoin' + projectID + '" onclick="projectReaction()"></a> <span id="JoinerNum' + projectID + '"></span>
                 </div>
                 <div class="adminonly">
-                  <a style="cursor: pointer;" onclick="projectReaction()"><i class="bi bi-pencil-square"></i></a>
+                  <a style="cursor: pointer;" onclick="projectcontrol(id, 'edit')"><i class="bi bi-pencil-square"></i></a>
                 </div>
                 <div class="adminonly">
-                  <a style="cursor: pointer;" onclick="projectReaction()"><i class="bi bi-trash"></i></a>
+                  <a style="cursor: pointer;" onclick="projectcontrol(id, 'del')"><i class="bi bi-trash"></i></a>
                 </div>
               </div>
             </div>
@@ -283,7 +283,7 @@
           <div class="form-floating mb-1" style="position: relative;">
             <input type="password" class="form-control" id="eventCode" placeholder="code">
             <label for="eventCode">出席コード</label>
-            <a style="text-decoration: none; position: absolute; top: 25%; right: 10%; color: black;" class="h3" onclick="toggleshowcode()" id="eye"><i class="bi bi-eye-slash"></i></a>
+            <a style="text-decoration: none; position: absolute; top: 30%; right: 10%; color: black;" class="h5" onclick="toggleshowcode()" id="eye"><i class="bi bi-eye-slash"></i></a>
           </div>
           <div class="form-floating mb-1">
             <input type="number" class="form-control" id="eventPoint" placeholder="points">
@@ -329,15 +329,17 @@
             <textarea class="form-control" placeholder="description" id="projectDescription"></textarea>
             <label for="projectDescription">概要</label>
           </div>
-          <div class="form-floating col-6">
-            <input type="date" class="form-control" id="projectDateBegin" placeholder="date.begin">
-            <label for="projectDateBegin">開始日</label>
+          <div class="row">
+            <div class="form-floating col-6">
+              <input type="date" class="form-control" id="projectDateBegin" placeholder="date.begin">
+              <label for="projectDateBegin">開始日</label>
+            </div>
+            <div class="form-floating col-6">
+              <input type="date" class="form-control" id="projectDateEnd" placeholder="date.end">
+              <label for="projectDateEnd">終了日</label>
+            </div>
           </div>
-          <div class="form-floating col-6">
-            <input type="date" class="form-control" id="projectDateEnd" placeholder="date.end">
-            <label for="projectDateEnd">終了日</label>
-          </div>
-          <h5 class="my-3 text-center">参加者</h5>
+          <h5 class="my-3 text-center" id="MemberListTitle">参加者</h5>
           <ul class="list-group list-group-flush" id="MemberList">
             <p id="noMember" class="text-danger text-center">参加者がいません</p>
           </ul>

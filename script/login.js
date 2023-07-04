@@ -92,6 +92,11 @@ onAuthStateChanged(auth, (snapshot) => {
             var adminonly = document.getElementsByClassName("adminonly");
             Object.keys(adminonly).forEach((key) => { adminonly[key].style.display = "inherit"; })
           }
+          //adminonlyを非表示
+          else{
+            var adminonly = document.getElementsByClassName("adminonly");
+            Object.keys(adminonly).forEach((key) => { adminonly[key].style.display = "none"; })
+          }
         }
         //外部用
         else{

@@ -2,7 +2,10 @@ export function getObj(id) {
   var obj = document.getElementById(id);
   if(obj){
     obj.hide = function () { this.style.display = "none"; }
-    obj.show = function () { this.style.display = "inherit"; }
+    obj.show = function (style) {
+      if(style) { this.style.display = style; }
+      else { this.style.display = "inherit"; }
+    }
     obj.head = function ( HTML ) { this.innerHTML = HTML + obj.innerHTML; }
     obj.tail = function ( HTML ) { this.innerHTML += HTML; }
   }

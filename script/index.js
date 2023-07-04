@@ -54,10 +54,10 @@ var ranks = {
 onAuthStateChanged(auth, (snapshot) => {  
   user = snapshot;
   
-  getObj("loading-overray").show();
+  getObj("loading-overray").show("block");
   getObj("login-overray").hide();
 
-  getObj("overray").show();
+  getObj("overray").show("block");
   
   //ログイン状態
   if(user) {
@@ -119,14 +119,14 @@ onAuthStateChanged(auth, (snapshot) => {
         window.showhistory = showhistory;
         //ポイントリンクを表示
         onValue(ref(db, "pointGift"), (snapshot) => {
-          getObj("giftList").innerHTML = '<h5 style="text-align: center;">受け取り用URL</h5>';
-          if(snapshot.val()){
+          getObj("giftList").innerHTML = '<h5 class="text-center">受け取り用URL</h5>';
+          if(snapshot.val()) {
             Object.keys(snapshot.val()).forEach(id => {
               if(snapshot.val()[id].senderID == user.uid) {
                 var amount = snapshot.val()[id].amount;
                 getObj("giftNum").value = "";
-                getObj("giftList-footer").show();
-                getObj("giftList").tail('<div class="row mb-1"><div class="col-10" style="outline: solid 1px lightgray; border-radius: 5px; padding: 0;"><p style="margin: 1em 0.5em;"><span style="font-weight: bold;">' + amount + 'pt</span> : https://portal.c4-s.net?getpoint=...</p></div><div class="col-2"><button class="btn btn-outline-dark w-100 h-100" style="text-align: center;" onclick="copylink(\'' + id + '\')"))"><i class="bi bi-share-fill"></i></button></div></div>');
+                getObj("giftList-footer").show("block");
+                getObj("giftList").tail('<div class="w-100 p-3 position-relative"><h5 class="mb-0">' + amount + 'ポイント</h5><p class="mb-0">https://https://portal.c4-s.net?getpoint=' + id + '</p><h6 onclick="copylink(\'' + id + '\')" style="position: absolute; top: 20%; right: 10%; cursor: pointer;"><i class="bi bi-share-fill"></i></h6></div>');
               }
             });
           }

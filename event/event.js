@@ -114,8 +114,8 @@ export function start(callback) {
     projects = snapshot.val();
 
     if(projects) {
-      sortTermKeys(projects).forEach((project) => {
-
+      sortTermKeys(projects).forEach((projectID) => {
+        
       })
     }
   })
@@ -408,6 +408,8 @@ export function eventcontrol(eventID, type) {
     if(getObj("eventCode").type == "password"){
       getObj("eventCode").type = "text";
       getObj("eye").innerHTML = '<i class="bi bi-eye"></i>';
+
+      alert("ログ保存 : " + user.displayName + "がパスワードを閲覧");
     }
     else {
       getObj("eventCode").type = "password";
@@ -487,29 +489,33 @@ export function projectcontrol(projectID, type) {
       getObj("projectDescription").value = "";
       getObj("projectDateBegin").value = "";
       getObj("projectDateEnd").value = "";
+      getObj("MemberListTitle").hide();
       getObj("MemberList").hide();
 
       new bootstrap.Modal(getObj("editprojectModal")).show();
     break;
     case "edit":
-      let data = projects[projectID];
+      get(ref(db, "projects/" + projectID)).then((snapshot) => {
+        let data = snapshot.val();
 
-      getObj("projectID").value = projectID
-      getObj("projectTitle").value = data.title;
-      getObj("projectDescription").value = data.description;
-      getObj("projectDateBegin").value = DateString(data.term.begin);
-      getObj("projectDateEnd").value = DateString(data.term.end);
-      getObj("MemberList").show();
-      if(data.member) {
-        getObj("noMember").hide();
-        var keys = sortMembers(users, Object.keys(data.member));
-        keys.forEach((ID) => {
-          getObj("attendersList").tail('<li class="list-group-item"><span class="text-secondary">' + users[ID].studentNumber + '</span> <span class="h6">' + users[ID].name + '</span></li>');
-        })
-      }
-      else { getObj("noMember").show(); }
-
-      new bootstrap.Modal(getObj("editprojectModal")).show();
+        getObj("projectID").value = projectID;
+        getObj("projectTitle").value = data.title;
+        getObj("projectDescription").value = data.description;
+        getObj("projectDateBegin").value = DateString(data.term.begin);
+        getObj("projectDateEnd").value = DateString(data.term.end);
+        getObj("MemberListTitle").show();
+        getObj("MemberList").show();
+        if(data.member) {
+          getObj("noMember").hide();
+          var keys = sortMembers(users, Object.keys(data.member));
+          keys.forEach((ID) => {
+            getObj("attendersList").tail('<li class="list-group-item"><span class="text-secondary">' + users[ID].studentNumber + '</span> <span class="h6">' + users[ID].name + '</span></li>');
+          })
+        }
+        else { getObj("noMember").show(); }
+  
+        new bootstrap.Modal(getObj("editprojectModal")).show();
+      })
 
       //日付の書式をちゃんとする
       function DateString(date) {
@@ -522,14 +528,30 @@ export function projectcontrol(projectID, type) {
       }
     break;
     case "save":
-      alert("まだ保存できません")
+      //不備チェック
+      try {
+        if(!getObj("projectTitle").value) { e("タイトルが入力されていません"); }
+        if(!projects[id].term.begin || !projects[id].term.end) { e("日付が入力されていません"); }
+        if(new Date(projects[id].term.end) < new Date(projects[id].term.begin)) { e("日付が不正です"); }
+        function e (msg) { throw new error (msg); }
+      } catch (msg) {
+        alert(msg); return;
+      }
+      let id = getObj("projectID").value;
+      projects[id].title = getObj("projectTitle").value;
+      projects[id].description = getObj("projectDescription").value;
+      projects[id].term.begin = getObj("projectDateBegin").value;
+      projects[id].term.end = getObj("projectDateEnd").value;
+
+      console.log("save as...");
+      console.table(projects[id]);
+      //set(ref(db, "projects/" + id), projects[id]);
     break;
     case "del":
-      alert("削除はできません")
+      alert("削除機能はありません。データベースを操作してください。");
     break;
   
-    default:
-      break;
+    default: break;
   }
 }
 window.projectcontrol = projectcontrol;

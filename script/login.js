@@ -1,29 +1,22 @@
-// Import the functions you need from the SDKs you need
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-app.js";
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-analytics.js";
 import { GoogleAuthProvider, getAuth, onAuthStateChanged, signInWithPopup, signOut } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-auth.js";
 import { getDatabase, ref, get, push } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-database.js";
 import { getObj } from "/script/methods.js";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
 
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-    apiKey: "AIzaSyBE60G8yImWlENWpCnQZzqqVUrwWa_torg",
-    authDomain: "c4s-portal.firebaseapp.com",
-    databaseURL: "https://c4s-portal-default-rtdb.asia-southeast1.firebasedatabase.app",
-    projectId: "c4s-portal",
-    storageBucket: "c4s-portal.appspot.com",
-    messagingSenderId: "863775995414",
-    appId: "1:863775995414:web:82eb9557a13a099dfbe737",
-    measurementId: "G-K2SR1WSNRC"
+  apiKey: "AIzaSyBE60G8yImWlENWpCnQZzqqVUrwWa_torg",
+  authDomain: "c4s-portal.firebaseapp.com",
+  databaseURL: "https://c4s-portal-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "c4s-portal",
+  storageBucket: "c4s-portal.appspot.com",
+  messagingSenderId: "863775995414",
+  appId: "1:863775995414:web:82eb9557a13a099dfbe737",
+  measurementId: "G-K2SR1WSNRC"
 };
 
-// Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
-
 const auth = getAuth();
 const provider = new GoogleAuthProvider();
 const db = getDatabase();
@@ -38,6 +31,11 @@ var status = 0;
 
 //ログイン状態の確認
 onAuthStateChanged(auth, (snapshot) => {
+  //ヘッダーを描画(メニューを含む)
+  $("#header").load("/frames/header.html", function () {
+    $("#menu-" + location.pathname.split('/')[1]).css("color", "navy");
+  });
+
   user = snapshot;
   if (user) {
     console.log(user);
@@ -51,23 +49,16 @@ onAuthStateChanged(auth, (snapshot) => {
         if(getObj("menu")) {
           getObj("menuBtn").src = user.photoURL;
           getObj("userPic_offcanvas").src = user.photoURL;
-          
-          //メニューを開く
-          getObj("menuBtn").onclick = function () { new bootstrap.Offcanvas(getObj("menu")).show(); };
         }
 
         //部員用
         if(c4suser){
           //更新情報を表示
           function news () {
-            //管理者は表示しない
-            if(user.uid == "pSv3N23pJEd1z7wUup73VEF6HHp1") { return; }
             //ローカル環境でも表示しない
             if(location.hostname == "localhost") { return; }
             if(!c4suser.accessHistory || new Date(c4suser.accessHistory[Object.keys(c4suser.accessHistory).slice(-1)[0]].date) < new Date("2023-06-22 13:50"))
-            { alert("アップデート：トップ画面のメニュー画面が新しくなりました！"); alert("左上のプロフィールアイコンを押してみよう！"); }
-            else if(!c4suser.accessHistory || new Date(c4suser.accessHistory[Object.keys(c4suser.accessHistory).slice(-1)[0]].date) < new Date("2023-06-29 15:50"))
-            { alert("アップデート：備品画面のデザインをリニューアルしました。"); }
+            { alert("アップデート：メニュー画面が新しくなりました！"); alert("左上のプロフィールアイコンを押してみよう！"); }
           }
           news();
 

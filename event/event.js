@@ -67,7 +67,7 @@ export function start(callback) {
         var eventcolor;
         var timecolor;
         if(new Date(element.term.begin) < new Date()) { eventcolor = "darkred"; timecolor = "text-danger"; } else { eventcolor = "green"; timecolor = "text-muted"}
-        getObj("eventList_future").tail('<div class="col-lg-6 p-2"><div class="card w-100 shadow-sm position-relative" style="border-left: solid ' + eventcolor + ' 10px;"><div class="card-body"><h5 class="card-title">' + element.title + '</h5><h6 class="card-subtitle mb-2 ' + timecolor + '">' + TermString(element.term) + '<br>' + element.place + '</h6><p class="text-primary text-small m-0">' + Tags(element.tags) + '</p><p class="card-text" style="height: 5em;">' + element.description + '</p><div class="mt-2"><div class="h5 card-link d-flex justify-content-around mb-0 text-secondary"><div><a style="cursor: pointer;" id="eventAttend' + eventID + '" onclick="eventReaction(\'' + eventID + '\', \'attend\')"></a> <span id="AttendNum' + eventID + '"></span></div><div><a style="cursor: pointer;" id="eventAbsent' + eventID + '" onclick="eventReaction(\'' + eventID + '\', \'absent\')"></a> <span id="AbsentNum' + eventID + '"></span></div><div class="adminonly"><a style="cursor: pointer;" onclick="eventcontrol(\'' + eventID + '\', \'edit\')"><i class="bi bi-pencil-square"></i></a></div><div class="adminonly"><a style="cursor: pointer;" onclick="eventcontrol(\'' + eventID + '\', \'del\')"><i class="bi bi-trash"></i></a></div></div></div></div><div id="codeexist' + eventID + '" style="display: none;" class="position-absolute top-0 end-0 m-3"><h5><i class="bi bi-person-check-fill" style="color: lightgray;"></i></h5></div><div id="attended-check' + eventID + '" style="display: none;" class="position-absolute top-0 end-0 m-3"><h5><i class="bi bi-person-check-fill" style="color: darkred;"></i></h1></div></div></div>');
+        getObj("eventList_future").tail('<div class="col-lg-6 p-2"><div class="card w-100 shadow-sm position-relative" style="border-left: solid ' + eventcolor + ' 10px;"><div class="card-body"><h5 class="card-title">' + element.title + '</h5><h6 class="card-subtitle mb-2 ' + timecolor + '">' + TermString(element.term) + '<br>' + element.place + '</h6><p class="text-primary text-small m-0">' + Tags(element.tags) + '</p><p class="card-text" style="height: 5em; text-align: justify;">' + element.description + '</p><div class="mt-2"><div class="h5 card-link d-flex justify-content-around mb-0 text-secondary"><div><a style="cursor: pointer;" id="eventAttend' + eventID + '" onclick="eventReaction(\'' + eventID + '\', \'attend\')"></a> <span id="AttendNum' + eventID + '"></span></div><div><a style="cursor: pointer;" id="eventAbsent' + eventID + '" onclick="eventReaction(\'' + eventID + '\', \'absent\')"></a> <span id="AbsentNum' + eventID + '"></span></div><div class="adminonly"><a style="cursor: pointer;" onclick="eventcontrol(\'' + eventID + '\', \'edit\')"><i class="bi bi-pencil-square"></i></a></div><div class="adminonly"><a style="cursor: pointer;" onclick="eventcontrol(\'' + eventID + '\', \'del\')"><i class="bi bi-trash"></i></a></div></div></div></div><div id="codeexist' + eventID + '" style="display: none;" class="position-absolute top-0 end-0 m-3"><h5><i class="bi bi-person-check-fill" style="color: lightgray;"></i></h5></div><div id="attended-check' + eventID + '" style="display: none;" class="position-absolute top-0 end-0 m-3"><h5><i class="bi bi-person-check-fill" style="color: green;"></i></h1></div></div></div>');
                 
         //出席登録済みマーク
         if(element.attenders && element.attenders[user.uid]) { getObj("attended-check" + eventID).show(); }
@@ -112,6 +112,7 @@ export function start(callback) {
   //企画リストを表示
   get(ref(db, "projects")).then((snapshot) => {
     projects = snapshot.val();
+    if(!snapshot.val()) { projects = {}; }
 
     if(projects) {
       sortTermKeys(projects).forEach((projectID) => {
@@ -531,21 +532,22 @@ export function projectcontrol(projectID, type) {
       //不備チェック
       try {
         if(!getObj("projectTitle").value) { e("タイトルが入力されていません"); }
-        if(!projects[id].term.begin || !projects[id].term.end) { e("日付が入力されていません"); }
-        if(new Date(projects[id].term.end) < new Date(projects[id].term.begin)) { e("日付が不正です"); }
-        function e (msg) { throw new error (msg); }
+        if(!getObj("projectDateBegin").value || !getObj("projectDateEnd").value) { e("日付が必要です"); }
+        if(new Date(getObj("projectDateEnd").value) < new Date(getObj("projectDateBegin").value)) { e("日付が不正です"); }
+        function e (msg) { throw new Error (msg); }
       } catch (msg) {
         alert(msg); return;
       }
       let id = getObj("projectID").value;
+      if(!projects[id]) { projects[id] = {}; }
       projects[id].title = getObj("projectTitle").value;
       projects[id].description = getObj("projectDescription").value;
-      projects[id].term.begin = getObj("projectDateBegin").value;
-      projects[id].term.end = getObj("projectDateEnd").value;
+      projects[id].term = {
+        begin : getObj("projectDateBegin").value,
+        end : getObj("projectDateEnd").value
+      };
 
-      console.log("save as...");
-      console.table(projects[id]);
-      //set(ref(db, "projects/" + id), projects[id]);
+      set(ref(db, "projects/" + id), projects[id]);
     break;
     case "del":
       alert("削除機能はありません。データベースを操作してください。");

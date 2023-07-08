@@ -187,8 +187,6 @@ export function logout() {
     accountName.innerHTML = "";
     accountIcon.src = "";
     accountEmail.innerHTML = "ログインしていません";
-  }).catch((error) => {
-    document.getElementById("error").innerHTML = error.message;
   });
 }
 window.logout = logout;

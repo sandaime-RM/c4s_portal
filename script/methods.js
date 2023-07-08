@@ -12,9 +12,29 @@ export function getObj(id) {
   return obj;
 }
 
+//日付計算
+export function DateText(date) {
+  var dif = Math.floor((new Date() - date) / 1000 / 60 / 60 / 24);
+  if(dif < 7){
+    if(new Date().getDate() == date.getDate()){
+      return "きょう";
+    }
+    else{
+      switch (Math.floor(dif)) {
+        case 0: return "きのう";
+        case 1: return "おととい";
+        default: return String(Math.floor(dif)) + "日前";
+      }
+    }
+  }
+  else{
+    return String(date.getMonth() + 1) + "月" + String(date.getDate()) + "日"
+  }
+}
+
 //部員をソート(users:全ユーザーのデータ、keys:ソートしたい部員のIDリスト)
 export function sortMembers(users, keys){
-  var leaders = []
+  var leaders = [];
   var active_keys = [];
   var new_keys = [];
   var outsiders = [];

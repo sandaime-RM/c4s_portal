@@ -1,6 +1,6 @@
 <!--Twitter風のヘッダー-->
 <div class="container">
-  <div class="mx-1 position-relative" style="height: 50px;">
+  <div class="mx-2 position-relative" style="height: 50px;">
     <img class="position-absolute bottom-0 start-0 rounded-circle shadow-sm" src="/icons/person-circle-gray.svg" style="height: 40px; cursor: pointer;" data-bs-toggle="offcanvas" href="#menu" id="menuBtn"></img>
     <img class="position-absolute bottom-0 start-50 translate-middle-x" src="/img/logoAlpha.png" onclick="location.href='/'" style="height: 40px; cursor: pointer;">
   </div>
@@ -14,7 +14,7 @@
     <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
   </div>
   <div class="offcanvas-body">
-    <div class="mx-2 row ">
+    <div class="mx-2 row">
       <div class="col-4">
         <img style="width: 100%; height: auto;" class="rounded-circle" id="userPic_offcanvas">
       </div>
@@ -33,7 +33,7 @@
       <div class="activeonly">
         <h4 style="line-height: 45px; cursor: pointer;" id="menu-document" onclick="location.href='/document'"><i class="bi bi-clipboard mx-3"></i>掲示板</h4>
         <h4 style="line-height: 45px; cursor: pointer;" id="menu-room" onclick="location.href='/room'"><i class="bi bi-door-open mx-3"></i>場所予約</h4>
-        <h4 style="line-height: 45px; cursor: pointer;" id="menu-store" onclick="location.href='/store'"><i class="bi bi-cart mx-3"></i>C4's ショップ</h4>
+        <h4 style="line-height: 45px; cursor: pointer;" id="menu-store" onclick="location.href='/store'"><i class="bi bi-basket3 mx-3"></i>ストア</h4>
         <h4 style="line-height: 45px; cursor: pointer;" id="menu-money" onclick="location.href='/money'"><i class="bi bi-cash mx-3"></i>部費</h4>
         <h4 style="line-height: 45px; cursor: pointer;" id="menu-procedure" onclick="location.href='/procedure'"><i class="bi bi-file-earmark-text mx-3"></i>各種手続き</h4>
       </div>
@@ -41,7 +41,8 @@
       <div class="adminonly" style="color: indigo">
         <p class="small text-secondary mt-3">管理者のみ</p>
         <h4 style="line-height: 45px; cursor: pointer;" id="menu-control" onclick="location.href='/control'"><i class="bi bi-info-circle mx-3"></i>管理画面</h4>
-        <h4 style="line-height: 45px; cursor: pointer;" id="menu-wallet" onclick="location.href='/wallet'"><i class="bi bi-wallet mx-3"></i>ウォレット(非公開)</h4>
+        <h4 style="line-height: 45px; cursor: pointer;" id="menu-wallet" onclick="location.href='/wallet'"><i class="bi bi-wallet mx-3"></i>ウォレット <span class="h6 badge bg-secondary">非公開</span></h4>
+        <h4 style="line-height: 45px; cursor: pointer;" id="menu-shop" onclick="location.href='/shop'"><i class="bi bi-cart mx-3"></i>C4's ショップ <span class="h6 badge bg-secondary">開発中</span></h4>
       </div>
       <hr>
       <!--入部フォームは部外者だけに表示-->

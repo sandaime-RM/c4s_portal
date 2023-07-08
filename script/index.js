@@ -2,7 +2,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/9.17.2/firebas
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-analytics.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-auth.js";
 import { getDatabase, ref, push, remove, set, get, onValue } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-database.js";
-import { getObj } from "/script/methods.js";
+import { getObj, DateText } from "/script/methods.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBE60G8yImWlENWpCnQZzqqVUrwWa_torg",
@@ -84,6 +84,9 @@ onAuthStateChanged(auth, (snapshot) => {
         getObj("info2").textContent = c4suser.department + " " + c4suser.grade + "年生";
         showQR();
 
+        getObj("pointHistoryBtn").disabled = false;
+        getObj("sendPointBtn").disabled = false;
+
         //HTMLにランクバーを表示
         for (let i = 0; i < ranks.name.length; i++) {
           getObj("pointbars").tail('<div class="progress-bar progress-bar-striped" style="width: 0%;" role="progressbar" id="pointbar' + i + '"></div>'); 
@@ -109,7 +112,7 @@ onAuthStateChanged(auth, (snapshot) => {
             getObj("addhistory").show();
             var id = historykeys[historynum];
             var data = datas[id];
-            var date = getdatetext(new Date(data.date));
+            var date = DateText(new Date(data.date));
             var pointcolor = ["black", "darkred"];
             getObj("pointHistory").tail('<li class="list-group-item"><h6 class="mb-0">' + data.title + '</h6><div class="row"><p class="text-secondary small col-6 mb-0">' + date + '</p><h4 class="col-6" style="text-align: right; color: ' + pointcolor[data.mode - 1] + ';margin-bottom: 0;">' + (-2 * data.mode + 3) * data.amount + 'pt</h4></div></li>');
             historynum++;
@@ -167,21 +170,24 @@ onAuthStateChanged(auth, (snapshot) => {
             }
           });
         }
-  
-        //ローディング解除
-        getObj("loading-overray").style.display = "none";
-        getObj("login-overray").style.display = "none";
-  
-        getObj("overray").style.display = "none";
       }
-      //ゲスト
-      else{
-        //ローディング解除
-        getObj("loading-overray").style.display = "none";
-        getObj("login-overray").style.display = "none";
+      else {
+        //ゲスト用表示
+        getObj("userPic").innerHTML = '<img src="' + user.photoURL + '" style="width: 100%; height: 100%; border-radius: 50%;">'
+        getObj("userName").innerText = user.displayName;
+        getObj("userRole").innerText = "部員ではありません";
   
-        getObj("overray").style.display = "none";
+        getObj("profile").show("block");
+  
+        $("#pointnum").html("0");
+        $("#restpoint").html("<p>まだポイントを獲得できません</p>");
+        getObj("pointHistoryBtn").disabled = true;
+        getObj("sendPointBtn").disabled = true;
+        getObj("info2").textContent = user.email;
+        showQR();
       }
+      //ローディング解除
+      $("#overray").fadeOut();
     });
 
     //開催中のイベントをトップに表示
@@ -216,8 +222,8 @@ onAuthStateChanged(auth, (snapshot) => {
   }
   //ログアウト状態
   else{
-    getObj("loading-overray").style.display = "none";
-    getObj("login-overray").style.display = "block";
+    getObj("loading-overray").hide()
+    getObj("login-overray").show("block");
   }
 });
 
@@ -395,8 +401,9 @@ export function cancel_gift() {
 window.cancel_gift = cancel_gift;
 
 //クリップボードにstrをコピー
-export function copylink(str) {
-  return navigator.clipboard.writeText("https://portal.c4-s.net?getpoint=" + str).then(() => { alert("クリップボードにコピーしました"); });
+export async function copylink(str) {
+  await navigator.clipboard.writeText("https://portal.c4-s.net?getpoint=" + str);
+  alert("クリップボードにコピーしました");
 }
 window.copylink = copylink;
 

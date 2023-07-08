@@ -78,7 +78,7 @@ window.onload = function() {
       getObj("list").tail('<div class="col-lg-6 mb-1" style="display: flex; cursor: pointer;" id="equip' + key + '" onclick="ClickEquip(\'' + key + '\')"><img class="rounded-3" src="cats/' + imgname + '.svg" style="width: 100px; height: 100px;"><div class="px-3" style="height: 100px;"><p class="mb-0"><span class="h5">' + equipname + '</span> <span class="text-secondary small">' + data[key].place + '</span></p><p class="mb-0 small">' + data[key].detail + '</p></div></div>');
     })
 
-    getObj("overray").hide();
+    $("#overray").fadeOut();
   });
 
   //カテゴリ切り替え

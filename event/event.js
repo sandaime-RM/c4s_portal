@@ -45,7 +45,7 @@ onAuthStateChanged(auth, (snapshot) => {
     else { status = 0; start(end); }
   })
 
-  function end() { getObj("overray").hide(); }
+  function end() { $("#overray").fadeOut(); }
 });
 
 //読み込み時に実行

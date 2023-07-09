@@ -1,8 +1,9 @@
 <!--Twitter風のヘッダー-->
 <div class="container">
   <div class="mx-2 position-relative" style="height: 50px;">
-    <img class="position-absolute bottom-0 start-0 rounded-circle shadow-sm" src="/icons/person-circle-gray.svg" style="height: 40px; cursor: pointer;" data-bs-toggle="offcanvas" href="#menu" id="menuBtn"></img>
-    <img class="position-absolute bottom-0 start-50 translate-middle-x" src="/img/logoAlpha.png" onclick="location.href='/'" style="height: 40px; cursor: pointer;">
+    <img class="position-absolute bottom-0 start-0 rounded-circle shadow-sm pointer" src="/icons/person-circle-gray.svg" style="height: 40px;" data-bs-toggle="offcanvas" href="#menu" id="menuBtn"></img>
+    <img class="position-absolute bottom-0 start-50 translate-middle-x pointer" src="/img/logoAlpha.png" onclick="location.href='/'" style="height: 40px;">
+    <img class="position-absolute bottom-0 end-0 pointer" src="/img/bell.svg" style="height: 30px;" data-bs-toggle="offcanvas" href="#notice" id="noticeBtn"></img>
   </div>
   <hr>
 </div>
@@ -52,5 +53,23 @@
       <!--ログアウトボタン-->
       <h4 style="line-height: 45px; cursor: pointer;" onclick="logout()"><i class="bi bi-person-x mx-3"></i>ログアウト</h4>
     </div>
+  </div>
+</div>
+
+<!--通知一覧-->
+<div class="offcanvas offcanvas-end" tabindex="-1" id="notice">
+  <div class="offcanvas-header">
+    <h5 class="text-center">通知</h5>
+    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+  </div>
+  <div class="offcanvas-body">
+    <p class="mt-3 text-danger text-center" id="noNotice">通知はありません</p>
+    <ul class="list-group list-group-flush" id="noticeList">
+
+      <li class="list-group-item">
+        
+      </li>
+
+    </ul>
   </div>
 </div>

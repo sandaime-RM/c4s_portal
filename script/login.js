@@ -1,7 +1,7 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-app.js";
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-analytics.js";
 import { GoogleAuthProvider, getAuth, onAuthStateChanged, signInWithPopup, signOut } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-auth.js";
-import { getDatabase, ref, get, push } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-database.js";
+import { getDatabase, ref, get, push, onValue, remove } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-database.js";
 import { getObj } from "/script/methods.js";
 
 const firebaseConfig = {
@@ -114,6 +114,46 @@ onAuthStateChanged(auth, (snapshot) => {
           }
         }
 
+        //通知の描画
+        onValue(ref(db, "notices"), (snapshot) => {
+          var data = snapshot.val();
+          getObj("noNotice").show();
+          if(data) {
+            Object.keys(data).forEach((key) => {
+              var notice = data[key];
+              //30日以上過ぎた通知は削除
+              if(30 * 24 * 60 * 60 * 1000 < (new Date().getTime() - new Date(notice.time).getTime()))
+              { remove(ref(db, "notices/" + key)); }
+              //30日以内の通知なら表示
+              else {
+                //通知表示条件を満たしているか確認
+                var show;
+                if(notice.target == "whole") { show = true; }
+                else if(notice.target == "active" && (status == 1 || status == 2)) { show = true; }
+                else if(notice.target == "admin" && status == 2) { show = true; }
+                else if(0 < notice.target.indexOf(user.uid)) { show = true; }
+                //満たしているとき表示
+                if(show) {
+                  getObj("noNotice").hide();
+                  var titles = {
+                    attender : "出席登録されました",
+                    purchase : "商品が購入されました",
+                    newEvent : "新しいイベントが登録されました",
+                    newProject : "新しい企画が作られました"
+                  }
+                  let title = titles[notice.type];
+                  if(!title) { title = notice.type; }
+                  getObj("noticeList").head('<li class="list-group-item" id="notice' + notice.time + '"><h5>' + title + '</h5><p>' + notice.content + '</p></li>');
+                  if(notice.link) { 
+                    getObj("notice" + notice.time).onclick = 'location.href="' + notice.link + '"';
+                    getObj("notice" + notice.time).style.cursor = "pointer";
+                  }
+                }
+              }
+            });
+          }
+        });
+
         //まだメニューがないページは旧スクリプト
         if(!getObj("menu")){
           if(snapshot.child("point").exists()) {
@@ -190,9 +230,3 @@ export function logout() {
   });
 }
 window.logout = logout;
-
-//誰かが出席登録をしたら管理者に通知する
-export function AttendanceNotification() {
-  console.error("function AttendanceNotification is not built.")
-}
-window.AttendanceNotification = AttendanceNotification;

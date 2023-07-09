@@ -33,7 +33,7 @@ var status = 0;
 onAuthStateChanged(auth, (snapshot) => {
   //ヘッダーを描画(メニューを含む)
   $("#header").load("/frames/header.html", function () {
-    $("#menu-" + location.pathname.split('/')[1]).css("color", "navy");
+    $("#menu-" + location.pathname.split('/')[1]).css("color", "darkorange");
   });
 
   user = snapshot;

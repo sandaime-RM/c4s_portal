@@ -32,17 +32,19 @@ onAuthStateChanged(auth, (snapshot) => {
     items = snapshot.val();
 
     Object.keys(items).forEach((key) => {
-      var pricetext = items[key].price;
-      if(items[key].paytype) { pricetext += "円"; } else { pricetext += "pts"; }
-      var styletext;
-      if(items[key].style) { styletext = "レンタル"; } else { styletext = "販売"; }
-      getObj("items").tail(
-        '<div class="col hover" id="cardOf' + key + '"><div onclick="location.href=\'/shop/item.html?key=' + key + '\'" class="card h-100 position-relative" style="cursor: pointer;"><h6 class="price-' + items[key].paytype + '">' + pricetext + '</h6><img src="/img/noimage.svg" class="card-img-top itemimg" id="imgOf' + key + '"><div class="card-body"><h6 class="card-' + items[key].style + '">' + styletext + '</h6><h5 class="card-title">' + items[key].name + '</h5><p class="card-text" style="text-align: justify;">' + items[key].detail + '</p></div><div class="card-footer"><small class="text-muted">' + items[key].owner.name + '・' + DateText(new Date(items[key].time)) + '</small></div></div></div>'
-      ); 
-      if(items[key].img) {
-        getURL(stref(storage, "store/" + items[key].img)).then((url) => {
-          getObj("imgOf" + key).src = url;
-        });
+      if(0 < items[key].num) {
+        var pricetext = items[key].price;
+        if(items[key].paytype) { pricetext += "円"; } else { pricetext += "pts"; }
+        var styletext;
+        if(items[key].style) { styletext = "レンタル"; } else { styletext = "販売"; }
+        getObj("items").tail(
+          '<div class="col hover" id="cardOf' + key + '"><div onclick="location.href=\'/shop/item.html?key=' + key + '\'" class="card h-100 position-relative" style="cursor: pointer;"><h6 class="price-' + items[key].paytype + '">' + pricetext + '</h6><img src="/img/noimage.svg" class="card-img-top itemimg" id="imgOf' + key + '"><div class="card-body"><h6 class="card-' + items[key].style + '">' + styletext + '</h6><h5 class="card-title">' + items[key].name + '</h5><p class="card-text" style="text-align: justify;">' + items[key].detail + '</p></div><div class="card-footer"><small class="text-muted">' + items[key].owner.name + '・' + DateText(new Date(items[key].time)) + '</small></div></div></div>'
+        ); 
+        if(items[key].img) {
+          getURL(stref(storage, "store/" + items[key].img)).then((url) => {
+            getObj("imgOf" + key).src = url;
+          });
+        }
       }
     });
 
@@ -53,7 +55,7 @@ onAuthStateChanged(auth, (snapshot) => {
 window.onload = function () {
   getObj("all_tab").onclick = function () {
     Object.keys(items).forEach((key) => {
-      getObj("cardOf" + key).show();
+      if(0 < items[key].num) { getObj("cardOf" + key).show(); }
     });
     $("#all_tab").removeClass("unclicked").addClass("clicked");
     $("#uru_tab").removeClass("clicked").addClass("unclicked");
@@ -61,8 +63,10 @@ window.onload = function () {
   };
   getObj("uru_tab").onclick = function () {
     Object.keys(items).forEach((key) => {
-      if(items[key].style) { getObj("cardOf" + key).hide(); }
-      else { getObj("cardOf" + key).show(); }
+      if(0 < items[key].num) {
+        if(items[key].style) { getObj("cardOf" + key).hide(); }
+        else { getObj("cardOf" + key).show(); }
+      }
     })
     $("#all_tab").removeClass("clicked").addClass("unclicked");
     $("#uru_tab").removeClass("unclicked").addClass("clicked");
@@ -70,8 +74,10 @@ window.onload = function () {
   };
   getObj("kas_tab").onclick = function () {
     Object.keys(items).forEach((key) => {
-      if(items[key].style) { getObj("cardOf" + key).show(); }
-      else { getObj("cardOf" + key).hide(); }
+      if(0 < items[key].num) {
+        if(items[key].style) { getObj("cardOf" + key).show(); }
+        else { getObj("cardOf" + key).hide(); }
+      }
     })
     $("#all_tab").removeClass("clicked").addClass("unclicked");
     $("#uru_tab").removeClass("clicked").addClass("unclicked");

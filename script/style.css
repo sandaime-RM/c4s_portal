@@ -23,6 +23,10 @@
   cursor: pointer;
 }
 
+.pointer {
+  cursor: pointer;
+}
+
 .loader,
 .loader:before,
 .loader:after {

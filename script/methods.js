@@ -8,6 +8,7 @@ export function getObj(id) {
     }
     obj.head = function ( HTML ) { this.innerHTML = HTML + obj.innerHTML; }
     obj.tail = function ( HTML ) { this.innerHTML += HTML; }
+    obj.html = function ( HTML ) { this.innerHTML = HTML; }
   }
   return obj;
 }

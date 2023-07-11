@@ -101,280 +101,312 @@
   </svg>
 
   <!--メインの画面-->
-  <main>
-    <div class="container">
-      <!--タイトル・カルーセルに置き換えてもいいかも-->
-      <!--<iframe src="/iframe/carousel" frameborder="0"></iframe>-->
-      <div class="py-3 text-center">
-        <h2 class="fs-2 fw-normal">C4's Portal</h2>
-        <p class="text-secondary">～ワクワクを作りつづける～</p>
-      </div>
-
-      <!--メイン-->
-      <div class="row mx-auto my-3">
-        <!--開催中のイベントがあれば表示-->
-        <div id="heldevent" class="col-lg-6 mx-auto" style="max-width: 480px; text-align: center; border-radius: 15px; padding: 10px 10px; outline: solid 1px darkgreen; background-color: rgb(226, 250, 226); display: none;">
-          <h5 style="text-align: center; color: darkgreen;">開催中のイベント</h5>
-          <div class="card shadow-sm" style="border-bottom: 12px solid green; border-radius: 10px;">
-            <div class="card-body">
-              <div>
-                <h5 class="card-title" id="heldevent_title"></h5>
-                <h5 class="card-subtitle mb-2">
-                  <span class="badge bg-danger"><span id="heldevent_place"></span>にて開催中!</span>
-                </h5>
-                <p class="card-text small">
-                  <div class="alert alert-light" style="padding: 5px 10px; border-radius: 5px; text-align: justify;" id="heldevent_description"></div>
-                  <p class="my-1 text-primary" id="heldevent_tags"></p>
-                </p>
-              </div>
-              <div class="card-link small mt-3" style="color: darkred; text-align: center;" id="attendbtn-text" onclick="openmodal('attend')">
-                <h6>出席登録する</h6>
-              </div>
-            </div>
-          </div>
-        </div>
-  
-        <!--プロフィール-->
-        <div id="profile" class="col-lg-6 mx-auto" style="max-width: 480px; margin: 20px auto; padding: 10px 10px; outline: solid 1px lightgray; border-radius: 10px; display: none;">
-          <div class="row mb-2" style="display: flex; align-items: flex-end;">
-            <div class="col-sm-4 mt-2">
-              <div id="userPic" style="width: 80%; max-width: 100px; height: auto; margin: 0 auto;">
-                <img src="icons/person-circle-gray.svg" style="width: 100%; height: 100%;">
-              </div>
-            </div>
-            <div class="col-sm-8 mt-2" style="text-align: center; padding: auto 0;">
-              <h4 id="userName"></h4>
-              <p id="userRole" style="color: darkslateblue;" class="small"></p>
-              <h5 style="width: 50%; margin: auto;"><span class="badge w-100" id="ranktext"></span></h5>
-            </div>
-          </div>
-          <hr>
-          <!--ポイント-->
-          <div style="text-align: center;">
-            <p style="margin-bottom: 0;">あなたのC4'sポイント</p>
-            <h1 id="pointnum" style="font-weight: bold;"></h1>
-            <div class="progress" style="height: 10px;" id="pointbars">
-              <div class="progress-bar progress-bar-striped" style="width: 0%;" role="progressbar" id="pointbar0"></div>
-              <div class="progress-bar progress-bar-striped" style="width: 0%;" role="progressbar" id="pointbar1"></div>
-              <div class="progress-bar progress-bar-striped" style="width: 0%;" role="progressbar" id="pointbar2"></div>
-              <div class="progress-bar progress-bar-striped" style="width: 0%;" role="progressbar" id="pointbar3"></div>
-            </div>
-            <div id="restpoint" style="text-align: right; margin: 0;"></div>
-            <!--<div style="margin: 0;">ランク制度についてくわしくは<a href="" style="text-decoration: none;">こちら</a></div>-->
-            <div class="row mx-auto" style="width: 100%; max-width: 300px;">
-              <div class="w-50 px-1">
-                <button type="button" class="btn btn-outline-secondary btn-sm w-100" style="border-radius: 15px;" data-bs-toggle="modal" data-bs-target="#pointModal" id="pointHistoryBtn">
-                  ポイント履歴
-                </button>
-              </div>
-              <div class="w-50 px-1">
-                <button type="button" class="btn btn-outline-secondary btn-sm w-100" style="border-radius: 15px;" data-bs-toggle="modal" data-bs-target="#giftModal" id="sendPointBtn">
-                  ポイントをおくる
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!--フッター(というかリンク集)-->
-      <div class="py-3">
-        <h3 class="text-center fw-normal text-secondary">リンク集</h3>
-
-        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-2 g-3 mb-3">
-          <div class="col">
-            <ul class="list-group">
-              <li class="list-group-item"><a href="https://c4-s.net/">C4's HP</a></li>
-              <li class="list-group-item"><a href="https://twitter.com/C4s_TUS">Twitter</a></li>
-              <li class="list-group-item"><a href="https://www.instagram.com/c4s_tus/">Instagram</a></li>
-              <li class="list-group-item"><a href="https://t.co/fH9w6pEkUO">公式LINE</a></li>
-              <li class="list-group-item"><a href="https://peing.net/ja/c4s_tus">Peing 質問箱</a></li>
-              <li class="list-group-item"><a href="https://www.tus-act.tus.ac.jp/club_admin/index.php?c=login_1&amp;next_c=clubinfo">TUS-ACTフォーム</a></li>
-            </ul>
-          </div>
-  
-          <div class="col">
-            <ul class="list-group">
-              <li class="list-group-item"><a href="https://c4s.esa.io/">esa</a><small class="text-secondary">（文書管理）</small></li>
-              <li class="list-group-item"><a href="https://www.value-domain.com/login.php">Value Domain</a><small class="text-secondary">（メール，サーバー，ドメイン）</small></li>
-              <li class="list-group-item"><a href="https://gitlab.com/users/sign_in">GitLab</a><small class="text-secondary">（公式HP用）</small></li>
-              <li class="list-group-item"><a href="https://app.netlify.com/login">Netlify</a><small class="text-secondary">（公式HP用）</small></li>
-              <li class="list-group-item"><a href="https://be.contentful.com/login">Contentful</a><small class="text-secondary">（公式HPでの作品公開用）</small></li>
-              <li class="list-group-item"><a href="vr/index.html">Aframeコンテンツ</a></li>
-            </ul>
-          </div>
-            
-        </div>
-      </div>
+  <div class="container mb-5">
+    <!--タイトル・カルーセルに置き換えてもいいかも-->
+    <!--<iframe src="/iframe/carousel" frameborder="0"></iframe>-->
+    <div class="py-3 text-center">
+      <h2 class="fs-2 fw-normal">C4's Portal</h2>
+      <p class="text-secondary">～ワクワクを作りつづける～</p>
     </div>
-  </main>
 
-  <!--右下に表示するボタン-->
-  <div class="position-fixed end-0 bottom-0 mx-3 my-3">
-    <!--QRボタン-->
-    <div class="bg-dark text-light shadow rounded-circle position-fixed end-0 bottom-0 m-3 text-center" style="cursor: pointer; width: 50px; height: 50px;" data-bs-target="#qrModal" data-bs-toggle="modal">
-      <i class="bi bi-qr-code h4" style="line-height: 50px;"></i>
-    </div>
-  </div>
-  
-  <!-- 出席登録モーダル -->
-  <div class="modal fade" id="attendModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="attendModalLabel">出席登録</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    <!--メイン-->
+    <div class="row mx-auto my-3">
+      <!--開催中のイベントがあれば表示-->
+      <div id="heldevent" class="col-lg-6 mx-auto" style="max-width: 480px; text-align: center; border-radius: 15px; padding: 10px 10px; outline: solid 1px darkgreen; background-color: rgb(226, 250, 226); display: none;">
+        <h5 style="text-align: center; color: darkgreen;">開催中のイベント</h5>
+        <div class="card shadow-sm" style="border-bottom: 12px solid green; border-radius: 10px;">
+          <div class="card-body">
+            <div>
+              <h5 class="card-title" id="heldevent_title"></h5>
+              <h5 class="card-subtitle mb-2">
+                <span class="badge bg-danger"><span id="heldevent_place"></span>にて開催中!</span>
+              </h5>
+              <p class="card-text small">
+                <div class="alert alert-light" style="padding: 5px 10px; border-radius: 5px; text-align: justify;" id="heldevent_description"></div>
+                <p class="my-1 text-primary" id="heldevent_tags"></p>
+              </p>
+            </div>
+            <div class="card-link small mt-3" style="color: darkred; text-align: center;" id="attendbtn-text" onclick="openmodal('attend')">
+              <h6>出席登録する</h6>
+            </div>
+          </div>
         </div>
-        <div class="modal-body" class="py-5">
-          <div id="attend-btnform">
-            <h5 class="text-center">出席コード</h5>
-            <input type="number" class="form-control text-center w-75 mx-auto"
-              style="
-                font-weight: bold; font-size: 20px;
-                letter-spacing: 1.5em; text-indent: 1.5em;
-                line-height: 35px; caret-color: white;
-                border: none; border-bottom: solid 1px gray; border-radius: 0;
-                " id="code">
-            <div class="w-75 mx-auto">
-              <button type="button" class="col-12 btn btn-outline-dark mt-5 rounded-pill w-100" onclick="attend()" id="attendBtn"><i class="bi bi-check"> </i>出席登録</button>
-            </div>
-            <div id="attend-failed" class="text-center text-danger mt-5">
-              <h1><i class="bi bi-x-lg"></i></h1>
-              <h3>出席コードが違います！</h3>
+      </div>
+
+      <!--プロフィール-->
+      <div id="profile" class="col-lg-6 mx-auto" style="max-width: 480px; margin: 20px auto; padding: 10px 10px; outline: solid 1px lightgray; border-radius: 10px; display: none;">
+        <div class="row mb-2" style="display: flex; align-items: flex-end;">
+          <div class="col-sm-4 mt-2">
+            <div id="userPic" style="width: 80%; max-width: 100px; height: auto; margin: 0 auto;">
+              <img src="icons/person-circle-gray.svg" style="width: 100%; height: 100%;">
             </div>
           </div>
-          <div id="attend-success" class="text-center text-success">
-            <h1><i class="bi bi-check-lg"></i></h1>
-            <h3>出席が登録されました！</h3>
-            <b><span id="attend-points"></span>ポイント獲得！</b>
+          <div class="col-sm-8 mt-2" style="text-align: center; padding: auto 0;">
+            <h4 id="userName"></h4>
+            <p id="userRole" style="color: darkslateblue;" class="small"></p>
+            <h5 style="width: 50%; margin: auto;"><span class="badge w-100" id="ranktext"></span></h5>
           </div>
-          <div id="attend-already" class="text-primary text-center">
-            <h1><i class="bi bi-check-lg"></i></h1>
-            <h3>すでに出席登録されています</h3>
+        </div>
+        <hr>
+        <!--ポイント-->
+        <div style="text-align: center;">
+          <p style="margin-bottom: 0;">あなたのC4'sポイント</p>
+          <h1 id="pointnum" style="font-weight: bold;"></h1>
+          <div class="progress" style="height: 10px;" id="pointbars">
+            <div class="progress-bar progress-bar-striped" style="width: 0%;" role="progressbar" id="pointbar0"></div>
+            <div class="progress-bar progress-bar-striped" style="width: 0%;" role="progressbar" id="pointbar1"></div>
+            <div class="progress-bar progress-bar-striped" style="width: 0%;" role="progressbar" id="pointbar2"></div>
+            <div class="progress-bar progress-bar-striped" style="width: 0%;" role="progressbar" id="pointbar3"></div>
+          </div>
+          <div id="restpoint" style="text-align: right; margin: 0;"></div>
+          <!--<div style="margin: 0;">ランク制度についてくわしくは<a href="" style="text-decoration: none;">こちら</a></div>-->
+          <div class="row mx-auto" style="width: 100%; max-width: 300px;">
+            <div class="w-50 px-1">
+              <button type="button" class="btn btn-outline-secondary btn-sm w-100" style="border-radius: 15px;" data-bs-toggle="modal" data-bs-target="#pointModal" id="pointHistoryBtn">
+                ポイント履歴
+              </button>
+            </div>
+            <div class="w-50 px-1">
+              <button type="button" class="btn btn-outline-secondary btn-sm w-100" style="border-radius: 15px;" data-bs-toggle="modal" data-bs-target="#giftModal" id="sendPointBtn">
+                ポイントをおくる
+              </button>
+            </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
 
-  <!-- QRモーダル -->
-  <div class="modal fade" id="qrModal" tabindex="-1" aria-labelledby="qrModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="qrModalLabel">QRコード</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body text-center">
-          <canvas id="qr" width="240" height="240"></canvas>
-          <div class="text-center py-3">
-            <span id="info1"></span><br>
-            <span class="text-secondary small" id="info2"></span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!--ポイント履歴モーダル-->
-  <div class="modal fade" id="pointModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">ポイント履歴</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <ul class="list-group list-group-flush w-100" id="pointHistory">
-            <p style="text-align: center; color: darkred; margin-top: 15px;">履歴がありません</p>
+    <!--フッター(というかリンク集)-->
+    <div class="py-3">
+      <h3 class="text-center fw-normal text-secondary">リンク集</h3>
+      <div class="row row-cols-1 row-cols-sm-2 row-cols-md-2 g-3 mb-3">
+        <div class="col">
+          <ul class="list-group">
+            <li class="list-group-item"><a href="https://c4-s.net/">C4's HP</a></li>
+            <li class="list-group-item"><a href="https://twitter.com/C4s_TUS">Twitter</a></li>
+            <li class="list-group-item"><a href="https://www.instagram.com/c4s_tus/">Instagram</a></li>
+            <li class="list-group-item"><a href="https://t.co/fH9w6pEkUO">公式LINE</a></li>
+            <li class="list-group-item"><a href="https://peing.net/ja/c4s_tus">Peing 質問箱</a></li>
+            <li class="list-group-item"><a href="https://www.tus-act.tus.ac.jp/club_admin/index.php?c=login_1&amp;next_c=clubinfo">TUS-ACTフォーム</a></li>
           </ul>
         </div>
-        <div class="modal-footer py-3" style="text-align: center;" id="addhistory">
-          <a onclick="showhistory()" style="text-decoration: none; cursor: pointer;">さらに表示</a>
+        <div class="col">
+          <ul class="list-group">
+            <li class="list-group-item"><a href="https://c4s.esa.io/">esa</a><small class="text-secondary">（文書管理）</small></li>
+            <li class="list-group-item"><a href="https://www.value-domain.com/login.php">Value Domain</a><small class="text-secondary">（メール，サーバー，ドメイン）</small></li>
+            <li class="list-group-item"><a href="https://gitlab.com/users/sign_in">GitLab</a><small class="text-secondary">（公式HP用）</small></li>
+            <li class="list-group-item"><a href="https://app.netlify.com/login">Netlify</a><small class="text-secondary">（公式HP用）</small></li>
+            <li class="list-group-item"><a href="https://be.contentful.com/login">Contentful</a><small class="text-secondary">（公式HPでの作品公開用）</small></li>
+            <li class="list-group-item"><a href="vr/index.html">Aframeコンテンツ</a></li>
+          </ul>
         </div>
       </div>
     </div>
-  </div>
-  
-  <!--ポイントギフトモーダル-->
-  <div class="modal fade" id="giftModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">ポイントをおくる</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body py-3">
-          <h5 style="text-align: center;">部員にポイントをプレゼント</h5>
-          <div class="w-50 mx-auto" style="min-width: 300px;" id="giftForm">
-            <div class="form-floating mb-1">
-              <input type="number" class="form-control" id="giftNum" placeholder="0">
-              <label for="giftNum">送信するポイント数</label>
-            </div>
-            <button class="btn btn-dark w-100" onclick="sendgift()">リンクを作成</button>
-            <div class="alert alert-dark mt-2" role="alert" id="giftalert" style="display: none;"></div>
-          </div>
-        </div>
-        <!--リンクが存在するならこれを表示-->
-        <div class="modal-footer" id="giftList-footer">
-          <div class="w-100 text-left mb-2" id="giftList">
-            <h5 style="text-align: center;">受け取り用URL</h5>
-            
-          </div>
-        </div>
+
+    <!--通知送信フォーム-->
+    <div class="adminonly mb-5 mw-md mx-auto">
+      <h5 class="text-center">通知送信フォーム</h5>
+      <p class="text-secondary text-center">管理者のみ</p>
+      <div class="form-floating mb-3">
+        <input type="text" class="form-control" id="noticeTitle" placeholder="title">
+        <label for="noticeTitle">タイトル</label>
       </div>
-    </div>
-  </div>
-
-  <!-- ポイント獲得モーダル -->
-  <div class="modal fade" id="getpointModal" data-bs-backdrop="static" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">ポイント受け取り</h5>
-        </div>
-        <div class="modal-body text-center">
-          <!--受け取り成功-->
-          <div id="loading-getpoint">
-            <div class="spinner-grow text-primary mt-5 mx-auto" role="status">
-              <span class="visually-hidden">Loading...</span>
-            </div>
-          </div>
-          <div id="success-getpoint" style="display: none;">
-            <h4 id="pointsender">松浦竜征</h4>
-            <p>さんからポイントを受け取りました</p>
-  
-            <h1 id="pointamount">500pt</h1>
-
-            <div class="w-50 mx-auto mt-5">
-              <button class="btn btn-primary w-100" data-bs-dismiss="modal" aria-label="Close">OK</button>
-            </div>
-          </div>
-          <!--存在しないギフトを開いたとき-->
-          <div id="failed-getpoint" style="display: none;">
-            <h4 style="color: darkred;">このギフトは受け取り済みです</h4>
-
-            <div class="w-50 mx-auto mt-3">
-              <button class="btn btn-dark w-100" data-bs-dismiss="modal" aria-label="Close">とじる</button>
-            </div>
-          </div>
-          <!--自分宛てのギフトを開いたらキャンセル画面-->
-          <div id="cancel-getpoint" style="display: none;">
-            <h4 class="mb-3" style="color: darkred;" id="getpoint-error">自分で作成したギフトです</h4>
-            <p>ギフトを取り消しますか？<br><span class="text-secondary">※ポイントが元に戻ります</span></p>
-
-            <div class="w-75 mx-auto row mt-5">
-              <div class="w-50 px-2">
-                <button class="btn btn-secondary w-100" data-bs-dismiss="modal" aria-label="Close">とじる</button>
-              </div>
-              <div class="w-50 px-2">
-                <button class="btn btn-danger w-100" onclick="cancel_gift()">取り消す</button>
-              </div>
-            </div>
-          </div>
-        </div>
+      <div class="form-floating mb-3">
+        <textarea type="text" class="form-control" id="noticeContent" placeholder="content" style="height: 5em;"></textarea>
+        <label for="noticeContent">詳細</label>
+      </div>
+      <div class="form-floating mb-3">
+        <select class="form-select" id="noticeTarget">
+          <option value="whole">全体公開</option>
+          <option value="active">部員のみ</option>
+          <option value="admin">管理者のみ</option>
+        </select>
+        <label for="noticeTarget">公開範囲</label>
+      </div>
+      <div class="form-floating mb-3">
+        <input type="date" class="form-control" id="noticeTime" placeholder="time"></input>
+        <label for="noticeTime">公開開始日(午前4時に公開になります)</label>
+      </div>
+      <div class="form-floating mb-3">
+        <input type="date" class="form-control" id="noticeDead" placeholder="dead"></input>
+        <label for="noticeDead">公開終了日(23:59に削除されます)</label>
+      </div>
+      <div class="form-floating mb-3">
+        <input type="url" class="form-control" id="noticeLink" placeholder="url"></input>
+        <label for="noticeLink">遷移先(任意)</label>
+      </div>
+      <div class="w-50 mx-auto mb-5">
+        <button class="btn btn-dark w-100" onclick="sendNotice()">送信</button>
       </div>
     </div>
   </div>
 </body>
+
+<!--右下に表示するボタン-->
+<div class="position-fixed end-0 bottom-0 mx-3 my-3">
+  <!--QRボタン-->
+  <div class="bg-dark text-light shadow rounded-circle position-fixed end-0 bottom-0 m-3 text-center" style="cursor: pointer; width: 50px; height: 50px;" data-bs-target="#qrModal" data-bs-toggle="modal">
+    <i class="bi bi-qr-code h4" style="line-height: 50px;"></i>
+  </div>
+</div>
+
+<!-- 出席登録モーダル -->
+<div class="modal fade" id="attendModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="attendModalLabel">出席登録</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body" class="py-5">
+        <div id="attend-btnform">
+          <h5 class="text-center">出席コード</h5>
+          <input type="number" class="form-control text-center w-75 mx-auto"
+            style="
+              font-weight: bold; font-size: 20px;
+              letter-spacing: 1.5em; text-indent: 1.5em;
+              line-height: 35px; caret-color: white;
+              border: none; border-bottom: solid 1px gray; border-radius: 0;
+              " id="code">
+          <div class="w-75 mx-auto">
+            <button type="button" class="col-12 btn btn-outline-dark mt-5 rounded-pill w-100" onclick="attend()" id="attendBtn"><i class="bi bi-check"> </i>出席登録</button>
+          </div>
+          <div id="attend-failed" class="text-center text-danger mt-5">
+            <h1><i class="bi bi-x-lg"></i></h1>
+            <h3>出席コードが違います！</h3>
+          </div>
+        </div>
+        <div id="attend-success" class="text-center text-success">
+          <h1><i class="bi bi-check-lg"></i></h1>
+          <h3>出席が登録されました！</h3>
+          <b><span id="attend-points"></span>ポイント獲得！</b>
+        </div>
+        <div id="attend-already" class="text-primary text-center">
+          <h1><i class="bi bi-check-lg"></i></h1>
+          <h3>すでに出席登録されています</h3>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- QRモーダル -->
+<div class="modal fade" id="qrModal" tabindex="-1" aria-labelledby="qrModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="qrModalLabel">QRコード</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body text-center">
+        <canvas id="qr" width="240" height="240"></canvas>
+        <div class="text-center py-3">
+          <span id="info1"></span><br>
+          <span class="text-secondary small" id="info2"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--ポイント履歴モーダル-->
+<div class="modal fade" id="pointModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">ポイント履歴</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <ul class="list-group list-group-flush w-100" id="pointHistory">
+          <p style="text-align: center; color: darkred; margin-top: 15px;">履歴がありません</p>
+        </ul>
+      </div>
+      <div class="modal-footer py-3" style="text-align: center;" id="addhistory">
+        <a onclick="showhistory()" style="text-decoration: none; cursor: pointer;">さらに表示</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--ポイントギフトモーダル-->
+<div class="modal fade" id="giftModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">ポイントをおくる</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body py-3">
+        <h5 style="text-align: center;">部員にポイントをプレゼント</h5>
+        <div class="w-50 mx-auto" style="min-width: 300px;" id="giftForm">
+          <div class="form-floating mb-1">
+            <input type="number" class="form-control" id="giftNum" placeholder="0">
+            <label for="giftNum">送信するポイント数</label>
+          </div>
+          <button class="btn btn-dark w-100" onclick="sendgift()">リンクを作成</button>
+          <div class="alert alert-dark mt-2" role="alert" id="giftalert" style="display: none;"></div>
+        </div>
+      </div>
+      <!--リンクが存在するならこれを表示-->
+      <div class="modal-footer" id="giftList-footer">
+        <div class="w-100 text-left mb-2" id="giftList">
+          <h5 style="text-align: center;">受け取り用URL</h5>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ポイント獲得モーダル -->
+<div class="modal fade" id="getpointModal" data-bs-backdrop="static" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">ポイント受け取り</h5>
+      </div>
+      <div class="modal-body text-center">
+        <!--受け取り成功-->
+        <div id="loading-getpoint">
+          <div class="spinner-grow text-primary mt-5 mx-auto" role="status">
+            <span class="visually-hidden">Loading...</span>
+          </div>
+        </div>
+        <div id="success-getpoint" style="display: none;">
+          <h4 id="pointsender">松浦竜征</h4>
+          <p>さんからポイントを受け取りました</p>
+
+          <h1 id="pointamount">500pt</h1>
+
+          <div class="w-50 mx-auto mt-5">
+            <button class="btn btn-primary w-100" data-bs-dismiss="modal" aria-label="Close">OK</button>
+          </div>
+        </div>
+        <!--存在しないギフトを開いたとき-->
+        <div id="failed-getpoint" style="display: none;">
+          <h4 style="color: darkred;">このギフトは受け取り済みです</h4>
+
+          <div class="w-50 mx-auto mt-3">
+            <button class="btn btn-dark w-100" data-bs-dismiss="modal" aria-label="Close">とじる</button>
+          </div>
+        </div>
+        <!--自分宛てのギフトを開いたらキャンセル画面-->
+        <div id="cancel-getpoint" style="display: none;">
+          <h4 class="mb-3" style="color: darkred;" id="getpoint-error">自分で作成したギフトです</h4>
+          <p>ギフトを取り消しますか？<br><span class="text-secondary">※ポイントが元に戻ります</span></p>
+
+          <div class="w-75 mx-auto row mt-5">
+            <div class="w-50 px-2">
+              <button class="btn btn-secondary w-100" data-bs-dismiss="modal" aria-label="Close">とじる</button>
+            </div>
+            <div class="w-50 px-2">
+              <button class="btn btn-danger w-100" onclick="cancel_gift()">取り消す</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 </html>

@@ -310,27 +310,6 @@ export function openmodal(target) {
 }
 window.openmodal = openmodal;
 
-//Twitterみたいな日付を文字列で取得:made by toyton
-export function getdatetext(date) {
-  var dif = Math.floor((new Date() - date) / 1000 / 60 / 60 / 24);
-  if(dif < 7){
-    if(new Date().getDate() == date.getDate()){
-      return "きょう";
-    }
-    else{
-      switch (Math.floor(dif)) {
-        case 0: return "きのう";
-        case 1: return "一昨日";
-        default: return String(Math.floor(dif)) + "日前";
-      }
-    }
-  }
-  else{
-    return String(date.getMonth() + 1) + "月" + String(date.getDate()) + "日"
-  }
-}
-window.getdatetext = getdatetext;
-
 //ポイント送信リンクを作成
 export function sendgift() {
   if(!user || !c4suser) {
@@ -442,3 +421,36 @@ export function repoint(amount) {
   getObj("ranktext").innerText = ranks.name[ranknum];
   getObj("ranktext").style.backgroundColor = ranks.color[ranknum];
 }
+
+//通知を送信
+export function sendNotice() {
+  var data = {};
+
+  data.title = getObj("noticeTitle").value;
+  data.content = getObj("noticeContent").value;
+  data.target = getObj("noticeTarget").value;
+  data.time = new Date(getObj("noticeTime").value).getTime();
+  data.dead = new Date(getObj("noticeDead").value).getTime();
+  data.link = getObj("noticeLink").value;
+
+  try {
+    if(!data.title) { e("タイトルが入力されていません"); }
+    if(!data.time) { e("公開日が入力されていません"); }
+    if(!data.dead) { data.dead = new Date().getTime() + (1000 * 60 * 60 * 24 * 14); }
+    if(data.dead < data.time) { e("日付が不正です"); }
+    function e ( msg ) { throw new Error ( msg ); }
+  } catch (msg) {
+    alert(msg); return;
+  }
+  console.table(data);
+  push(ref(db, "notice"), data).then(() => {
+    getObj("noticeTitle").value = "";
+    getObj("noticeContent").value = "";
+    getObj("noticeTarget").value = "whole";
+    getObj("noticeTime").value = "";
+    getObj("noticeDead").value = "";
+    getObj("noticeLink").value = "";
+    alert("通知を送信しました");
+  });
+}
+window.sendNotice = sendNotice;

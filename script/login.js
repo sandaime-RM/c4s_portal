@@ -115,29 +115,32 @@ onAuthStateChanged(auth, (snapshot) => {
         }
 
         //通知の描画
-        onValue(ref(db, "notices"), (snapshot) => {
+        onValue(ref(db, "notice"), (snapshot) => {
           var data = snapshot.val();
           getObj("noNotice").show();
+          getObj("noticeList").html("");
+          console.log(getObj("noticeList").innerHTML)
           if(data) {
             Object.keys(data).forEach((key) => {
               var notice = data[key];
               //期限を過ぎた通知は削除
-              if(new Date(notice.dead).getTime() < new Date().getTime())
+              if(new Date(notice.dead).getTime() + (1000 * 60 * 60 * 15) < new Date().getTime())
               { remove(ref(db, "notices/" + key)); }
-              //30日以内の通知なら表示
-              else {
+              //表示期間内の通知なら表示
+              else if(new Date(notice.time).getTime() - (1000 * 60 * 60 * 5) < new Date().getTime()) {
                 //通知表示条件を満たしているか確認
-                var show;
-                if(notice.target == "whole") { show = true; }
-                else if(notice.target == "active" && (status == 1 || status == 2)) { show = true; }
-                else if(notice.target == "admin" && status == 2) { show = true; }
-                else if(0 < notice.target.indexOf(user.uid)) { show = true; }
+                var show = false;
+                var color = "";
+                if(notice.target == "whole") { show = true; color = "black"; }
+                else if(notice.target == "active" && (status == 1 || status == 2)) { show = true; color = "darkblue"; }
+                else if(notice.target == "admin" && status == 2) { show = true; color = "darkred"; }
+                else if(0 < notice.target.indexOf(user.uid)) { show = true; color = "darkgreen"; }
                 //満たしているとき表示
                 if(show) {
                   getObj("noNotice").hide();
                   var onclick = "";
                   if(notice.link) { onclick = 'style="cursor: pointer;" onclick="location.href=\'' + notice.link + '\'"'; }
-                  getObj("noticeList").head('<li class="list-group-item" id="notice' + notice.time + '" ' + onclick + '><h5>' + notice.title + '</h5><p>' + notice.content + '</p></li>');
+                  getObj("noticeList").head('<li style="color: ' + color + '" class="list-group-item" id="notice' + notice.time + '" ' + onclick + '><h6 class="mb-0 mt-2">' + notice.title + '</h6><p class="small">' + notice.content + '</p></li>');
                 }
               }
             });

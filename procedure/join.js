@@ -1,31 +1,46 @@
-// Import the functions you need from the SDKs you need
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-app.js";
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-analytics.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-auth.js";
 import { getDatabase, ref, get, set, push } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-database.js";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
+import { getObj } from "/script/methods.js";
 
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-    apiKey: "AIzaSyBE60G8yImWlENWpCnQZzqqVUrwWa_torg",
-    authDomain: "c4s-portal.firebaseapp.com",
-    databaseURL: "https://c4s-portal-default-rtdb.asia-southeast1.firebasedatabase.app",
-    projectId: "c4s-portal",
-    storageBucket: "c4s-portal.appspot.com",
-    messagingSenderId: "863775995414",
-    appId: "1:863775995414:web:82eb9557a13a099dfbe737",
-    measurementId: "G-K2SR1WSNRC"
+  apiKey: "AIzaSyBE60G8yImWlENWpCnQZzqqVUrwWa_torg",
+  authDomain: "c4s-portal.firebaseapp.com",
+  databaseURL: "https://c4s-portal-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "c4s-portal",
+  storageBucket: "c4s-portal.appspot.com",
+  messagingSenderId: "863775995414",
+  appId: "1:863775995414:web:82eb9557a13a099dfbe737",
+  measurementId: "G-K2SR1WSNRC"
 };
 
-// Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
 const db = getDatabase(app);
 const auth = getAuth();
-var user;
 
+var user = {};
+
+//ユーザー情報の取得
+onAuthStateChanged(auth, (us) => {
+  user = us;
+  window.scroll({ top : 0 });
+
+  get(ref(db, "users/" + user.uid)).then((snapshot) =>{
+    //部員登録済みはバイバイ
+    if(snapshot.val() && location.hostname != "localhost") {
+      alert("既に入部手続きを終えています。部員情報の更新は、アカウント画面からお願いします。");
+      window.location.href = "/account";
+    }
+    //部員でない人ならスタート
+    //ローカル環境のときも一応スタートさせる
+    else {
+      getObj("loading-overray").hide();
+      $("#overray").fadeOut(2000);
+    }
+  });
+});
 
 //部員情報アップロード
 function upload() {
@@ -77,7 +92,7 @@ function upload() {
         grade : Number(grade.value),
         department : department.options[department.selectedIndex].text,
         departmentIndex : department.selectedIndex,
-        sex : sex.value,
+        sex : gender.value,
         otherDepart : otherDepart.value,
         phoneNumber : phoneNumber.value,
         time : (new Date()).getTime()
@@ -89,22 +104,3 @@ function upload() {
 
 window.upload = upload;
 export{upload}
-
-//ユーザー情報の取得
-onAuthStateChanged(auth, (us) => {
-    user = us;
-
-    if(!user) {
-        alert("Googleアカウントでのログインをしてから、部員情報の登録をお願いします。");
-        login();
-    }
-
-    get(ref(db, "users/" + user.uid)).then((snapshot) =>{
-        if(snapshot.exists()) {
-            if(!snapshot.val().status) {
-                alert("既に入部手続きを終えています。部員情報の更新は、アカウント画面からお願いします。");
-                window.location.href = "../account";
-            }
-        }
-    });
-});

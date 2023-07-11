@@ -326,6 +326,7 @@ export function eventcontrol(eventID, type) {
 
       get(ref(db, "event/" + eventID)).then((snapshot) => {
         var data = snapshot.val();
+        if(!data) { data = {}; }
         if(!data.attenders) { data.attenders = ""; }
         if(!data.notice) { data.notice = ""; }
         set(ref(db, "event/" + eventID), {

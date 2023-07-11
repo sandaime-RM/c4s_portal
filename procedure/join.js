@@ -36,6 +36,20 @@ onAuthStateChanged(auth, (us) => {
     //部員でない人ならスタート
     //ローカル環境のときも一応スタートさせる
     else {
+      if(location.hostname == "localhost") { console.warn("ローカル環境です。入部ボタンは押下しないでください。"); }
+
+      getObj("input-alert").hide();
+      getObj("belong-tus").onclick = function tus() {
+        getObj("department-tab").show();
+        getObj("department-free-tab").hide();
+      }
+      getObj("belong-other").onclick = function other() {
+        getObj("department-tab").hide();
+        getObj("department-free-tab").show();
+      }
+      getObj("phoneNumber").value = user.phoneNumber;
+      getObj("grade").value = 1;
+
       getObj("loading-overray").hide();
       $("#overray").fadeOut(2000);
     }
@@ -43,64 +57,63 @@ onAuthStateChanged(auth, (us) => {
 });
 
 //部員情報アップロード
-function upload() {
+export function upload() {
+  //値の代入
+  var data = {};
 
-    var name = document.getElementById("name");
-    var nameKana = document.getElementById("nameKana");
-    var detail = document.getElementById("detail");
-    var number = document.getElementById("schoolNumber");
-    var birth = document.getElementById("birth");
-    var department = document.getElementById("department");
-    var grade = document.getElementById("grade");
-    var sex = document.getElementById("sex");
-    var phoneNumber = document.getElementById("phoneNumber");
-    var otherDepart = document.getElementById("otherDepart");
-
-    var defective = false;
-    var errorList = ""
-
-    //空欄だったらエラー
-    if(name.value == "") {defective = true; errorList += "氏名 ";}
-    if(nameKana.value == "") {defective = true; errorList += "氏名（よみがな） ";}
-    if(number.value == "") {defective = true; errorList +="学籍番号 ";}
-    if(birth.value == "") {defective = true; errorList +="生年月日 ";}
-    if(!grade.value) {defective = true; errorList += "学年 ";}
-    if(phoneNumber.value == "") {defective = true; errorList += "電話番号 ";}
-
-    if(defective) {
-        document.getElementById("errorText").textContent = errorList;
-        document.getElementById("error").style.display = "";
-
-        return;
+  data.name = getObj("name").value;
+  data.nameKana = getObj("nameKana").value;
+    if(getObj("gender-man").checked) { data.sex = "man"; }
+    else if(getObj("gender-woman").checked) { data.sex = "woman"; }
+    else if(getObj("gender-other").checked) { data.sex = "other"; }
+  data.birth = getObj("birth").value;
+    if(getObj("belong-tus").checked) {
+      data.department = getObj("department").options[getObj("department").selectedIndex].text;
+      data.departmentIndex = getObj("department").selectedIndex;
     }
-
-    if(!user) {
-        errorList += "未ログイン";
-        document.getElementById("errorText").textContent = errorList;
-        document.getElementById("error").style.display = "";
-        return;
+    else {
+      data.department = getObj("department-free").value; 
+      data.departmentIndex = -1;
     }
+  data.grade = Number(getObj("grade").value);
+  data.studentNumber = getObj("studentNumber").value;
+  data.phoneNumber = getObj("phoneNumber").value;
+  data.detail = getObj("detail").value;
 
-    document.getElementById("Passed");
+  data.role = "new";
+  data.time = new Date().getTime();
 
-    set(ref(db, "users/" + user.uid), {
-        name : name.value,
-        nameKana : nameKana.value,
-        detail : detail.value,
-        studentNumber : number.value,
-        birth : birth.value,
-        grade : Number(grade.value),
-        department : department.options[department.selectedIndex].text,
-        departmentIndex : department.selectedIndex,
-        sex : gender.value,
-        otherDepart : otherDepart.value,
-        phoneNumber : phoneNumber.value,
-        time : (new Date()).getTime()
-    })
-    .then(() => {
+  //不備チェック
+  try {
+    if(data.name) { getObj("name-alert").html = ""; } else { getObj("name-alert").html = "入力されていません"; e("name is null"); }
+    if(data.nameKana) { getObj("nameKana-alert").html = ""; } else { getObj("nameKana").html = "入力されていません"; e("nameKana is null"); }
+    if(data.sex) { getObj("gender-alert").html = ""; } else { getObj("gender-alert").html = "選択してください"; e("gender is not selected"); }
+    if(data.birth) { getObj("birth-alert").html = ""; } else { getObj("birth-alert").html = "入力されていません"; e("birth is null"); }
+    if(getObj("belong-tus").checked && data.departmentIndex == 33) { getObj("department-alert").html = "選択されていません"; e("department is null"); }
+      else { getObj("department-alert").html = ""; }
+    if(getObj("belong-other").checked && !data.department) { getObj("department-free-alert").html = "入力されていません"; e("department is null"); }
+      else { getObj("department-free-alert").html = ""; }
+    if(0 < data.grade) { getObj("grade-alert").html = ""; } else { getObj("grade-alert").html = "正しく入力されていません"; e("undefined grade"); }
+    if(data.studentNumber) { getObj("studentNumber-alert").html = ""; } else { getObj("studentNumber-alert").html = "入力されていません"; e("student number is null"); }
+    if(data.phoneNumber) { getObj("phoneNumber-alert").html = ""; } else { getObj("phoneNumber-alert").html = "入力されていません"; e("phone number is null"); }
+    if(data.detail) { getObj("detail-alert").html = ""; } else { getObj("detail-alert").html = "必須項目です"; e("detail is null"); }
+    function e (msg) { throw new Error(msg); }
+  } catch (msg) { getObj("input-alert").show(); window.scroll({ top : 0 }); console.error(msg); return; }
+
+  //アップロード処理
+  $("#saving").fadeIn();
+  if(location.hostname == "localhost") {
+    console.table(data);
+    setTimeout(() => {
+      window.location.href = "join2.html";
+    }, 6500);
+  }
+  else {
+    set(ref(db, "users/" + user.uid), data).then(() => {
+      setTimeout(() => {
         window.location.href = "join2.html";
+      }, 6500);
     });
+  }
 }
-
 window.upload = upload;
-export{upload}

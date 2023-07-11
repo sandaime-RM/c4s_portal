@@ -121,8 +121,8 @@ onAuthStateChanged(auth, (snapshot) => {
           if(data) {
             Object.keys(data).forEach((key) => {
               var notice = data[key];
-              //30日以上過ぎた通知は削除
-              if(30 * 24 * 60 * 60 * 1000 < (new Date().getTime() - new Date(notice.time).getTime()))
+              //期限を過ぎた通知は削除
+              if(new Date(notice.dead).getTime() < new Date().getTime())
               { remove(ref(db, "notices/" + key)); }
               //30日以内の通知なら表示
               else {
@@ -135,19 +135,9 @@ onAuthStateChanged(auth, (snapshot) => {
                 //満たしているとき表示
                 if(show) {
                   getObj("noNotice").hide();
-                  var titles = {
-                    attender : "出席登録されました",
-                    purchase : "商品が購入されました",
-                    newEvent : "新しいイベントが登録されました",
-                    newProject : "新しい企画が作られました"
-                  }
-                  let title = titles[notice.type];
-                  if(!title) { title = notice.type; }
-                  getObj("noticeList").head('<li class="list-group-item" id="notice' + notice.time + '"><h5>' + title + '</h5><p>' + notice.content + '</p></li>');
-                  if(notice.link) { 
-                    getObj("notice" + notice.time).onclick = 'location.href="' + notice.link + '"';
-                    getObj("notice" + notice.time).style.cursor = "pointer";
-                  }
+                  var onclick = "";
+                  if(notice.link) { onclick = 'style="cursor: pointer;" onclick="location.href=\'' + notice.link + '\'"'; }
+                  getObj("noticeList").head('<li class="list-group-item" id="notice' + notice.time + '" ' + onclick + '><h5>' + notice.title + '</h5><p>' + notice.content + '</p></li>');
                 }
               }
             });
@@ -155,7 +145,7 @@ onAuthStateChanged(auth, (snapshot) => {
         });
 
         //まだメニューがないページは旧スクリプト
-        if(!getObj("menu")){
+        if(!getObj("menu") && location.pathname != "/procedure/join.html" && location.pathname != "/procedure/join2.html") {
           if(snapshot.child("point").exists()) {
             var point = snapshot.child("point").val();
             var color = "#c95700";

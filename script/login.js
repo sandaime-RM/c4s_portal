@@ -125,7 +125,7 @@ onAuthStateChanged(auth, (snapshot) => {
                 var notice = data[key];
                 //期限を過ぎた通知は削除
                 if(new Date(notice.dead).getTime() + (1000 * 60 * 60 * 15) < new Date().getTime())
-                { remove(ref(db, "notices/" + key)); }
+                { remove(ref(db, "notice/" + key)); }
                 //表示期間内の通知なら表示
                 else if(new Date(notice.time).getTime() - (1000 * 60 * 60 * 5) < new Date().getTime()) {
                   //通知表示条件を満たしているか確認

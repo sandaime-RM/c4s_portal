@@ -132,15 +132,15 @@ onAuthStateChanged(auth, (snapshot) => {
                 var show = false;
                 var color = "";
                 if(notice.target == "whole") { show = true; color = "black"; }
-                else if(notice.target == "active" && (status == 1 || status == 2)) { show = true; color = "darkblue"; }
-                else if(notice.target == "admin" && status == 2) { show = true; color = "darkred"; }
-                else if(0 < notice.target.indexOf(user.uid)) { show = true; color = "darkgreen"; }
+                else if(notice.target == "active" && (status == 1 || status == 2)) { show = true; color = "midnightblue"; }
+                else if(notice.target == "admin" && status == 2) { show = true; color = "maroon"; }
+                else if(0 < notice.target.indexOf(user.uid)) { show = true; color = "green"; }
                 //満たしているとき表示
                 if(show) {
                   getObj("noNotice").hide();
                   var onclick = "";
-                  if(notice.link) { onclick = 'style="cursor: pointer;" onclick="location.href=\'' + notice.link + '\'"'; }
-                  getObj("noticeList").head('<li style="color: ' + color + '" class="list-group-item" id="notice' + notice.time + '" ' + onclick + '><h6 class="mb-0 mt-2">' + notice.title + '</h6><p class="small">' + notice.content + '</p></li>');
+                  if(notice.link) { onclick = 'location.href=\'' + notice.link + '\''; } else { 'console.warn("this notice has no link");'; }
+                  getObj("noticeList").head('<div style="background: ghostwhite; color: ' + color + ';" class="pointer hover rounded-m shadow-sm px-4 py-2 mb-3" id="notice' + notice.time + '" onclick="' + onclick + '"><h6 class="mb-0 mt-2">' + notice.title + '</h6><p class="small mb-2">' + notice.content + '</p></div>');
                 }
               }
             });

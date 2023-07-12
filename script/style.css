@@ -4,6 +4,10 @@
 .mw-md { max-width: 480px; }
 .mw-lg { max-width: 960px; }
 
+.rounded-s { border-radius: 5px; }
+.rounded-m { border-radius: 10px; }
+.rounded-l { border-radius: 15px; }
+
 .unclicked {
   display: inline-block;
   padding: 0.5em 1em;

@@ -52,7 +52,7 @@ onAuthStateChanged(auth, (snapshot) => {
         }
 
         //部員用
-        if(c4suser){
+        if(c4suser) {
           //更新情報を表示
           function news () {
             //ローカル環境でも表示しない
@@ -115,37 +115,38 @@ onAuthStateChanged(auth, (snapshot) => {
         }
 
         //通知の描画
-        onValue(ref(db, "notice"), (snapshot) => {
-          var data = snapshot.val();
-          getObj("noNotice").show();
-          getObj("noticeList").html("");
-          console.log(getObj("noticeList").innerHTML)
-          if(data) {
-            Object.keys(data).forEach((key) => {
-              var notice = data[key];
-              //期限を過ぎた通知は削除
-              if(new Date(notice.dead).getTime() + (1000 * 60 * 60 * 15) < new Date().getTime())
-              { remove(ref(db, "notices/" + key)); }
-              //表示期間内の通知なら表示
-              else if(new Date(notice.time).getTime() - (1000 * 60 * 60 * 5) < new Date().getTime()) {
-                //通知表示条件を満たしているか確認
-                var show = false;
-                var color = "";
-                if(notice.target == "whole") { show = true; color = "black"; }
-                else if(notice.target == "active" && (status == 1 || status == 2)) { show = true; color = "midnightblue"; }
-                else if(notice.target == "admin" && status == 2) { show = true; color = "maroon"; }
-                else if(0 < notice.target.indexOf(user.uid)) { show = true; color = "green"; }
-                //満たしているとき表示
-                if(show) {
-                  getObj("noNotice").hide();
-                  var onclick = "";
-                  if(notice.link) { onclick = 'location.href=\'' + notice.link + '\''; } else { 'console.warn("this notice has no link");'; }
-                  getObj("noticeList").head('<div style="background: ghostwhite; color: ' + color + ';" class="pointer hover rounded-m shadow-sm px-4 py-2 mb-3" id="notice' + notice.time + '" onclick="' + onclick + '"><h6 class="mb-0 mt-2">' + notice.title + '</h6><p class="small mb-2">' + notice.content + '</p></div>');
+        if(getObj("notice")) {
+          onValue(ref(db, "notice"), (snapshot) => {
+            var data = snapshot.val();
+            getObj("noNotice").show();
+            getObj("noticeList").html("");
+            if(data) {
+              Object.keys(data).forEach((key) => {
+                var notice = data[key];
+                //期限を過ぎた通知は削除
+                if(new Date(notice.dead).getTime() + (1000 * 60 * 60 * 15) < new Date().getTime())
+                { remove(ref(db, "notices/" + key)); }
+                //表示期間内の通知なら表示
+                else if(new Date(notice.time).getTime() - (1000 * 60 * 60 * 5) < new Date().getTime()) {
+                  //通知表示条件を満たしているか確認
+                  var show = false;
+                  var color = "";
+                  if(notice.target == "whole") { show = true; color = "black"; }
+                  else if(notice.target == "active" && (status == 1 || status == 2)) { show = true; color = "midnightblue"; }
+                  else if(notice.target == "admin" && status == 2) { show = true; color = "maroon"; }
+                  else if(0 < notice.target.indexOf(user.uid)) { show = true; color = "green"; }
+                  //満たしているとき表示
+                  if(show) {
+                    getObj("noNotice").hide();
+                    var onclick = "";
+                    if(notice.link) { onclick = 'location.href=\'' + notice.link + '\''; } else { onclick = 'console.warn(\'this notice has no link\');'; }
+                    getObj("noticeList").head('<div style="background: ghostwhite; color: ' + color + ';" class="pointer hover rounded-md shadow-sm px-4 py-2 mb-3" id="notice' + notice.time + '" onclick="' + onclick + '"><h6 class="mb-0 mt-2">' + notice.title + '</h6><p class="small mb-2">' + notice.content + '</p></div>');
+                  }
                 }
-              }
-            });
-          }
-        });
+              });
+            }
+          })
+        };
 
         //まだメニューがないページは旧スクリプト
         if(!getObj("menu") && location.pathname != "/procedure/join.html" && location.pathname != "/procedure/join2.html") {

@@ -18,7 +18,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.js"></script>
 
     <script src="../script/login.js" type="module"></script>
-    <script src="document.js" type="module"></script>
+    <!-- <script src="document.js" type="module"></script> -->
 
     <title>C4's Portal</title>
     <link rel="icon" href="../img/logo_mini.png">
@@ -116,121 +116,95 @@
         </header>
       </div>
 
-    <div class="container">
-      <h2 class="fs-2 fw-normal"><svg class="me-3 ms-2" viewBox="0 0 16 16" x="0" y="0" width="36px" height="36px"><use xlink:href="#richText"></use></svg>掲示板</h2>
-
-      <p id="errorDoc" class="text-danger small"></p>
-
-      <div class="text-center" id="loading">
-        <div class="spinner-border" role="status">
-            <span class="visually-hidden">Loading...</span>
-          </div>
-      </div>
-      
-      <div class="py-3 mb-5 row px-2" id="documents">
-        <!-- <div class="card shadow-sm m-2 p-1" style="width: 18rem;">
-            <div class="card-body">
-                <h5 class="card-title">理大祭配布資料Vol1.0</h5>
-                <h6 class="card-subtitle mb-2 text-muted">2023.05.29 19:23</h6>
-                <p class="card-text small">第1回理大祭説明会の資料です。理大祭係を募集しています。やってもいいよ、って方はDiscordでお知らせください。</p>
-                <div class="m-1 px-0 py-2 row border rounded-3" style="cursor:pointer;">
-                    <div class="col-2 text-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" style="color:#de0909" class="bi bi-file-earmark-pdf" viewBox="0 0 16 16">
-                            <path d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2zM9.5 3A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5v2z"/>
-                            <path d="M4.603 14.087a.81.81 0 0 1-.438-.42c-.195-.388-.13-.776.08-1.102.198-.307.526-.568.897-.787a7.68 7.68 0 0 1 1.482-.645 19.697 19.697 0 0 0 1.062-2.227 7.269 7.269 0 0 1-.43-1.295c-.086-.4-.119-.796-.046-1.136.075-.354.274-.672.65-.823.192-.077.4-.12.602-.077a.7.7 0 0 1 .477.365c.088.164.12.356.127.538.007.188-.012.396-.047.614-.084.51-.27 1.134-.52 1.794a10.954 10.954 0 0 0 .98 1.686 5.753 5.753 0 0 1 1.334.05c.364.066.734.195.96.465.12.144.193.32.2.518.007.192-.047.382-.138.563a1.04 1.04 0 0 1-.354.416.856.856 0 0 1-.51.138c-.331-.014-.654-.196-.933-.417a5.712 5.712 0 0 1-.911-.95 11.651 11.651 0 0 0-1.997.406 11.307 11.307 0 0 1-1.02 1.51c-.292.35-.609.656-.927.787a.793.793 0 0 1-.58.029zm1.379-1.901c-.166.076-.32.156-.459.238-.328.194-.541.383-.647.547-.094.145-.096.25-.04.361.01.022.02.036.026.044a.266.266 0 0 0 .035-.012c.137-.056.355-.235.635-.572a8.18 8.18 0 0 0 .45-.606zm1.64-1.33a12.71 12.71 0 0 1 1.01-.193 11.744 11.744 0 0 1-.51-.858 20.801 20.801 0 0 1-.5 1.05zm2.446.45c.15.163.296.3.435.41.24.19.407.253.498.256a.107.107 0 0 0 .07-.015.307.307 0 0 0 .094-.125.436.436 0 0 0 .059-.2.095.095 0 0 0-.026-.063c-.052-.062-.2-.152-.518-.209a3.876 3.876 0 0 0-.612-.053zM8.078 7.8a6.7 6.7 0 0 0 .2-.828c.031-.188.043-.343.038-.465a.613.613 0 0 0-.032-.198.517.517 0 0 0-.145.04c-.087.035-.158.106-.196.283-.04.192-.03.469.046.822.024.111.054.227.09.346z"/>
-                          </svg>
-                    </div>
-
-                    <div class="col-10 fw-bold">理大祭配布資料Vol1.0</div>
-                </div>
-
-                <div class="position-absolute top-0 end-0 pe-2 pt-1" style="cursor: pointer;">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="text-secondary bi bi-three-dots-vertical" viewBox="0 0 16 16">
-                        <path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/>
-                      </svg>
-                </div>
-            </div>
-        </div>
-
-        <div class="card shadow-sm m-2 p-1" style="width: 18rem;">
-            <div class="card-body">
-                <h5 class="card-title">C4's 会則</h5>
-                <h6 class="card-subtitle mb-2 text-muted">2023.05.30 16:15</h6>
-                <p class="card-text small">当サークルの会則です。部員は一度読んで内容を把握しておいてください。</p>
-                <div class="m-1 px-0 py-2 row border rounded-3" style="cursor:pointer;">
-                    <div class="col-2 text-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" style="color:#de0909" class="bi bi-file-earmark-pdf" viewBox="0 0 16 16">
-                            <path d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2zM9.5 3A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5v2z"/>
-                            <path d="M4.603 14.087a.81.81 0 0 1-.438-.42c-.195-.388-.13-.776.08-1.102.198-.307.526-.568.897-.787a7.68 7.68 0 0 1 1.482-.645 19.697 19.697 0 0 0 1.062-2.227 7.269 7.269 0 0 1-.43-1.295c-.086-.4-.119-.796-.046-1.136.075-.354.274-.672.65-.823.192-.077.4-.12.602-.077a.7.7 0 0 1 .477.365c.088.164.12.356.127.538.007.188-.012.396-.047.614-.084.51-.27 1.134-.52 1.794a10.954 10.954 0 0 0 .98 1.686 5.753 5.753 0 0 1 1.334.05c.364.066.734.195.96.465.12.144.193.32.2.518.007.192-.047.382-.138.563a1.04 1.04 0 0 1-.354.416.856.856 0 0 1-.51.138c-.331-.014-.654-.196-.933-.417a5.712 5.712 0 0 1-.911-.95 11.651 11.651 0 0 0-1.997.406 11.307 11.307 0 0 1-1.02 1.51c-.292.35-.609.656-.927.787a.793.793 0 0 1-.58.029zm1.379-1.901c-.166.076-.32.156-.459.238-.328.194-.541.383-.647.547-.094.145-.096.25-.04.361.01.022.02.036.026.044a.266.266 0 0 0 .035-.012c.137-.056.355-.235.635-.572a8.18 8.18 0 0 0 .45-.606zm1.64-1.33a12.71 12.71 0 0 1 1.01-.193 11.744 11.744 0 0 1-.51-.858 20.801 20.801 0 0 1-.5 1.05zm2.446.45c.15.163.296.3.435.41.24.19.407.253.498.256a.107.107 0 0 0 .07-.015.307.307 0 0 0 .094-.125.436.436 0 0 0 .059-.2.095.095 0 0 0-.026-.063c-.052-.062-.2-.152-.518-.209a3.876 3.876 0 0 0-.612-.053zM8.078 7.8a6.7 6.7 0 0 0 .2-.828c.031-.188.043-.343.038-.465a.613.613 0 0 0-.032-.198.517.517 0 0 0-.145.04c-.087.035-.158.106-.196.283-.04.192-.03.469.046.822.024.111.054.227.09.346z"/>
-                          </svg>
-                    </div>
-
-                    <div class="col-10 fw-bold">C4's 会則</div>
-                </div>
-
-                <div class="position-absolute top-0 end-0 pe-2 pt-1" style="cursor: pointer;">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="text-secondary bi bi-three-dots-vertical" viewBox="0 0 16 16">
-                        <path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/>
-                      </svg>
-                </div>
-            </div>
-        </div> -->
-      </div>
-      
-      <div class="text-center">
-        <a class="btn btn-outline-dark col-8" href="rule.html">
-          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="me-1 bi bi-book" viewBox="0 0 16 16">
+    <div class="container pb-4">
+        <h2 class="fw-normal">
+            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor" class="me-1 bi bi-book" viewBox="0 0 16 16">
             <path d="M1 2.828c.885-.37 2.154-.769 3.388-.893 1.33-.134 2.458.063 3.112.752v9.746c-.935-.53-2.12-.603-3.213-.493-1.18.12-2.37.461-3.287.811V2.828zm7.5-.141c.654-.689 1.782-.886 3.112-.752 1.234.124 2.503.523 3.388.893v9.923c-.918-.35-2.107-.692-3.287-.81-1.094-.111-2.278-.039-3.213.492V2.687zM8 1.783C7.015.936 5.587.81 4.287.94c-1.514.153-3.042.672-3.994 1.105A.5.5 0 0 0 0 2.5v11a.5.5 0 0 0 .707.455c.882-.4 2.303-.881 3.68-1.02 1.409-.142 2.59.087 3.223.877a.5.5 0 0 0 .78 0c.633-.79 1.814-1.019 3.222-.877 1.378.139 2.8.62 3.681 1.02A.5.5 0 0 0 16 13.5v-11a.5.5 0 0 0-.293-.455c-.952-.433-2.48-.952-3.994-1.105C10.413.809 8.985.936 8 1.783z"/>
           </svg>
-          C4's 会則を開く
-        </a>
-      </div>
+          会則
+        </h2>
+
+        <div class="my-4">
+            <h3 class="border-bottom pb-2">第１章　名称及び目的</h3>
+            <ol>
+                <li>本団体は「メディアアートサークルC4’s」と称す。ただし、「C4’s」とはCから始まる4つの英単語を集めたものであり、「シーフォース」と読む。</li>
+                <li>本団体は、目的に賛同し自発的に参加する者で組織し、本部を東京理科大学野田校舎内に置く。また、活動内容によって神楽坂校舎、葛飾校舎および学外の任意の場所において制作活動や作品展示などをすることができる。</li>
+                <li>本団体は、デジタルコンテンツや電子工作などのメディアアート的創作活動を通じて、会員相互の技術向上を目指すほか、社会のエンターテインメントや利便性向上などに資することを目的とする。</li>
+            </ol>
+        </div>
+
+        <div class="my-3">
+            <h3 class="border-bottom pb-2">第２章　組織</h3>
+            <ol>
+                <li>本団体は、東京理科大学専任教職員の顧問を置く。</li>
+                <li>幹部は部長1名、副部長1名、会計1名により構成するものとする。それぞれの役割は以下のとおり。
+                    <ol>
+                        <li>部長<br>　部長は会員に対し、本会の活動に関して統括するとともに、これらの活動に対して責任を負うものとする。</li>
+                        <li>副部長<br>　副部長は、主に部長の業務の補助を行うものとする。</li>
+                        <li>会計<br>　会計は、本会におけるいっさいの金銭出納を管理し、責任を負うものとする。</li>
+                    </ol>
+                </li>
+                <li>本会に対して大きく貢献したと認められる部長は、退任後に名誉部長としてその功績を称えるものとする。</li>
+                <li>すべて幹部は幹部会議によって候補者を選出し、それに対し全会員による総会をもって多数決により決定され、それぞれの引継ぎを行うものとする。</li>
+                <li>幹部の任期は12月1日～翌年11月30日までの1年とする。ただし、再任を防げない。</li>
+            </ol>
+        </div>
+
+        <div class="my-4">
+            <h3 class="border-bottom pb-2">第３章　会議・会合</h3>
+            <ol>
+                <li>総会は本会の最高議決機関とし、毎年2回、部長が招集する定例総会において、次の事項を審議する。
+                    <ol>
+                        <li>会則の制定及び改正に関する事項</li>
+                        <li>予算及び決算に関する事項</li>
+                        <li>その他、本団体の運営に関する事項</li>
+                    </ol>
+                </li>
+                <li>部長は、臨時総会を招集することがある。</li>
+                <li>幹部会は、幹部の要請により開く。</li>
+            </ol>
+        </div>
+
+        <div class="my-4">
+            <h3 class="border-bottom pb-2">第４章　会計</h3>
+            <ol>
+                <li>本団体の会計年度は、4月1日～翌年3月31日までの1年間とする。</li>
+                <li>運営費は、会費及びその他収入をもって支弁する。会費は、入会後初年度は4000円(年額)、次年度以降6000円(年額)とする。ただし、幹部会の決定に基づき変更する場合がある。</li>
+                <li>会計は、出納帳を作成の上、会計年度毎に収支予想および決算報告書を作成しなければならない。</li>
+                <li>会計は、総会において決算報告書を会員に提示し、承認を得なければならない。また、収支予想および決算報告書は東京理科大学学生支援センターへ提出する。</li>
+                <li>制作等の活動に必要な物品（ソフト、サービス含む）の購入、サークルの趣旨に沿った展示等への訪問時の補助金（最大1回1人当たり1,000円）、サークル運営のために必要な物・サービス（サーバー代など）の購入に利用する。なお、用途については幹部会の決定に基づき変更する場合がある。</li>
+                <li>制作・展示・販売などを通して利益を得た場合、以下に過去の事例を参考として示すが、その利益の分配は、その活動に関わった部員の合意の上で、都度決めることができるものとする。
+                    <br><span class="text-secondary">【参考】個人制作・販売による収益は、その8割を制作者、2割を部費に分配する。サークル全体として行った活動（学園祭など）による収益は、全額部費に充てる。</span>
+                </li>
+                <li>第16条に示した用途であれば、部員は役職に関わらず、部費の利用を申請することができる。ただし、部費を利用する場合は、幹部（代表、副代表、会計）のうち2人の合意を得る必要がある。</li>
+            </ol>
+        </div>
+
+        <div class="my-4">
+            <h3 class="border-bottom pb-2">第５章　入部・退部・休部</h3>
+            <ol>
+                <li>入部を希望する者は、部長にその旨を伝え、本会におけるポータルサイト(以下、「C4’s Portal」)上で部員登録フォームへ入力し、送信する。</li>
+                <li>退部する者は、C4’s Portal上で退部フォームへ入力し、送信する。</li>
+                <li>6か月以上にわたって活動に参加しない場合、C4’s Portal上で休部フォームへ入力し、送信する。</li>
+            </ol>
+        </div>
+
+        <p>2023/07/16より施行</p>
     </div>
 
-    <!--追加ボタン-->
-    <div class="bg-dark text-light position-fixed end-0 bottom-0 mx-3 my-3 px-3 py-3 shadow rounded-pill" style="cursor: pointer;" data-bs-toggle="modal" data-bs-target="#exampleModal">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-plus-lg" viewBox="0 0 16 16">
-          <path fill-rule="evenodd" d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2Z"/>
-        </svg>
-      </div>
+    
+    
 
-        <!-- 掲示編集モーダル -->
-        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-          <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">新規掲示</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-              </div>
-              <div class="modal-body">
-                <div class="mb-3">
-                    <label>タイトル</label>
-                    <input type="text" class="form-control" id="title">
-                </div>
+    <style>
+        li {
+            padding-bottom: 18px;
+            line-height: 1.8em;
+        }
 
-                <div class="mb-3">
-                    <label>詳細</label>
-                    <textarea class="form-control" id="detail"></textarea>
-                </div>
-
-                <div class="mb-3">
-                    <label>ファイル</label>
-                    <input type="file" accept=".pdf" id="file" class="form-control" onchange="fileChanged()">
-                    <div class="text-danger small">現在はPDFのアップロードのみ対応しています。</div>
-                </div>
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-outline-danger" onclick="deleteItem()">
-                    削除
-                </button>
-
-                <button type="button" class="btn btn-dark" onclick="upload()">
-                  <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" id="uploading" style="display: none;"></span>
-                  保存
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
+        ol {
+            padding-top: 12px;
+            padding : 12px 40px 0px 40px;
+        }
+    </style>
 </body>
 </html>

@@ -274,7 +274,7 @@ function dispGraph() {
         data: {
             labels: labels,
             datasets: [{
-                label: '資産推移',
+                label: '残高推移',
                 data: data,
                 fill: true,
                 borderColor: '#f28005',
@@ -324,3 +324,23 @@ function exportCSV() {
 
 window.exportCSV = exportCSV;
 export{exportCSV}
+
+
+//領収書発行
+function receipt() {
+    var rNum = document.getElementById("number").value;
+    var rTo = document.getElementById("toName").value;
+    var rCnt = document.getElementById("name").value;
+    var rMny = document.getElementById("amount").value;
+    var rDt = document.getElementById("dateForm").value;
+
+    if(document.getElementById("type2").checked) {
+        alert("領収書は「入金」のみに発行できます。");
+        return;
+    }
+
+    window.location.href = "receipt.html?num=" + rNum + "&to=" + rTo + "&cnt=" + rCnt + "&mny=" + rMny + "&dt=" + rDt;
+}
+
+window.receipt = receipt;
+export{receipt}

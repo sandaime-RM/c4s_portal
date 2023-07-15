@@ -38,7 +38,7 @@ window.onload = function () {
     document.getElementById("num").textContent = ("00" + number.toString()).slice(-3);
     document.getElementById("content").textContent = content;
     document.getElementById("to").textContent = toName;
-    document.getElementById("money").textContent = money;
+    document.getElementById("money").textContent = Number(money).toLocaleString();
     document.getElementById("date2").textContent = setDate;
 }
 

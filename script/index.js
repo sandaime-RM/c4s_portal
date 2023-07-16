@@ -66,6 +66,25 @@ onAuthStateChanged(auth, (snapshot) => {
       //部員
       if(snapshot.val()){
         c4suser = snapshot.val();
+
+        //管理者のみ：最近ログインしていないユーザーを取得
+        get(ref(db, "admin-users/" + user.uid)).then((snapshot) => {
+          if(snapshot.val()) {
+            get(ref(db, "users")).then((snapshot) => {
+              let users = snapshot.val();
+              let noLogins = {};
+              Object.keys(users).forEach((uid) => {
+                if(!users[uid].accessHistory) {
+                  noLogins[user.uid] = { 氏名 : user.name, 最終ログイン : "不明" };
+                }
+                else if(new Date(c4suser.accessHistory[Object.keys(c4suser.accessHistory).slice(-1)[0]].date).getTime() < new Date().getTime() - 1000 * 60 * 60 * 24 * 30) {
+                  noLogins[user.uid] = { 氏名 : user.name, 最終ログイン : new Date(c4suser.accessHistory[Object.keys(c4suser.accessHistory).slice(-1)[0]].date) }
+                }
+              });
+              console.table(noLogins);
+            })
+          }
+        })
         
         //プロフィールを表示
         getObj("userPic").innerHTML = '<img src="' + user.photoURL + '" style="width: 100%; height: 100%; border-radius: 50%;">'

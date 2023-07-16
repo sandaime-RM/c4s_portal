@@ -82,6 +82,7 @@ export function upload() {
 
   data.role = "new";
   data.time = new Date().getTime();
+  data.point = 0;
 
   //不備チェック
   try {

@@ -57,8 +57,8 @@ onAuthStateChanged(auth, (snapshot) => {
           function news () {
             //ローカル環境でも表示しない
             if(location.hostname == "localhost") { return; }
-            if(!c4suser.accessHistory || new Date(c4suser.accessHistory[Object.keys(c4suser.accessHistory).slice(-1)[0]].date) < new Date("2023-06-22 13:50"))
-            { alert("アップデート：メニュー画面が新しくなりました！"); alert("左上のプロフィールアイコンを押してみよう！"); }
+            if(!c4suser.accessHistory || new Date(c4suser.accessHistory[Object.keys(c4suser.accessHistory).slice(-1)[0]].date) < new Date("2023-07-16 10:02"))
+            { alert("アップデート：プロフィール画面が復活！"); alert("左上のメニュー画面から自分のアイコンをクリックorタップしてみよう"); }
           }
           news();
 

@@ -33,6 +33,12 @@ export function DateText(date) {
   }
 }
 
+//transform date object into date text for input "type = date"
+export function DateInput(date) {
+  return date.getFullYear() + addzero(date.getMonth() + 1) + addzero(date.getDate());
+  function addzero (str) { if(str[1]) { return String(str); } else { return addzero("0" + str); }}
+}
+
 //部員をソート(users:全ユーザーのデータ、keys:ソートしたい部員のIDリスト)
 export function sortMembers(users, keys){
   var leaders = [];

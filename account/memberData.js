@@ -1,72 +1,72 @@
-// Import the functions you need from the SDKs you need
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-app.js";
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-analytics.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-auth.js";
-import { getDatabase, ref, get, set, update } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-database.js";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
+import { getDatabase, ref, get, set, update, onValue, push } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-database.js";
+import { getObj } from "/script/methods.js";
 
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-    apiKey: "AIzaSyBE60G8yImWlENWpCnQZzqqVUrwWa_torg",
-    authDomain: "c4s-portal.firebaseapp.com",
-    databaseURL: "https://c4s-portal-default-rtdb.asia-southeast1.firebasedatabase.app",
-    projectId: "c4s-portal",
-    storageBucket: "c4s-portal.appspot.com",
-    messagingSenderId: "863775995414",
-    appId: "1:863775995414:web:82eb9557a13a099dfbe737",
-    measurementId: "G-K2SR1WSNRC"
+  apiKey: "AIzaSyBE60G8yImWlENWpCnQZzqqVUrwWa_torg",
+  authDomain: "c4s-portal.firebaseapp.com",
+  databaseURL: "https://c4s-portal-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "c4s-portal",
+  storageBucket: "c4s-portal.appspot.com",
+  messagingSenderId: "863775995414",
+  appId: "1:863775995414:web:82eb9557a13a099dfbe737",
+  measurementId: "G-K2SR1WSNRC"
 };
 
-// Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
 const db = getDatabase(app);
 const auth = getAuth();
-var user, data;
 
+var user = {};
+var c4suser = {};
 
-//部員情報アップロード
-function upload() {
-    if(data.status == 1 || data.status == 2) {return;}
-    
-    var name = document.getElementById("name");
-    var nameKana = document.getElementById("nameKana");
-    var detail = document.getElementById("detail");
-    var number = document.getElementById("schoolNumber");
-    var birth = document.getElementById("birth");
-    var department = document.getElementById("department");
-    var grade = document.getElementById("grade");
-    var sex = document.getElementById("sex");
-    var phoneNumber = document.getElementById("phoneNumber");
-    var otherDepart = document.getElementById("otherDepart");
-
-    update(ref(db, "users/" + user.uid), {
-        name : name.value,
-        nameKana : nameKana.value,
-        detail : detail.value,
-        studentNumber : number.value,
-        birth : birth.value,
-        grade : Number(grade.value),
-        department : department.options[department.selectedIndex].text,
-        departmentIndex : department.selectedIndex,
-        sex : sex.value,
-        phoneNumber : phoneNumber.value,
-        otherDepart : otherDepart.value,
-        time : (new Date()).getTime()
-    })
-    .then(() => {
-        alert("更新しました。");
-    });
-}
-
-window.upload = upload;
-export{upload}
+var ranks;
+//jsonファイルを読み込み
+fetch("/script/variable.json").then((data) => { return data.json(); }).then((json) => {
+  ranks = json.ranks;
+});
 
 //ユーザー情報の取得
 onAuthStateChanged(auth, (us) => {
-    user = us;
+  user = us;
+
+  getObj("userPic").src = user.photoURL;
+  getObj("userName").html(user.displayName);
+  getObj("userEmail").html(user.email);
+
+  get(ref(db, "users/" + user.uid)).then((snapshot) => {
+    c4suser = snapshot.val();
+
+    //部員
+    if(c4suser) {
+      getObj("c4suserName").html(c4suser.name);
+      var roles = { leader : "部長", subleader : "副部長", treasurer : "会計", active : "現役", new : "新入部員", other : "外部" };
+      getObj("c4suserRole").html(roles[c4suser.role]);
+      
+      onValue(ref(db, "users/" + user.uid + "/point"), (snapshot) => { repoint(snapshot.val()); });
+
+      getObj("name").value = c4suser.name;
+      getObj("nameKana").value = c4suser.nameKana;
+      var genders = { man : "男性", woman : "女性", other : "その他" };
+      getObj("gender").value = genders[c4suser.sex];
+      getObj("birth").value = c4suser.birth;
+      getObj("department").value = c4suser.department;
+      getObj("grade").value = c4suser.grade;
+      getObj("studentNumber").value = c4suser.studentNumber;
+      getObj("phoneNumber").value = c4suser.phoneNumber;
+      getObj("detail").value = c4suser.detail;
+    }
+    //外部
+    else {
+
+    }
+
+    $("#overray").fadeOut();
+  });
+  /*
 
     var name = document.getElementById("name");
     var nameKana = document.getElementById("nameKana");
@@ -76,15 +76,8 @@ onAuthStateChanged(auth, (us) => {
     var department = document.getElementById("department");
     var grade = document.getElementById("grade");
     var sex = document.getElementById("sex");
-    var accountName = document.getElementById("userName");
-    var accountIcon = document.getElementById("userIcon");
-    var accountEmail = document.getElementById("userEmail");
     var phoneNumber = document.getElementById("phoneNumber");
     var otherDepart = document.getElementById("otherDepart");
-
-    accountName.textContent = user.displayName;
-    accountIcon.src = user.photoURL;
-    accountEmail.textContent = user.email;
 
     get(ref(db, 'users/' + user.uid)).then((snapshot) => {
         data = snapshot.val();
@@ -122,7 +115,6 @@ onAuthStateChanged(auth, (us) => {
             }
   
             if(point >= 3000) {
-              document.getElementById("userName").innerHTML += '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" style="color: '+color+'" class="ms-2 bi bi-check-circle-fill" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/></svg>';
               document.getElementById("userIcon").style.border = "solid 4px " + color;
               document.getElementById("bronze").style.display = "";
             }
@@ -158,4 +150,87 @@ onAuthStateChanged(auth, (us) => {
              document.getElementById("storeHistory").innerHTML += '<li class="list-group-item"><span class="fw-bold mx-1">' + storeHistory[key].itemName + '<span class="text-secondary mx-1">×'+storeHistory[key].num+'</span></span><span class="text-secondary mx-1 small">'+(new Date(storeHistory[key].date)).toLocaleString()+'</span></li>';
         });
     });
+
+  */
 });
+
+//プロフィールのポイント画面を更新(トップページから移植)
+function repoint(amount) {
+  c4suser.point = amount;
+  getObj("pointnum").innerText = amount;
+  var ranknum = ranks.basis.length - 1;
+  //0以下または未定義なら0にリセット
+  if ( amount < ranks.basis[0] || !amount) { set(ref(db, "users/" + user.uid + "/point"), 0); amount = 0; }
+  //最高ランクなら最高ランク表示にする
+  if ( ranks.basis.slice(-1)[0] <= amount ) {
+    getObj("pointbar" + String(ranks.name.length - 1)).style.width = "100%";
+    getObj("pointbar" + String(ranks.name.length - 1)).style.display = "block";
+    getObj("pointbar" + String(ranks.name.length - 1)).style.backgroundColor = ranks.color[ranknum];
+    getObj("restpoint").innerHTML = '<p style="color: darkred;">最高ランク会員</p>';
+    for (let i = 0; i < ranks.name.length - 1; i++) {
+      getObj("pointbar" + String(i)).style.display = "none";
+    }
+  }
+  //それ以外ならランク番号を取得
+  else{
+    getObj("pointbar" + String(ranks.name.length - 1)).style.display = "none";
+    for (let i = 0; i < ranks.basis.length; i++) { if(ranks.basis[i] <= amount) { ranknum = i; } }
+    getObj("restpoint").innerHTML = '<p>' + ranks.name[ranknum+1] + 'まであと<span style="color: darkred; font-weight: bold;">' + String(ranks.basis[ranknum+1] - amount) + '</span>pt</p>';
+    for (let i = 0; i < ranks.color.length - 1; i++) {
+      var bar = getObj("pointbar" + String(i));
+      bar.style.backgroundColor = ranks.color[i];
+      var ratio = (amount - ranks.basis[i]) / ranks.basis.slice(-1)[0];
+      ratio = Math.max(ratio, 0);
+      ratio = Math.min(ratio, (ranks.basis[i+1] - ranks.basis[i]) / ranks.basis.slice(-1)[0]);
+      bar.style.width = String(ratio * 100) + "%";
+      bar.style.display = "block";
+    }
+  }
+  getObj("ranktext").innerText = ranks.name[ranknum];
+  getObj("ranktext").style.backgroundColor = ranks.color[ranknum];
+}
+
+//部員情報の更新ボタンが押されたとき
+window.upload = function upload () {  
+  let grade = Number(getObj("grade").value);
+  let phoneNumber = getObj("phoneNumber").value;
+  let detail = getObj("detail").value;
+
+  //不備チェック
+  if(!grade || grade < 1) { 
+    alert("学年を正しく入力してください"); return;
+  }
+  if(!phoneNumber) {
+    alert("電話番号は必須です"); return;
+  }
+
+  //特に変更なければ何もしない
+  if(grade == c4suser.grade && phoneNumber == c4suser.phoneNumber && detail == c4suser.detail) {
+    return;
+  }
+
+  set(ref(db, "users/" + user.uid + "/grade"), grade).then(() => {
+    set(ref(db, "users/" + user.uid + "/phoneNumber"), phoneNumber).then(() => {
+      set(ref(db, "users/" + user.uid + "/detail"), detail).then(() => {
+        alert("保存しました"); location.reload(); 
+      })
+    })
+  })
+}
+
+//その他の情報を更新
+window.offer = function offer () {
+  let ans = confirm("変更申請を送信しますか？");
+  if(ans) { 
+    push(ref(db, "notice"), {
+      title : "部員情報の変更申請",
+      content : c4suser.name + "さんが部員情報を変更するようです。ここをクリックしてメールを送信し、変更する情報を確認してください。",
+      target : "admin",
+      time : new Date().getTime(),
+      dead : new Date().getTime() + 1000 * 60 * 60 * 24 * 30,
+      link : "mailto:" + c4suser.studentNumber + "@ed.tus.ac.jp?subject=C4's Portalより 部員情報の変更申請を受理しました"
+    }).then(() => {
+      alert("送信しました。");
+    })
+  }
+}

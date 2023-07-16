@@ -1,316 +1,190 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <!--Bootstrap-->
-    <!-- CSS only -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <!-- JavaScript Bundle with Popper -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-    <!--BootstrapIcon-->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.0/font/bootstrap-icons.css">
-    <!--jQuery-->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <!--Bootstrap-->
+  <!-- CSS only -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <!-- JavaScript Bundle with Popper -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+  <!--BootstrapIcon-->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.0/font/bootstrap-icons.css">
+  <!--jQuery-->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
-    <script src="memberData.js" type="module"></script>
-    <script src="../script/login.js" type="module"></script>
+  <script src="memberData.js" type="module"></script>
+  <script src="/script/login.js" type="module"></script>
 
-    <title>C4's Portal</title>
-    <link rel="icon" href="../img/logo_mini.png">
-    <link rel="manifest" href="../manifest.json">
+  <title>C4's Portal</title>
+  <link rel="icon" href="../img/logo_mini.png">
+  <link rel="manifest" href="../manifest.json">
 
-    <link rel="stylesheet" href="/script/style.css">
+  <link rel="stylesheet" href="/script/style.css">
 </head>
 <body class="bg-light">
-  <!--SVGの定義-->
-  <svg display="none">
-    <defs>
-      <symbol id="wallet" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-wallet" viewBox="0 0 16 16">
-        <path d="M0 3a2 2 0 0 1 2-2h13.5a.5.5 0 0 1 0 1H15v2a1 1 0 0 1 1 1v8.5a1.5 1.5 0 0 1-1.5 1.5h-12A2.5 2.5 0 0 1 0 12.5V3zm1 1.732V12.5A1.5 1.5 0 0 0 2.5 14h12a.5.5 0 0 0 .5-.5V5H2a1.99 1.99 0 0 1-1-.268zM1 3a1 1 0 0 0 1 1h12V2H2a1 1 0 0 0-1 1z"/>
-    </symbol>
-
-        <symbol id="calendar" xmlns="http://www.w3.org/2000/svg" class="bi bi-calendar-week" viewBox="0 0 16 16">
-          <path d="M11 6.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1zm-3 0a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1zm-5 3a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1zm3 0a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1z"/>
-          <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4H1z"/>
-        </symbol>
-
-        <symbol id="house" xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-house" viewBox="0 0 16 16">
-          <path fill-rule="evenodd" d="M2 13.5V7h1v6.5a.5.5 0 0 0 .5.5h9a.5.5 0 0 0 .5-.5V7h1v6.5a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 2 13.5zm11-11V6l-2-2V2.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5z"/>
-          <path fill-rule="evenodd" d="M7.293 1.5a1 1 0 0 1 1.414 0l6.647 6.646a.5.5 0 0 1-.708.708L8 2.207 1.354 8.854a.5.5 0 1 1-.708-.708L7.293 1.5z"/>
-        </symbol>
-
-        <symbol id="box" xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-box-seam" viewBox="0 0 16 16">
-          <path d="M8.186 1.113a.5.5 0 0 0-.372 0L1.846 3.5l2.404.961L10.404 2l-2.218-.887zm3.564 1.426L5.596 5 8 5.961 14.154 3.5l-2.404-.961zm3.25 1.7-6.5 2.6v7.922l6.5-2.6V4.24zM7.5 14.762V6.838L1 4.239v7.923l6.5 2.6zM7.443.184a1.5 1.5 0 0 1 1.114 0l7.129 2.852A.5.5 0 0 1 16 3.5v8.662a1 1 0 0 1-.629.928l-7.185 2.874a.5.5 0 0 1-.372 0L.63 13.09a1 1 0 0 1-.63-.928V3.5a.5.5 0 0 1 .314-.464L7.443.184z"/>
-        </symbol>
-
-        <symbol id="cash" xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-cash-coin" viewBox="0 0 16 16">
-          <path fill-rule="evenodd" d="M11 15a4 4 0 1 0 0-8 4 4 0 0 0 0 8zm5-4a5 5 0 1 1-10 0 5 5 0 0 1 10 0z"/>
-          <path d="M9.438 11.944c.047.596.518 1.06 1.363 1.116v.44h.375v-.443c.875-.061 1.386-.529 1.386-1.207 0-.618-.39-.936-1.09-1.1l-.296-.07v-1.2c.376.043.614.248.671.532h.658c-.047-.575-.54-1.024-1.329-1.073V8.5h-.375v.45c-.747.073-1.255.522-1.255 1.158 0 .562.378.92 1.007 1.066l.248.061v1.272c-.384-.058-.639-.27-.696-.563h-.668zm1.36-1.354c-.369-.085-.569-.26-.569-.522 0-.294.216-.514.572-.578v1.1h-.003zm.432.746c.449.104.655.272.655.569 0 .339-.257.571-.709.614v-1.195l.054.012z"/>
-          <path d="M1 0a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h4.083c.058-.344.145-.678.258-1H3a2 2 0 0 0-2-2V3a2 2 0 0 0 2-2h10a2 2 0 0 0 2 2v3.528c.38.34.717.728 1 1.154V1a1 1 0 0 0-1-1H1z"/>
-          <path d="M9.998 5.083 10 5a2 2 0 1 0-3.132 1.65 5.982 5.982 0 0 1 3.13-1.567z"/>
-        </symbol> 
-
-        <symbol id="textFile" xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-file-earmark-text" viewBox="0 0 16 16">
-          <path d="M5.5 7a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1h-5zM5 9.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5z"/>
-          <path d="M9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.5L9.5 0zm0 1v2A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5z"/>
-        </symbol>
-
-        <symbol id="gear" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-gear" viewBox="0 0 16 16">
-          <path d="M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492zM5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0z"/>
-          <path d="M9.796 1.343c-.527-1.79-3.065-1.79-3.592 0l-.094.319a.873.873 0 0 1-1.255.52l-.292-.16c-1.64-.892-3.433.902-2.54 2.541l.159.292a.873.873 0 0 1-.52 1.255l-.319.094c-1.79.527-1.79 3.065 0 3.592l.319.094a.873.873 0 0 1 .52 1.255l-.16.292c-.892 1.64.901 3.434 2.541 2.54l.292-.159a.873.873 0 0 1 1.255.52l.094.319c.527 1.79 3.065 1.79 3.592 0l.094-.319a.873.873 0 0 1 1.255-.52l.292.16c1.64.893 3.434-.902 2.54-2.541l-.159-.292a.873.873 0 0 1 .52-1.255l.319-.094c1.79-.527 1.79-3.065 0-3.592l-.319-.094a.873.873 0 0 1-.52-1.255l.16-.292c.893-1.64-.902-3.433-2.541-2.54l-.292.159a.873.873 0 0 1-1.255-.52l-.094-.319zm-2.633.283c.246-.835 1.428-.835 1.674 0l.094.319a1.873 1.873 0 0 0 2.693 1.115l.291-.16c.764-.415 1.6.42 1.184 1.185l-.159.292a1.873 1.873 0 0 0 1.116 2.692l.318.094c.835.246.835 1.428 0 1.674l-.319.094a1.873 1.873 0 0 0-1.115 2.693l.16.291c.415.764-.42 1.6-1.185 1.184l-.291-.159a1.873 1.873 0 0 0-2.693 1.116l-.094.318c-.246.835-1.428.835-1.674 0l-.094-.319a1.873 1.873 0 0 0-2.692-1.115l-.292.16c-.764.415-1.6-.42-1.184-1.185l.159-.291A1.873 1.873 0 0 0 1.945 8.93l-.319-.094c-.835-.246-.835-1.428 0-1.674l.319-.094A1.873 1.873 0 0 0 3.06 4.377l-.16-.292c-.415-.764.42-1.6 1.185-1.184l.292.159a1.873 1.873 0 0 0 2.692-1.115l.094-.319z"/>
-        </symbol>
-
-        <symbol id="person" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-badge" viewBox="0 0 16 16">
-          <path d="M6.5 2a.5.5 0 0 0 0 1h3a.5.5 0 0 0 0-1h-3zM11 8a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
-          <path d="M4.5 0A2.5 2.5 0 0 0 2 2.5V14a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2.5A2.5 2.5 0 0 0 11.5 0h-7zM3 2.5A1.5 1.5 0 0 1 4.5 1h7A1.5 1.5 0 0 1 13 2.5v10.795a4.2 4.2 0 0 0-.776-.492C11.392 12.387 10.063 12 8 12s-3.392.387-4.224.803a4.2 4.2 0 0 0-.776.492V2.5z"/>
-        </symbol>
-
-        <symbol id="basket" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-basket3" viewBox="0 0 16 16">
-          <path d="M5.757 1.071a.5.5 0 0 1 .172.686L3.383 6h9.234L10.07 1.757a.5.5 0 1 1 .858-.514L13.783 6H15.5a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5H.5a.5.5 0 0 1-.5-.5v-1A.5.5 0 0 1 .5 6h1.717L5.07 1.243a.5.5 0 0 1 .686-.172zM3.394 15l-1.48-6h-.97l1.525 6.426a.75.75 0 0 0 .729.574h9.606a.75.75 0 0 0 .73-.574L15.056 9h-.972l-1.479 6h-9.21z"/>
-      </symbol>
-
-    </defs>
-  </svg>
-
-    <!--ヘッダー-->
-    <div class="container">
-        <header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom">
-          <a href="/" class="d-flex align-items-center col-md-3 mb-2 mb-md-0 text-dark text-decoration-none fs-5">
-            <img src="../img/logo.png" width="38px" class="rounded-3"> C4's Portal
-          </a>
-    
-          <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
-            <li><a href="../" class="nav-link px-2 mx-1"><svg viewBox="0 0 16 16" x="0" y="0" width="24px" height="24px"><use class="text-dark" xlink:href="#house"></use></svg></a></li>
-            <li><a href="../event" class="nav-link px-2 mx-1"><svg viewBox="0 0 16 16" x="0" y="0" width="24px" height="24px"><use class="text-dark" xlink:href="#calendar"></use></svg></a></li>
-            <li><a href="../equips" class="nav-link px-2 mx-1"><svg viewBox="0 0 16 16" x="0" y="0" width="24px" height="24px"><use class="text-dark" xlink:href="#box"></use></svg></a></li>
-            <li><a href="../money" class="nav-link px-2 mx-1"><svg viewBox="0 0 16 16" x="0" y="0" width="24px" height="24px"><use class="text-dark" xlink:href="#cash"></use></svg></a></li>
-            <!--<li><a href="../wallet" class="nav-link px-2 mx-1"><svg viewBox="0 0 16 16" x="0" y="0" width="24px" height="24px"><use class="text-dark" xlink:href="#wallet"></use></svg></a></li>-->
-            <li><a href="../store" class="nav-link px-2 mx-1"><svg viewBox="0 0 16 16" x="0" y="0" width="24px" height="24px"><use class="text-dark" xlink:href="#basket"></use></svg></a></li>
-            <li><a href="../procedure" class="nav-link px-2 mx-1"><svg viewBox="0 0 16 16" x="0" y="0" width="24px" height="24px"><use class="text-dark" xlink:href="#textFile"></use></svg></a></li>
-          </ul>
-    
-          <div class="col-md-3 text-end" id="account">
-            <div class="spinner-border" role="status">
-                <span class="visually-hidden">Loading...</span>
-              </div>
-          </div>
-        </header>
+  <!--最初のロード画面-->
+  <div id="overray" style="position: fixed; left: 0; top: 0; width: 100%; height: 100%; background-color: white; z-index: 2147483647;">
+    <div style="width: 100%; max-width: 120px; margin: 30px auto;">
+      <img src="/img/loading.svg" style="width: 100%">
     </div>
+    <h5 class="mt-3 text-center">プロフィール</h5>
+    <div class="text-center mt-5" id="loading-overray">
+      <div class="spinner-grow" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
+  </div>
 
-    <div class="container">
-        <h2 class="fs-2 fw-normal"><svg class="me-3 ms-2" viewBox="0 0 16 16" x="0" y="0" width="36px" height="36px"><use xlink:href="#person"></use></svg>アカウント</h2>
+  <div id="header"></div>
 
-        <div class="py-3 px-3" style="max-width: 600px">
-            <h4 class="fw-normal text-secondary">Google アカウント</h4>
-            
-            <div class="py-2">
-                <img class="rounded-pill my-1" width="48px" id="userIcon"><span id="userName" class="fs-5 ms-2"></span>
-                <div class="small text-secondary" id="userEmail">ログインしていません</div>
+  <div class="container mw-lg mb-5">
+    <h2 class="text-center my-5"><i class="bi bi-person-badge"> </i>プロフィール</h2>
 
-                <div class="border rounded mx-2 my-2 px-2 py-3 text-center bg-white shadow-sm">
-                    <div class="small text-secondary mb-2">ログイン</div>
-                    <button type="button" class="btn btn-outline-dark me-2" onclick="login()"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-google" viewBox="0 0 16 16"><path d="M15.545 6.558a9.42 9.42 0 0 1 .139 1.626c0 2.434-.87 4.492-2.384 5.885h.002C11.978 15.292 10.158 16 8 16A8 8 0 1 1 8 0a7.689 7.689 0 0 1 5.352 2.082l-2.284 2.284A4.347 4.347 0 0 0 8 3.166c-2.087 0-3.86 1.408-4.492 3.304a4.792 4.792 0 0 0 0 3.063h.003c.635 1.893 2.405 3.301 4.492 3.301 1.078 0 2.004-.276 2.722-.764h-.003a3.702 3.702 0 0 0 1.599-2.431H8v-3.08h7.545z"/></svg> ログイン</button>
-                    <button class="btn btn-outline-danger" onclick="logout()">ログアウト</button>
-                </div>
+    <div class="row">
+      <div class="col-lg-6">
+        <h6 class="fw-normal text-secondary text-center mt-5 mb-3">Google アカウント</h6>
+        <div class="p-3 rounded-md border bg-white mw-md mx-auto shadow-sm">
+          <div style="max-width: 48px; height: auto;" class="mx-auto">
+            <img src="/icons/person-circle-gray.svg" id="userPic" class="rounded-circle w-100">
+          </div>
+          <h4 id="userName" class="text-center mt-3"></h4>
+          <p class="text-secondary text-center my-1" id="userEmail"></p> 
+          <div class="mx-auto mt-3" style="width: 160px;">
+            <button class="btn btn-outline-secondary btn-sm rounded-pill w-100" onclick="logout()">ログアウト</button>
+          </div>
+        </div>
+    
+        <h6 class="fw-normal text-secondary text-center mt-5 mb-3">C4's アカウント</h6>
+        <div class="p-3 rounded-md border bg-white mw-md mx-auto shadow-sm">
+          <h4 id="c4suserName" class="text-center"></h4>
+          <p class="text-secondary text-center small my-1" style="color: darkslateblue;" id="c4suserRole"></p>
+          <h5 class="w-50 m-auto"><span class="badge w-100" id="ranktext"></span></h5>
+          <hr>
+          <!--トップページから移植したポイント表示-->
+          <div class="text-center">
+            <p class="mb-0">あなたのC4'sポイント</p>
+            <h1 id="pointnum" class="fw-bold"></h1>
+            <div class="progress" style="height: 10px;" id="pointbars">
+              <div class="progress-bar progress-bar-striped" style="width: 0%;" role="progressbar" id="pointbar0"></div>
+              <div class="progress-bar progress-bar-striped" style="width: 0%;" role="progressbar" id="pointbar1"></div>
+              <div class="progress-bar progress-bar-striped" style="width: 0%;" role="progressbar" id="pointbar2"></div>
+              <div class="progress-bar progress-bar-striped" style="width: 0%;" role="progressbar" id="pointbar3"></div>
             </div>
+            <div id="restpoint" class="text-end m-0"></div>
+          </div>
         </div>
 
-        <div class="py-3 px-3" style="max-width: 600px">
-          <h4 class="fw-normal text-secondary">履歴</h4>
-          <div class="accordion accordion mb-3" id="accordionFlushExample">
+        <h6 class="fw-normal text-secondary text-center mt-5 mb-3">活動履歴</h6>
+        <div class="p-3 rounded-md border bg-white mw-md mx-auto shadow-sm">
+          <div class="accordion">
             <div class="accordion-item">
-              <h2 class="accordion-header" id="flush-headingOne">
-                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
-                  部費支払い履歴
-                </button>
-              </h2>
-              <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
-                <ul class="list-group mx-2 my-2" id="buhiRecord">
-                  
-                </ul>
-              </div>
-            </div>
-
-            <div class="accordion-item">
-              <h2 class="accordion-header" id="flush-headingTwo">
-                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">
+              <h2 class="accordion-header">
+                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
                   活動参加履歴
                 </button>
               </h2>
-              <div id="flush-collapseTwo" class="accordion-collapse collapse" aria-labelledby="flush-headingTwo" data-bs-parent="#accordionFlushExample">
-                <ul class="list-group mx-2 my-2" id="attendHistory">
-                  
-                </ul>
+              <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                <div class="accordion-body">
+                  <p class="text-danger text-center">
+                    履歴はありません
+                  </p>
+                </div>
               </div>
             </div>
-
             <div class="accordion-item">
-              <h2 class="accordion-header" id="flush-headingThree">
-                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseThree" aria-expanded="false" aria-controls="flush-collapseThree">
+              <h2 class="accordion-header" id="headingTwo">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                  部費支払い履歴
+                </button>
+              </h2>
+              <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
+                <div class="accordion-body">
+                  <p class="text-danger text-center">
+                    履歴はありません
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="accordion-item">
+              <h2 class="accordion-header" id="headingThree">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
                   ストア購入履歴
                 </button>
               </h2>
-              <div id="flush-collapseThree" class="accordion-collapse collapse" aria-labelledby="flush-headingThree" data-bs-parent="#accordionFlushExample">
-                <ul class="list-group mx-2 my-2" id="storeHistory">
-                  
-                </ul>
+              <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
+                <div class="accordion-body">
+                  <p class="text-danger text-center">
+                    履歴はありません
+                  </p>
+                </div>
               </div>
             </div>
           </div>
         </div>
-
-        <div class="py-3 px-3" style="max-width: 600px">
-          <h4 class="fw-normal text-secondary">ランク</h4>
-
-          <div class="border rounded mx-2 my-2 px-3 py-3 bg-white shadow-sm">
-            <div class="text-secondary fw-normal">保有ポイント</div>
-            <div class="fs-5 ms-2 fw-bold"><span id="myPoint"></span> pt</div>
- 
-            <table class="table table-striped mb-3 mt-2 text-center small">
-              <thead>
-                <tr>
-                  <th scope="col">ランク</th>
-                  <th scope="col">ノーマル</th>
-                  <th scope="col">ブロンズ</th>
-                  <th scope="col">シルバー</th>
-                  <th scope="col">ゴールド</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <th scope="row">必要ポイント [pt]</th>
-                  <td>0</td>
-                  <td>3,000</td>
-                  <td>8,000</td>
-                  <td>15,000</td>
-                </tr>
-                <tr>
-                  <th scope="row">達成済み</th>
-                  <td>
-                    <svg xmlns="http://www.w3.org/2000/svg" id="normal" width="20" height="20" fill="currentColor" style="color: #00aee3; display: none;" class="ms-2 bi bi-check-circle-fill" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/></svg>
-                  </td>
-                  <td >
-                    <svg xmlns="http://www.w3.org/2000/svg" id="bronze" width="20" height="20" fill="currentColor" style="color: #c95700; display: none;" class="ms-2 bi bi-check-circle-fill" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/></svg>
-                  </td>
-
-                  <td >
-                    <svg xmlns="http://www.w3.org/2000/svg" id="silver" width="20" height="20" fill="currentColor" style="color: #aba9a1; display: none;" class="ms-2 bi bi-check-circle-fill" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/></svg>
-                  </td>
-
-                  <td >
-                    <svg xmlns="http://www.w3.org/2000/svg" id="gold" width="20" height="20" fill="currentColor" style="color: #decb00; display: none;" class="ms-2 bi bi-check-circle-fill" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/></svg>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-
-          </div>
-        </div>
-        
-        
-      <div class="py-3 px-3" style="max-width: 600px">
-        <h4 class="fw-normal text-secondary">部員情報</h4>
-
-        <div class="mb-3">
-            <label>氏名</label>
-            <input class="form-control" type="text" id="name">
-        </div>
-        
-        <div class="mb-3">
-            <label>氏名（よみがな）</label>
-            <input class="form-control" type="text" id="nameKana">
-        </div>
-
-        <div class="mb-3">
-            <label>性別</label>
-            <select class="form-select" id="sex">
-                <option value="man">男性</option>
-                <option value="woman">女性</option>
-                <option value="other">その他</option>
-            </select>
-        </div>
-
-        <div class="mb-3">
-            <label>誕生日</label>
-            <input type="date" class="form-control" id="birth">
-        </div>
-
-        <div class="mb-3">
-            <label>学部・学科</label>
-            <div class="small text-secondary">理科大の方はこちらから選択</div>
-            <select class="form-select" id="department">
-                <option value="0">理学部第一部 数学科</option>
-                <option value="1">理学部第一部 物理学科</option>
-                <option value="2">理学部第一部 化学科</option>
-                <option value="3">理学部第一部 応用数学科</option>
-                <option value="4">理学部第一部 応用化学科</option>
-                <option value="5">工学部 建築学科</option>
-                <option value="6">工学部 工業化学科</option>
-                <option value="7">工学部 電気工学科</option>
-                <option value="8">工学部 情報工学科</option>
-                <option value="9">工学部 機械工学科</option>
-                <option value="10">薬学部 薬学科</option>
-                <option value="11">薬学部 生命創薬科学科</option>
-                <option value="12">創域理工学部 数理科学科</option>
-                <option value="13">創域理工学部 先端物理学科</option>
-                <option value="14">創域理工学部 情報計算科学科</option>
-                <option value="15">創域理工学部 生命生物科学科</option>
-                <option value="16">創域理工学部 建築学科</option>
-                <option value="17">創域理工学部 先端化学科</option>
-                <option value="18">創域理工学部 電気電子情報工学科</option>
-                <option value="19">創域理工学部 経営システム工学科</option>
-                <option value="20">創域理工学部 機械航空宇宙工学科</option>
-                <option value="21">創域理工学部 社会基盤工学科</option>
-                <option value="22">先進工学部 電子システム工学科</option>
-                <option value="23">先進工学部 マテリアル創成工学科</option>
-                <option value="24">先進工学部 生命システム工学科</option>
-                <option value="25">先進工学部 物理工学科</option>
-                <option value="26">先進工学部 機械デザイン工学科</option>
-                <option value="27">経営学部 経営学科</option>
-                <option value="28">経営学部 ビジネスエコノミクス学科</option>
-                <option value="29">経営学部 国際デザイン経営学科</option>
-                <option value="30">理学部第二部 数学科</option>
-                <option value="31">理学部第二部 物理学科</option>
-                <option value="32">理学部第二部 化学科</option>
-                <option selected>その他</option>
-            </select>
-        </div>
-
-        <div class="mb-3">
-            <label>学年</label>
-            <div class="input-group">
-                <input class="form-control" type="number" id="grade">
-                <span class="input-group-text" id="basic-addon2">年生</span>
+      </div>
+      <div class="col-lg-6">
+        <h6 class="fw-normal text-secondary text-center mt-5 mb-3">部員情報</h6>
+        <div class="p-3 rounded-md border bg-white mw-md mx-auto shadow-sm">
+          <p class="text-secondary text-center">
+            部員名簿に登録されている情報です。<br>
+            氏名・性別などが変更になる場合は<br>
+            ページ下部のフォームからお願いします。
+          </p>
+    
+          <div class="mw-md mx-auto">
+            <div class="mb-3">
+              <h6>お名前</h6>
+              <input class="form-control" type="text" id="name" disabled>
             </div>
-        </div>
+            <div class="mb-3">
+              <h6>お名前(よみがな)</h6>
+              <input class="form-control" type="text" id="nameKana" disabled>
+            </div>
+            <div class="mb-3">
+              <h6>性別</h6>
+              <input class="form-control" type="text" id="gender" disabled>
+            </div>
+            <div class="mb-3">
+              <h6>生年月日</h6>
+              <input class="form-control" type="date" id="birth" disabled>
+            </div>
+            <div class="mb-3">
+              <h6>所属</h6>
+              <input class="form-control" type="text" id="department" disabled>
+            </div>
+            <div class="mb-3">
+              <h6>学年</h6>
+              <input class="form-control" type="number" id="grade">
+              <p class="mb-0 text-danger text-end small" id="grade-alert">変更できます</p>
+            </div>
+            <div class="mb-3">
+              <h6>学籍番号</h6>
+              <input class="form-control" type="text" id="studentNumber" disabled>
+            </div>
+            <div class="mb-3">
+              <h6>電話番号</h6>
+              <input class="form-control" type="tel" id="phoneNumber">
+              <p class="mb-0 text-danger text-end small" id="phoneNumber-alert">変更できます</p>
+            </div>
+            <div class="mb-3">
+              <h6>自己紹介</h6>
+              <textarea class="form-control" type="tel" id="detail"></textarea>
+              <p class="mb-0 text-danger text-end small" id="detail-alert">変更できます</p>
+            </div>
+            <div class="w-50 mx-auto">
+              <button class="btn btn-dark w-100" onclick="upload()">更新</button>
+            </div>
 
-        <div class="mb-3">
-            <label>大学名・学部・学科（理科大以外の方）</label>
-            <input type="text" class="form-control" id="otherDepart">
-        </div>
-
-        <div class="mb-3">
-            <label>学籍番号</label>
-            <input type="text" class="form-control" id="schoolNumber">
-        </div>
-
-        <div class="mb-3">
-            <label>電話番号（ハイフン"-"なし）</label>
-            <input type="tel" class="form-control" id="phoneNumber">
-        </div>
-
-        <div class="mb-3">
-            <label>自己PR（過去の制作経験、目標、楽しみなこと、など）</label>
-            <textarea class="form-control" id="detail"></textarea>
-        </div>
-
-        <div class="text-end">
-            <button onclick="upload()" class="btn btn-dark">更新</button>
+            <p class="my-3 text-center">
+              <a onclick="offer()" class="text-secondary pointer">その他の情報を変更する</a>
+            </p>
+          </div>
         </div>
       </div>
     </div>
+  </div>
 </body>
 </html>

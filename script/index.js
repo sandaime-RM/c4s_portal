@@ -42,13 +42,11 @@ var historynum;
 //URLでパラメータ指定されたときのGIFTID
 var giftID;
 
-//ユーザーランクの定義
-var ranks = {
-  name : ["ノーマル", "ブロンズ", "シルバー", "ゴールド"],
-  //color : ["cornflowerblue", "darkgreen", "purple", "goldenrod"],
-  color : ["cornflowerblue", "#c95700", "#aba9a1", "#decb00"],
-  basis : [0, 1000, 5000, 12000]
-}
+var ranks;
+//jsonファイルを読み込み
+fetch("/script/variable.json").then((data) => { return data.json(); }).then((json) => {
+  ranks = json.ranks;
+});
 
 //ユーザー情報の取得
 onAuthStateChanged(auth, (snapshot) => {  

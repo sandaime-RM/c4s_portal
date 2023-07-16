@@ -75,12 +75,13 @@ onAuthStateChanged(auth, (snapshot) => {
               let noLogins = {};
               Object.keys(users).forEach((uid) => {
                 if(!users[uid].accessHistory) {
-                  noLogins[user.uid] = { 氏名 : user.name, 最終ログイン : "不明" };
+                  noLogins[uid] = { 氏名 : users[uid].name, 最終ログイン : "不明" };
                 }
-                else if(new Date(c4suser.accessHistory[Object.keys(c4suser.accessHistory).slice(-1)[0]].date).getTime() < new Date().getTime() - 1000 * 60 * 60 * 24 * 30) {
-                  noLogins[user.uid] = { 氏名 : user.name, 最終ログイン : new Date(c4suser.accessHistory[Object.keys(c4suser.accessHistory).slice(-1)[0]].date) }
+                else if(new Date(users[uid].accessHistory[Object.keys(users[uid].accessHistory).slice(-1)[0]].date).getTime() < new Date().getTime() - 1000 * 60 * 60 * 24 * 30) {
+                  noLogins[uid] = { 氏名 : users[uid].name, 最終ログイン : new Date(users[uid].accessHistory[Object.keys(users[uid].accessHistory).slice(-1)[0]].date) }
                 }
               });
+              console.warn("一か月以上ログインしていないユーザー一覧");
               console.table(noLogins);
             })
           }

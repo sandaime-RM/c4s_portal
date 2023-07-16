@@ -153,7 +153,7 @@ onAuthStateChanged(auth, (snapshot) => {
 
         //まだメニューがないページは旧スクリプト
         if(!getObj("menu") && location.pathname != "/procedure/join.html" && location.pathname != "/procedure/join2.html") {
-          if(snapshot.child("point").exists()) {
+          if(c4suser.point) {
             var point = snapshot.child("point").val();
             var color = "#c95700";
             

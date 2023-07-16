@@ -1,7 +1,7 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-app.js";
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-analytics.js";
 import { GoogleAuthProvider, getAuth, onAuthStateChanged, signInWithPopup, signOut } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-auth.js";
-import { getDatabase, ref, get, push, onValue, remove } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-database.js";
+import { getDatabase, ref, get, set, push, onValue, remove } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-database.js";
 import { getObj } from "/script/methods.js";
 
 const firebaseConfig = {
@@ -40,6 +40,9 @@ onAuthStateChanged(auth, (snapshot) => {
   if (user) {
     console.log(user);
 
+    //ユーザーアイコンのURLを取得
+    set(ref(db, "users/" + user.uid + "/userPic"), user.photoURL);
+
     get(ref(db, "users/" + user.uid)).then((snapshot) => {
       c4suser = snapshot.val();
       get(ref(db, "admin-users")).then((snapshot) => {
@@ -57,7 +60,7 @@ onAuthStateChanged(auth, (snapshot) => {
           function news () {
             //ローカル環境でも表示しない
             if(location.hostname == "localhost") { return; }
-            if(!c4suser.accessHistory || new Date(c4suser.accessHistory[Object.keys(c4suser.accessHistory).slice(-1)[0]].date) < new Date("2023-07-16 10:02"))
+            if(!c4suser.accessHistory || new Date(c4suser.accessHistory[Object.keys(c4suser.accessHistory).slice(-1)[0]].date) < new Date("2023-07-16 10:15"))
             { alert("アップデート：プロフィール画面が復活！"); alert("左上のメニュー画面から自分のアイコンをクリックorタップしてみよう"); }
           }
           news();

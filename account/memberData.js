@@ -228,7 +228,7 @@ window.offer = function offer () {
       target : "admin",
       time : new Date().getTime(),
       dead : new Date().getTime() + 1000 * 60 * 60 * 24 * 30,
-      link : "mailto:" + c4suser.studentNumber + "@ed.tus.ac.jp?subject=C4's Portalより 部員情報の変更申請を受理しました"
+      link : "mailto:" + c4suser.studentNumber + "@ed.tus.ac.jp"
     }).then(() => {
       alert("送信しました。");
     })

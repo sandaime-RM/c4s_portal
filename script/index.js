@@ -412,8 +412,6 @@ export function repoint(amount) {
   c4suser.point = amount;
   getObj("pointnum").innerText = amount;
   var ranknum = ranks.basis.length - 1;
-  //0以下または未定義なら0にリセット
-  if ( amount < ranks.basis[0] || !amount) { set(ref(db, "users/" + user.uid + "/point"), 0); amount = 0; }
   //最高ランクなら最高ランク表示にする
   if ( ranks.basis.slice(-1)[0] <= amount ) {
     getObj("pointbar" + String(ranks.name.length - 1)).style.width = "100%";

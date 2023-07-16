@@ -43,9 +43,6 @@ onAuthStateChanged(auth, (snapshot) => {
   if (user) {
     console.log(user);
 
-    //ユーザーアイコンのURLを取得
-    set(ref(db, "users/" + user.uid + "/userPic"), user.photoURL);
-
     get(ref(db, "users/" + user.uid)).then((snapshot) => {
       c4suser = snapshot.val();
       get(ref(db, "admin-users")).then((snapshot) => {
@@ -59,6 +56,8 @@ onAuthStateChanged(auth, (snapshot) => {
 
         //部員用
         if(c4suser) {
+          status = 1;
+
           //更新情報を表示
           function news () {
             //ローカル環境でも表示しない
@@ -68,7 +67,8 @@ onAuthStateChanged(auth, (snapshot) => {
           }
           news();
 
-          status = 1;
+          //ユーザーアイコンのURLを取得
+          set(ref(db, "users/" + user.uid + "/userPic"), user.photoURL);
 
           var outsideonly = document.getElementsByClassName("outsideonly");
           Object.keys(outsideonly).forEach((key) => { outsideonly[key].style.display = "none"; })
@@ -80,6 +80,14 @@ onAuthStateChanged(auth, (snapshot) => {
           if(getObj("menu")) {
             getObj("userName_offcanvas").innerText = c4suser.name;
             getObj("userData_offcanvas").innerText = c4suser.department.split(' ').splice(-1)[0];
+          }
+    
+          //アクセス履歴を表示
+          if(c4suser && location.hostname != "localhost") {
+            push(ref(db, "users/" + user.uid + "/accessHistory"), {
+              date : (new Date()).getTime(),
+              path : location.pathname
+            });
           }
           
           //管理者用
@@ -174,14 +182,6 @@ onAuthStateChanged(auth, (snapshot) => {
             }
           }
           document.getElementById("account").innerHTML = '<img id="userpic" src="'+user.photoURL+'" width="32px" height="32px" class="rounded-pill mx-2" onclick="goAccount()" style="cursor: pointer;"> <span class="fs-5" style="user-select: none; cursor: pointer;" onclick="goAccount()">'+user.displayName+' <span id="topUserTag"></span></span>'
-        }
-    
-        //アクセス履歴を表示
-        if(c4suser && location.hostname != "localhost") {
-          push(ref(db, "users/" + user.uid + "/accessHistory"), {
-            date : (new Date()).getTime(),
-            path : location.pathname
-          });
         }
       })
     });

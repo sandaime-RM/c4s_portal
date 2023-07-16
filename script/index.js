@@ -88,8 +88,8 @@ onAuthStateChanged(auth, (snapshot) => {
         //HTMLにランクバーを表示
         for (let i = 0; i < ranks.name.length; i++) {
           getObj("pointbars").tail('<div class="progress-bar progress-bar-striped" style="width: 0%;" role="progressbar" id="pointbar' + i + '"></div>'); 
-        }
-        var url = new URL(window.location.href);
+          }
+          var url = new URL(window.location.href);
         var giftID = url.searchParams.get("getpoint");
     
         //ポイント情報が更新されたとき
@@ -168,6 +168,9 @@ onAuthStateChanged(auth, (snapshot) => {
             }
           });
         }
+        //部員登録完了画面からの遷移
+        var join2 = url.searchParams.get("new");
+        if(join2) { alert("ようこそ！左上のメニューから各ページにアクセスしてみてください。"); }
       }
       else {
         //ゲスト用表示

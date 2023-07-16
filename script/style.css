@@ -1,5 +1,6 @@
 .hide { display: none; }
 
+.mw-xs { max-width: 120px; }
 .mw-sm { max-width: 360px; }
 .mw-md { max-width: 480px; }
 .mw-lg { max-width: 960px; }
@@ -145,3 +146,7 @@
   from { opacity: 75%; }
   to { opacity: 100%; }
 }
+
+/* import web fonts */
+@import url('https://fonts.googleapis.com/css2?family=Kaisei+Tokumin:wght@800&display=swap');
+.font-kaisei-tokumin-eb { font-family: 'Kaisei Tokumin', serif; }

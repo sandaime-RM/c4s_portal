@@ -85,18 +85,18 @@ export function upload() {
 
   //不備チェック
   try {
-    if(data.name) { getObj("name-alert").html = ""; } else { getObj("name-alert").html = "入力されていません"; e("name is null"); }
-    if(data.nameKana) { getObj("nameKana-alert").html = ""; } else { getObj("nameKana").html = "入力されていません"; e("nameKana is null"); }
-    if(data.sex) { getObj("gender-alert").html = ""; } else { getObj("gender-alert").html = "選択してください"; e("gender is not selected"); }
-    if(data.birth) { getObj("birth-alert").html = ""; } else { getObj("birth-alert").html = "入力されていません"; e("birth is null"); }
-    if(getObj("belong-tus").checked && data.departmentIndex == 33) { getObj("department-alert").html = "選択されていません"; e("department is null"); }
-      else { getObj("department-alert").html = ""; }
-    if(getObj("belong-other").checked && !data.department) { getObj("department-free-alert").html = "入力されていません"; e("department is null"); }
-      else { getObj("department-free-alert").html = ""; }
-    if(0 < data.grade) { getObj("grade-alert").html = ""; } else { getObj("grade-alert").html = "正しく入力されていません"; e("undefined grade"); }
-    if(data.studentNumber) { getObj("studentNumber-alert").html = ""; } else { getObj("studentNumber-alert").html = "入力されていません"; e("student number is null"); }
-    if(data.phoneNumber) { getObj("phoneNumber-alert").html = ""; } else { getObj("phoneNumber-alert").html = "入力されていません"; e("phone number is null"); }
-    if(data.detail) { getObj("detail-alert").html = ""; } else { getObj("detail-alert").html = "必須項目です"; e("detail is null"); }
+    if(data.name) { getObj("name-alert").html(); } else { getObj("name-alert").html("入力されていません"); e("name is null"); }
+    if(data.nameKana) { getObj("nameKana-alert").html(); } else { getObj("nameKana").html("入力されていません"); e("nameKana is null"); }
+    if(data.sex) { getObj("gender-alert").html(); } else { getObj("gender-alert").html("選択してください"); e("gender is not selected"); }
+    if(data.birth) { getObj("birth-alert").html(); } else { getObj("birth-alert").html("入力されていません"); e("birth is null"); }
+    if(getObj("belong-tus").checked && data.departmentIndex == 33) { getObj("department-alert").html("選択されていません"); e("department is null"); }
+      else { getObj("department-alert").html(); }
+    if(getObj("belong-other").checked && !data.department) { getObj("department-free-alert").html("入力されていません"); e("department is null"); }
+      else { getObj("department-free-alert").html(); }
+    if(0 < data.grade) { getObj("grade-alert").html(); } else { getObj("grade-alert").html("正しく入力されていません"); e("undefined grade"); }
+    if(data.studentNumber) { getObj("studentNumber-alert").html(); } else { getObj("studentNumber-alert").html("入力されていません"); e("student number is null"); }
+    if(data.phoneNumber) { getObj("phoneNumber-alert").html(); } else { getObj("phoneNumber-alert").html("入力されていません"); e("phone number is null"); }
+    if(data.detail) { getObj("detail-alert").html(); } else { getObj("detail-alert").html("必須項目です"); e("detail is null"); }
     function e (msg) { throw new Error(msg); }
   } catch (msg) { getObj("input-alert").show(); window.scroll({ top : 0 }); console.error(msg); return; }
 

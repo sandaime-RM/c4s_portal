@@ -74,7 +74,7 @@
     </script>
   </div>
 
-  <p class="text-center my-5" id="showmore"><a class="text-secondary my-5" onclick="showmore()">さらに見る</a></p>
+  <p class="text-center my-5" id="showmore"><a class="text-secondary my-5 pointer" onclick="showmore()">さらに見る</a></p>
   <script>
     window.showmore = function () {
       document.getElementById("more").style.display = "block"; 
@@ -82,9 +82,33 @@
     }
   </script>
 
-  <div id="more">
+  <div id="more" class="mb-5 hide">
 
+    <h3 class="text-center bi bi-caret-down-fill my-4"></h3>
 
+    <div class="mw-md mx-auto bg-white shadow-sm rounded-md p-3">
+      <h5 class="text-center mb-3">esaにログインしよう</h5>
+      <p style="text-align: justify;">
+        　esaは、部会での議事録などを管理するシステムです。ご自身のGoogleアカウントでログインしておいてください。
+      </p>
+      <div class="bg-dark text-white text-center w-100 rounded-sm hover pointer" style="line-height: 3em;" onclick="joinEsa()">
+        esa「c4s」に参加
+      </div>
+      <script>window.joinEsa = function () { location.href = "https://c4s.esa.io/team/invitations/member-bdea0c194425635198c6ca6e739e0613"; }</script>
+    </div>
+
+    <h3 class="text-center bi bi-caret-down-fill my-4"></h3>
+
+    <div class="mw-md mx-auto bg-white shadow-sm rounded-md p-3">
+      <h5 class="text-center mb-3">ガクセイ協賛にログインしよう</h5>
+      <p style="text-align: justify;">
+        　学生協賛に参加すると部費に還元されます。積極的に活動に参加したい方はご協力をお願いします。
+      </p>
+      <div class="bg-dark text-white text-center w-100 rounded-sm hover pointer" style="line-height: 3em;" onclick="joinKyosan()">
+        ガクセイ協賛に参加
+      </div>
+      <script>window.joinKyosan = function () { location.href = "https://www.gakuseikyosan.com/member_regist/step1?is_group=2&in_code=zW8wxXSe"; }</script>
+    </div>
   </div>
 
   <!--

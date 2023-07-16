@@ -22,6 +22,8 @@ const auth = getAuth();
 
 var user = {};
 
+var DOUI = false;
+
 //ユーザー情報の取得
 onAuthStateChanged(auth, (us) => {
   user = us;
@@ -56,8 +58,19 @@ onAuthStateChanged(auth, (us) => {
   });
 });
 
+//同意ボタンが押されたら入部ボタンを有効化
+window.DOUI = function () {
+  $("#DOUI-btn").css("background", "#FFDFCF").css("opacity", 1)
+  .removeClass("pointer").removeClass("hover").html("<i class='bi bi-check'></i>");
+  $("#upload-btn").css("background", "#FF7F00").css("color", "white")
+  .addClass("pointer").addClass("hover");
+  DOUI = true;
+}
+
 //部員情報アップロード
-export function upload() {
+window.upload =function upload() {
+  if(!DOUI) { alert("会則に同意されない場合は入部できません"); return; }
+
   //値の代入
   var data = {};
 
@@ -117,4 +130,3 @@ export function upload() {
     });
   }
 }
-window.upload = upload;

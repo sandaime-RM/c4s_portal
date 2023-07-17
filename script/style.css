@@ -1,5 +1,9 @@
 .hide { display: none; }
 
+.adminonly { display: none; }
+.activeonly { display: none; }
+.outsideonly { display: none; }
+
 .mw-xs { max-width: 120px; }
 .mw-sm { max-width: 360px; }
 .mw-md { max-width: 480px; }
@@ -13,7 +17,7 @@
 .c4s { color: rgb(255, 127, 0); }
 .c4s-dark { color: rgb(191, 95, 0);}
 
-.bg-c4s { background-color: rgb(255, 127, 0); color: white;}
+.bg-c4s { background-color: rgb(255, 127, 0); color: white; }
 .bg-c4s-light { background-color: rgb(255, 247, 239); }
 .bg-c4s-dark { background-color: rgb(255, 95, 0); color: white; }
 

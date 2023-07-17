@@ -33,22 +33,18 @@ onAuthStateChanged(auth, (us) => {
     //部員登録済みはバイバイ
     if(snapshot.val()) {
       get(ref(db, "admin-users/" + user.uid)).then((snapshot) => {
-        let back = true;
         //ローカルホストなら続行
-        if(location.hostname == "localhost") { back = false; }
+        if(location.hostname == "localhost") { start (); }
         //ローカルホストじゃなくても管理者アカウントなら続行
+        else if(snapshot.val()) { start(); }
+        //どっちの条件も満たしてなければバイバイ
         else {
-          if(snapshot.val()) { back = false; }
-        }
-        if(back) {
           alert("既に入部手続きを終えています。部員情報の更新は、アカウント画面からお願いします。");
           window.location.href = "/account";
         }
-        else {
-          start();
-        }
       })
     }
+    else { start (); }
 
     //部員でない人ならスタート
     //ローカル環境and管理者のときも一応スタート

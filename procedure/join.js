@@ -32,46 +32,50 @@ onAuthStateChanged(auth, (us) => {
   get(ref(db, "users/" + user.uid)).then((snapshot) =>{
     //部員登録済みはバイバイ
     if(snapshot.val()) {
-      let back = true;
-      if(location.hostname == localhost) { back = false; }
-      else {
-        get(ref(db, "admin-users/" + user.uid)).then((snapshot) => {
+      get(ref(db, "admin-users/" + user.uid)).then((snapshot) => {
+        let back = true;
+        //ローカルホストなら続行
+        if(location.hostname == "localhost") { back = false; }
+        //ローカルホストじゃなくても管理者アカウントなら続行
+        else {
           if(snapshot.val()) { back = false; }
-        })
-      }
-      if(back) {
-        alert("既に入部手続きを終えています。部員情報の更新は、アカウント画面からお願いします。");
-        window.location.href = "/account";
-        return;
-      }
+        }
+        if(back) {
+          alert("既に入部手続きを終えています。部員情報の更新は、アカウント画面からお願いします。");
+          window.location.href = "/account";
+        }
+        else {
+          start();
+        }
+      })
     }
 
     //部員でない人ならスタート
-    //ローカル環境のときも一応スタートさせる
-    if(location.hostname == "localhost") { console.warn("ローカル環境です。入部ボタンは押下しないでください。"); }
-
-    getObj("input-alert").hide();
-    getObj("belong-tus").onclick = function tus() {
-      getObj("department-tab").show();
-      getObj("department-free-tab").hide();
+    //ローカル環境and管理者のときも一応スタート
+    function start () {
+      getObj("input-alert").hide();
+      getObj("belong-tus").onclick = function tus() {
+        getObj("department-tab").show();
+        getObj("department-free-tab").hide();
+      }
+      getObj("belong-other").onclick = function other() {
+        getObj("department-tab").hide();
+        getObj("department-free-tab").show();
+      }
+      getObj("phoneNumber").value = user.phoneNumber;
+      getObj("grade").value = 1;
+  
+      getObj("loading-overray").hide();
+      $("#overray").fadeOut(2000);
     }
-    getObj("belong-other").onclick = function other() {
-      getObj("department-tab").hide();
-      getObj("department-free-tab").show();
-    }
-    getObj("phoneNumber").value = user.phoneNumber;
-    getObj("grade").value = 1;
-
-    getObj("loading-overray").hide();
-    $("#overray").fadeOut(2000);
   });
 });
 
 //同意ボタンが押されたら入部ボタンを有効化
 window.DOUI = function () {
-  $("#DOUI-btn").css("background", "#FFDFCF").css("opacity", 1)
+  $("#DOUI-btn").addClass("bg-c4s-light").css("color", "dimgray").css("opacity", 1)
   .removeClass("pointer").removeClass("hover").html("<i class='bi bi-check'></i>");
-  $("#upload-btn").css("background", "#FF7F00").css("color", "white")
+  $("#upload-btn").addClass("bg-c4s").css("color", "white")
   .addClass("pointer").addClass("hover");
   DOUI = true;
 }

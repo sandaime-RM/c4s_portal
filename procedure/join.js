@@ -31,30 +31,39 @@ onAuthStateChanged(auth, (us) => {
 
   get(ref(db, "users/" + user.uid)).then((snapshot) =>{
     //部員登録済みはバイバイ
-    if(snapshot.val() && location.hostname != "localhost") {
-      alert("既に入部手続きを終えています。部員情報の更新は、アカウント画面からお願いします。");
-      window.location.href = "/account";
+    if(snapshot.val()) {
+      let back = true;
+      if(location.hostname == localhost) { back = false; }
+      else {
+        get(ref(db, "admin-users/" + user.uid)).then((snapshot) => {
+          if(snapshot.val()) { back = false; }
+        })
+      }
+      if(back) {
+        alert("既に入部手続きを終えています。部員情報の更新は、アカウント画面からお願いします。");
+        window.location.href = "/account";
+        return;
+      }
     }
+
     //部員でない人ならスタート
     //ローカル環境のときも一応スタートさせる
-    else {
-      if(location.hostname == "localhost") { console.warn("ローカル環境です。入部ボタンは押下しないでください。"); }
+    if(location.hostname == "localhost") { console.warn("ローカル環境です。入部ボタンは押下しないでください。"); }
 
-      getObj("input-alert").hide();
-      getObj("belong-tus").onclick = function tus() {
-        getObj("department-tab").show();
-        getObj("department-free-tab").hide();
-      }
-      getObj("belong-other").onclick = function other() {
-        getObj("department-tab").hide();
-        getObj("department-free-tab").show();
-      }
-      getObj("phoneNumber").value = user.phoneNumber;
-      getObj("grade").value = 1;
-
-      getObj("loading-overray").hide();
-      $("#overray").fadeOut(2000);
+    getObj("input-alert").hide();
+    getObj("belong-tus").onclick = function tus() {
+      getObj("department-tab").show();
+      getObj("department-free-tab").hide();
     }
+    getObj("belong-other").onclick = function other() {
+      getObj("department-tab").hide();
+      getObj("department-free-tab").show();
+    }
+    getObj("phoneNumber").value = user.phoneNumber;
+    getObj("grade").value = 1;
+
+    getObj("loading-overray").hide();
+    $("#overray").fadeOut(2000);
   });
 });
 
@@ -124,9 +133,18 @@ window.upload =function upload() {
   }
   else {
     set(ref(db, "users/" + user.uid), data).then(() => {
-      setTimeout(() => {
-        window.location.href = "join2.html";
-      }, 6500);
+      push(ref(db, "notice"), {
+        title : "新規部員が登録されました！",
+        content : data.department + " " + data.grade + "年生の" + data.name + "さんが部員登録しました！",
+        target : "admin",
+        time : new Date().getTime(),
+        dead : new Date().getTime() + 1000 * 60 * 60 * 24 * 7,
+        link : "/control",
+      }).then(() => {
+        setTimeout(() => {
+          window.location.href = "join2.html";
+        }, 6000);
+      })
     });
   }
 }

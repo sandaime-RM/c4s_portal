@@ -13,6 +13,10 @@
 .c4s { color: rgb(255, 127, 0); }
 .c4s-dark { color: rgb(191, 95, 0);}
 
+.bg-c4s { background-color: rgb(255, 127, 0); color: white;}
+.bg-c4s-light { background-color: rgb(255, 247, 239); }
+.bg-c4s-dark { background-color: rgb(255, 95, 0); color: white; }
+
 .unclicked {
   display: inline-block;
   padding: 0.5em 1em;
@@ -21,7 +25,6 @@
   border-radius: 1.5em;
   cursor: pointer;
 }
-
 .clicked {
   display: inline-block;
   padding: 0.5em 1em;
@@ -32,9 +35,7 @@
   cursor: pointer;
 }
 
-.pointer {
-  cursor: pointer;
-}
+.pointer { cursor: pointer; }
 
 .loader,
 .loader:before,

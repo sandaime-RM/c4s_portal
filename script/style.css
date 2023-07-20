@@ -1,5 +1,10 @@
 .hide { display: none; }
 
+.adminonly { display: none; }
+.activeonly { display: none; }
+.outsideonly { display: none; }
+
+.mw-xs { max-width: 120px; }
 .mw-sm { max-width: 360px; }
 .mw-md { max-width: 480px; }
 .mw-lg { max-width: 960px; }
@@ -7,6 +12,14 @@
 .rounded-sm { border-radius: 5px; }
 .rounded-md { border-radius: 10px; }
 .rounded-lg { border-radius: 15px; }
+
+.c4s-background { background-color: rgb(255, 247, 239);}
+.c4s { color: rgb(255, 127, 0); }
+.c4s-dark { color: rgb(191, 95, 0);}
+
+.bg-c4s { background-color: rgb(255, 127, 0); color: white; }
+.bg-c4s-light { background-color: rgb(255, 247, 239); }
+.bg-c4s-dark { background-color: rgb(255, 95, 0); color: white; }
 
 .unclicked {
   display: inline-block;
@@ -16,7 +29,6 @@
   border-radius: 1.5em;
   cursor: pointer;
 }
-
 .clicked {
   display: inline-block;
   padding: 0.5em 1em;
@@ -27,9 +39,7 @@
   cursor: pointer;
 }
 
-.pointer {
-  cursor: pointer;
-}
+.pointer { cursor: pointer; }
 
 .loader,
 .loader:before,
@@ -141,3 +151,7 @@
   from { opacity: 75%; }
   to { opacity: 100%; }
 }
+
+/* import web fonts */
+@import url('https://fonts.googleapis.com/css2?family=Kaisei+Tokumin:wght@800&display=swap');
+.font-kaisei-tokumin-eb { font-family: 'Kaisei Tokumin', serif; }

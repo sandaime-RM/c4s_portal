@@ -15,7 +15,7 @@
     <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
   </div>
   <div class="offcanvas-body">
-    <div class="mx-2 row">
+    <div class="mx-2 row pointer hover" onclick="location.href='/account'">
       <div class="col-4">
         <img style="width: 100%; height: auto;" class="rounded-circle" id="userPic_offcanvas">
       </div>
@@ -31,6 +31,7 @@
       <h4 style="line-height: 45px; cursor: pointer;" id="menu-event" onclick="location.href='/event'"><i class="bi bi-calendar-check mx-3"></i>イベント・企画一覧</h4>
       <h4 style="line-height: 45px; cursor: pointer;" id="menu-equips" onclick="location.href='/equips'"><i class="bi bi-usb-symbol mx-3"></i>備品一覧</h4>
       <!--部員にならないとアクセスできないページ-->
+      <!--このリスト内のページタイトルはprocedure/join2.html内「以下のページが解放されました！」にも手動で同期させてください-->
       <div class="activeonly">
         <h4 style="line-height: 45px; cursor: pointer;" id="menu-document" onclick="location.href='/document'"><i class="bi bi-clipboard mx-3"></i>掲示板</h4>
         <h4 style="line-height: 45px; cursor: pointer;" id="menu-room" onclick="location.href='/room'"><i class="bi bi-door-open mx-3"></i>場所予約</h4>

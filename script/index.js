@@ -42,13 +42,11 @@ var historynum;
 //URLでパラメータ指定されたときのGIFTID
 var giftID;
 
-//ユーザーランクの定義
-var ranks = {
-  name : ["ノーマル", "ブロンズ", "シルバー", "ゴールド"],
-  //color : ["cornflowerblue", "darkgreen", "purple", "goldenrod"],
-  color : ["cornflowerblue", "#c95700", "#aba9a1", "#decb00"],
-  basis : [0, 1000, 5000, 12000]
-}
+var ranks;
+//jsonファイルを読み込み
+fetch("/script/variable.json").then((data) => { return data.json(); }).then((json) => {
+  ranks = json.ranks;
+});
 
 //ユーザー情報の取得
 onAuthStateChanged(auth, (snapshot) => {  
@@ -68,6 +66,26 @@ onAuthStateChanged(auth, (snapshot) => {
       //部員
       if(snapshot.val()){
         c4suser = snapshot.val();
+
+        //管理者のみ：最近ログインしていないユーザーを取得
+        get(ref(db, "admin-users/" + user.uid)).then((snapshot) => {
+          if(snapshot.val()) {
+            get(ref(db, "users")).then((snapshot) => {
+              let users = snapshot.val();
+              let noLogins = {};
+              Object.keys(users).forEach((uid) => {
+                if(!users[uid].accessHistory) {
+                  noLogins[uid] = { 氏名 : users[uid].name, 最終ログイン : "不明" };
+                }
+                else if(new Date(users[uid].accessHistory[Object.keys(users[uid].accessHistory).slice(-1)[0]].date).getTime() < new Date().getTime() - 1000 * 60 * 60 * 24 * 30) {
+                  noLogins[uid] = { 氏名 : users[uid].name, 最終ログイン : new Date(users[uid].accessHistory[Object.keys(users[uid].accessHistory).slice(-1)[0]].date) }
+                }
+              });
+              console.warn("一か月以上ログインしていないユーザー一覧");
+              console.table(noLogins);
+            })
+          }
+        })
         
         //プロフィールを表示
         getObj("userPic").innerHTML = '<img src="' + user.photoURL + '" style="width: 100%; height: 100%; border-radius: 50%;">'
@@ -90,8 +108,8 @@ onAuthStateChanged(auth, (snapshot) => {
         //HTMLにランクバーを表示
         for (let i = 0; i < ranks.name.length; i++) {
           getObj("pointbars").tail('<div class="progress-bar progress-bar-striped" style="width: 0%;" role="progressbar" id="pointbar' + i + '"></div>'); 
-        }
-        var url = new URL(window.location.href);
+          }
+          var url = new URL(window.location.href);
         var giftID = url.searchParams.get("getpoint");
     
         //ポイント情報が更新されたとき
@@ -170,6 +188,9 @@ onAuthStateChanged(auth, (snapshot) => {
             }
           });
         }
+        //部員登録完了画面からの遷移
+        var join2 = url.searchParams.get("new");
+        if(join2) { alert("ようこそ！左上のメニューから各ページにアクセスしてみてください。"); }
       }
       else {
         //ゲスト用表示
@@ -391,8 +412,6 @@ export function repoint(amount) {
   c4suser.point = amount;
   getObj("pointnum").innerText = amount;
   var ranknum = ranks.basis.length - 1;
-  //0以下または未定義なら0にリセット
-  if ( amount < ranks.basis[0] || !amount) { set(ref(db, "users/" + user.uid + "/point"), 0); amount = 0; }
   //最高ランクなら最高ランク表示にする
   if ( ranks.basis.slice(-1)[0] <= amount ) {
     getObj("pointbar" + String(ranks.name.length - 1)).style.width = "100%";

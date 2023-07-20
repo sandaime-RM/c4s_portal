@@ -1,7 +1,7 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-app.js";
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-analytics.js";
 import { GoogleAuthProvider, getAuth, onAuthStateChanged, signInWithPopup, signOut } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-auth.js";
-import { getDatabase, ref, get, push, onValue, remove } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-database.js";
+import { getDatabase, ref, get, set, push, onValue, remove } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-database.js";
 import { getObj } from "/script/methods.js";
 
 const firebaseConfig = {
@@ -33,7 +33,10 @@ var status = 0;
 onAuthStateChanged(auth, (snapshot) => {
   //ヘッダーを描画(メニューを含む)
   $("#header").load("/frames/header.html", function () {
-    $("#menu-" + location.pathname.split('/')[1]).css("color", "darkorange");
+    let id;
+    if(location.pathname.split('/')[1].split('?')[0] == "index.html") { id = ""; }
+    else { id = location.pathname.split('/')[1].split('?')[0]; }
+    $("#menu-" + id).css("color", "darkorange");
   });
 
   user = snapshot;
@@ -53,16 +56,19 @@ onAuthStateChanged(auth, (snapshot) => {
 
         //部員用
         if(c4suser) {
+          status = 1;
+
           //更新情報を表示
           function news () {
             //ローカル環境でも表示しない
             if(location.hostname == "localhost") { return; }
-            if(!c4suser.accessHistory || new Date(c4suser.accessHistory[Object.keys(c4suser.accessHistory).slice(-1)[0]].date) < new Date("2023-06-22 13:50"))
-            { alert("アップデート：メニュー画面が新しくなりました！"); alert("左上のプロフィールアイコンを押してみよう！"); }
+            if(!c4suser.accessHistory || new Date(c4suser.accessHistory[Object.keys(c4suser.accessHistory).slice(-1)[0]].date) < new Date("2023-07-16 10:15"))
+            { alert("アップデート：プロフィール画面が復活！"); alert("左上のメニュー画面から自分のアイコンをクリックorタップしてみよう"); }
           }
           news();
 
-          status = 1;
+          //ユーザーアイコンのURLを取得
+          set(ref(db, "users/" + user.uid + "/userPic"), user.photoURL);
 
           var outsideonly = document.getElementsByClassName("outsideonly");
           Object.keys(outsideonly).forEach((key) => { outsideonly[key].style.display = "none"; })
@@ -74,6 +80,14 @@ onAuthStateChanged(auth, (snapshot) => {
           if(getObj("menu")) {
             getObj("userName_offcanvas").innerText = c4suser.name;
             getObj("userData_offcanvas").innerText = c4suser.department.split(' ').splice(-1)[0];
+          }
+    
+          //アクセス履歴を表示
+          if(c4suser && location.hostname != "localhost") {
+            push(ref(db, "users/" + user.uid + "/accessHistory"), {
+              date : (new Date()).getTime(),
+              path : location.pathname
+            });
           }
           
           //管理者用
@@ -150,7 +164,7 @@ onAuthStateChanged(auth, (snapshot) => {
 
         //まだメニューがないページは旧スクリプト
         if(!getObj("menu") && location.pathname != "/procedure/join.html" && location.pathname != "/procedure/join2.html") {
-          if(snapshot.child("point").exists()) {
+          if(c4suser.point) {
             var point = snapshot.child("point").val();
             var color = "#c95700";
             
@@ -168,14 +182,6 @@ onAuthStateChanged(auth, (snapshot) => {
             }
           }
           document.getElementById("account").innerHTML = '<img id="userpic" src="'+user.photoURL+'" width="32px" height="32px" class="rounded-pill mx-2" onclick="goAccount()" style="cursor: pointer;"> <span class="fs-5" style="user-select: none; cursor: pointer;" onclick="goAccount()">'+user.displayName+' <span id="topUserTag"></span></span>'
-        }
-    
-        //アクセス履歴を表示
-        if(c4suser && location.hostname != "localhost") {
-          push(ref(db, "users/" + user.uid + "/accessHistory"), {
-            date : (new Date()).getTime(),
-            path : location.pathname
-          });
         }
       })
     });

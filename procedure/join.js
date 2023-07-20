@@ -22,6 +22,8 @@ const auth = getAuth();
 
 var user = {};
 
+var DOUI = false;
+
 //ユーザー情報の取得
 onAuthStateChanged(auth, (us) => {
   user = us;
@@ -29,15 +31,24 @@ onAuthStateChanged(auth, (us) => {
 
   get(ref(db, "users/" + user.uid)).then((snapshot) =>{
     //部員登録済みはバイバイ
-    if(snapshot.val() && location.hostname != "localhost") {
-      alert("既に入部手続きを終えています。部員情報の更新は、アカウント画面からお願いします。");
-      window.location.href = "/account";
+    if(snapshot.val()) {
+      get(ref(db, "admin-users/" + user.uid)).then((snapshot) => {
+        //ローカルホストなら続行
+        if(location.hostname == "localhost") { start (); }
+        //ローカルホストじゃなくても管理者アカウントなら続行
+        else if(snapshot.val()) { start(); }
+        //どっちの条件も満たしてなければバイバイ
+        else {
+          alert("既に入部手続きを終えています。部員情報の更新は、アカウント画面からお願いします。");
+          window.location.href = "/account";
+        }
+      })
     }
-    //部員でない人ならスタート
-    //ローカル環境のときも一応スタートさせる
-    else {
-      if(location.hostname == "localhost") { console.warn("ローカル環境です。入部ボタンは押下しないでください。"); }
+    else { start (); }
 
+    //部員でない人ならスタート
+    //ローカル環境and管理者のときも一応スタート
+    function start () {
       getObj("input-alert").hide();
       getObj("belong-tus").onclick = function tus() {
         getObj("department-tab").show();
@@ -49,15 +60,26 @@ onAuthStateChanged(auth, (us) => {
       }
       getObj("phoneNumber").value = user.phoneNumber;
       getObj("grade").value = 1;
-
+  
       getObj("loading-overray").hide();
       $("#overray").fadeOut(2000);
     }
   });
 });
 
+//同意ボタンが押されたら入部ボタンを有効化
+window.DOUI = function () {
+  $("#DOUI-btn").addClass("bg-c4s-light").css("color", "dimgray").css("opacity", 1)
+  .removeClass("pointer").removeClass("hover").html("<i class='bi bi-check'></i>");
+  $("#upload-btn").addClass("bg-c4s").css("color", "white")
+  .addClass("pointer").addClass("hover");
+  DOUI = true;
+}
+
 //部員情報アップロード
-export function upload() {
+window.upload =function upload() {
+  if(!DOUI) { alert("会則に同意されない場合は入部できません"); return; }
+
   //値の代入
   var data = {};
 
@@ -82,21 +104,22 @@ export function upload() {
 
   data.role = "new";
   data.time = new Date().getTime();
+  data.point = 0;
 
   //不備チェック
   try {
-    if(data.name) { getObj("name-alert").html = ""; } else { getObj("name-alert").html = "入力されていません"; e("name is null"); }
-    if(data.nameKana) { getObj("nameKana-alert").html = ""; } else { getObj("nameKana").html = "入力されていません"; e("nameKana is null"); }
-    if(data.sex) { getObj("gender-alert").html = ""; } else { getObj("gender-alert").html = "選択してください"; e("gender is not selected"); }
-    if(data.birth) { getObj("birth-alert").html = ""; } else { getObj("birth-alert").html = "入力されていません"; e("birth is null"); }
-    if(getObj("belong-tus").checked && data.departmentIndex == 33) { getObj("department-alert").html = "選択されていません"; e("department is null"); }
-      else { getObj("department-alert").html = ""; }
-    if(getObj("belong-other").checked && !data.department) { getObj("department-free-alert").html = "入力されていません"; e("department is null"); }
-      else { getObj("department-free-alert").html = ""; }
-    if(0 < data.grade) { getObj("grade-alert").html = ""; } else { getObj("grade-alert").html = "正しく入力されていません"; e("undefined grade"); }
-    if(data.studentNumber) { getObj("studentNumber-alert").html = ""; } else { getObj("studentNumber-alert").html = "入力されていません"; e("student number is null"); }
-    if(data.phoneNumber) { getObj("phoneNumber-alert").html = ""; } else { getObj("phoneNumber-alert").html = "入力されていません"; e("phone number is null"); }
-    if(data.detail) { getObj("detail-alert").html = ""; } else { getObj("detail-alert").html = "必須項目です"; e("detail is null"); }
+    if(data.name) { getObj("name-alert").html(); } else { getObj("name-alert").html("入力されていません"); e("name is null"); }
+    if(data.nameKana) { getObj("nameKana-alert").html(); } else { getObj("nameKana").html("入力されていません"); e("nameKana is null"); }
+    if(data.sex) { getObj("gender-alert").html(); } else { getObj("gender-alert").html("選択してください"); e("gender is not selected"); }
+    if(data.birth) { getObj("birth-alert").html(); } else { getObj("birth-alert").html("入力されていません"); e("birth is null"); }
+    if(getObj("belong-tus").checked && data.departmentIndex == 33) { getObj("department-alert").html("選択されていません"); e("department is null"); }
+      else { getObj("department-alert").html(); }
+    if(getObj("belong-other").checked && !data.department) { getObj("department-free-alert").html("入力されていません"); e("department is null"); }
+      else { getObj("department-free-alert").html(); }
+    if(0 < data.grade) { getObj("grade-alert").html(); } else { getObj("grade-alert").html("正しく入力されていません"); e("undefined grade"); }
+    if(data.studentNumber) { getObj("studentNumber-alert").html(); } else { getObj("studentNumber-alert").html("入力されていません"); e("student number is null"); }
+    if(data.phoneNumber) { getObj("phoneNumber-alert").html(); } else { getObj("phoneNumber-alert").html("入力されていません"); e("phone number is null"); }
+    if(data.detail) { getObj("detail-alert").html(); } else { getObj("detail-alert").html("必須項目です"); e("detail is null"); }
     function e (msg) { throw new Error(msg); }
   } catch (msg) { getObj("input-alert").show(); window.scroll({ top : 0 }); console.error(msg); return; }
 
@@ -110,10 +133,18 @@ export function upload() {
   }
   else {
     set(ref(db, "users/" + user.uid), data).then(() => {
-      setTimeout(() => {
-        window.location.href = "join2.html";
-      }, 6500);
+      push(ref(db, "notice"), {
+        title : "新規部員が登録されました！",
+        content : data.department + " " + data.grade + "年生の" + data.name + "さんが部員登録しました！",
+        target : "admin",
+        time : new Date().getTime(),
+        dead : new Date().getTime() + 1000 * 60 * 60 * 24 * 7,
+        link : "/control",
+      }).then(() => {
+        setTimeout(() => {
+          window.location.href = "join2.html";
+        }, 6000);
+      })
     });
   }
 }
-window.upload = upload;

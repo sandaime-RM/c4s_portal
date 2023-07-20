@@ -1,0 +1,9 @@
+
+{
+  "ranks" : {
+    "name" : ["ノーマル", "ブロンズ", "シルバー", "ゴールド"],
+    "color-sample" : ["cornflowerblue", "darkgreen", "purple", "goldenrod"],
+    "color" : ["cornflowerblue", "#c95700", "#aba9a1", "#decb00"],
+    "basis" : [0, 1000, 5000, 12000]
+  }
+}

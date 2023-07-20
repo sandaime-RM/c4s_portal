@@ -15,12 +15,14 @@
     <!--jQuery-->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.js"></script>
+    
     <script src="join.js" type="module"></script>
     <script src="/script/login.js" type="module"></script>
 
     <title>C4's Portal</title>
     <link rel="icon" href="/img/logo_mini.png">
-    <link rel="manifest" href="/manifest.json">
+    <!-- <link rel="manifest" href="/manifest.json"> -->
     
     <link rel="stylesheet" href="/script/style.css">
 </head>
@@ -164,10 +166,15 @@
         <textarea class="form-control" type="tel" id="detail"></textarea>
         <p class="mb-0 text-danger text-end small" id="detail-alert">過去の制作経験や楽しみなことなど、何でもどうぞ！</p>
       </div>
+      <div class="mb-3">
+        <h6>C4's会則</h6>
+        <iframe src="/frames/rule.html" frameborder="1" class="rounded-sm w-100 border" style="height: 300px;">ご使用のブラウザはiframeに対応していません。</iframe>
+      </div>
     </div>
     <!--enter-->
-    <div class="mw-sm mx-auto my-5">
-      <button class="btn btn-primary w-100" onclick="upload()">入部する</button>
+    <div class="mw-sm mx-auto mb-5">
+      <div class="w-75 mx-auto rounded-pill text-center pointer hover my-3" style="line-height: 3em; background: #FF7F00; color: white;" id="DOUI-btn" onclick="DOUI()">同意する</div>
+      <div class="w-75 mx-auto rounded-pill text-center               my-3" style="line-height: 3em; background: #FFDFCF; color: dimgray;" id="upload-btn" onclick="upload()">入部する</div>
     </div>
   </div>
 

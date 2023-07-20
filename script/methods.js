@@ -8,7 +8,10 @@ export function getObj(id) {
     }
     obj.head = function ( HTML ) { this.innerHTML = HTML + obj.innerHTML; }
     obj.tail = function ( HTML ) { this.innerHTML += HTML; }
-    obj.html = function ( HTML ) { this.innerHTML = HTML; }
+    obj.html = function ( HTML ) {
+      if(HTML) { this.innerHTML = HTML; }
+      else { this.innerHTML = ""; }
+    }
   }
   return obj;
 }
@@ -31,6 +34,12 @@ export function DateText(date) {
   else{
     return String(date.getMonth() + 1) + "月" + String(date.getDate()) + "日"
   }
+}
+
+//transform date object into date text for input "type = date"
+export function DateInput(date) {
+  return date.getFullYear() + addzero(date.getMonth() + 1) + addzero(date.getDate());
+  function addzero (str) { if(str[1]) { return String(str); } else { return addzero("0" + str); }}
 }
 
 //部員をソート(users:全ユーザーのデータ、keys:ソートしたい部員のIDリスト)

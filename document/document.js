@@ -37,7 +37,7 @@ $(function () {
     let data = snapshot.val();
     Object.keys(data).forEach((key) => {
       var info = data[key]
-      getObj("docsList").head('<div class="w-95 mx-auto shadow-sm bg-white rounded-md p-4 mb-3 position-relative"><h5 class="mb-0">' + info.title + '</h5><p class="text-muted mb-0">' + DateText(new Date(info.date)) + '</p><p class="text-justify">' + info.detail + '</p><div class="rounded-sm border py-1 px-4 hover pointer" onclick="openFile(\'' + key + '\')"><h5 class="lh-lg mb-0" style="white-space: nowrap; overflow: clip;"><i class="bi bi-file-pdf text-danger"> </i>' + info.file + '</h5></div><h5 style="top: 10%; right: 7%;" class="adminonly position-absolute bi bi-pencil-square pointer" onclick="edit(\'' + key + '\')"></h5></div>');
+      getObj("docsList").head('<div class="w-95 mx-auto shadow-sm bg-white rounded-md p-4 mb-3 position-relative"><h5 class="mb-0">' + info.title + '</h5><p class="text-muted mb-0">' + DateText(new Date(info.date)) + '</p><p class="text-justify">' + info.detail + '</p><div class="rounded-sm border py-1 px-4 hover pointer" onclick="openFile(\'' + key + '\')"><h5 class="lh-lg mb-0" style="white-space: nowrap; overflow: clip;"><i class="bi bi-file-pdf text-danger"> </i>' + info.file + '</h5></div><h5 style="top: 10%; right: 7%;" class="adminonly position-absolute bi bi-pencil-square pointer text-secondary" onclick="edit(\'' + key + '\')"></h5></div>');
 
       getDownloadURL(ref_st(storage, "document/" + info.file)).then((URL) => { docs[key] = URL; });
     });
@@ -69,7 +69,7 @@ $(function () {
 
 //ファイルをひらく
 window.openFile = function openFile (key) {
-  window.open(docs[key]);
+  location.href = docs[key];
 }
 
 //ファイルが変更された場合

@@ -4,6 +4,8 @@
 .activeonly { display: none; }
 .outsideonly { display: none; }
 
+.w-95 { width: 95%; }
+
 .mw-xs { max-width: 120px; }
 .mw-sm { max-width: 360px; }
 .mw-md { max-width: 480px; }
@@ -12,6 +14,8 @@
 .rounded-sm { border-radius: 5px; }
 .rounded-md { border-radius: 10px; }
 .rounded-lg { border-radius: 15px; }
+
+.text-justify { text-align: justify; }
 
 .c4s-background { background-color: rgb(255, 247, 239);}
 .c4s { color: rgb(255, 127, 0); }

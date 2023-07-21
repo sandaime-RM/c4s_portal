@@ -351,7 +351,13 @@ export function eventcontrol(eventID, type) {
     break;
     //削除する
     case "del":
-      alert("イベント削除機能はありません。データベースを操作してください。");
+      var ans = confirm("本当に削除してよろしいですか？");
+      if(ans) { 
+        remove(ref(db, "event/" + eventID)).then(() => {
+          alert("削除しました。");
+          location.reload();
+        })
+      }
     break;
     default: console.error("undefined type of edit function"); break;
   }

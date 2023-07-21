@@ -60,7 +60,7 @@ $(function () {
 
     });
     */
-  })
+  }).then(() => { $("#overray").fadeOut(); })
   .catch((error) => {
     document.getElementById("errorDoc").innerHTML = error;
     document.getElementById("loading").style.display = "none";

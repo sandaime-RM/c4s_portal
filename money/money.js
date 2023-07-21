@@ -57,6 +57,7 @@ function upload() {
     var type = 2;
     var liquid = true;
     var date = document.getElementById("dateForm");
+    var toName = document.getElementById("toName");
 
     document.getElementById("uploading").style.display = "";
 
@@ -70,7 +71,8 @@ function upload() {
         userId : user.uid,
         date : date.value,
         type : type,
-        liquid : liquid
+        liquid : liquid,
+        toName : toName.value
     }
 
     if(editting == -1) {
@@ -182,6 +184,7 @@ function openInfo(index) {
     var price = document.getElementById("amount");
     var detail = document.getElementById("detail");
     var date = document.getElementById("dateForm");
+    var toName = document.getElementById("toName");
 
     name.value = thisData.name;
     price.value = thisData.price;
@@ -191,6 +194,10 @@ function openInfo(index) {
         detail.value = thisData.detail;
     } else {
         detail.value = "";
+    }
+
+    if(thisData.toName) {
+        toName.value = thisData.toName;
     }
 
     if(thisData.type == 1) {
@@ -328,7 +335,9 @@ export{exportCSV}
 
 //領収書発行
 function receipt() {
-    var rNum = document.getElementById("number").value;
+    if(editting == -1) {alert("発行前に保存してください。"); return;}
+
+    var rNum = editting;
     var rTo = document.getElementById("toName").value;
     var rCnt = document.getElementById("name").value;
     var rMny = document.getElementById("amount").value;

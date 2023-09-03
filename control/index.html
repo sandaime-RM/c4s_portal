@@ -15,6 +15,7 @@
     <!--jQuery-->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
+
     <script src="../script/login.js" type="module"></script>
     <script src="control.js" type="module"></script>
 
@@ -85,6 +86,13 @@
           <path d="M5.757 1.071a.5.5 0 0 1 .172.686L3.383 6h9.234L10.07 1.757a.5.5 0 1 1 .858-.514L13.783 6H15.5a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5H.5a.5.5 0 0 1-.5-.5v-1A.5.5 0 0 1 .5 6h1.717L5.07 1.243a.5.5 0 0 1 .686-.172zM3.394 15l-1.48-6h-.97l1.525 6.426a.75.75 0 0 0 .729.574h9.606a.75.75 0 0 0 .73-.574L15.056 9h-.972l-1.479 6h-9.21z"/>
       </symbol>
 
+      <symbol id="qrscan" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-qr-code-scan" viewBox="0 0 16 16">
+        <path d="M0 .5A.5.5 0 0 1 .5 0h3a.5.5 0 0 1 0 1H1v2.5a.5.5 0 0 1-1 0v-3Zm12 0a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-1 0V1h-2.5a.5.5 0 0 1-.5-.5ZM.5 12a.5.5 0 0 1 .5.5V15h2.5a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5v-3a.5.5 0 0 1 .5-.5Zm15 0a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1 0-1H15v-2.5a.5.5 0 0 1 .5-.5ZM4 4h1v1H4V4Z"/>
+        <path d="M7 2H2v5h5V2ZM3 3h3v3H3V3Zm2 8H4v1h1v-1Z"/>
+        <path d="M7 9H2v5h5V9Zm-4 1h3v3H3v-3Zm8-6h1v1h-1V4Z"/>
+        <path d="M9 2h5v5H9V2Zm1 1v3h3V3h-3ZM8 8v2h1v1H8v1h2v-2h1v2h1v-1h2v-1h-3V8H8Zm2 2H9V9h1v1Zm4 2h-1v1h-2v1h3v-2Zm-4 2v-1H8v1h2Z"/>
+        <path d="M12 9h2V8h-2v1Z"/>
+      </symbol>
     </defs>
   </svg>
 
@@ -214,6 +222,7 @@
       </div>
     </main>
 
+    <!-- モーダル -->
     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
@@ -227,6 +236,7 @@
               <div class="text-secondary small py-1 mb-2" id="mbYomi"></div>
 
               <p><span id="mbSex" class="mx-1"></span><span class="mx-1" id="mbBirth"></span>
+              <br><span class="ms-1">ニックネーム</span><span id="mbNickname" class="mx-1"></span>
               <br><span id="mbDepartment" class="mx-1"></span><span class="mx-1" id="mbGrade"></span>
               <br><span class="ms-1">学籍番号</span><span id="mbStudentNumber" class="mx-1 me-2 text-secondary"></span>TEL<span class="mx-1 text-secondary" id="mbTel"></span></p>
               <label class="mt-1" id="detailTitle">自己PR</label>
@@ -361,5 +371,12 @@
       </div>
     </div>
 
+    <!--右下に表示するボタン-->
+    <div class="position-fixed end-0 bottom-0 mx-3 my-3">
+      <!--QR読取ボタン-->
+      <div class="bg-dark text-light shadow rounded-circle m-3 pt-2 text-center" style="cursor: pointer; width: 50px; height: 50px;" onclick="window.location.href='scan.html';">
+        <svg viewBox="0 0 16 16" x="0" y="0" width="24px" height="24px"><use xlink:href="#qrscan"></use></svg>
+      </div>
+    </div>
 </body>
 </html>

@@ -48,7 +48,7 @@ function restart() {
     get(ref(db, "users")).then((snapshot) => {
         users = snapshot.val();
 
-        totalNum = Object.keys(users).length - 1;
+        totalNum = Object.keys(users).length;
         var date = new Date();
 
         document.getElementById("tableBirth").innerHTML = "";

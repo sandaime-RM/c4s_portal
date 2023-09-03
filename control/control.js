@@ -38,6 +38,8 @@ var totalMembers = 0;
 var storeTasks, storeData;
 var edittingStore = ["", ""];
 
+var userModal = new bootstrap.Modal(document.getElementById('exampleModal'));
+
 var adminusers;
 
 //ユーザー情報の取得
@@ -80,6 +82,15 @@ function restart() {
 
   var date = new Date();
   totalMembers = userKeys.length;
+
+  //パラメータにIDがあれば、そのユーザーを表示
+  if(getParam("id")) {
+    let userIndex = userKeys.indexOf(getParam("id"));
+    if(userIndex != -1) {
+        openInfo(userIndex);
+        userModal.show();
+    }
+  }
 
   userKeys.forEach((key, i) => {
     //引退・退部した部員
@@ -130,9 +141,10 @@ function restart() {
     var age = 0;
     var birth = new Date(users[key].birth);
     age = Math.floor((date - birth) / (86400000 * 365));
+    if(!users[key].nickname) {users[key].nickname = "";}
 
     //リストに表示
-    document.getElementById("memberList").innerHTML += '<li class="list-group-item" onclick="openInfo('+i+')" data-bs-toggle="modal" data-bs-target="#exampleModal"><h6>'+users[key].name + '<span class="text-secondary mx-1">' + users[key].studentNumber + '</span>' + roles + '</h6><div class="small text-secondary">'+users[key].department+' '+users[key].grade+'年 '+sex+' '+age+'歳</div>'+tags+'</li>'
+    document.getElementById("memberList").innerHTML += '<li class="list-group-item" onclick="openInfo('+i+')" data-bs-toggle="modal" data-bs-target="#exampleModal"><h6>'+users[key].name + '<span class="text-secondary mx-1">' + users[key].nickname + '</span>' + roles + '</h6><div class="small text-secondary">'+users[key].department+' '+users[key].grade+'年 '+sex+' '+age+'歳</div>'+tags+'</li>'
     
     toCsvData.push([users[key].name, users[key].nameKana, users[key].studentNumber, users[key].department, users[key].otherDepart, users[key].grade, sex, users[key].birth, String(users[key].phoneNumber)]);
 
@@ -144,7 +156,7 @@ function restart() {
         buhiRecords[key2].uid = key;
         buhiList = buhiList.concat(buhiRecords[key2]);
         buhiTotal += Number(buhiRecords[key2].amount);
-      });  
+      });
     }
   });
 
@@ -206,11 +218,13 @@ function openInfo(i) {
       document.getElementById("mbTel").textContent = "----------";
       document.getElementById("mbSex").textContent = "----";
       document.getElementById("mbDepartment").textContent = "----------";
+      document.getElementById("mbNickname").textContent = "----------";
       document.getElementById("mbGrade").textContent = "-- 年生";
     } else {
       //在籍している人
       document.getElementById("mbBirth").textContent = users[userKeys[i]].birth + "生";
       document.getElementById("mbTel").textContent = users[userKeys[i]].phoneNumber;
+      document.getElementById("mbNickname").textContent = users[userKeys[i]].nickname;
   
       var sex = "男性";
       if(users[userKeys[i]].sex == "woman") { sex = "女性"; }
@@ -245,8 +259,10 @@ function openInfo(i) {
     if(users[userKeys[i]].accessHistory) {
         var accessRecord = users[userKeys[i]].accessHistory;
 
-        Object.keys(accessRecord).forEach((key, index) => {
-            document.getElementById("accessRecord").innerHTML = (new Date(accessRecord[key].date)).toLocaleString() + " " + accessRecord[key].path + "<br>" + document.getElementById("accessRecord").innerHTML;
+        Object.keys(accessRecord).slice().reverse().forEach((key, index) => {
+            if(index < 30) {
+                document.getElementById("accessRecord").innerHTML = (new Date(accessRecord[key].date)).toLocaleString() + " " + accessRecord[key].path + "<br>" + document.getElementById("accessRecord").innerHTML;
+            }
         });
     }
 
@@ -465,3 +481,20 @@ function storeUpload() {
 
 window.storeUpload = storeUpload;
 export{storeUpload}
+
+
+/**
+ * Get the URL parameter value
+ *
+ * @param  name {string} パラメータのキー文字列
+ * @return  url {url} 対象のURL文字列（任意）
+ */
+function getParam(name, url) {
+    if (!url) url = window.location.href;
+    name = name.replace(/[\[\]]/g, "\\$&");
+    var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+        results = regex.exec(url);
+    if (!results) return null;
+    if (!results[2]) return '';
+    return decodeURIComponent(results[2].replace(/\+/g, " "));
+}

@@ -22,6 +22,7 @@ const auth = getAuth();
 
 var user = {};
 var c4suser = {};
+var data;
 
 var ranks;
 //jsonファイルを読み込み
@@ -68,94 +69,43 @@ onAuthStateChanged(auth, (us) => {
 
     }
 
-    $("#overray").fadeOut();
-  });
-  /*
+    //部費支払い記録表時
+    if(c4suser.buhiRecord) {
+      var buhiRecord = c4suser.buhiRecord;
+      document.getElementById("buhiRecord").innerHTML = "";
 
-    var name = document.getElementById("name");
-    var nameKana = document.getElementById("nameKana");
-    var detail = document.getElementById("detail");
-    var number = document.getElementById("schoolNumber");
-    var birth = document.getElementById("birth");
-    var department = document.getElementById("department");
-    var grade = document.getElementById("grade");
-    var sex = document.getElementById("sex");
-    var phoneNumber = document.getElementById("phoneNumber");
-    var otherDepart = document.getElementById("otherDepart");
+      Object.keys(buhiRecord).forEach((key, index) => {
+          document.getElementById("buhiRecord").innerHTML += '<li class="list-group-item"><span class="fw-bold mx-1">￥' + Number(buhiRecord[key].amount).toLocaleString() + '</span><span class="text-secondary mx-1 small">'+buhiRecord[key].date+' 記録者 : '+buhiRecord[key].recorderName+'</span></li>';
+      });
+    } else {
+        document.getElementById("buhiRecord").innerHTML = '<p class="text-secondary small text-center py-2 mx-1">履歴はありません</p>';
+    }
 
-    get(ref(db, 'users/' + user.uid)).then((snapshot) => {
-        data = snapshot.val();
+    //イベント出席記録表時
+    if(c4suser.attend) {
+        var attends = c4suser.attend;
+        document.getElementById("attendHistory").innerHTML = "";
 
-        if(data.status == 1 || data.status == 2) {return;}
-
-        phoneNumber.value = data.phoneNumber;
-        name.value = data.name;
-        nameKana.value = data.nameKana;
-        detail.value = data.detail;
-        number.value = data.studentNumber;
-        birth.value = data.birth;
-        grade.value = data.grade;
-        otherDepart.value = data.otherDepart;
-        department.selectedIndex = data.departmentIndex;
-        sex.value = data.sex;
-
-        //ポイントのランク表示
-        if(data.point) {
-            var point = data.point;
-            var color = "#c95700";
-
-            document.getElementById("myPoint").textContent = point;
-
-            document.getElementById("normal").style.display = "";
-            
-            if(point >= 8000) {
-              color = "#aba9a1";
-              document.getElementById("silver").style.display = "";
-            }
-  
-            if(point >= 15000) {
-              color = "#decb00";
-              document.getElementById("gold").style.display = "";
-            }
-  
-            if(point >= 3000) {
-              document.getElementById("userIcon").style.border = "solid 4px " + color;
-              document.getElementById("bronze").style.display = "";
-            }
-        }
-
-        //部費支払い記録表時
-        if(data.buhiRecord) {
-            var buhiRecord = data.buhiRecord;
-            document.getElementById("buhiRecord").innerHTML = "";
-    
-            Object.keys(buhiRecord).forEach((key, index) => {
-                document.getElementById("buhiRecord").innerHTML += '<li class="list-group-item"><span class="fw-bold mx-1">￥' + Number(buhiRecord[key].amount).toLocaleString() + '</span><span class="text-secondary mx-1 small">'+buhiRecord[key].date+' 記録者 : '+buhiRecord[key].recorderName+'</span></li>';
-            });
-        } else {
-            document.getElementById("buhiRecord").innerHTML = '<p class="text-secondary small text-center py-2 mx-1">履歴はありません</p>';
-        }
-
-        //イベント出席記録表時
-        if(data.attend) {
-            var attends = data.attend;
-            document.getElementById("attendHistory").innerHTML = "";
-
-            Object.keys(attends).forEach((key, index) => {
-                document.getElementById("attendHistory").innerHTML += '<li class="list-group-item"><span class="fw-bold mx-1">' + attends[key].title + '</span><span class="text-secondary mx-1 small">'+(new Date(attends[key].date)).toLocaleString()+'</span></li>';
-            });
-        } else {
-            document.getElementById("attendHistory").innerHTML = '<p class="text-secondary small text-center py-2 mx-1">履歴はありません</p>';
-        }
-
-        //ストア購入履歴
-        var storeHistory = data.storeHistory;
-        Object.keys(storeHistory).forEach((key, index) => {
-             document.getElementById("storeHistory").innerHTML += '<li class="list-group-item"><span class="fw-bold mx-1">' + storeHistory[key].itemName + '<span class="text-secondary mx-1">×'+storeHistory[key].num+'</span></span><span class="text-secondary mx-1 small">'+(new Date(storeHistory[key].date)).toLocaleString()+'</span></li>';
+        Object.keys(attends).forEach((key, index) => {
+            document.getElementById("attendHistory").innerHTML += '<li class="list-group-item"><span class="fw-bold mx-1">' + attends[key].title + '</span><span class="text-secondary mx-1 small">'+(new Date(attends[key].date)).toLocaleString()+'</span></li>';
         });
+    } else {
+        document.getElementById("attendHistory").innerHTML = '<p class="text-secondary small text-center py-2 mx-1">履歴はありません</p>';
+    }
+
+    //ストア購入履歴
+    var storeHistory = c4suser.storeHistory;
+    if(storeHistory) {
+      document.getElementById("storeHistory").innerHTML = "";
+    }
+    
+    Object.keys(storeHistory).forEach((key, index) => {
+        document.getElementById("storeHistory").innerHTML += '<li class="list-group-item"><span class="fw-bold mx-1">' + storeHistory[key].itemName + '<span class="text-secondary mx-1">×'+storeHistory[key].num+'</span></span><span class="text-secondary mx-1 small">'+(new Date(storeHistory[key].date)).toLocaleString()+'</span></li>';
     });
 
-  */
+    $("#overray").fadeOut();
+  });
+
 });
 
 //プロフィールのポイント画面を更新(トップページから移植)

@@ -85,6 +85,7 @@ window.upload =function upload() {
 
   data.name = getObj("name").value;
   data.nameKana = getObj("nameKana").value;
+  data.nickname = getObj("nickname").value;
     if(getObj("gender-man").checked) { data.sex = "man"; }
     else if(getObj("gender-woman").checked) { data.sex = "woman"; }
     else if(getObj("gender-other").checked) { data.sex = "other"; }

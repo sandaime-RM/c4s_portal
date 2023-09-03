@@ -58,6 +58,10 @@ onAuthStateChanged(auth, (us) => {
       getObj("studentNumber").value = c4suser.studentNumber;
       getObj("phoneNumber").value = c4suser.phoneNumber;
       getObj("detail").value = c4suser.detail;
+
+      if(c4suser.nickname) {
+        getObj("nickname").value = c4suser.nickname;
+      }
     }
     //外部
     else {
@@ -195,6 +199,7 @@ window.upload = function upload () {
   let grade = Number(getObj("grade").value);
   let phoneNumber = getObj("phoneNumber").value;
   let detail = getObj("detail").value;
+  let nickname = getObj("nickname").value;
 
   //不備チェック
   if(!grade || grade < 1) { 
@@ -205,17 +210,27 @@ window.upload = function upload () {
   }
 
   //特に変更なければ何もしない
-  if(grade == c4suser.grade && phoneNumber == c4suser.phoneNumber && detail == c4suser.detail) {
+  if(grade == c4suser.grade && phoneNumber == c4suser.phoneNumber && detail == c4suser.detail && nickname == c4suser.nickname) {
     return;
   }
 
-  set(ref(db, "users/" + user.uid + "/grade"), grade).then(() => {
-    set(ref(db, "users/" + user.uid + "/phoneNumber"), phoneNumber).then(() => {
-      set(ref(db, "users/" + user.uid + "/detail"), detail).then(() => {
-        alert("保存しました"); location.reload(); 
-      })
-    })
+  update(ref(db, "users/" + user.uid), {
+    grade : grade,
+    phoneNumber : phoneNumber,
+    detail : detail,
+    nickname : nickname
   })
+  .then(() => {
+    alert("保存しました"); location.reload();
+  });
+
+  // set(ref(db, "users/" + user.uid + "/grade"), grade).then(() => {
+  //   set(ref(db, "users/" + user.uid + "/phoneNumber"), phoneNumber).then(() => {
+  //     set(ref(db, "users/" + user.uid + "/detail"), detail).then(() => {
+  //       alert("保存しました"); location.reload(); 
+  //     })
+  //   })
+  // })
 }
 
 //その他の情報を更新

@@ -49,6 +49,8 @@ onAuthStateChanged(auth, (us) => {
         yesterday.setDate( yesterday.getDate() -1 )
         var tomorrow = new Date();
         tomorrow.setDate( tomorrow.getDate() + 1 );
+        var tomorrow2 = new Date();
+        tomorrow2.setDate( tomorrow2.getDate() + 2 );
 
         //予約データを１つずつ表示
         Object.keys(roomData).slice().reverse().forEach((key, index) => {
@@ -81,9 +83,6 @@ onAuthStateChanged(auth, (us) => {
                 if(yesterday > rdate) {
                     bookList.innerHTML += '<li class="list-group-item" style="cursor: pointer;" onclick="edit('+index+')"><div class="row"><div class="col-4"><div class="fs-5 fw-bold">'+date+'</div><div class="small">'+room.start+'～'+room.end+'</div></div><div class="col-5"><div class="fs-5 fw-bold">'+room.building+'</div><div>'+room.roomNum+'</div></div><div class="col-3 text-'+color+' text-center">'+status+'</div></div></li>';
                 } else {
-                    console.log(dateNow.getMonth(), dateNow.getDate())
-                    console.log(rdate.getMonth(), rdate.getDate())
-                    console.log(dateNow.getMonth() == rdate.getMonth(), rdate.getDate() == dateNow.getDate());
 
                     if(dateNow.getMonth() == rdate.getMonth() && rdate.getDate() == dateNow.getDate()) {
                         dateCol = "danger";
@@ -92,6 +91,10 @@ onAuthStateChanged(auth, (us) => {
 
                     if(tomorrow.getMonth() == rdate.getMonth() && rdate.getDate() == tomorrow.getDate()) {
                         date = "明日";
+                    }
+
+                    if(tomorrow2.getMonth() == rdate.getMonth() && rdate.getDate() == tomorrow2.getDate()) {
+                        date = "明後日";
                     }
     
                     bookListFuture.innerHTML += '<li class="list-group-item" style="cursor: pointer;" onclick="edit('+index+')"><div class="row"><div class="col-4"><div class="fs-5 fw-bold text-'+dateCol+'">'+date+'</div><div class="small">'+room.start+'～'+room.end+'</div></div><div class="col-5"><div class="fs-5 fw-bold">'+room.building+'</div><div>'+room.roomNum+'</div></div><div class="col-3 text-'+color+' text-center">'+status+'</div></div></li>';

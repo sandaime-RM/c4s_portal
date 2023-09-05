@@ -261,7 +261,7 @@ function openInfo(i) {
 
         Object.keys(accessRecord).slice().reverse().forEach((key, index) => {
             if(index < 30) {
-                document.getElementById("accessRecord").innerHTML = (new Date(accessRecord[key].date)).toLocaleString() + " " + accessRecord[key].path + "<br>" + document.getElementById("accessRecord").innerHTML;
+                document.getElementById("accessRecord").innerHTML += (new Date(accessRecord[key].date)).toLocaleString() + " " + accessRecord[key].path + "<br>";
             }
         });
     }

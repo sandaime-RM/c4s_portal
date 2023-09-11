@@ -68,7 +68,7 @@ export function start(callback) {
         var timecolor;
         if(new Date(element.term.begin) < new Date()) { eventcolor = "darkred"; timecolor = "text-danger"; } else { eventcolor = "green"; timecolor = "text-muted"}
         getObj("eventList_future").tail('<div class="col-lg-6 p-2"><div class="card w-100 shadow-sm position-relative" style="border-left: solid ' + eventcolor + ' 10px;"><div class="card-body"><h5 class="card-title">' + element.title + '</h5><h6 class="card-subtitle mb-2 ' + timecolor + '">' + TermString(element.term) + '<br>' + element.place + '</h6><p class="text-primary text-small m-0" style="height: 1.5em;">' + Tags(element.tags) + '</p><p class="card-text" style="height: 5em; text-align: justify;">' + element.description + '</p><div class="mt-2"><div class="h5 card-link d-flex justify-content-around mb-0 text-secondary"><div><a style="cursor: pointer;" id="eventAttend' + eventID + '" onclick="eventReaction(\'' + eventID + '\', \'attend\')"></a> <span id="AttendNum' + eventID + '"></span></div><div><a style="cursor: pointer;" id="eventAbsent' + eventID + '" onclick="eventReaction(\'' + eventID + '\', \'absent\')"></a> <span id="AbsentNum' + eventID + '"></span></div><div class="adminonly"><a style="cursor: pointer;" onclick="eventcontrol(\'' + eventID + '\', \'edit\')"><i class="bi bi-pencil-square"></i></a></div><div class="adminonly"><a style="cursor: pointer;" onclick="eventcontrol(\'' + eventID + '\', \'del\')"><i class="bi bi-trash"></i></a></div></div></div></div><div id="codeexist' + eventID + '" style="display: none;" class="position-absolute top-0 end-0 m-3"><h5><i class="bi bi-person-check-fill" style="color: lightgray;"></i></h5></div><div id="attended-check' + eventID + '" style="display: none;" class="position-absolute top-0 end-0 m-3"><h5><i class="bi bi-person-check-fill" style="color: green;"></i></h1></div></div></div>');
-                
+        
         //出席登録済みマーク
         if(element.attenders && element.attenders[user.uid]) { getObj("attended-check" + eventID).show(); }
         //出席コードが存在するマーク
@@ -112,12 +112,21 @@ export function start(callback) {
   //企画リストを表示
   get(ref(db, "projects")).then((snapshot) => {
     projects = snapshot.val();
-    if(!snapshot.val()) { projects = {}; }
+    let projectsSub = snapshot.val();
 
     if(projects) {
-      sortTermKeys(projects).forEach((projectID) => {
-        
+      getObj("noProject").style.display = "none";
+
+      sortTermKeys(projectsSub).forEach((projectID) => {
+        //表示
+        getObj("projectList").innerHTML += '<div class="col-lg-6 p-2"><div class="card w-100 shadow-sm position-relative" style="border-left: solid green 10px;"><div class="card-body"><h5 class="card-title">'+projects[projectID].title+'</h5><h6 class="card-subtitle mb-2 text-muted">'+projects[projectID].term.begin+'～'+projects[projectID].term.end+'</h6><p class="card-text" style="height: 5em;">'+projects[projectID].description+'</p><div class="mt-2"><div class="h5 card-link d-flex justify-content-around mb-0 text-secondary"><div><a style="cursor: pointer;" id="projectJoin' + projectID + '" onclick="projectReaction()"></a> <span id="JoinerNum' + projectID + '"></span></div><div class="adminonly"><a style="cursor: pointer;" onclick="projectcontrol(`'+projectID+'`, `edit`)"><i class="bi bi-pencil-square"></i></a></div><div class="adminonly"><a style="cursor: pointer;" onclick="projectcontrol(`'+projectID+'`, `del`)"><i class="bi bi-trash"></i></a></div></div></div></div></div></div>';
       })
+
+      //管理者以外は非表示にするもの
+      var adminonly = document.getElementsByClassName("adminonly");
+      Object.keys(adminonly).forEach(key => {
+        if ( status == 2 ) { adminonly[key].style.display = "inherit"; } else { adminonly[key].style.display = "none"; }
+      });
     }
   })
 
@@ -509,8 +518,8 @@ export function projectcontrol(projectID, type) {
         getObj("projectID").value = projectID;
         getObj("projectTitle").value = data.title;
         getObj("projectDescription").value = data.description;
-        getObj("projectDateBegin").value = DateString(data.term.begin);
-        getObj("projectDateEnd").value = DateString(data.term.end);
+        getObj("projectDateBegin").value = data.term.begin;
+        getObj("projectDateEnd").value = data.term.end;
         getObj("MemberListTitle").show();
         getObj("MemberList").show();
         if(data.member) {
@@ -546,7 +555,12 @@ export function projectcontrol(projectID, type) {
         alert(msg); return;
       }
       let id = getObj("projectID").value;
-      if(!projects[id]) { projects[id] = {}; }
+      if(projects) {
+        if(!projects[id]) { projects[id] = {}; }
+      } else {
+        projects = {};
+        projects[id] = {};
+      }
       projects[id].title = getObj("projectTitle").value;
       projects[id].description = getObj("projectDescription").value;
       projects[id].term = {
@@ -554,10 +568,17 @@ export function projectcontrol(projectID, type) {
         end : getObj("projectDateEnd").value
       };
 
-      set(ref(db, "projects/" + id), projects[id]);
+      set(ref(db, "projects/" + id), projects[id])
+      .then(() => {
+        alert("保存しました。");
+        window.location.reload();
+      });
     break;
     case "del":
-      alert("削除機能はありません。データベースを操作してください。");
+      remove(ref(db, "projects/" + projectID))
+      .then(() => {
+        window.location.reload();
+      })
     break;
   
     default: break;

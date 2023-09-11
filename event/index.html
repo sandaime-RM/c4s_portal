@@ -130,29 +130,10 @@
 
     <!--企画タブ-->
     <div id="project" class="mx-auto mb-5" style="max-width: 960px;">
-      <p class="text-danger text-center">進行中の企画がありません</p>
+      <p class="text-danger text-center" id="noProject">進行中の企画がありません</p>
 
-      <div class="col-lg-6 p-2">
-        <div class="card w-100 shadow-sm position-relative" style="border-left: solid green 10px;">
-          <div class="card-body">
-            <h5 class="card-title">企画名</h5>
-            <h6 class="card-subtitle mb-2 text-muted">期間</h6>
-            <p class="card-text" style="height: 5em;"></p>
-            <div class="mt-2">
-              <div class="h5 card-link d-flex justify-content-around mb-0 text-secondary">
-                <div>
-                  <a style="cursor: pointer;" id="projectJoin' + projectID + '" onclick="projectReaction()"></a> <span id="JoinerNum' + projectID + '"></span>
-                </div>
-                <div class="adminonly">
-                  <a style="cursor: pointer;" onclick="projectcontrol(id, 'edit')"><i class="bi bi-pencil-square"></i></a>
-                </div>
-                <div class="adminonly">
-                  <a style="cursor: pointer;" onclick="projectcontrol(id, 'del')"><i class="bi bi-trash"></i></a>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+      <div class="row" id="projectList">
+        
       </div>
 
     </div>

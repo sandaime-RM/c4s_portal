@@ -312,6 +312,11 @@ function upload() {
             type : 2,
             liquid : true,
             userId : user.uid
+        })
+        .then(() => {
+            if(document.getElementById("receipt").checked) {
+                window.location.href = "receipt.html?price="+Number(document.getElementById("buhiPrice").value)+"&given=" + Number(document.getElementById("buhiPrice").value) + "&title="+"部費支払い (" + users[userKeys[editting]].name+" さん)";
+            }
         });
     }
 

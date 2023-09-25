@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!--Bootstrap-->
+    <!-- CSS only -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <!-- JavaScript Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <!--BootstrapIcon-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.0/font/bootstrap-icons.css">
+    <!--jQuery-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    
+    <script src="/script/login.js" type="module"></script>
+    
+    <title>C4's Portal</title>
+    <link rel="icon" href="../img/logo_mini.png">
+    <link rel="manifest" href="../manifest.json">
+
+    <link rel="stylesheet" href="/script/style.css">
+</head>
+<body class="bg-light mb-5">
+  <!--最初のロード画面-->
+  <div id="overray" style="position: fixed; left: 0; top: 0; width: 100%; height: 100%; background-color: white; z-index: 2147483647;">
+    <div style="width: 100%; max-width: 120px; margin: 30px auto;">
+      <img src="/img/loading.svg" style="width: 100%">
+    </div>
+    <h5 class="mt-3 text-center">幹部紹介</h5>
+    <div class="text-center mt-5" id="loading-overray">
+      <div class="spinner-grow" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // setTimeout(() => { $("#overray").fadeOut(); }, 1000);
+  </script>
+
+  <!-- 一旦幹部しかアクセスできないようにしてます -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-auth.js";
+    import { getDatabase, ref, push, remove, set, get, onValue } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-database.js";
+    const firebaseConfig = {
+      apiKey: "AIzaSyBE60G8yImWlENWpCnQZzqqVUrwWa_torg",
+      authDomain: "c4s-portal.firebaseapp.com",
+      databaseURL: "https://c4s-portal-default-rtdb.asia-southeast1.firebasedatabase.app",
+      projectId: "c4s-portal",
+      storageBucket: "c4s-portal.appspot.com",
+      messagingSenderId: "863775995414",
+      appId: "1:863775995414:web:82eb9557a13a099dfbe737",
+      measurementId: "G-K2SR1WSNRC"
+    };
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+    const auth = getAuth();
+    onAuthStateChanged(auth, snapshot => {
+      var uid = snapshot.uid;
+      get(ref(db, `admin-users/${uid}`)).then(snapshot => {
+        if(snapshot.val()) { $("#overray").fadeOut(); }
+        else { alert("このページは非公開です"); location.href="/"; }
+      })
+    });
+  </script>
+
+  <div id="header"></div>
+
+  <h2 class="text-center my-5"><i class="bi bi-people"> </i>C4's 幹部紹介</h2>
+
+  <div class="mw-lg mx-auto w-95 row bg-white rounded-md shadow-sm mt-3">
+
+    <div class="p-3 col-sm-6 col-md-4 text-center">
+      <div class="w-50 mx-auto mb-3"><img src="pic/izawa.jpg" class="w-100 rounded-circle"></div>
+      <h4>松浦竜征</h4>
+      <p class="text-secondary mb-0">まつり</p>
+      <p class="text-secondary">電気電子情報工学科３年</p>
+      <hr>
+      <h4 style="color: indigo;">部長</h4>
+      <hr>
+      <p class="px-3 rounded-sm  text-justify">
+        ここに一言文章を入れられます！ちゃんと<b>HTMLタグ</b>も使えます。さすが。
+      </p>
+    </div>
+    <div class="p-3 col-sm-6 col-md-4 text-center">
+      <div class="w-50 mx-auto mb-3"><img src="pic/sugai.jpg" class="w-100 rounded-circle"></div>
+      <h4>今井悠人</h4>
+      <p class="text-secondary mb-0">といとん</p>
+      <p class="text-secondary">情報計算科学科２年</p>
+      <hr>
+      <h4 style="color: darkred;">副部長</h4>
+      <hr>
+      <p class="px-3 rounded-sm  text-justify">
+        文字数稼ぎのためにちょっと宣伝しておきますが、
+        東京ディズニーシーの新エリア「ファンタジースプリングス」が
+        2024年春に開業予定です。投資額3800億円の新エリアをどうぞお楽しみに。
+      </p>
+    </div>
+    <div class="p-3 col-sm-6 col-md-4 text-center">
+      <div class="w-50 mx-auto mb-3"><img src="pic/fukura.jpg" class="w-100 rounded-circle"></div>
+      <h4>佐藤太心</h4>
+      <p class="text-secondary mb-0">たと</p>
+      <p class="text-secondary">情報計算科学科３年</p>
+      <hr>
+      <h4 style="color: darkred;">会計</h4>
+      <hr>
+      <p class="px-3 rounded-sm  text-justify">
+        たとさんは世界一優しい人間です
+      </p>
+    </div>
+    <div class="p-3 col-sm-6 col-md-4 text-center">
+      <div class="w-50 mx-auto mb-3"><img src="pic/ko-chan.jpg" class="w-100 rounded-circle"></div>
+      <h4>神谷宗典</h4>
+      <p class="text-secondary mb-0">かみやん</p>
+      <p class="text-secondary">情報計算科学科２年</p>
+      <hr>
+      <h4 style="color: darkgray;">幹部</h4>
+      <hr>
+      <p class="px-3 rounded-sm  text-justify">
+        風邪ひいたらしい、かわいそうに
+      </p>
+    </div>
+    <div class="p-3 col-sm-6 col-md-4 text-center">
+      <div class="w-50 mx-auto mb-3"><img src="pic/yamamoto.jpg" class="w-100 rounded-circle"></div>
+      <h4>刈川凌</h4>
+      <p class="text-secondary mb-0">刈川凌</p>
+      <p class="text-secondary">電気電子情報工学科３年</p>
+      <hr>
+      <h4 style="color: darkgray;">幹部</h4>
+      <hr>
+      <p class="px-3 rounded-sm  text-justify">
+        プロ
+      </p>
+    </div>
+    
+  </div>
+</body>
+</html>

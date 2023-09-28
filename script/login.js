@@ -32,10 +32,9 @@ var status = 0;
 //ログイン状態の確認
 onAuthStateChanged(auth, (snapshot) => {
   //ヘッダーを描画(メニューを含む)
-  $("#header").load("/frames/header.html", function () {
-    let id;
-    if(location.pathname.split('/')[1].split('?')[0] == "index.html") { id = ""; }
-    else { id = location.pathname.split('/')[1].split('?')[0]; }
+  $("#header").load("/frames/header.html", () => {
+    let id = location.pathname.split('/')[1].split('?')[0];
+    if(id == "index.html") { id = ""; }
     $("#menu-" + id).css("color", "darkorange");
   });
 
@@ -63,7 +62,10 @@ onAuthStateChanged(auth, (snapshot) => {
             //ローカル環境でも表示しない
             if(location.hostname == "localhost") { return; }
             if(!c4suser.accessHistory || new Date(c4suser.accessHistory[Object.keys(c4suser.accessHistory).slice(-1)[0]].date) < new Date("2023-07-16 10:15"))
-            { alert("アップデート：プロフィール画面が復活！"); alert("左上のメニュー画面から自分のアイコンをクリックorタップしてみよう"); }
+            {
+              alert("アップデート：プロフィール画面が復活！");
+              alert("左上のメニュー画面から自分のアイコンをクリックorタップしてみよう");
+            }
           }
           news();
 

@@ -66,6 +66,7 @@ window.onload = function() {
     
     Object.keys(data).forEach((key, i) => {
       equips[i] = data[key];
+      equipKeys[i] = key;
 
       data[key].cat = -1;
       var imgname;
@@ -125,7 +126,7 @@ function upload() {
     var finishPic = false;
     var finishDb = false;
 
-    if(name == "") {alert("名称くらいは入力してよ！怒"); return;}
+    if(name == "" || !name) {alert("名称くらいは入力してよ！怒"); return;}
 
     for(var i = 1; i <= categories; i++) {
         if(document.getElementById("flexCheck" + i).checked) {

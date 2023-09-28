@@ -20,16 +20,13 @@ export function getObj(id) {
 export function DateText(date) {
   var dif = Math.floor((new Date() - date) / 1000 / 60 / 60 / 24);
   if(dif < 7){
-    if(new Date().getDate() == date.getDate()){
-      return "きょう";
-    }
-    else{
-      switch (Math.floor(dif)) {
-        case 0: return "きのう";
-        case 1: return "おととい";
-        default: return String(Math.floor(dif)) + "日前";
-      }
-    }
+    if(new Date().getDate() == date.getDate()){ return "きょう"; }
+    else if(new Date().getDate() - (1000 * 60 * 60 * 24) == date.getDate()){ return "きのう"; }
+    else if(new Date().getDate() - (1000 * 60 * 60 * 24 * 2) == date.getDate()){ return "おととい"; }
+    else{ return String(dif) + "日前"; }
+  }
+  else if(new Date().getFullYear() != date.getFullYear()) {
+    return String(date.getFullYear()) + "年" + String(date.getMonth() + 1) + "月" + String(date.getDate()) + "日"
   }
   else{
     return String(date.getMonth() + 1) + "月" + String(date.getDate()) + "日"

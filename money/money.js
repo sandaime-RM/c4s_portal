@@ -1,13 +1,9 @@
-// Import the functions you need from the SDKs you need
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-app.js";
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-analytics.js";
 import { getDatabase, push, set, ref, get, child, remove } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-database.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-auth.js";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
+import { getObj, DateText } from "/script/methods.js";
 
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
     apiKey: "AIzaSyBE60G8yImWlENWpCnQZzqqVUrwWa_torg",
     authDomain: "c4s-portal.firebaseapp.com",
@@ -47,6 +43,8 @@ window.onload = function() {
         }
     }
 }
+
+function ready() { $("#overray").fadeOut(); }
 
 //項目編集・保存
 function upload() {
@@ -116,12 +114,12 @@ function dispMoneyInfo(e, index) {
     }
 }
 
-function dispList() {
+async function dispList() {
     var total = 0;
     document.getElementById("moneyList").innerHTML = '<div class="text-center py-3"><div class="spinner-border" role="status"><span class="visually-hidden">Loading...</span></div></div>';
     exportData = [["日付", "項目", "収入/支出", "清算済み", "金額", "備考"]];
 
-    get(ref(db, 'money')).then((snapshot) => {
+    await get(ref(db, 'money')).then((snapshot) => {
         document.getElementById("errorMoney").innerHTML = "";
         data = snapshot.child(document.getElementById("year").value).val();
 
@@ -172,6 +170,8 @@ function dispList() {
         document.getElementById("moneyList").innerHTML = "";
         document.getElementById("errorMoney").innerHTML = '<span class="text-danger small">'+error+'</span>';
     });
+
+    ready();
 }
 
 //部費情報の編集画面を表示

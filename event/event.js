@@ -67,7 +67,7 @@ export function start(callback) {
         var eventcolor;
         var timecolor;
         if(new Date(element.term.begin) < new Date()) { eventcolor = "darkred"; timecolor = "text-danger"; } else { eventcolor = "green"; timecolor = "text-muted"}
-        getObj("eventList_future").tail('<div class="col-lg-6 p-2"><div class="card w-100 shadow-sm position-relative" style="border-left: solid ' + eventcolor + ' 10px;"><div class="card-body"><h5 class="card-title">' + element.title + '</h5><h6 class="card-subtitle mb-2 ' + timecolor + '">' + TermString(element.term) + '<br>' + element.place + '</h6><p class="text-primary text-small m-0" style="height: 1.5em;">' + Tags(element.tags) + '</p><p class="card-text" style="height: 5em; text-align: justify;">' + element.description + '</p><div class="mt-2"><div class="h5 card-link d-flex justify-content-around mb-0 text-secondary"><div><a style="cursor: pointer;" id="eventAttend' + eventID + '" onclick="eventReaction(\'' + eventID + '\', \'attend\')"></a> <span id="AttendNum' + eventID + '"></span></div><div><a style="cursor: pointer;" id="eventAbsent' + eventID + '" onclick="eventReaction(\'' + eventID + '\', \'absent\')"></a> <span id="AbsentNum' + eventID + '"></span></div><div class="adminonly"><a style="cursor: pointer;" onclick="eventcontrol(\'' + eventID + '\', \'edit\')"><i class="bi bi-pencil-square"></i></a></div><div class="adminonly"><a style="cursor: pointer;" onclick="eventcontrol(\'' + eventID + '\', \'del\')"><i class="bi bi-trash"></i></a></div></div></div></div><div id="codeexist' + eventID + '" style="display: none;" class="position-absolute top-0 end-0 m-3"><h5><i class="bi bi-person-check-fill" style="color: lightgray;"></i></h5></div><div id="attended-check' + eventID + '" style="display: none;" class="position-absolute top-0 end-0 m-3"><h5><i class="bi bi-person-check-fill" style="color: green;"></i></h1></div></div></div>');
+        getObj("eventList_future").tail('<div class="col-lg-6 p-2"><div class="card w-100 shadow-sm position-relative" style="border-left: solid ' + eventcolor + ' 10px;"><div class="card-body"><h5 class="card-title">' + element.title + '</h5><h6 class="card-subtitle mb-2 ' + timecolor + '">' + Eventterm(element.term) + '<br>' + element.place + '</h6><p class="text-primary text-small m-0" style="height: 1.5em;">' + Tags(element.tags) + '</p><p class="card-text" style="height: 5em; text-align: justify;">' + element.description + '</p><div class="mt-2"><div class="h5 card-link d-flex justify-content-around mb-0 text-secondary"><div><a style="cursor: pointer;" id="eventAttend' + eventID + '" onclick="eventReaction(\'' + eventID + '\', \'attend\')"></a> <span id="AttendNum' + eventID + '"></span></div><div><a style="cursor: pointer;" id="eventAbsent' + eventID + '" onclick="eventReaction(\'' + eventID + '\', \'absent\')"></a> <span id="AbsentNum' + eventID + '"></span></div><div class="adminonly"><a style="cursor: pointer;" onclick="eventcontrol(\'' + eventID + '\', \'edit\')"><i class="bi bi-pencil-square"></i></a></div><div class="adminonly"><a style="cursor: pointer;" onclick="eventcontrol(\'' + eventID + '\', \'del\')"><i class="bi bi-trash"></i></a></div></div></div></div><div id="codeexist' + eventID + '" style="display: none;" class="position-absolute top-0 end-0 m-3"><h5><i class="bi bi-person-check-fill" style="color: lightgray;"></i></h5></div><div id="attended-check' + eventID + '" style="display: none;" class="position-absolute top-0 end-0 m-3"><h5><i class="bi bi-person-check-fill" style="color: green;"></i></h1></div></div></div>');
         
         //出席登録済みマーク
         if(element.attenders && element.attenders[user.uid]) { getObj("attended-check" + eventID).show(); }
@@ -92,7 +92,7 @@ export function start(callback) {
       }
       //終了済みのイベントを表示
       else{
-        getObj("endEvents").head('<div class="col-lg-6 p-2"><div class="card w-100 shadow-sm position-relative" style="border-left: solid gray 10px;"><div class="card-body"><h5 class="card-title">' + element.title + '</h5><h6 class="card-subtitle mb-2 text-muted">' + TermString(element.term) + '<br>' + element.place + '</h6><p class="text-primary text-small m-0" style="height: 1.5em;">' + Tags(element.tags) + '</p><div class="mt-2 adminonly"><div class="h5 card-link d-flex justify-content-around mb-0 text-secondary"><div><a style="cursor: pointer;" onclick="eventcontrol(\'' + eventID + '\', \'edit\')"><i class="bi bi-pencil-square"></i></a></div><div><a style="cursor: pointer;" onclick="eventcontrol(\'' + eventID + '\', \'del\')"><i class="bi bi-trash"></i></a></div></div></div></div><div id="codeexist' + eventID + '" style="display: none;" class="position-absolute top-0 end-0 m-3"><h5><i class="bi bi-person-check-fill" style="color: lightgray;"></i></h5></div><div id="attended-check' + eventID + '" style="display: none;" class="position-absolute top-0 end-0 m-3"><h5><i class="bi bi-person-check-fill" style="color: green;"></i></h5></div></div></div>');
+        getObj("endEvents").head('<div class="col-lg-6 p-2"><div class="card w-100 shadow-sm position-relative" style="border-left: solid gray 10px;"><div class="card-body"><h5 class="card-title">' + element.title + '</h5><h6 class="card-subtitle mb-2 text-muted">' + Eventterm(element.term) + '<br>' + element.place + '</h6><p class="text-primary text-small m-0" style="height: 1.5em;">' + Tags(element.tags) + '</p><div class="mt-2 adminonly"><div class="h5 card-link d-flex justify-content-around mb-0 text-secondary"><div><a style="cursor: pointer;" onclick="eventcontrol(\'' + eventID + '\', \'edit\')"><i class="bi bi-pencil-square"></i></a></div><div><a style="cursor: pointer;" onclick="eventcontrol(\'' + eventID + '\', \'del\')"><i class="bi bi-trash"></i></a></div></div></div></div><div id="codeexist' + eventID + '" style="display: none;" class="position-absolute top-0 end-0 m-3"><h5><i class="bi bi-person-check-fill" style="color: lightgray;"></i></h5></div><div id="attended-check' + eventID + '" style="display: none;" class="position-absolute top-0 end-0 m-3"><h5><i class="bi bi-person-check-fill" style="color: green;"></i></h5></div></div></div>');
         
         //出席登録済みマーク
         if(element.attenders && element.attenders[user.uid]) { getObj("attended-check" + eventID).show(); }
@@ -119,7 +119,9 @@ export function start(callback) {
 
       sortTermKeys(projectsSub).forEach((projectID) => {
         //表示
-        getObj("projectList").innerHTML += '<div class="col-lg-6 p-2"><div class="card w-100 shadow-sm position-relative" style="border-left: solid green 10px;"><div class="card-body"><h5 class="card-title">'+projects[projectID].title+'</h5><h6 class="card-subtitle mb-2 text-muted">'+projects[projectID].term.begin+'～'+projects[projectID].term.end+'</h6><p class="card-text" style="height: 5em;">'+projects[projectID].description+'</p><div class="mt-2"><div class="h5 card-link d-flex justify-content-around mb-0 text-secondary"><div><a style="cursor: pointer;" id="projectJoin' + projectID + '" onclick="projectReaction()"></a> <span id="JoinerNum' + projectID + '"></span></div><div class="adminonly"><a style="cursor: pointer;" onclick="projectcontrol(`'+projectID+'`, `edit`)"><i class="bi bi-pencil-square"></i></a></div><div class="adminonly"><a style="cursor: pointer;" onclick="projectcontrol(`'+projectID+'`, `del`)"><i class="bi bi-trash"></i></a></div></div></div></div></div></div>';
+        //期間表示
+        var term = projects[projectID].term
+        getObj("projectList").innerHTML += '<div class="col-lg-6 p-2"><div class="card w-100 shadow-sm position-relative" style="border-left: solid green 10px;"><div class="card-body"><h5 class="card-title">'+projects[projectID].title+'</h5><h6 class="card-subtitle mb-2 text-muted">' + Projectterm(projects[projectID].term) + '</h6><p class="card-text" style="height: 5em;">'+projects[projectID].description+'</p><div class="mt-2"><div class="h5 card-link d-flex justify-content-around mb-0 text-secondary"><div><a style="cursor: pointer;" id="projectJoin' + projectID + '" onclick="projectReaction()"></a> <span id="JoinerNum' + projectID + '"></span></div><div class="adminonly"><a style="cursor: pointer;" onclick="projectcontrol(`'+projectID+'`, `edit`)"><i class="bi bi-pencil-square"></i></a></div><div class="adminonly"><a style="cursor: pointer;" onclick="projectcontrol(`'+projectID+'`, `del`)"><i class="bi bi-trash"></i></a></div></div></div></div></div></div>';
       })
 
       //管理者以外は非表示にするもの
@@ -141,8 +143,8 @@ export function start(callback) {
     else { return [minkey]; }
   }
 
-  //期間をStringに変換
-  function TermString(term) {
+  //期間をStringに変換（イベント用）
+  function Eventterm(term) {
     var begin = new Date(term.begin); var end = new Date(term.end); var now = new Date();
     var allday = term.allday;
     var output = "";
@@ -177,7 +179,28 @@ export function start(callback) {
     function full(str) { str = String(str); if(str.length < 2) { return full("0" + str); } else { return str; } }
   }
 
-  //タグを文字列に変換、またまた再帰関数大活躍、これ完全にOCaml
+  //期間をStringに変換（企画用）
+  function Projectterm(term) {
+    var begin = new Date(term.begin); var end = new Date(term.end); var now = new Date();
+    var output = "";
+
+    if(now.getFullYear() < begin.getFullYear()) { output += begin.getFullYear() + "年"; }
+    output += `${full(begin.getMonth() + 1)}月${full(begin.getDate())}日`;
+    if(begin != end) {
+      output += " - "
+      if(begin.getFullYear() != end.getFullYear()) { output += `${end.getFullYear()}年`; }
+      output +=`${full(end.getMonth() + 1)}月${full(end.getDate())}日`
+    }
+
+    function full ( str ) { 
+      // if ( `${str}`.length < 2 ) { return `0${str}`; } else { return str; } 
+      return str
+    }
+
+    return output;
+  }
+
+  //タグを文字列に変換、またまた再帰関数大活躍
   function Tags(tags) {
     if(tags[0]) { return "#" + tags.shift() + Tags(tags); }
     else{ return ""; }

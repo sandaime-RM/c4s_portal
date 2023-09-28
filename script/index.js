@@ -217,24 +217,25 @@ onAuthStateChanged(auth, (snapshot) => {
       Object.keys(events).forEach((key) => {
         var data = events[key];
         if(data.term){
-          if(new Date(data.term.begin) <= new Date() && new Date() <= new Date(data.term.end)){
+          // if(true) {
+          if(new Date() <= new Date(data.term.end) && new Date(data.term.begin) <= new Date()){
             heldeventID = key;
 
             getObj("heldevent").style.display = "block";
             getObj("heldevent_title").innerText = data.title;
             getObj("heldevent_place").innerText = data.place;
-            data.tags.forEach(tag => {
-              getObj("heldevent_tags").innerText += "#" + tag;
-            });
+            getObj("heldevent_tags").html();
+            if(data.tags) { data.tags.forEach(tag => { getObj("heldevent_tags").innerText += "#" + tag; }); }
+            else {  }
             getObj("heldevent_description").innerText = data.description;
 
             if(data.code){
               getObj("attendbtn-text").style.display = "block";
-              getObj("heldevent").style.cursor = "pointer";
+              getObj("attendbtn-text").style.cursor = "pointer";
             }
             else{
               getObj("attendbtn-text").style.display = "none"; 
-              getObj("heldevent").style.cursor = "default";
+              getObj("attendbtn-text").style.cursor = "default";
             }
           }
         }

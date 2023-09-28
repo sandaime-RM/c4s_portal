@@ -110,23 +110,21 @@
     </div>
 
     <!--メイン-->
-    <div class="row mx-auto my-3">
+    <div class="row mw-lg mx-auto my-3">
       <!--開催中のイベントがあれば表示-->
-      <div id="heldevent" class="col-lg-6 mx-auto" style="max-width: 480px; text-align: center; border-radius: 15px; padding: 10px 10px; outline: solid 1px darkgreen; background-color: rgb(226, 250, 226); display: none;">
-        <h5 style="text-align: center; color: darkgreen;">開催中のイベント</h5>
-        <div class="card shadow-sm" style="border-bottom: 12px solid green; border-radius: 10px;">
-          <div class="card-body">
-            <div>
-              <h5 class="card-title" id="heldevent_title"></h5>
-              <h5 class="card-subtitle mb-2">
-                <span class="badge bg-danger"><span id="heldevent_place"></span>にて開催中!</span>
-              </h5>
-              <p class="card-text small">
-                <div class="alert alert-light" style="padding: 5px 10px; border-radius: 5px; text-align: justify;" id="heldevent_description"></div>
-                <p class="my-1 text-primary" id="heldevent_tags"></p>
-              </p>
-            </div>
-            <div class="card-link small mt-3" style="color: darkred; text-align: center;" id="attendbtn-text" onclick="openmodal('attend')">
+      <div id="heldevent" class="col-lg-6 hide mb-3">
+        <div class="text-center p-3 bg-c4s-dark shadow rounded-md">
+          <h5 class="text-light">開催中のイベント</h5>
+          <div class="shadow-sm rounded-sm w-100 p-3 bg-c4s-light" style="border: 1px solid rgb(127, 63, 0);">
+            <h5 id="heldevent_title" class="text-dark"></h5>
+            <h5 class="mb-2">
+              <span class="badge bg-danger"><span id="heldevent_place"></span>にて開催中!</span>
+            </h5>
+            <p class="small">
+              <div class="alert alert-light text-justify" id="heldevent_description"></div>
+              <p class="my-1 text-primary" id="heldevent_tags"></p>
+            </p>
+            <div class="small mt-3 text-center text-danger" id="attendbtn-text" onclick="openmodal('attend')">
               <h6>出席登録する</h6>
             </div>
           </div>
@@ -134,7 +132,7 @@
       </div>
 
       <!--プロフィール-->
-      <div id="profile" class="col-lg-6 mx-auto" style="max-width: 480px; margin: 20px auto; padding: 10px 10px; outline: solid 1px lightgray; border-radius: 10px; display: none;">
+      <div id="profile" class="col-lg-6 mx-auto p-3 border rounded-md hide mb-3">
         <div class="row mb-2" style="display: flex; align-items: flex-end;">
           <div class="col-sm-4 mt-2">
             <div id="userPic" style="width: 80%; max-width: 100px; height: auto; margin: 0 auto;">

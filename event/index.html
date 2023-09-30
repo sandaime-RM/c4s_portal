@@ -94,23 +94,13 @@
     <h2 class="text-center my-5"><i class="bi bi-calendar-week"> </i>イベント・企画一覧</h2>
 
     <!--イベント/企画切り替えタブ-->
-    <div class="text-center adminonly" style="margin: 30px auto;">
-      <ul id="tab-event" class="nav nav-tabs justify-content-center">
-        <li class="nav-item">
-          <a style="width: 8em;" class="nav-link h6 active" aria-current="page">イベント</a>
-        </li>
-        <li class="nav-item">
-          <a style="width: 8em; cursor: pointer;" class="nav-link h6" onclick="switchtab(1)">企画</a>
-        </li>
-      </ul>
-      <ul id="tab-project" class="nav nav-tabs justify-content-center">
-        <li class="nav-item">
-          <a style="width: 8em; cursor: pointer;" class="nav-link h6" onclick="switchtab(0)">イベント</a>
-        </li>
-        <li class="nav-item">
-          <a style="width: 8em;" class="nav-link active h6" aria-current="page">企画</a>
-        </li>
-      </ul>
+    <div id="tab-event" class="text-center my-3 mx-auto">
+      <div class="clicked">イベント</div>
+      <div class="unclicked pointer" onclick="switchtab(1)">企画</div>
+    </div>
+    <div id="tab-project" class="text-center my-3 mx-auto">
+      <div class="unclicked pointer" onclick="switchtab(0)">イベント</div>
+      <div class="clicked">企画</div>
     </div>
 
     <!--イベントタブ-->
@@ -131,6 +121,9 @@
     <!--企画タブ-->
     <div id="project" class="mx-auto mb-5" style="max-width: 960px;">
       <p class="text-danger text-center" id="noProject">進行中の企画がありません</p>
+
+      <div class="row">
+      </div>
 
       <div class="row" id="projectList">
         

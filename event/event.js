@@ -1,5 +1,4 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-app.js";
-import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-analytics.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-auth.js";
 import { getDatabase, ref, push, remove, set, get, onValue } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-database.js";
 import { getObj, sortMembers } from "/script/methods.js";
@@ -17,7 +16,6 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
 const db = getDatabase(app);
 const auth = getAuth();
 var user = {};
@@ -39,22 +37,22 @@ onAuthStateChanged(auth, (snapshot) => {
       get(ref(db, "admin-users/" + user.uid)).then((snapshot) => {
         if(snapshot.val()) { status = 2; } else { status = 1; }
         if(status == 2) { get(ref(db, ("users"))).then((snapshot) => { users = snapshot.val(); })}
-        start(end);
+        start().then(end);
       });
     }
-    else { status = 0; start(end); }
+    else { status = 0; start().then(end); }
   })
 
-  function end() { $("#overray").fadeOut(); }
+  function end() { $("#overray").fadeOut(); };
 });
 
 //読み込み時に実行
-export function start(callback) {
+window.start = async callback => {
   //タブはデフォルトでイベント状態にする
-  switchtab(0);
+  console.log(switchtab(0));
 
   //イベントリストを表示
-  get(ref(db, "event")).then((snapshot) => {
+  await get(ref(db, "event")).then((snapshot) => {
     events = snapshot.val();
 
     if(!events) { getObj("noEvent").show(); }
@@ -105,12 +103,10 @@ export function start(callback) {
     Object.keys(adminonly).forEach(key => {
       if ( status == 2 ) { adminonly[key].style.display = "inherit"; } else { adminonly[key].style.display = "none"; }
     });
-
-    callback();
   });
 
   //企画リストを表示
-  get(ref(db, "projects")).then((snapshot) => {
+  await get(ref(db, "projects")).then((snapshot) => {
     projects = snapshot.val();
     let projectsSub = snapshot.val();
 
@@ -121,7 +117,7 @@ export function start(callback) {
         //表示
         //期間表示
         var term = projects[projectID].term
-        getObj("projectList").innerHTML += '<div class="col-lg-6 p-2"><div class="card w-100 shadow-sm position-relative" style="border-left: solid green 10px;"><div class="card-body"><h5 class="card-title">'+projects[projectID].title+'</h5><h6 class="card-subtitle mb-2 text-muted">' + Projectterm(projects[projectID].term) + '</h6><p class="card-text" style="height: 5em;">'+projects[projectID].description+'</p><div class="mt-2"><div class="h5 card-link d-flex justify-content-around mb-0 text-secondary"><div><a style="cursor: pointer;" id="projectJoin' + projectID + '" onclick="projectReaction()"></a> <span id="JoinerNum' + projectID + '"></span></div><div class="adminonly"><a style="cursor: pointer;" onclick="projectcontrol(`'+projectID+'`, `edit`)"><i class="bi bi-pencil-square"></i></a></div><div class="adminonly"><a style="cursor: pointer;" onclick="projectcontrol(`'+projectID+'`, `del`)"><i class="bi bi-trash"></i></a></div></div></div></div></div></div>';
+        getObj("projectList").innerHTML += '<div class="col-lg-6 p-2"><div class="card w-100 shadow-sm position-relative" style="border-left: solid green 10px;"><div class="card-body"><h5 class="card-title">'+projects[projectID].title+'</h5><h6 class="card-subtitle mb-2 text-muted">' + Projectterm(projects[projectID].term) + '</h6><p class="card-text" style="height: 5em;">'+projects[projectID].description+'</p><div class="mt-2"><div class="h5 card-link d-flex justify-content-around mb-0 text-secondary"><div><i class="pointer bi bi-person-plus" id="projectJoin' + projectID + '" onclick="projectReaction()"></i> <span id="JoinerNum' + projectID + '"></span></div><div class="adminonly"><a style="cursor: pointer;" onclick="projectcontrol(`'+projectID+'`, `edit`)"><i class="bi bi-pencil-square"></i></a></div><div class="adminonly"><a style="cursor: pointer;" onclick="projectcontrol(`'+projectID+'`, `del`)"><i class="bi bi-trash"></i></a></div></div></div></div></div></div>';
       })
 
       //管理者以外は非表示にするもの
@@ -191,11 +187,7 @@ export function start(callback) {
       if(begin.getFullYear() != end.getFullYear()) { output += `${end.getFullYear()}年`; }
       output +=`${full(end.getMonth() + 1)}月${full(end.getDate())}日`
     }
-
-    function full ( str ) { 
-      // if ( `${str}`.length < 2 ) { return `0${str}`; } else { return str; } 
-      return str
-    }
+    function full(str) { return str; }
 
     return output;
   }
@@ -206,16 +198,15 @@ export function start(callback) {
     else{ return ""; }
   }
 }
-window.start = start;
 
 //タブ切り替え
-export function switchtab(i) {
+window.switchtab = function switchtab(i) {
   var display = []; //eventtab, projecttab, event, project
   if(i) { display = ["none", "flex", "none", "block"]; }
   else  { display = ["flex", "none", "block", "none"]; }
 
-  getObj("tab-event").style.display = display[0];
-  getObj("tab-project").style.display = display[1];
+  getObj("tab-event").style.display = display[2];
+  getObj("tab-project").style.display = display[3];
   getObj("event").style.display = display[2];
   getObj("project").style.display = display[3];
   if(status == 2){
@@ -226,8 +217,9 @@ export function switchtab(i) {
     getObj("addEventBtn").style.display = "none";
     getObj("addProjectBtn").style.display = "none";
   }
+
+  return display;
 }
-window.switchtab = switchtab;
 
 var editeventModal = new bootstrap.Modal(getObj("editeventModal"));
 //イベントコントロール
@@ -521,7 +513,7 @@ export function drawEventReaction (eventID, attend) {
 window.drawEventReaction = drawEventReaction;
 
 //企画コントロール
-export function projectcontrol(projectID, type) { 
+window.projectcontrol = (projectID, type) => { 
   switch (type) {
     case "new":
       getObj("projectID").value = new Date().getTime().toString(16).toUpperCase();
@@ -578,12 +570,8 @@ export function projectcontrol(projectID, type) {
         alert(msg); return;
       }
       let id = getObj("projectID").value;
-      if(projects) {
-        if(!projects[id]) { projects[id] = {}; }
-      } else {
-        projects = {};
-        projects[id] = {};
-      }
+      if(!projects) { projects = {}; }
+      if(!projects[id]) { projects[id] = {}; }
       projects[id].title = getObj("projectTitle").value;
       projects[id].description = getObj("projectDescription").value;
       projects[id].term = {
@@ -592,19 +580,16 @@ export function projectcontrol(projectID, type) {
       };
 
       set(ref(db, "projects/" + id), projects[id])
-      .then(() => {
-        alert("保存しました。");
-        window.location.reload();
-      });
+      .then(() => { alert("保存しました。"); location.reload(); });
     break;
     case "del":
-      remove(ref(db, "projects/" + projectID))
-      .then(() => {
-        window.location.reload();
-      })
+      let ans = confirm("削除してよろしいですか？");
+      if(ans) {
+        remove(ref(db, "projects/" + projectID))
+        .then(() => { alert("削除しました"); location.reload(); })
+      }
     break;
   
     default: break;
   }
 }
-window.projectcontrol = projectcontrol;

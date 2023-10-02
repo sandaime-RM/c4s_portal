@@ -1,28 +1,21 @@
-// Import the functions you need from the SDKs you need
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-app.js";
-import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-analytics.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-auth.js";
 import { getDatabase, ref, update, push, remove, set, get } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-database.js";
-import { sortMembers } from "/script/methods.js";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
+import { getObj, sortMembers } from "/script/methods.js";
 
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-    apiKey: "AIzaSyBE60G8yImWlENWpCnQZzqqVUrwWa_torg",
-    authDomain: "c4s-portal.firebaseapp.com",
-    databaseURL: "https://c4s-portal-default-rtdb.asia-southeast1.firebasedatabase.app",
-    projectId: "c4s-portal",
-    storageBucket: "c4s-portal.appspot.com",
-    messagingSenderId: "863775995414",
-    appId: "1:863775995414:web:82eb9557a13a099dfbe737",
-    measurementId: "G-K2SR1WSNRC"
+  apiKey: "AIzaSyBE60G8yImWlENWpCnQZzqqVUrwWa_torg",
+  authDomain: "c4s-portal.firebaseapp.com",
+  databaseURL: "https://c4s-portal-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "c4s-portal",
+  storageBucket: "c4s-portal.appspot.com",
+  messagingSenderId: "863775995414",
+  appId: "1:863775995414:web:82eb9557a13a099dfbe737",
+  measurementId: "G-K2SR1WSNRC"
 };
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
 const db = getDatabase(app);
 const auth = getAuth();
 var user;
@@ -38,7 +31,7 @@ var totalMembers = 0;
 var storeTasks, storeData;
 var edittingStore = ["", ""];
 
-var userModal = new bootstrap.Modal(document.getElementById('exampleModal'));
+var userModal = new bootstrap.Modal(getObj('exampleModal'));
 
 var adminusers;
 
@@ -47,7 +40,6 @@ onAuthStateChanged(auth, (us) => {
   user = us;
 
   //ローディング画面
-  document.getElementById("overray").style.display = "block";
   
   //管理者一覧を取得
   get(ref(db, "admin-users")).then((snapshot) => {
@@ -67,12 +59,12 @@ onAuthStateChanged(auth, (us) => {
 
 function restart() {
   //とりあえず仮で即ローディング解除
-  document.getElementById("overray").style.display = "none";
+  $("#overray").fadeOut();
 
   //部費支払い一覧(あとでタームごとに管理できるようにする)
   var date = new Date();
-  document.getElementById("endDate").value = date.getFullYear() + "-" + ("0" + (date.getMonth() + 1)).slice(-2) + "-" + ("0" + date.getDate()).slice(-2);
-  document.getElementById("startDate").value = "2023-04-01";
+  getObj("endDate").value = date.getFullYear() + "-" + ("0" + (date.getMonth() + 1)).slice(-2) + "-" + ("0" + date.getDate()).slice(-2);
+  getObj("startDate").value = "2023-04-01";
 
   //CSVデータ作成用
   toCsvData = [["名前", "名前（ふりがな）", "学籍番号", "学部学科", "大学名・学部学科（他大学）", "学年", "性別", "誕生日", "電話番号"]];
@@ -101,7 +93,7 @@ function restart() {
 
         totalMembers --;
 
-        document.getElementById("exitMembers").innerHTML += '<li class="list-group-item" onclick="openInfo('+i+')" data-bs-toggle="modal" data-bs-target="#exampleModal"><h6>'+users[key].name + '<span class="badge bg-danger mx-1">'+role+'</span></h6><span class="text-secondary small mx-1">'+users[key].nameKana+' ' + users[key].studentNumber + '</span></li>';
+        getObj("exitMembers").innerHTML += '<li class="list-group-item" onclick="openInfo('+i+')" data-bs-toggle="modal" data-bs-target="#exampleModal"><h6>'+users[key].name + '<span class="badge bg-danger mx-1">'+role+'</span></h6><span class="text-secondary small mx-1">'+users[key].nameKana+' ' + users[key].studentNumber + '</span></li>';
         return;
     }
 
@@ -144,7 +136,7 @@ function restart() {
     if(!users[key].nickname) {users[key].nickname = "";}
 
     //リストに表示
-    document.getElementById("memberList").innerHTML += '<li class="list-group-item" onclick="openInfo('+i+')" data-bs-toggle="modal" data-bs-target="#exampleModal"><h6>'+users[key].name + '<span class="text-secondary mx-1">' + users[key].nickname + '</span>' + roles + '</h6><div class="small text-secondary">'+users[key].department+' '+users[key].grade+'年 '+sex+' '+age+'歳</div>'+tags+'</li>'
+    getObj("memberList").innerHTML += '<li class="list-group-item" onclick="openInfo('+i+')" data-bs-toggle="modal" data-bs-target="#exampleModal"><h6>'+users[key].name + '<span class="text-secondary mx-1">' + users[key].nickname + '</span>' + roles + '</h6><div class="small text-secondary">'+users[key].department+' '+users[key].grade+'年 '+sex+' '+age+'歳</div>'+tags+'</li>'
     
     toCsvData.push([users[key].name, users[key].nameKana, users[key].studentNumber, users[key].department, users[key].otherDepart, users[key].grade, sex, users[key].birth, String(users[key].phoneNumber)]);
 
@@ -165,19 +157,19 @@ function restart() {
   )
 
   // buhiList.forEach((buhi, il) => {
-  //     document.getElementById("buhiList").innerHTML += '<li class="list-group-item">'+buhi.name+'<span class="fw-bold mx-1">￥' + Number(buhi.amount).toLocaleString() + '</span><span class="text-secondary mx-1 small">'+buhi.date+' 記録者 : '+buhi.recorderName+'</span></li>';
+  //     getObj("buhiList").innerHTML += '<li class="list-group-item">'+buhi.name+'<span class="fw-bold mx-1">￥' + Number(buhi.amount).toLocaleString() + '</span><span class="text-secondary mx-1 small">'+buhi.date+' 記録者 : '+buhi.recorderName+'</span></li>';
   // });
 
-  document.getElementById("totalMoney").textContent = buhiTotal.toLocaleString();
+  getObj("totalMoney").textContent = buhiTotal.toLocaleString();
 
   create_csv(toCsvData);
 
   //引退・退部部員がいる
   if(!noExit) {
-      document.getElementById("noExit").style.display = "none";
+      getObj("noExit").style.display = "none";
   }
 
-  document.getElementById("totalMember").innerHTML = '合計 ' + totalMembers + "人";
+  getObj("totalMember").innerHTML = '合計 ' + totalMembers + "人";
 
     //ストアの取引情報の表示
     get(ref(db, "store")).then((snapshot2) => {
@@ -192,11 +184,11 @@ function restart() {
                 Object.keys(itemTask).forEach((key2, index2) => {
                     //取引完了済みかどうか
                     if(!itemTask[key2].done) {
-                        document.getElementById("needTrans").innerHTML += '<li style="cursor:pointer;" data-bs-toggle="modal" data-bs-target="#transModal" class="list-group-item" onclick="openItemInfo('+index + ","+ index2 + ')"><div><span class="fw-bold">'+storeData[key].name+'<span class="text-secondary mx-1">×'+itemTask[key2].num+'</span></span></div><div class="text-secondary small">購入者：<span id="buyerName">'+itemTask[key2].userName+'</span> さん<br>購入日時：<span id="boughtDate">'+(new Date(itemTask[key2].date)).toLocaleString()+'</span></div></li>';
+                        getObj("needTrans").innerHTML += '<li style="cursor:pointer;" data-bs-toggle="modal" data-bs-target="#transModal" class="list-group-item" onclick="openItemInfo('+index + ","+ index2 + ')"><div><span class="fw-bold">'+storeData[key].name+'<span class="text-secondary mx-1">×'+itemTask[key2].num+'</span></span></div><div class="text-secondary small">購入者：<span id="buyerName">'+itemTask[key2].userName+'</span> さん<br>購入日時：<span id="boughtDate">'+(new Date(itemTask[key2].date)).toLocaleString()+'</span></div></li>';
                     } else {
-                        document.getElementById("noExit2").style.display = "none";
+                        getObj("noExit2").style.display = "none";
                         
-                        document.getElementById("otherTransactions").innerHTML += '<li style="cursor:pointer;" data-bs-toggle="modal" data-bs-target="#transModal" class="list-group-item" onclick="openItemInfo('+index + ","+ index2 + ')"><div><span class="fw-bold">'+storeData[key].name+'<span class="text-secondary mx-1">×'+itemTask[key2].num+'</span></span></div><div class="text-secondary small">購入者：<span id="buyerName">'+itemTask[key2].userName+'</span> さん<br>購入日時：<span id="boughtDate">'+(new Date(itemTask[key2].date)).toLocaleString()+'</span></div></li>';
+                        getObj("otherTransactions").innerHTML += '<li style="cursor:pointer;" data-bs-toggle="modal" data-bs-target="#transModal" class="list-group-item" onclick="openItemInfo('+index + ","+ index2 + ')"><div><span class="fw-bold">'+storeData[key].name+'<span class="text-secondary mx-1">×'+itemTask[key2].num+'</span></span></div><div class="text-secondary small">購入者：<span id="buyerName">'+itemTask[key2].userName+'</span> さん<br>購入日時：<span id="boughtDate">'+(new Date(itemTask[key2].date)).toLocaleString()+'</span></div></li>';
                     }
                 });
             });
@@ -206,62 +198,62 @@ function restart() {
 
 //部員情報の表示
 function openInfo(i) {
-    document.getElementById("mbName").textContent = users[userKeys[i]].name;
-    document.getElementById("mbYomi").textContent = users[userKeys[i]].nameKana;
+    getObj("mbName").textContent = users[userKeys[i]].name;
+    getObj("mbYomi").textContent = users[userKeys[i]].nameKana;
 
     if(users[userKeys[i]].status == 1 || users[userKeys[i]].status == 2) {
       //退部引退した人
-      document.getElementById("mbPR").textContent = users[userKeys[i]].reason;
-      document.getElementById("detailTitle").textContent = "退部理由";
+      getObj("mbPR").textContent = users[userKeys[i]].reason;
+      getObj("detailTitle").textContent = "退部理由";
 
-      document.getElementById("mbBirth").textContent = "---------" + "生";
-      document.getElementById("mbTel").textContent = "----------";
-      document.getElementById("mbSex").textContent = "----";
-      document.getElementById("mbDepartment").textContent = "----------";
-      document.getElementById("mbNickname").textContent = "----------";
-      document.getElementById("mbGrade").textContent = "-- 年生";
+      getObj("mbBirth").textContent = "---------" + "生";
+      getObj("mbTel").textContent = "----------";
+      getObj("mbSex").textContent = "----";
+      getObj("mbDepartment").textContent = "----------";
+      getObj("mbNickname").textContent = "----------";
+      getObj("mbGrade").textContent = "-- 年生";
     } else {
       //在籍している人
-      document.getElementById("mbBirth").textContent = users[userKeys[i]].birth + "生";
-      document.getElementById("mbTel").textContent = users[userKeys[i]].phoneNumber;
-      document.getElementById("mbNickname").textContent = users[userKeys[i]].nickname;
+      getObj("mbBirth").textContent = users[userKeys[i]].birth + "生";
+      getObj("mbTel").textContent = users[userKeys[i]].phoneNumber;
+      getObj("mbNickname").textContent = users[userKeys[i]].nickname;
   
       var sex = "男性";
       if(users[userKeys[i]].sex == "woman") { sex = "女性"; }
   
-      document.getElementById("mbSex").textContent = sex;
-      document.getElementById("mbDepartment").textContent = users[userKeys[i]].department;
-      document.getElementById("mbGrade").textContent = users[userKeys[i]].grade + "年生";
-      document.getElementById("mbPR").textContent = users[userKeys[i]].detail;
-      document.getElementById("detailTitle").textContent = "自己PR";
+      getObj("mbSex").textContent = sex;
+      getObj("mbDepartment").textContent = users[userKeys[i]].department;
+      getObj("mbGrade").textContent = users[userKeys[i]].grade + "年生";
+      getObj("mbPR").textContent = users[userKeys[i]].detail;
+      getObj("detailTitle").textContent = "自己PR";
     }
     
-    document.getElementById("mbStudentNumber").textContent = users[userKeys[i]].studentNumber;
-    document.getElementById("role1").checked = adminusers[userKeys[i]];
+    getObj("mbStudentNumber").textContent = users[userKeys[i]].studentNumber;
+    getObj("role1").checked = adminusers[userKeys[i]];
 
     //役職を表示
-    document.getElementById("role2").value = users[userKeys[i]].role;
+    getObj("role2").value = users[userKeys[i]].role;
 
     if(users[userKeys[i]].buhiRecord) {
         var buhiRecord = users[userKeys[i]].buhiRecord;
-        document.getElementById("buhiRecord").innerHTML = "";
+        getObj("buhiRecord").innerHTML = "";
 
         buhiKeys = Object.keys(buhiRecord);
 
         Object.keys(buhiRecord).forEach((key, index) => {
-            document.getElementById("buhiRecord").innerHTML += '<li class="list-group-item"><span class="fw-bold mx-1">￥' + Number(buhiRecord[key].amount).toLocaleString() + '</span><span class="text-secondary mx-1 small">'+buhiRecord[key].date+' 記録者 : '+buhiRecord[key].recorderName+'</span><div class="position-absolute top-50 end-0 translate-middle-y"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" onclick="deleteBuhi('+i+', '+index+')" class="mx-2 bi bi-x-lg text-secondary" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M13.854 2.146a.5.5 0 0 1 0 .708l-11 11a.5.5 0 0 1-.708-.708l11-11a.5.5 0 0 1 .708 0Z"/><path fill-rule="evenodd" d="M2.146 2.146a.5.5 0 0 0 0 .708l11 11a.5.5 0 0 0 .708-.708l-11-11a.5.5 0 0 0-.708 0Z"/></svg></div></li>';
+            getObj("buhiRecord").innerHTML += '<li class="list-group-item"><span class="fw-bold mx-1">￥' + Number(buhiRecord[key].amount).toLocaleString() + '</span><span class="text-secondary mx-1 small">'+buhiRecord[key].date+' 記録者 : '+buhiRecord[key].recorderName+'</span><div class="position-absolute top-50 end-0 translate-middle-y"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" onclick="deleteBuhi('+i+', '+index+')" class="mx-2 bi bi-x-lg text-secondary" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M13.854 2.146a.5.5 0 0 1 0 .708l-11 11a.5.5 0 0 1-.708-.708l11-11a.5.5 0 0 1 .708 0Z"/><path fill-rule="evenodd" d="M2.146 2.146a.5.5 0 0 0 0 .708l11 11a.5.5 0 0 0 .708-.708l-11-11a.5.5 0 0 0-.708 0Z"/></svg></div></li>';
         });
     } else {
-        document.getElementById("buhiRecord").innerHTML = '<p class="text-secondary small text-center py-2 mx-1">履歴はありません</p>';
+        getObj("buhiRecord").innerHTML = '<p class="text-secondary small text-center py-2 mx-1">履歴はありません</p>';
     }
 
-    document.getElementById("accessRecord").innerHTML = "";
+    getObj("accessRecord").innerHTML = "";
     if(users[userKeys[i]].accessHistory) {
         var accessRecord = users[userKeys[i]].accessHistory;
 
         Object.keys(accessRecord).slice().reverse().forEach((key, index) => {
             if(index < 30) {
-                document.getElementById("accessRecord").innerHTML += (new Date(accessRecord[key].date)).toLocaleString() + " " + accessRecord[key].path + "<br>";
+                getObj("accessRecord").innerHTML += (new Date(accessRecord[key].date)).toLocaleString() + " " + accessRecord[key].path + "<br>";
             }
         });
     }
@@ -292,21 +284,21 @@ function create_csv(data){
     let blob        = new Blob([csv_string], {type: "text/csv"});
     let uri         = URL.createObjectURL(blob);
 
-    document.getElementById("exportBtn").href = uri;
+    getObj("exportBtn").href = uri;
 }
 
 //ユーザー情報の保存
 function upload() {
-    if(document.getElementById("buhiPrice").value) {
+    if(getObj("buhiPrice").value) {
         push(ref(db, "users/" + userKeys[editting] + "/buhiRecord/"), {
-            date : document.getElementById("buhiDate2").value,
-            amount : Number(document.getElementById("buhiPrice").value),
+            date : getObj("buhiDate2").value,
+            amount : Number(getObj("buhiPrice").value),
             recorderName : users[user.uid].name
         });
 
-        push(ref(db, "money/" + (new Date(document.getElementById("buhiDate2").value)).getFullYear()), {
-            date : document.getElementById("buhiDate2").value,
-            price : Number(document.getElementById("buhiPrice").value),
+        push(ref(db, "money/" + (new Date(getObj("buhiDate2").value)).getFullYear()), {
+            date : getObj("buhiDate2").value,
+            price : Number(getObj("buhiPrice").value),
             detail : "部費支払い記録による自動追加です。",
             name : "部費支払い (" + users[userKeys[editting]].name+" さん)",
             type : 2,
@@ -314,16 +306,16 @@ function upload() {
             userId : user.uid
         })
         .then(() => {
-            if(document.getElementById("receipt").checked) {
-                window.location.href = "receipt.html?price="+Number(document.getElementById("buhiPrice").value)+"&given=" + Number(document.getElementById("buhiPrice").value) + "&title="+"部費支払い (" + users[userKeys[editting]].name+" さん)";
+            if(getObj("receipt").checked) {
+                window.location.href = "receipt.html?price="+Number(getObj("buhiPrice").value)+"&given=" + Number(getObj("buhiPrice").value) + "&title="+"部費支払い (" + users[userKeys[editting]].name+" さん)";
             }
         });
     }
 
     //役職を登録
-    set(ref(db, "users/" + userKeys[editting] + "/role"), document.getElementById("role2").value)
+    set(ref(db, "users/" + userKeys[editting] + "/role"), getObj("role2").value)
 
-    set(ref(db, "admin-users/" + userKeys[editting]), document.getElementById("role1").checked).then(() => {
+    set(ref(db, "admin-users/" + userKeys[editting]), getObj("role1").checked).then(() => {
       alert('保存しました');
     })
 }
@@ -404,8 +396,8 @@ export{exit}
 
 //部費情報を指定期間に絞って表示
 function reshowBuhi() {
-    var startDate = document.getElementById("startDate");
-    var endDate = document.getElementById("endDate");
+    var startDate = getObj("startDate");
+    var endDate = getObj("endDate");
 
     if(!startDate || !endDate) {return;}
 
@@ -416,13 +408,13 @@ function reshowBuhi() {
     var notPaidNum = 0;
     var buhiUids = [];
 
-    document.getElementById("buhiList").innerHTML = "";
-    document.getElementById("buhiNotList").innerHTML = "";
+    getObj("buhiList").innerHTML = "";
+    getObj("buhiNotList").innerHTML = "";
 
     buhiList.forEach((buhi, il) => {
         var buhiDate = new Date(buhi.date);
         if(startDate2 < buhiDate && endDate2 > buhiDate) {
-            document.getElementById("buhiList").innerHTML += '<li class="list-group-item">'+buhi.name+'<span class="fw-bold mx-1">￥' + Number(buhi.amount).toLocaleString() + '</span><span class="text-secondary mx-1 small">'+buhi.date+' 記録者 : '+buhi.recorderName+'</span></li>';
+            getObj("buhiList").innerHTML += '<li class="list-group-item">'+buhi.name+'<span class="fw-bold mx-1">￥' + Number(buhi.amount).toLocaleString() + '</span><span class="text-secondary mx-1 small">'+buhi.date+' 記録者 : '+buhi.recorderName+'</span></li>';
 
             buhiTotal += buhi.amount;
             paidNum ++;
@@ -437,13 +429,13 @@ function reshowBuhi() {
 
         if(buhiUids.indexOf(key) == -1) {
             notPaidNum ++;
-            document.getElementById("buhiNotList").innerHTML += '<li class="list-group-item">'+users[key].studentNumber+' ' + users[key].name + '<div class="small text-secondary">'+users[key].department+' '+users[key].grade+'年</div></li>';
+            getObj("buhiNotList").innerHTML += '<li class="list-group-item">'+users[key].studentNumber+' ' + users[key].name + '<div class="small text-secondary">'+users[key].department+' '+users[key].grade+'年</div></li>';
         }
     });
 
-    document.getElementById("notBuhiNum").textContent = notPaidNum + "人";
-    document.getElementById("totalMoney").textContent = buhiTotal.toLocaleString();
-    document.getElementById("buhiRatio").textContent = Math.floor(paidNum/totalMembers*1000)/10;
+    getObj("notBuhiNum").textContent = notPaidNum + "人";
+    getObj("totalMoney").textContent = buhiTotal.toLocaleString();
+    getObj("buhiRatio").textContent = Math.floor(paidNum/totalMembers*1000)/10;
 }
 
 window.reshowBuhi = reshowBuhi;
@@ -457,18 +449,18 @@ function openItemInfo(itemNum, num) {
 
     edittingStore = [itemKey, NumKey]
 
-    document.getElementById("itemName").textContent = storeData[itemKey].name;
-    document.getElementById("itemUserName").textContent = storeTasks[itemKey][NumKey].userName;
-    document.getElementById("itemEmail").innerHTML = "<a href='mailto:"+storeTasks[itemKey][NumKey].email+"'>" + storeTasks[itemKey][NumKey].email +"</a>";
-    document.getElementById("itemDate").textContent = (new Date(storeTasks[itemKey][NumKey].date)).toLocaleString();
-    document.getElementById("itemMessage").textContent = storeTasks[itemKey][NumKey].message;
-    document.getElementById("itemNum").textContent = storeTasks[itemKey][NumKey].num;
-    document.getElementById("itemPaidPrice").textContent = storeTasks[itemKey][NumKey].paidPrice;
+    getObj("itemName").textContent = storeData[itemKey].name;
+    getObj("itemUserName").textContent = storeTasks[itemKey][NumKey].userName;
+    getObj("itemEmail").innerHTML = "<a href='mailto:"+storeTasks[itemKey][NumKey].email+"'>" + storeTasks[itemKey][NumKey].email +"</a>";
+    getObj("itemDate").textContent = (new Date(storeTasks[itemKey][NumKey].date)).toLocaleString();
+    getObj("itemMessage").textContent = storeTasks[itemKey][NumKey].message;
+    getObj("itemNum").textContent = storeTasks[itemKey][NumKey].num;
+    getObj("itemPaidPrice").textContent = storeTasks[itemKey][NumKey].paidPrice;
 
     if(storeTasks[itemKey][NumKey].done) {
-        document.getElementById("transEnd").checked = true;
+        getObj("transEnd").checked = true;
     } else {
-        document.getElementById("transEnd").checked = false;
+        getObj("transEnd").checked = false;
     }
 }
 
@@ -478,7 +470,7 @@ export{openItemInfo}
 //ストア取引情報の更新
 function storeUpload() {
     update(ref(db, "storePay/" + edittingStore[0] + "/" + edittingStore[1]), {
-        done : document.getElementById("transEnd").checked
+        done : getObj("transEnd").checked
     }).then(() => {
         alert("保存しました。");
     });
@@ -502,4 +494,18 @@ function getParam(name, url) {
     if (!results) return null;
     if (!results[2]) return '';
     return decodeURIComponent(results[2].replace(/\+/g, " "));
+}
+
+//タブ切り替え
+window.tab = index => {
+  let tablist = ["member", "dashboard", "buhi", "shop"];
+
+  if (index == 1) { location.href = "members.html"; return; }
+  
+  for (let i = 0; i < tablist.length; i++) {
+    const tabname = tablist[i];
+    if(index == i) { getObj(tabname).show("block"); } else { getObj(tabname).hide(); }
+  }
+
+  location.href = "#header";
 }

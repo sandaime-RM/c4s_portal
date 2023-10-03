@@ -63,6 +63,8 @@ window.onload = function() {
   //リストの表示
   get(ref(db, 'equips')).then((snapshot) => {
     data = snapshot.val();
+    var totalNum = Object.keys(data).length;
+    document.getElementById("totalNum").innerHTML = "総数：" + totalNum;
     
     Object.keys(data).forEach((key, i) => {
       equips[i] = data[key];
@@ -84,6 +86,7 @@ window.onload = function() {
 
   //カテゴリ切り替え
   function setcats (i) {
+    var totalNum = 0;
     //いったん全部消す
     Object.keys(data).forEach((key) => { getObj("equip" + key).hide(); })
 
@@ -107,9 +110,12 @@ window.onload = function() {
           if(data[key].category[n]) { display = true; }
         })
       }
-      if(display) { getObj("equip" + key).style.display = "flex"; }
+      if(display) { getObj("equip" + key).style.display = "flex"; totalNum ++; }
     })
+    
+    document.getElementById("totalNum").innerHTML = "総数：" + (totalNum);
   }
+
   window.setcats = setcats;
 }
 

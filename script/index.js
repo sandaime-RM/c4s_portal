@@ -250,7 +250,7 @@ onAuthStateChanged(auth, (snapshot) => {
 });
 
 //出席登録
-export function attend() {
+window.attend = () => {
   //開催中のイベントがないときのエラー(フォアグラウンド)
   if(!heldeventID || !events[heldeventID].code || new Date(events[heldeventID].term.end) < new Date()) { alert("出席登録を受け付けているイベントはありません"); }
   //出席コード未入力時のエラー(バックグラウンド)
@@ -259,26 +259,39 @@ export function attend() {
   else {
     //正解
     if(events[heldeventID].code == getObj("code").value) {
-      getObj("attend-btnform").hide();
-      getObj("attend-failed").hide();
-      getObj("attend-already").hide();
-      getObj("attend-success").show();
-      getObj("code").value = "";
-      getObj("attend-points").innerText = events[heldeventID].point;
-
-      //データベースに登録
-      set(ref(db, "event/" + heldeventID + "/attenders/" + user.uid), true).then(() => {
-        events[heldeventID].attenders = { [user.uid] : true };
-      });
-      set(ref(db, "users/" + user.uid + "/point"), Number(c4suser.point) + Number(events[heldeventID].point)).then(() => {
-        c4suser.point += Number(events[heldeventID].point);
-      });
-      push(ref(db, "users/" + user.uid + "/pointHistory/" + String(new Date().getFullYear())), {
-        title : "【出席登録】" + events[heldeventID].title,
-        amount : Number(events[heldeventID].point),
-        date : new Date().getTime(),
-        mode : 1
-      });
+      //出席済みであるかどうか判定
+      get(ref(db, `event/${heldeventID}/attenders/${user.uid}`)).then((snapshot) => {
+        //出席済みだったとき
+        if(snapshot.val()) {
+          getObj("attend-btnform").hide();
+          getObj("attend-failed").hide();
+          getObj("attend-already").show();
+          getObj("attend-success").hide();
+        }
+        //出席登録処理
+        else {
+          getObj("attend-btnform").hide();
+          getObj("attend-failed").hide();
+          getObj("attend-already").hide();
+          getObj("attend-success").show();
+          getObj("code").value = "";
+          getObj("attend-points").innerText = events[heldeventID].point;
+    
+          //データベースに登録
+          set(ref(db, "event/" + heldeventID + "/attenders/" + user.uid), true).then(() => {
+            events[heldeventID].attenders = { [user.uid] : true };
+          });
+          set(ref(db, "users/" + user.uid + "/point"), Number(c4suser.point) + Number(events[heldeventID].point)).then(() => {
+            c4suser.point += Number(events[heldeventID].point);
+          });
+          push(ref(db, "users/" + user.uid + "/pointHistory/" + String(new Date().getFullYear())), {
+            title : "【出席登録】" + events[heldeventID].title,
+            amount : Number(events[heldeventID].point),
+            date : new Date().getTime(),
+            mode : 1
+          });
+        }
+      })
     }
     //しっぱい
     else{
@@ -286,7 +299,6 @@ export function attend() {
     }
   }
 }
-window.attend = attend;
 
 //QR表示
 function showQR() {

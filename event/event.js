@@ -249,6 +249,9 @@ export function eventcontrol(eventID, type) {
       getObj("attendList_title").hide();
       getObj("absentList_title").hide();
       getObj("attendersList_title").hide();
+      getObj("attendList").innerHTML = "";
+      getObj("absentList").innerHTML = "";
+      getObj("attendersList").innerHTML = "";
         
       editeventModal.show();
     break;
@@ -283,16 +286,23 @@ export function eventcontrol(eventID, type) {
         getObj("attendList_title").hide();
         getObj("absentList_title").hide();
         getObj("attendersList_title").hide();
+
+        var attendNum = 0;
+        var absentNum = 0;
+        var registerNum = 0;
+
         if(data.notice){
           var keys = sortMembers(users, Object.keys(data.notice));
           keys.forEach((ID) => {
             if(data.notice[ID] == 1)
             {
+              attendNum ++;
               getObj("attendList_title").show();
               getObj("attendList").tail('<li class="list-group-item"><span class="text-secondary">' + users[ID].studentNumber + '</span> <span class="h6">' + users[ID].name + '</span></li>'); 
             }
             if(data.notice[ID] == -1)
             {
+              absentNum ++;
               getObj("absentList_title").show();
               getObj("absentList").tail('<li class="list-group-item"><span class="text-secondary">' + users[ID].studentNumber + '</span> <span class="h6">' + users[ID].name + '</span></li>');
             }
@@ -301,11 +311,16 @@ export function eventcontrol(eventID, type) {
         if(data.attenders){
           getObj("attendersList_title").show();
           var keys = sortMembers(users, Object.keys(data.attenders));
+          registerNum = keys.length;
           keys.forEach((ID) => {
             getObj("attendersList").tail('<li class="list-group-item"><span class="text-secondary">' + users[ID].studentNumber + '</span> <span class="h6">' + users[ID].name + '</span></li>');
           })
         }
         
+        getObj("attendNum").innerHTML = attendNum + "人";
+        getObj("absentNum").innerHTML = absentNum + "人";
+        getObj("registerNum").innerHTML = registerNum + "人";
+
         editeventModal.show();
       })
     break;

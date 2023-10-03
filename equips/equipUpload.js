@@ -30,10 +30,10 @@ const storage = getStorage(app);
 const categories = 10; //カテゴリーの数
 const categoryNames = ["書籍", "電子工作", "映像・写真", "3Dプリンター", "ケーブル・アダプタ", "部室用インテリア", "工具", "音響", "VR", "工作"];
 var catSelected = Array(categoryNames.length).fill(false);
-var loadingEquips = document.getElementById("loadingEquips");
+var loadingEquips = getObj("loadingEquips");
 var urls = [];
 
-var photoModal = new bootstrap.Modal(document.getElementById('photoModal'))
+var photoModal = new bootstrap.Modal(getObj('photoModal'))
 
 var status;
 
@@ -116,28 +116,28 @@ window.onload = function() {
 
 //備品情報アップロード
 function upload() {
-    document.getElementById("uploading").style.display = "";
+    getObj("uploading").hide();
 
-    var name = document.getElementById("name");
-    var detail = document.getElementById("detail");
-    var number = document.getElementById("number");
-    var place = document.getElementById("place");
-    var category = [];
-    var finishPic = false;
-    var finishDb = false;
+    var name = getObj("name"),
+        detail = getObj("detail"),
+        number = getObj("number"),
+        place = getObj("place"),
+        category = [],
+        finishPic = false,
+        finishDb = false;
 
-    if(name == "" || !name) {alert("名称くらいは入力してよ！怒"); return;}
+    if(!name.value) { alert("名称くらいは入力してよ！怒"); return; }
 
     for(var i = 1; i <= categories; i++) {
-        if(document.getElementById("flexCheck" + i).checked) {
-            category[i-1] = true;
-        } else {
-            category[i-1] = false;
-        }
+      if(getObj("flexCheck" + i).checked) {
+        category[i-1] = true;
+      } else {
+        category[i-1] = false;
+      }
     }
 
     //画像の圧縮＆アップロード
-    var files = document.getElementById("itemImage").files;
+    var files = getObj("itemImage").files;
     var fileNameTop = (new Date()).getTime();
     var fileNames = [];
 
@@ -271,12 +271,12 @@ export{openInfo}
 
 //フォームの初期化
 function clearForm() {
-    var name = document.getElementById("name");
-    var detail = document.getElementById("detail");
-    var number = document.getElementById("number");
-    var place = document.getElementById("place");
+    var name = getObj("name");
+    var detail = getObj("detail");
+    var number = getObj("number");
+    var place = getObj("place");
 
-    document.getElementById("imgs").innerHTML = "";
+    getObj("imgs").innerHTML = "";
 
     name.value = "";
     detail.value = "";
@@ -284,7 +284,7 @@ function clearForm() {
     number.value = "";
 
     for(var i=1; i<=categories; i++) {
-        document.getElementById("flexCheck"+i).checked = false;
+        getObj("flexCheck"+i).checked = false;
     }
 
     editting = -1;
@@ -312,15 +312,15 @@ export{delItem};
 //備品リストの表示
 function showList() {
     var totalNum = Object.keys(data).length;
-    document.getElementById("equipsList").innerHTML = "";
-    document.getElementById("equipsList2").innerHTML = "";
+    getObj("equipsList").innerHTML = "";
+    getObj("equipsList2").innerHTML = "";
 
     //絞り込みの判定
     var categoryChecked = [];
     var noChecked = true;
     var skipped = 0;
     for(var i=1; i<=categories; i++) {
-        categoryChecked[i-1] = document.getElementById("flex2Check" + i).checked;
+        categoryChecked[i-1] = getObj("flex2Check" + i).checked;
         if(categoryChecked[i-1]) { noChecked = false; }
     }
 
@@ -353,7 +353,7 @@ function showList() {
         var addTo = "equipsList";
         if(i > totalNum/2 && noChecked) { addTo = "equipsList2"; }
     
-        document.getElementById(addTo).innerHTML += '<li class="list-group-item"><h5>'+equip.name+'</h5><div class="small text-primary">'+category+'</div><div class="row"><div class="col-4">数量 : '+equip.number+'</div><div class="col-4">場所 : '+equip.place+'</div></div><div class="position-absolute top-0 end-0 px-2 py-1 pb-2" style="cursor:pointer;" data-bs-toggle="modal" data-bs-target="#exampleModal" onclick="openInfo('+equipNum+')"><img src="../icons/three-dots-vertical.svg"></div></li>';
+        getObj(addTo).innerHTML += '<li class="list-group-item"><h5>'+equip.name+'</h5><div class="small text-primary">'+category+'</div><div class="row"><div class="col-4">数量 : '+equip.number+'</div><div class="col-4">場所 : '+equip.place+'</div></div><div class="position-absolute top-0 end-0 px-2 py-1 pb-2" style="cursor:pointer;" data-bs-toggle="modal" data-bs-target="#exampleModal" onclick="openInfo('+equipNum+')"><img src="../icons/three-dots-vertical.svg"></div></li>';
     
         equips[equipNum] = equip;
         equipKeys[equipNum] = key;
@@ -361,7 +361,7 @@ function showList() {
         equipNum ++;
     });
 
-    document.getElementById("totalNum").textContent = "総数：" + (totalNum-skipped);
+    getObj("totalNum").textContent = "総数：" + (totalNum-skipped);
 }
 
 window.showList = showList;
@@ -369,7 +369,7 @@ export{showList}
 
 //大きく画像を表示
 function openLargePhoto(index) {
-    document.getElementById("equipPhoto").src = urls[index];
+    getObj("equipPhoto").src = urls[index];
     photoModal.show();
 }
 

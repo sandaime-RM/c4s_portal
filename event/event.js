@@ -54,12 +54,13 @@ window.start = async callback => {
   //イベントリストを表示
   await get(ref(db, "event")).then((snapshot) => {
     events = snapshot.val();
-    onValue(ref(db, "event"), snapshot => { events = snapshot.val(); console.log(events)})
+    // onValue(ref(db, "event"), snapshot => { events = snapshot.val(); console.log(events)})
 
     if(!events) { getObj("noEvent").show(); }
 
-    sortTermKeys(events).forEach(eventID => {
+    Object.keys(events).reverse().forEach(eventID => {
       var element = events[eventID];
+      console.log(element)
       //終了していないイベントを表示
       if(new Date() < new Date(element.term.end)) {
         var eventcolor;

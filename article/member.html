@@ -37,35 +37,10 @@
     </div>
   </div>
 
+  <!-- ロード解除 -->
   <script>
-    // setTimeout(() => { $("#overray").fadeOut(); }, 1000);
-  </script>
-
-  <!-- 一旦幹部しかアクセスできないようにしてます -->
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-app.js";
-    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-auth.js";
-    import { getDatabase, ref, push, remove, set, get, onValue } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-database.js";
-    const firebaseConfig = {
-      apiKey: "AIzaSyBE60G8yImWlENWpCnQZzqqVUrwWa_torg",
-      authDomain: "c4s-portal.firebaseapp.com",
-      databaseURL: "https://c4s-portal-default-rtdb.asia-southeast1.firebasedatabase.app",
-      projectId: "c4s-portal",
-      storageBucket: "c4s-portal.appspot.com",
-      messagingSenderId: "863775995414",
-      appId: "1:863775995414:web:82eb9557a13a099dfbe737",
-      measurementId: "G-K2SR1WSNRC"
-    };
-    const app = initializeApp(firebaseConfig);
-    const db = getDatabase(app);
-    const auth = getAuth();
-    onAuthStateChanged(auth, snapshot => {
-      var uid = snapshot.uid;
-      get(ref(db, `admin-users/${uid}`)).then(snapshot => {
-        if(snapshot.val()) { $("#overray").fadeOut(); }
-        else { alert("このページは非公開です"); location.href="/"; }
-      })
-    });
+    setTimeout(() => { $("#overray").fadeOut(); }, 1280);
+    // window.addEventListener('load', () => { $("#overray").fadeOut(); });
   </script>
 
   <div id="header"></div>
@@ -82,7 +57,7 @@
       <hr>
       <h4 style="color: indigo;">部長</h4>
       <hr>
-      <p class="px-3 rounded-sm  text-justify">
+      <p class="px-3 rounded-sm text-justify">
         ２年間C4'sの代表をやっています。サークルにワクワクを増やしていきます。<br>
         突発的なモチベが原動力。<br>
         Web, 電子工作, TouchDesignerとか。
@@ -96,10 +71,9 @@
       <hr>
       <h4 style="color: darkred;">副部長</h4>
       <hr>
-      <p class="px-3 rounded-sm  text-justify">
-        文字数稼ぎのためにちょっと宣伝しておきますが、
-        東京ディズニーシーの新エリア「ファンタジースプリングス」が
-        2024年春に開業予定です。投資額3800億円の新エリアをどうぞお楽しみに。
+      <p class="px-3 rounded-sm text-justify">
+        Web制作、プロジェクションマッピング、デザイン、ディズニーなど。
+        色々なジャンルに足を踏み入れたいです。
       </p>
     </div>
     <div class="p-3 col-sm-6 col-md-4 text-center">
@@ -110,36 +84,12 @@
       <hr>
       <h4 style="color: darkred;">会計</h4>
       <hr>
-      <p class="px-3 rounded-sm  text-justify">
+      <p class="px-3 rounded-sm text-justify">
         <div class="text-center">
           写真とデザインと寝坊と遅刻。
           <br>
           かわいいぷろばいだー。
         </div>
-      </p>
-    </div>
-    <div class="p-3 col-sm-6 col-md-4 text-center">
-      <div class="w-50 mx-auto mb-3"><img src="pic/ko-chan.jpg" class="w-100 rounded-circle"></div>
-      <h4>神谷宗典</h4>
-      <p class="text-secondary mb-0">かみやん</p>
-      <p class="text-secondary">情報計算科学科２年</p>
-      <hr>
-      <h4 style="color: darkgray;">幹部</h4>
-      <hr>
-      <p class="px-3 rounded-sm  text-justify">
-        風邪ひいたらしい、かわいそうに
-      </p>
-    </div>
-    <div class="p-3 col-sm-6 col-md-4 text-center">
-      <div class="w-50 mx-auto mb-3"><img src="pic/yamamoto.jpg" class="w-100 rounded-circle"></div>
-      <h4>刈川凌</h4>
-      <p class="text-secondary mb-0">刈川凌</p>
-      <p class="text-secondary">電気電子情報工学科３年</p>
-      <hr>
-      <h4 style="color: darkgray;">幹部</h4>
-      <hr>
-      <p class="px-3 rounded-sm  text-justify">
-        プロ
       </p>
     </div>
     

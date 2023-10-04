@@ -54,50 +54,54 @@ window.start = async callback => {
   //イベントリストを表示
   await get(ref(db, "event")).then((snapshot) => {
     events = snapshot.val();
-    onValue(ref(db, "event"), snapshot => { events = snapshot.val(); console.log(events)})
+    onValue(ref(db, "event"), snapshot => { 
+      events = snapshot.val();
 
-    if(!events) { getObj("noEvent").show(); }
+      if(!events) { getObj("noEvent").show(); }
 
-    sortTermKeys(events).forEach(eventID => {
-      var element = events[eventID];
-      //終了していないイベントを表示
-      if(new Date() < new Date(element.term.end)) {
-        var eventcolor;
-        var timecolor;
-        if(new Date(element.term.begin) < new Date()) { eventcolor = "darkred"; timecolor = "text-danger"; } else { eventcolor = "green"; timecolor = "text-muted"}
-        getObj("eventList_future").tail('<div class="col-lg-6 p-2"><div class="card w-100 shadow-sm position-relative" style="border-left: solid ' + eventcolor + ' 10px;"><div class="card-body"><h5 class="card-title">' + element.title + '</h5><h6 class="card-subtitle mb-2 ' + timecolor + '">' + Eventterm(element.term) + '<br>' + element.place + '</h6><p class="text-primary text-small m-0" style="height: 1.5em;">' + Tags(element.tags) + '</p><p class="card-text" style="height: 5em; text-align: justify;">' + element.description + '</p><div class="mt-2"><div class="h5 card-link d-flex justify-content-around mb-0 text-secondary"><div><a style="cursor: pointer;" id="eventAttend' + eventID + '" onclick="eventReaction(\'' + eventID + '\', \'attend\')"></a> <span id="AttendNum' + eventID + '"></span></div><div><a style="cursor: pointer;" id="eventAbsent' + eventID + '" onclick="eventReaction(\'' + eventID + '\', \'absent\')"></a> <span id="AbsentNum' + eventID + '"></span></div><div class="adminonly"><a style="cursor: pointer;" onclick="eventcontrol(\'' + eventID + '\', \'edit\')"><i class="bi bi-pencil-square"></i></a></div><div class="adminonly"><a style="cursor: pointer;" onclick="eventcontrol(\'' + eventID + '\', \'del\')"><i class="bi bi-trash"></i></a></div></div></div></div><div id="codeexist' + eventID + '" style="display: none;" class="position-absolute top-0 end-0 m-3"><h5><i class="bi bi-person-check-fill" style="color: lightgray;"></i></h5></div><div id="attended-check' + eventID + '" style="display: none;" class="position-absolute top-0 end-0 m-3"><h5><i class="bi bi-person-check-fill" style="color: green;"></i></h1></div></div></div>');
-        
-        //出席登録済みマーク
-        if(element.attenders && element.attenders[user.uid]) { getObj("attended-check" + eventID).show(); }
-        //出席コードが存在するマーク
-        else if (element.code) { getObj("codeexist" + eventID).show(); }
-        //出席・欠席ボタンの描画
-        if(events[eventID].notice) { drawEventReaction(eventID, events[eventID].notice[user.uid]); }
-        else { drawEventReaction(eventID, 0); }
-        //出席・欠席の人数はリアルタイムで描画
-        onValue(ref(db, "event/" + eventID + "/notice"), (snapshot) => {
-          let attendnum = 0; let absentnum = 0;
-          if(snapshot.val()) {
-            Object.keys(snapshot.val()).forEach((element) => {
-              let data = snapshot.val()[element];
-              if(data == 1) { attendnum += 1; } else if(data == -1) { absentnum += 1; }
-            });
-          }
-          if(attendnum == 0) { attendnum = ""; } if(absentnum == 0) { absentnum = ""; }
-          getObj("AttendNum" + eventID).innerText = attendnum;
-          getObj("AbsentNum" + eventID).innerText = absentnum;
-        });
-      }
-      //終了済みのイベントを表示
-      else{
-        getObj("endEvents").head('<div class="col-lg-6 p-2"><div class="card w-100 shadow-sm position-relative" style="border-left: solid gray 10px;"><div class="card-body"><h5 class="card-title">' + element.title + '</h5><h6 class="card-subtitle mb-2 text-muted">' + Eventterm(element.term) + '<br>' + element.place + '</h6><p class="text-primary text-small m-0" style="height: 1.5em;">' + Tags(element.tags) + '</p><div class="mt-2 adminonly"><div class="h5 card-link d-flex justify-content-around mb-0 text-secondary"><div><a style="cursor: pointer;" onclick="eventcontrol(\'' + eventID + '\', \'edit\')"><i class="bi bi-pencil-square"></i></a></div><div><a style="cursor: pointer;" onclick="eventcontrol(\'' + eventID + '\', \'del\')"><i class="bi bi-trash"></i></a></div></div></div></div><div id="codeexist' + eventID + '" style="display: none;" class="position-absolute top-0 end-0 m-3"><h5><i class="bi bi-person-check-fill" style="color: lightgray;"></i></h5></div><div id="attended-check' + eventID + '" style="display: none;" class="position-absolute top-0 end-0 m-3"><h5><i class="bi bi-person-check-fill" style="color: green;"></i></h5></div></div></div>');
-        
-        //出席登録済みマーク
-        if(element.attenders && element.attenders[user.uid]) { getObj("attended-check" + eventID).show(); }
-        //出席者が存在するマーク
-        else if (element.attenders) { getObj("codeexist" + eventID).show(); }
-      }
+      sortTermKeys(events).forEach(eventID => {
+        var element = events[eventID];
+        //終了していないイベントを表示
+        if(new Date() < new Date(element.term.end)) {
+          var eventcolor;
+          var timecolor;
+          if(new Date(element.term.begin) < new Date()) { eventcolor = "darkred"; timecolor = "text-danger"; } else { eventcolor = "green"; timecolor = "text-muted"}
+          getObj("eventList_future").tail('<div class="col-lg-6 p-2"><div class="card w-100 shadow-sm position-relative" style="border-left: solid ' + eventcolor + ' 10px;"><div class="card-body"><h5 class="card-title">' + element.title + '</h5><h6 class="card-subtitle mb-2 ' + timecolor + '">' + Eventterm(element.term) + '<br>' + element.place + '</h6><p class="text-primary text-small m-0" style="height: 1.5em;">' + Tags(element.tags) + '</p><p class="card-text" style="height: 5em; text-align: justify;">' + element.description + '</p><div class="mt-2"><div class="h5 card-link d-flex justify-content-around mb-0 text-secondary"><div><a style="cursor: pointer;" id="eventAttend' + eventID + '" onclick="eventReaction(\'' + eventID + '\', \'attend\')"></a> <span id="AttendNum' + eventID + '"></span></div><div><a style="cursor: pointer;" id="eventAbsent' + eventID + '" onclick="eventReaction(\'' + eventID + '\', \'absent\')"></a> <span id="AbsentNum' + eventID + '"></span></div><div class="adminonly"><a style="cursor: pointer;" onclick="eventcontrol(\'' + eventID + '\', \'edit\')"><i class="bi bi-pencil-square"></i></a></div><div class="adminonly"><a style="cursor: pointer;" onclick="eventcontrol(\'' + eventID + '\', \'del\')"><i class="bi bi-trash"></i></a></div></div></div></div><div id="codeexist' + eventID + '" style="display: none;" class="position-absolute top-0 end-0 m-3"><h5><i class="bi bi-person-check-fill" style="color: lightgray;"></i></h5></div><div id="attended-check' + eventID + '" style="display: none;" class="position-absolute top-0 end-0 m-3"><h5><i class="bi bi-person-check-fill" style="color: green;"></i></h1></div></div></div>');
+          
+          //出席登録済みマーク
+          if(element.attenders && element.attenders[user.uid]) { getObj("attended-check" + eventID).show(); }
+          //出席コードが存在するマーク
+          else if (element.code) { getObj("codeexist" + eventID).show(); }
+          //出席・欠席ボタンの描画
+          if(events[eventID].notice) { drawEventReaction(eventID, events[eventID].notice[user.uid]); }
+          else { drawEventReaction(eventID, 0); }
+          //出席・欠席の人数はリアルタイムで描画
+          onValue(ref(db, "event/" + eventID + "/notice"), (snapshot) => {
+            let attendnum = 0; let absentnum = 0;
+            if(snapshot.val()) {
+              Object.keys(snapshot.val()).forEach((element) => {
+                let data = snapshot.val()[element];
+                if(data == 1) { attendnum += 1; } else if(data == -1) { absentnum += 1; }
+              });
+            }
+            if(attendnum == 0) { attendnum = ""; } if(absentnum == 0) { absentnum = ""; }
+            getObj("AttendNum" + eventID).innerText = attendnum;
+            getObj("AbsentNum" + eventID).innerText = absentnum;
+          });
+        }
+        //終了済みのイベントを表示
+        else{
+          getObj("endEvents").head('<div class="col-lg-6 p-2"><div class="card w-100 shadow-sm position-relative" style="border-left: solid gray 10px;"><div class="card-body"><h5 class="card-title">' + element.title + '</h5><h6 class="card-subtitle mb-2 text-muted">' + Eventterm(element.term) + '<br>' + element.place + '</h6><p class="text-primary text-small m-0" style="height: 1.5em;">' + Tags(element.tags) + '</p><div class="mt-2 adminonly"><div class="h5 card-link d-flex justify-content-around mb-0 text-secondary"><div><a style="cursor: pointer;" onclick="eventcontrol(\'' + eventID + '\', \'edit\')"><i class="bi bi-pencil-square"></i></a></div><div><a style="cursor: pointer;" onclick="eventcontrol(\'' + eventID + '\', \'del\')"><i class="bi bi-trash"></i></a></div></div></div></div><div id="codeexist' + eventID + '" style="display: none;" class="position-absolute top-0 end-0 m-3"><h5><i class="bi bi-person-check-fill" style="color: lightgray;"></i></h5></div><div id="attended-check' + eventID + '" style="display: none;" class="position-absolute top-0 end-0 m-3"><h5><i class="bi bi-person-check-fill" style="color: green;"></i></h5></div></div></div>');
+          
+          //出席登録済みマーク
+          if(element.attenders && element.attenders[user.uid]) { getObj("attended-check" + eventID).show(); }
+          //出席者が存在するマーク
+          else if (element.attenders) { getObj("codeexist" + eventID).show(); }
+        }
+      });
     });
+
+    
     //管理者以外は非表示にするもの
     var adminonly = document.getElementsByClassName("adminonly");
     Object.keys(adminonly).forEach(key => {

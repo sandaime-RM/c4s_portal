@@ -150,7 +150,7 @@ onAuthStateChanged(auth, (snapshot) => {
                   if(notice.target == "whole") { show = true; color = "black"; }
                   else if(notice.target == "active" && (status == 1 || status == 2)) { show = true; color = "midnightblue"; }
                   else if(notice.target == "admin" && status == 2) { show = true; color = "maroon"; }
-                  else if(0 < notice.target.indexOf(user.uid)) { show = true; color = "green"; }
+                  else if(notice.target.indexOf(user.uid) !== -1) { show = true; color = "green"; }
                   //満たしているとき表示
                   if(show) {
                     getObj("noNotice").hide();

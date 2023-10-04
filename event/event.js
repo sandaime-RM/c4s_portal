@@ -1,6 +1,6 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-app.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-auth.js";
-import { getDatabase, ref, push, remove, set, get, onValue } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-database.js";
+import { getDatabase, ref, push, remove, set, get, onValue, update } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-database.js";
 import { getObj, sortMembers } from "/script/methods.js";
 
 const firebaseConfig = {
@@ -54,11 +54,11 @@ window.start = async callback => {
   //イベントリストを表示
   await get(ref(db, "event")).then((snapshot) => {
     events = snapshot.val();
+    onValue(ref(db, "event"), snapshot => { events = snapshot.val(); console.log(events)})
 
     if(!events) { getObj("noEvent").show(); }
 
     sortTermKeys(events).forEach(eventID => {
-      events = snapshot.val();
       var element = events[eventID];
       //終了していないイベントを表示
       if(new Date() < new Date(element.term.end)) {
@@ -108,16 +108,14 @@ window.start = async callback => {
   //企画リストを表示
   await get(ref(db, "projects")).then((snapshot) => {
     projects = snapshot.val();
+    onValue(ref(db, "projects"), (snapshot) => { projects = snapshot.val(); })
     let projectsSub = snapshot.val();
 
     if(projects) {
       getObj("noProject").style.display = "none";
 
       sortTermKeys(projectsSub).forEach((projectID) => {
-        //表示
-        //期間表示
-        var term = projects[projectID].term
-        getObj("projectList").innerHTML += '<div class="col-lg-6 p-2"><div class="card w-100 shadow-sm position-relative" style="border-left: solid green 10px;"><div class="card-body"><h5 class="card-title">'+projects[projectID].title+'</h5><h6 class="card-subtitle mb-2 text-muted">' + Projectterm(projects[projectID].term) + '</h6><p class="card-text" style="height: 5em;">'+projects[projectID].description+'</p><div class="mt-2"><div class="h5 card-link d-flex justify-content-around mb-0 text-secondary"><div><i class="pointer bi bi-person-plus" id="projectJoin' + projectID + '" onclick="projectReaction()"></i> <span id="JoinerNum' + projectID + '"></span></div><div class="adminonly"><a style="cursor: pointer;" onclick="projectcontrol(`'+projectID+'`, `edit`)"><i class="bi bi-pencil-square"></i></a></div><div class="adminonly"><a style="cursor: pointer;" onclick="projectcontrol(`'+projectID+'`, `del`)"><i class="bi bi-trash"></i></a></div></div></div></div></div></div>';
+        getObj("projectList").innerHTML += '<div class="col-lg-6 p-2"><div class="card w-100 shadow-sm position-relative" style="border-right: solid indigo 10px;"><div class="card-body"><h5 class="card-title">'+projects[projectID].title+'</h5><h6 class="card-subtitle mb-2 text-muted">' + Projectterm(projects[projectID].term) + '</h6><p class="card-text" style="height: 5em;">'+projects[projectID].description+'</p><div class="mt-2"><div class="h5 card-link d-flex justify-content-around mb-0 text-secondary"><div style="cursor: pointer;" id="projectJoin' + projectID + '" onclick="projectReaction(`' + projectID + '`)"><i class="bi bi-person-plus"></i> <span id="JoinerNum' + projectID + '"></span></div><div class="adminonly"><a style="cursor: pointer;" onclick="projectcontrol(`'+projectID+'`, `edit`)"><i class="bi bi-pencil-square"></i></a></div><div class="adminonly"><a style="cursor: pointer;" onclick="projectcontrol(`'+projectID+'`, `del`)"><i class="bi bi-trash"></i></a></div></div></div></div></div></div>';
       })
 
       //管理者以外は非表示にするもの
@@ -606,5 +604,18 @@ window.projectcontrol = (projectID, type) => {
     break;
   
     default: break;
+  }
+}
+
+window.projectReaction = (ID) => {
+  //メンバーから削除
+  if(projects[ID].joiners && projects[ID].joiners[user.uid]) {
+    remove(ref(db, `projects/${ID}/joiners/${user.uid}`)).then(() => { alert("メンバーから削除しました"); });
+    getObj("projectJoin" + ID).html('<i class="bi bi-person-plus"> </i>');
+  }
+  //メンバーに登録
+  else {
+    update(ref(db, `projects/${ID}/joiners`), { [user.uid]: true }).then(() => { alert("メンバーに登録しました") });
+    getObj("projectJoin" + ID).html('<i class="bi bi-person-check-fill" style="color: indigo"> </i>');
   }
 }

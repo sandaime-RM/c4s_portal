@@ -117,6 +117,15 @@ window.start = async callback => {
 
       sortTermKeys(projectsSub).forEach((projectID) => {
         getObj("projectList").innerHTML += '<div class="col-lg-6 p-2"><div class="card w-100 shadow-sm position-relative" style="border-right: solid indigo 10px;"><div class="card-body"><h5 class="card-title">'+projects[projectID].title+'</h5><h6 class="card-subtitle mb-2 text-muted">' + Projectterm(projects[projectID].term) + '</h6><p class="card-text" style="height: 5em;">'+projects[projectID].description+'</p><div class="mt-2"><div class="h5 card-link d-flex justify-content-around mb-0 text-secondary"><div style="cursor: pointer;" id="projectJoin' + projectID + '" onclick="projectReaction(`' + projectID + '`)"><i class="bi bi-person-plus"></i> <span id="JoinerNum' + projectID + '"></span></div><div class="adminonly"><a style="cursor: pointer;" onclick="projectcontrol(`'+projectID+'`, `edit`)"><i class="bi bi-pencil-square"></i></a></div><div class="adminonly"><a style="cursor: pointer;" onclick="projectcontrol(`'+projectID+'`, `del`)"><i class="bi bi-trash"></i></a></div></div></div></div></div></div>';
+
+        //参加中の場合、チェック・アイコンに
+        if(projects[projectID].joiners) {
+          if(projects[projectID].joiners[user.uid]) {
+            getObj("projectJoin" + projectID).html('<i class="bi bi-person-check-fill" style="color: indigo"> </i>');
+          }
+
+          //document.getElementById("JoinerNum" + projectID).textContent = (Object.keys(projects[projectID].joiners)).length;
+        }
       })
 
       //管理者以外は非表示にするもの
@@ -551,11 +560,12 @@ window.projectcontrol = (projectID, type) => {
         getObj("projectDateEnd").value = data.term.end;
         getObj("MemberListTitle").show();
         getObj("MemberList").show();
-        if(data.member) {
+        getObj("MemberList").innerHTML = "";
+        
+        if(data.joiners) {
           getObj("noMember").hide();
-          var keys = sortMembers(users, Object.keys(data.member));
-          keys.forEach((ID) => {
-            getObj("attendersList").tail('<li class="list-group-item"><span class="text-secondary">' + users[ID].studentNumber + '</span> <span class="h6">' + users[ID].name + '</span></li>');
+          Object.keys(data.joiners).forEach((ID) => {
+            getObj("MemberList").tail('<li class="list-group-item"><span class="text-secondary">' + users[ID].studentNumber + '</span> <span class="h6">' + users[ID].name + '</span></li>');
           })
         }
         else { getObj("noMember").show(); }
@@ -613,10 +623,12 @@ window.projectReaction = (ID) => {
   if(projects[ID].joiners && projects[ID].joiners[user.uid]) {
     remove(ref(db, `projects/${ID}/joiners/${user.uid}`)).then(() => { alert("メンバーから削除しました"); });
     getObj("projectJoin" + ID).html('<i class="bi bi-person-plus"> </i>');
+    // document.getElementById("JoinerNum" + ID).textContent = Number(getObj("JoinerNum" + ID).html) - 1;
   }
   //メンバーに登録
   else {
     update(ref(db, `projects/${ID}/joiners`), { [user.uid]: true }).then(() => { alert("メンバーに登録しました") });
     getObj("projectJoin" + ID).html('<i class="bi bi-person-check-fill" style="color: indigo"> </i>');
+    // document.getElementById("JoinerNum" + ID).textContent = Number(getObj("JoinerNum" + ID).html) + 1;
   }
 }

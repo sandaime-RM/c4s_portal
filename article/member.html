@@ -37,62 +37,28 @@
     </div>
   </div>
 
-  <!-- ロード解除 -->
-  <script>
-    setTimeout(() => { $("#overray").fadeOut(); }, 1280);
-    // window.addEventListener('load', () => { $("#overray").fadeOut(); });
-  </script>
-
   <div id="header"></div>
 
   <h2 class="text-center my-5"><i class="bi bi-people"> </i>C4's 幹部紹介</h2>
 
-  <div class="mw-lg mx-auto w-95 row bg-white rounded-md shadow-sm mt-3">
+  <div class="mw-lg mx-auto w-95 row bg-white rounded-md shadow-sm mt-3" id="list"></div>
 
-    <div class="p-3 col-sm-6 col-md-4 text-center">
-      <div class="w-50 mx-auto mb-3"><img src="pic/c4s_artPic-2_square.jpg" class="w-100 rounded-circle"></div>
-      <h4>松浦竜征</h4>
-      <p class="text-secondary mb-0">まつり</p>
-      <p class="text-secondary">電気電子情報工学科３年</p>
-      <hr>
-      <h4 style="color: indigo;">部長</h4>
-      <hr>
-      <p class="px-3 rounded-sm text-justify">
-        ２年間C4'sの代表をやっています。サークルにワクワクを増やしていきます。<br>
-        突発的なモチベが原動力。<br>
-        Web, 電子工作, TouchDesignerとか。
-      </p>
-    </div>
-    <div class="p-3 col-sm-6 col-md-4 text-center">
-      <div class="w-50 mx-auto mb-3"><img src="pic/c4s_artPic-1_square.jpg" class="w-100 rounded-circle"></div>
-      <h4>今井悠人</h4>
-      <p class="text-secondary mb-0">といとん</p>
-      <p class="text-secondary">情報計算科学科２年</p>
-      <hr>
-      <h4 style="color: darkred;">副部長</h4>
-      <hr>
-      <p class="px-3 rounded-sm text-justify">
-        Web制作、プロジェクションマッピング、デザイン、ディズニーなど。
-        色々なジャンルに足を踏み入れたいです。
-      </p>
-    </div>
-    <div class="p-3 col-sm-6 col-md-4 text-center">
-      <div class="w-50 mx-auto mb-3"><img src="pic/c4s_artPic-3_square.jpg" class="w-100 rounded-circle"></div>
-      <h4>佐藤太心</h4>
-      <p class="text-secondary mb-0">たと</p>
-      <p class="text-secondary">情報計算科学科３年</p>
-      <hr>
-      <h4 style="color: darkred;">会計</h4>
-      <hr>
-      <p class="px-3 rounded-sm text-justify">
-        <div class="text-center">
-          写真とデザインと寝坊と遅刻。
-          <br>
-          かわいいぷろばいだー。
-        </div>
-      </p>
-    </div>
-    
-  </div>
+  <script>
+    let list = document.getElementById("list");
+    list.innerHTML = "";
+    list.add = (html) => { this.innerHTML += html; }
+    //jsonファイルを読み込み
+    fetch("/script/variable.json").then((data) => { return data.json(); }).then((json) => {
+      let data = json.members;
+
+      //HTMLに追加
+      data.forEach(element => {
+        list.innerHTML += `<div class="p-3 col-sm-6 col-md-4 text-center"><div class="w-50 mx-auto mb-3"><img src="pic/${element.pic}" class="w-100 rounded-circle"></div><h4>${element.name}</h4><p class="text-secondary mb-0">${element.nickname}</p><p class="text-secondary">${element.belong}</p><hr><h4 style="color: indigo;">${element.role}</h4><hr><p class="px-3 rounded-sm text-justify">${element.profile}</p></div>`;
+      })
+    });
+
+    //ロード解除
+    setTimeout(() => { $("#overray").fadeOut(); }, 1280);
+  </script>
 </body>
 </html>

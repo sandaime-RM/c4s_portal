@@ -47,7 +47,7 @@ onAuthStateChanged(auth, (snapshot) => {
 });
 
 //読み込み時に実行
-window.start = async callback => {
+window.start = async () => {
   //タブはデフォルトでイベント状態にする
   console.log(switchtab(0));
 
@@ -58,9 +58,18 @@ window.start = async callback => {
 
     if(!events) { getObj("noEvent").show(); }
 
-    Object.keys(events).reverse().forEach(eventID => {
+    //イベントを日付順に並び替え
+    function sortEvents (keys) {
+      let top;
+      if(!keys[0]) { return []; }
+      keys.forEach(key => {
+        if(!top || new Date(events[key].term.begin) < new Date(events[top].term.begin)) { top = key; }
+      });
+      return [keys.splice(keys.indexOf(top), 1), ...sortEvents(keys)];
+    }
+
+    sortEvents(Object.keys(events)).forEach(eventID => {
       var element = events[eventID];
-      console.log(element)
       //終了していないイベントを表示
       if(new Date() < new Date(element.term.end)) {
         var eventcolor;

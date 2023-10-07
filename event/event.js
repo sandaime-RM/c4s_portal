@@ -49,7 +49,7 @@ onAuthStateChanged(auth, (snapshot) => {
 //読み込み時に実行
 window.start = async () => {
   //タブはデフォルトでイベント状態にする
-  console.log(switchtab(0));
+  switchtab(0)
 
   //イベントリストを表示
   await get(ref(db, "event")).then((snapshot) => {

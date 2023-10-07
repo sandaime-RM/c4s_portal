@@ -145,17 +145,6 @@ window.start = async () => {
     }
   })
 
-  //選択ソートでイベントを時系列順に並び替え
-  function sortTermKeys(data) {
-    var minkey = Object.keys(data)[0];
-    Object.keys(data).forEach((key) => {
-      if(new Date(data[key].term.begin) < new Date(data[minkey].term.begin)) { minkey = key; }
-    });
-    delete data[minkey];
-    if(0 < Object.keys(data).length) { return [minkey, ...sortTermKeys(data)]; }
-    else { return [minkey]; }
-  }
-
   //期間をStringに変換（イベント用）
   function Eventterm(term) {
     var begin = new Date(term.begin); var end = new Date(term.end); var now = new Date();

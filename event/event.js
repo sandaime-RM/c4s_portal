@@ -58,16 +58,6 @@ window.start = async () => {
 
     if(!events) { getObj("noEvent").show(); }
 
-    //イベントを日付順に並び替え
-    function sortEvents (keys) {
-      let top;
-      if(!keys[0]) { return []; }
-      keys.forEach(key => {
-        if(!top || new Date(events[key].term.begin) < new Date(events[top].term.begin)) { top = key; }
-      });
-      return [keys.splice(keys.indexOf(top), 1), ...sortEvents(keys)];
-    }
-
     sortEvents(Object.keys(events)).forEach(eventID => {
       var element = events[eventID];
       //終了していないイベントを表示
@@ -118,13 +108,11 @@ window.start = async () => {
   //企画リストを表示
   await get(ref(db, "projects")).then((snapshot) => {
     projects = snapshot.val();
-    onValue(ref(db, "projects"), (snapshot) => { projects = snapshot.val(); })
-    let projectsSub = snapshot.val();
-
+    // onValue(ref(db, "projects"), (snapshot) => { projects = snapshot; })
     if(projects) {
       getObj("noProject").style.display = "none";
 
-      sortTermKeys(projectsSub).forEach((projectID) => {
+      sortProjects(Object.keys(projects)).forEach((projectID) => {
         getObj("projectList").innerHTML += '<div class="col-lg-6 p-2"><div class="card w-100 shadow-sm position-relative" style="border-right: solid indigo 10px;"><div class="card-body"><h5 class="card-title">'+projects[projectID].title+'</h5><h6 class="card-subtitle mb-2 text-muted">' + Projectterm(projects[projectID].term) + '</h6><p class="card-text" style="height: 5em;">'+projects[projectID].description+'</p><div class="mt-2"><div class="h5 card-link d-flex justify-content-around mb-0 text-secondary"><div style="cursor: pointer;" id="projectJoin' + projectID + '" onclick="projectReaction(`' + projectID + '`)"><i class="bi bi-person-plus"></i> <span id="JoinerNum' + projectID + '"></span></div><div class="adminonly"><a style="cursor: pointer;" onclick="projectcontrol(`'+projectID+'`, `edit`)"><i class="bi bi-pencil-square"></i></a></div><div class="adminonly"><a style="cursor: pointer;" onclick="projectcontrol(`'+projectID+'`, `del`)"><i class="bi bi-trash"></i></a></div></div></div></div></div></div>';
 
         //参加中の場合、チェック・アイコンに
@@ -144,6 +132,26 @@ window.start = async () => {
       });
     }
   })
+  
+  //イベントを日付順に並び替え
+  function sortEvents (keys) {
+    let top;
+    if(!keys[0]) { return []; }
+    keys.forEach(key => {
+      if(!top || new Date(events[key].term.begin) < new Date(events[top].term.begin)) { top = key; }
+    });
+    return [keys.splice(keys.indexOf(top), 1), ...sortEvents(keys)];
+  }
+  
+  //企画を日付順に並び替え
+  function sortProjects (keys) {
+    let top;
+    if(!keys[0]) { return []; }
+    keys.forEach(key => {
+      if(!top || new Date(projects[key].term.begin) < new Date(projects[top].term.begin)) { top = key; }
+    });
+    return [keys.splice(keys.indexOf(top), 1), ...sortProjects(keys)];
+  }
 
   //期間をStringに変換（イベント用）
   function Eventterm(term) {
@@ -151,7 +159,7 @@ window.start = async () => {
     var allday = term.allday;
     var output = "";
 
-    if(begin.getFullYear() != end.getFullYear()) { output += begin.getFullYear() + "年"; }
+    if(now.getFullYear() != begin.getFullYear()) { output += begin.getFullYear() + "年"; }
     output += begin.getMonth() + 1 + "月" + begin.getDate() + "日";
 
     //終日の予定は日付だけ
@@ -186,7 +194,7 @@ window.start = async () => {
     var begin = new Date(term.begin); var end = new Date(term.end); var now = new Date();
     var output = "";
 
-    if(now.getFullYear() < begin.getFullYear()) { output += begin.getFullYear() + "年"; }
+    if(now.getFullYear() != begin.getFullYear()) { output += begin.getFullYear() + "年"; }
     output += `${full(begin.getMonth() + 1)}月${full(begin.getDate())}日`;
     if(begin != end) {
       output += " - "

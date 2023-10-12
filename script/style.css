@@ -1,3 +1,5 @@
+body { overflow-x: hidden; }
+
 .hide { display: none; }
 
 .adminonly { display: none; }

@@ -1,11 +1,14 @@
+//getObjは非推奨、new Objの方を使ってください
 export function getObj(id) {
   var obj = document.getElementById(id);
   if(obj){
+    //表示・非表示
     obj.hide = function () { this.style.display = "none"; }
     obj.show = function (style) {
       if(style) { this.style.display = style; }
       else { this.style.display = "inherit"; }
     }
+    //HTMLに追加
     obj.head = function ( HTML ) { this.innerHTML = HTML + obj.innerHTML; }
     obj.tail = function ( HTML ) { this.innerHTML += HTML; }
     obj.html = function ( HTML ) {
@@ -14,6 +17,31 @@ export function getObj(id) {
     }
   }
   return obj;
+}
+
+//画面上の要素をオブジェクトで取得
+export class Obj {
+  constructor(id) {
+    let obj = document.getElementById(id);
+    if(obj) {
+      //表示・非表示
+      obj.hide = function () { this.style.display = "none"; }
+      obj.show = function (style) {
+        if(style) { this.style.display = style; }
+        else { this.style.display = "inherit"; }
+      }
+      //HTMLに追加
+      obj.before = function ( HTML ) { this.innerHTML = HTML + this.innerHTML; }
+      obj.after = function ( HTML ) { this.innerHTML += HTML; }
+      obj.set = function ( HTML ) {
+        if(HTML) { this.innerHTML = HTML; }
+        else { this.innerHTML = ""; }
+      }
+      //onclick属性をaddeventlistenerで追加
+      obj.tap = (f) => { this.onclick = f; }
+    }
+    return obj;
+  }
 }
 
 //日付計算
@@ -34,8 +62,10 @@ export function DateText(date) {
 }
 
 //transform date object into date text for input "type = date"
-export function DateInput(date) {
-  return date.getFullYear() + addzero(date.getMonth() + 1) + addzero(date.getDate());
+export function DateInput(input) {
+  let date;
+  if(!input) { date = new Date(); } else { date = new Date(input); }
+  return date.getFullYear() + "-" + addzero((date.getMonth() + 1).toString()) + "-" + addzero(date.getDate().toString());
   function addzero (str) { if(str[1]) { return String(str); } else { return addzero("0" + str); }}
 }
 

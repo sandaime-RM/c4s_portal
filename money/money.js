@@ -197,7 +197,7 @@ window.save = async () => {
   editingData.date = new Obj("date").value;
   editingData.toName = new Obj("toName").value;
 
-  await set(ref(db, `money/${new Obj("year").value}/${new Obj("key").value}/${new Obj("key").value}`), editingData);
+  await set(ref(db, `money/${new Obj("year").value}/${new Obj("key").value}`), editingData);
   alert("保存しました。"); closeModal(false);
 }
 // リストの表示・残高の表示
@@ -205,11 +205,23 @@ function showList () {
   //リストを表示
   const year = Number(new Obj("year").value);
   get(ref(db, `money/${year}`)).then(snapshot => {
-    const data = snapshot.val();
+    let keys = sortDataKeys(snapshot.val());
+    function sortDataKeys (data) {
+      let first = Object.keys(data)[0];
+      Object.keys(data).forEach(key => {
+        if(new Date(data[key].date) < new Date(data[first].date)) { first = key; }
+      });
+      delete data[first];
+      if(Object.keys(data).length > 0)
+      { return [first, ...sortDataKeys(data)]; }
+      else
+      { return [first]; }
+    }
+    console.log(keys)
     let list = new Obj("moneyList");
     list.set();
-    Object.keys(data).forEach(key => {
-      const element = data[key];
+    keys.forEach(key => {
+      const element = snapshot.val()[key];
       //出金
       if(element.price < 0 || element.type == 1) {
         let paid;

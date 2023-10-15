@@ -133,7 +133,7 @@ window.start = async () => {
     }
   })
   
-  //イベントを日付順に並び替え
+  //イベントを日付順(開始時刻)に並び替え
   function sortEvents (keys) {
     let top;
     if(!keys[0]) { return []; }
@@ -143,12 +143,12 @@ window.start = async () => {
     return [keys.splice(keys.indexOf(top), 1), ...sortEvents(keys)];
   }
   
-  //企画を日付順に並び替え
+  //企画を日付順(終了日時)に並び替え
   function sortProjects (keys) {
     let top;
     if(!keys[0]) { return []; }
     keys.forEach(key => {
-      if(!top || new Date(projects[key].term.begin) < new Date(projects[top].term.begin)) { top = key; }
+      if(!top || new Date(projects[key].term.end) < new Date(projects[top].term.end)) { top = key; }
     });
     return [keys.splice(keys.indexOf(top), 1), ...sortProjects(keys)];
   }
@@ -237,7 +237,7 @@ window.switchtab = function switchtab(i) {
 
 var editeventModal = new bootstrap.Modal(getObj("editeventModal"));
 //イベントコントロール
-export function eventcontrol(eventID, type) {
+window.eventcontrol = function eventcontrol(eventID, type) {
   if(status != 2) { alert("管理者権限がありません"); return; }
   switch (type) {
     //新規作成
@@ -479,10 +479,9 @@ export function eventcontrol(eventID, type) {
   }
   window.toggleshowcode = toggleshowcode;
 }
-window.eventcontrol = eventcontrol;
 
 //出席・欠席ボタン
-export function eventReaction(eventID, type) {
+window.eventReaction = function eventReaction(eventID, type) {
   if(status == 0) { alert("出席連絡には部員登録が必要です。"); return; }
 
   //欠席で-1、出席で1、未入力は0またはundefined
@@ -520,10 +519,9 @@ export function eventReaction(eventID, type) {
 
   drawEventReaction(eventID, events[eventID].notice[user.uid]);
 }
-window.eventReaction = eventReaction;
 
 //出席・欠席ボタンを描画
-export function drawEventReaction (eventID, attend) {
+window.drawEventReaction = function drawEventReaction (eventID, attend) {
   switch (attend) {
     case -1:
       getObj("eventAttend" + eventID).innerHTML = '<i class="bi bi-check-circle"></i>';
@@ -539,7 +537,6 @@ export function drawEventReaction (eventID, attend) {
     break;
   }
 }
-window.drawEventReaction = drawEventReaction;
 
 //企画コントロール
 window.projectcontrol = (projectID, type) => { 

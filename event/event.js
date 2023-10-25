@@ -49,7 +49,9 @@ onAuthStateChanged(auth, (snapshot) => {
 //読み込み時に実行
 window.start = async () => {
   //タブはデフォルトでイベント状態にする
-  switchtab(0)
+  let tab = new URL(location.href).searchParams("tab");
+  if(!tab) { tab = 0; }
+  switchtab(tab)
 
   //イベントリストを表示
   await get(ref(db, "event")).then((snapshot) => {

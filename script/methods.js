@@ -69,6 +69,24 @@ export function DateInput(input) {
   function addzero (str) { if(str[1]) { return String(str); } else { return addzero("0" + str); }}
 }
 
+export class Hizke {
+  constructor(snapshot) {
+    let date = new Date(snapshot);
+    date.year = date.getFullYear();
+    date.month = date.getMonth()+1;
+    date.date = date.getDate();
+    date.setYear = date.setFullYear();
+    return date;
+  }
+
+  DateInput(input) {
+    let date;
+    if(!input) { date = new Date(); } else { date = new Date(input); }
+    return date.getFullYear() + "-" + addzero((date.getMonth() + 1).toString()) + "-" + addzero(date.getDate().toString());
+    function addzero (str) { if(str[1]) { return String(str); } else { return addzero("0" + str); }}
+  }
+}
+
 //部員をソート(users:全ユーザーのデータ、keys:ソートしたい部員のIDリスト)
 export function sortMembers(users, keys){
   var leaders = [];

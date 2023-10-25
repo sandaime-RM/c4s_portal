@@ -1,0 +1,1147 @@
+{
+  "FY2022": {
+    "0": {
+      "date": "2022-04-26",
+      "detail": "",
+      "liquid": true,
+      "name": "初期残高",
+      "price": 139250,
+      "type": 2
+    },
+    "1": {
+      "date": "2022-04-29",
+      "detail": "",
+      "liquid": true,
+      "name": "発泡スチロールカッター",
+      "price": -1010,
+      "type": 1
+    },
+    "2": {
+      "date": "2022-05-06",
+      "detail": "",
+      "liquid": true,
+      "name": "部費支払い",
+      "price": 2000,
+      "type": 2
+    },
+    "3": {
+      "date": "2022-05-06",
+      "detail": "",
+      "liquid": true,
+      "name": "部費支払い",
+      "price": 2000,
+      "type": 2
+    },
+    "4": {
+      "date": "2022-05-06",
+      "detail": "",
+      "liquid": true,
+      "name": "部費支払い",
+      "price": 2000,
+      "type": 2
+    },
+    "5": {
+      "date": "2022-05-06",
+      "detail": "",
+      "liquid": false,
+      "name": "部費支払い",
+      "price": 20000,
+      "type": 2
+    },
+    "6": {
+      "date": "2022-05-14",
+      "detail": "",
+      "liquid": true,
+      "name": "東京銀器　講師代",
+      "price": -20000,
+      "type": 1
+    },
+    "7": {
+      "date": "2022-05-17",
+      "detail": "",
+      "liquid": false,
+      "name": "部費支払い",
+      "price": 1000,
+      "type": 2
+    },
+    "8": {
+      "date": "2022-07-03",
+      "detail": "",
+      "liquid": true,
+      "name": "チームラボ入館料　半額分×8人",
+      "price": -12800,
+      "type": 1
+    },
+    "9": {
+      "date": "2022-07-02",
+      "detail": "",
+      "liquid": true,
+      "name": "3Dプリンター　フィラメント（白）",
+      "price": -2980,
+      "type": 1
+    },
+    "10": {
+      "date": "2022-08-05",
+      "detail": "",
+      "liquid": true,
+      "name": "理大祭2022 パンフレット広告",
+      "price": -5000,
+      "type": 1
+    },
+    "11": {
+      "date": "2022-09-11",
+      "detail": "",
+      "liquid": true,
+      "name": "夏ハッカソン2022 参加賞（アマギフ500円×4）",
+      "price": -2000,
+      "type": 1
+    },
+    "12": {
+      "date": "2022-09-20",
+      "detail": "",
+      "liquid": true,
+      "name": "部費支払い",
+      "price": 3000,
+      "type": 2
+    },
+    "13": {
+      "date": "2022-09-20",
+      "detail": "",
+      "liquid": true,
+      "name": "部費支払い",
+      "price": 3000,
+      "type": 2
+    },
+    "14": {
+      "date": "2022-09-22",
+      "detail": "",
+      "liquid": true,
+      "name": "部費支払い",
+      "price": 3000,
+      "type": 2
+    },
+    "15": {
+      "date": "2022-09-22",
+      "detail": "",
+      "liquid": false,
+      "name": "部費支払い",
+      "price": 3000,
+      "type": 2
+    },
+    "16": {
+      "date": "2022-10-11",
+      "detail": "",
+      "liquid": false,
+      "name": "部費支払い",
+      "price": 6000,
+      "type": 2
+    },
+    "17": {
+      "date": "2022-10-13",
+      "detail": "",
+      "liquid": true,
+      "name": "カッター、ラッカースプレー、保護メガネ、テープ",
+      "price": -660,
+      "type": 1
+    },
+    "18": {
+      "date": "2022-10-20",
+      "detail": "",
+      "liquid": false,
+      "name": "部費支払い",
+      "price": 6000,
+      "type": 2
+    },
+    "19": {
+      "date": "2022-10-22",
+      "detail": "",
+      "liquid": true,
+      "name": "Immersive Museum 入館料半額×4",
+      "price": -3000,
+      "type": 1
+    },
+    "20": {
+      "date": "2022-10-31",
+      "detail": "",
+      "liquid": true,
+      "name": "スプレー（アイボリー）×3本",
+      "price": -330,
+      "type": 1
+    },
+    "21": {
+      "date": "2022-11-04",
+      "detail": "",
+      "liquid": true,
+      "name": "スプレー（黒）",
+      "price": -220,
+      "type": 1
+    },
+    "22": {
+      "date": "2022-11-03",
+      "detail": "",
+      "liquid": true,
+      "name": "障子×7枚 マグネットシール×2本",
+      "price": -990,
+      "type": 1,
+      "userId": "pSv3N23pJEd1z7wUup73VEF6HHp1"
+    },
+    "23": {
+      "date": "2022-11-08",
+      "detail": "",
+      "liquid": true,
+      "name": "電源 延長ケーブル",
+      "price": -2231,
+      "type": 1
+    },
+    "25": {
+      "date": "2022-11-10",
+      "detail": "",
+      "liquid": true,
+      "name": "部費支払い",
+      "price": 3000,
+      "type": 2
+    },
+    "26": {
+      "date": "2022-11-10",
+      "detail": "",
+      "liquid": true,
+      "name": "部費支払い",
+      "price": 3000,
+      "type": 2
+    },
+    "27": {
+      "date": "2022-11-11",
+      "detail": "",
+      "liquid": true,
+      "name": "マルチメディアステレオスピーカー",
+      "price": -8480,
+      "type": 1
+    },
+    "28": {
+      "date": "2022-11-11",
+      "detail": "",
+      "liquid": true,
+      "name": "MiniDisplayPort - HDMI変換ケーブル",
+      "price": -989,
+      "type": 1
+    },
+    "29": {
+      "date": "2022-11-15",
+      "detail": "",
+      "liquid": false,
+      "name": "部費支払い",
+      "price": 6000,
+      "type": 2
+    },
+    "30": {
+      "date": "2022-11-16",
+      "detail": "",
+      "liquid": true,
+      "name": "ラッカースプレー アイボリー",
+      "price": -110,
+      "type": 1
+    },
+    "31": {
+      "date": "2022-11-15",
+      "detail": "",
+      "liquid": true,
+      "name": "理大祭ポスター　印刷代",
+      "price": -1366,
+      "type": 1
+    },
+    "32": {
+      "date": "2022-11-17",
+      "detail": "",
+      "liquid": true,
+      "name": "理大祭　展示パンフレット　印刷代",
+      "price": -3490,
+      "type": 1
+    },
+    "33": {
+      "date": "2022-11-26",
+      "detail": "",
+      "liquid": true,
+      "name": "部費支払い",
+      "price": 5000,
+      "type": 2
+    },
+    "34": {
+      "date": "2022-11-27",
+      "detail": "",
+      "liquid": true,
+      "name": "理大祭 即席ポスター 印刷代",
+      "price": -180,
+      "type": 1
+    },
+    "35": {
+      "date": "2022-11-25",
+      "detail": "",
+      "liquid": true,
+      "name": "ACアダプタ ",
+      "price": -1480,
+      "type": 1
+    },
+    "36": {
+      "date": "2022-11-25",
+      "detail": "",
+      "liquid": false,
+      "name": "ビニールテープ黒×２、写真用マスキングテープ×３、やすり",
+      "price": -662,
+      "type": 1
+    },
+    "37": {
+      "date": "2022-12-20",
+      "detail": "",
+      "liquid": true,
+      "name": "新歓参加費（2023春）",
+      "price": -3000,
+      "type": 1
+    },
+    "38": {
+      "date": "2022-12-20",
+      "detail": "",
+      "liquid": true,
+      "name": "ドメインおよびサーバーの更新料",
+      "price": -4147,
+      "type": 1
+    },
+    "39": {
+      "date": "2023-02-05",
+      "detail": "",
+      "liquid": true,
+      "name": "ライブカメラ",
+      "price": -2890,
+      "type": 1
+    },
+    "-NTBNNFrp3giax4Pz7xd": {
+      "date": "2022-12-23",
+      "detail": "",
+      "liquid": true,
+      "name": "ガクセイ協賛　振込",
+      "price": 16700,
+      "type": 2,
+      "userId": "pSv3N23pJEd1z7wUup73VEF6HHp1"
+    }
+  },
+  "FY2023": {
+    "0": {
+      "date": "2023-03-01",
+      "detail": "",
+      "liquid": true,
+      "name": "前年度繰越",
+      "price": 145935,
+      "toName": "",
+      "userId": "22RngqK8BfOvSjaNOLVUSR8fnJD3"
+    },
+    "-NRBHpBmr57FVFQ0BC-d": {
+      "date": "2023-03-23",
+      "detail": "",
+      "liquid": true,
+      "name": "3Dプリンター用フィラメント（白色）",
+      "price": -1850,
+      "type": 1,
+      "userId": "pSv3N23pJEd1z7wUup73VEF6HHp1"
+    },
+    "-NRDHige1jsYrZd2ACom": {
+      "date": "2023-03-23",
+      "detail": "",
+      "liquid": true,
+      "name": "協賛金（AGLOさま）",
+      "price": 8000,
+      "type": 2,
+      "userId": "pSv3N23pJEd1z7wUup73VEF6HHp1"
+    },
+    "-NRQTXuXGvnIG4hiHvsT": {
+      "date": "2023-03-26",
+      "detail": "",
+      "liquid": true,
+      "name": "提出用のポスター・ビラ印刷代",
+      "price": -1920,
+      "type": 1,
+      "userId": "fD90BXChDvYKPVzl5EExFeUNmKh2"
+    },
+    "-NT2X93WLWT2qN9J2ll-": {
+      "date": "2023-04-15",
+      "detail": "",
+      "liquid": false,
+      "name": "新歓教室展示用ポスターほか",
+      "price": -745,
+      "type": 1,
+      "userId": "22RngqK8BfOvSjaNOLVUSR8fnJD3"
+    },
+    "-NT7X39k3FMMbDJmHEg-": {
+      "date": "2023-04-04",
+      "detail": "300枚×2",
+      "liquid": true,
+      "name": "ビラ代",
+      "price": -7180,
+      "type": 1,
+      "userId": "fD90BXChDvYKPVzl5EExFeUNmKh2"
+    },
+    "-NT84S_UUR5SuWT_Mjpq": {
+      "date": "2023-04-16",
+      "detail": "",
+      "liquid": true,
+      "name": "養生テープ",
+      "price": -440,
+      "type": 1,
+      "userId": "fD90BXChDvYKPVzl5EExFeUNmKh2"
+    },
+    "-NU0H6Ua65CAOaGHVVCK": {
+      "date": "2023-04-27",
+      "detail": "神楽坂支部部会用の部屋を借りた際にかかった費用",
+      "liquid": true,
+      "name": "インスタベース(場所代)",
+      "price": -2010,
+      "type": 1,
+      "userId": "fD90BXChDvYKPVzl5EExFeUNmKh2"
+    },
+    "-NU0vK5yy4lDQfDjMMJQ": {
+      "date": "2023-04-27",
+      "detail": "部費支払い記録による自動追加です。",
+      "liquid": true,
+      "name": "部費支払い (松浦竜征 さん)",
+      "price": 3000,
+      "type": 2,
+      "userId": "fD90BXChDvYKPVzl5EExFeUNmKh2"
+    },
+    "-NU1Zv_W1lw-MXcDyOeE": {
+      "date": "2023-04-27",
+      "detail": "部費支払い記録による自動追加です。",
+      "liquid": true,
+      "name": "部費支払い (西川知伸 さん)",
+      "price": 1000,
+      "type": 2,
+      "userId": "pSv3N23pJEd1z7wUup73VEF6HHp1"
+    },
+    "-NU1ZyKkyZlinL_EgMXx": {
+      "date": "2023-04-27",
+      "detail": "部費支払い記録による自動追加です。",
+      "liquid": true,
+      "name": "部費支払い (諸橋澪樹 さん)",
+      "price": 1000,
+      "type": 2,
+      "userId": "pSv3N23pJEd1z7wUup73VEF6HHp1"
+    },
+    "-NU1_7dQoM5q-w81jBNv": {
+      "date": "2023-04-27",
+      "detail": "部費支払い記録による自動追加です。",
+      "liquid": true,
+      "name": "部費支払い (手嶋進太 さん)",
+      "price": 1000,
+      "type": 2,
+      "userId": "pSv3N23pJEd1z7wUup73VEF6HHp1"
+    },
+    "-NU1_BruV5q8LQBhrXqN": {
+      "date": "2023-04-27",
+      "detail": "部費支払い記録による自動追加です。",
+      "liquid": true,
+      "name": "部費支払い (渡邉 明日馬 さん)",
+      "price": 1000,
+      "type": 2,
+      "userId": "pSv3N23pJEd1z7wUup73VEF6HHp1"
+    },
+    "-NU1_CM4rX1cLxB0sY1r": {
+      "date": "2023-04-27",
+      "detail": "部費支払い記録による自動追加です。",
+      "liquid": true,
+      "name": "部費支払い (川口翔太 さん)",
+      "price": 1000,
+      "type": 2,
+      "userId": "fD90BXChDvYKPVzl5EExFeUNmKh2"
+    },
+    "-NUQh531e6A87JFmOxe2": {
+      "date": "2023-05-02",
+      "detail": "部費支払い記録による自動追加です。",
+      "liquid": true,
+      "name": "部費支払い (西島 大智 さん)",
+      "price": 3000,
+      "type": 2,
+      "userId": "fD90BXChDvYKPVzl5EExFeUNmKh2"
+    },
+    "-NURGLnFbPgObLevu-lM": {
+      "date": "2023-05-02",
+      "detail": "部費支払い記録による自動追加です。",
+      "liquid": true,
+      "name": "部費支払い (中村祐太郎 さん)",
+      "price": 1000,
+      "type": 2,
+      "userId": "fD90BXChDvYKPVzl5EExFeUNmKh2"
+    },
+    "-NURGPWGONclvqVB9Z3E": {
+      "date": "2023-05-02",
+      "detail": "部費支払い記録による自動追加です。",
+      "liquid": true,
+      "name": "部費支払い (タク　シンボク さん)",
+      "price": 1000,
+      "type": 2,
+      "userId": "fD90BXChDvYKPVzl5EExFeUNmKh2"
+    },
+    "-NURGXTsQB2HGwFFYkcX": {
+      "date": "2023-05-02",
+      "detail": "部費支払い記録による自動追加です。",
+      "liquid": true,
+      "name": "部費支払い (大澤尚弘 さん)",
+      "price": 1000,
+      "type": 2,
+      "userId": "fD90BXChDvYKPVzl5EExFeUNmKh2"
+    },
+    "-NURGcZwxGIcplxllxX4": {
+      "date": "2023-05-02",
+      "detail": "部費支払い記録による自動追加です。",
+      "liquid": true,
+      "name": "部費支払い (上野雄佑 さん)",
+      "price": 1000,
+      "type": 2,
+      "userId": "fD90BXChDvYKPVzl5EExFeUNmKh2"
+    },
+    "-NURGeieIJjWY1xS1KXj": {
+      "date": "2023-05-02",
+      "detail": "部費支払い記録による自動追加です。",
+      "liquid": true,
+      "name": "部費支払い (吉田　幸平 さん)",
+      "price": 1000,
+      "type": 2,
+      "userId": "fD90BXChDvYKPVzl5EExFeUNmKh2"
+    },
+    "-NURGp7PcXY4zrx_IpLO": {
+      "date": "2023-05-02",
+      "detail": "部費支払い記録による自動追加です。",
+      "liquid": true,
+      "name": "部費支払い (白板巧幹 さん)",
+      "price": 1000,
+      "type": 2,
+      "userId": "fD90BXChDvYKPVzl5EExFeUNmKh2"
+    },
+    "-NURHKYwl2Jch3tqJLpt": {
+      "date": "2023-05-02",
+      "detail": "部費支払い記録による自動追加です。",
+      "liquid": true,
+      "name": "部費支払い (今井悠人 さん)",
+      "price": 3000,
+      "type": 2,
+      "userId": "fD90BXChDvYKPVzl5EExFeUNmKh2"
+    },
+    "-NURHvzdXbQBpVMaKTr9": {
+      "date": "2023-05-02",
+      "detail": "部費支払い記録による自動追加です。",
+      "liquid": true,
+      "name": "部費支払い (三笠 悠太郎 さん)",
+      "price": 3000,
+      "type": 2,
+      "userId": "fD90BXChDvYKPVzl5EExFeUNmKh2"
+    },
+    "-NUS8lvcUKPRTnA7YJAA": {
+      "date": "2023-05-03",
+      "detail": "部費支払い記録による自動追加です。",
+      "liquid": true,
+      "name": "部費支払い (佐藤太心 さん)",
+      "price": 3000,
+      "type": 2,
+      "userId": "fD90BXChDvYKPVzl5EExFeUNmKh2"
+    },
+    "-NV-6hyteqzwWJ0Qagpy": {
+      "date": "2023-05-09",
+      "detail": "部費支払い記録による自動追加です。",
+      "liquid": true,
+      "name": "部費支払い (城山　智札 さん)",
+      "price": 1000,
+      "type": 2,
+      "userId": "fD90BXChDvYKPVzl5EExFeUNmKh2"
+    },
+    "-NV-6wjJYhQ1bstbJY81": {
+      "date": "2023-05-09",
+      "detail": "部費支払い記録による自動追加です。",
+      "liquid": true,
+      "name": "部費支払い (村田　晴 さん)",
+      "price": 1000,
+      "type": 2,
+      "userId": "fD90BXChDvYKPVzl5EExFeUNmKh2"
+    },
+    "-NV-70IkGGsxQ4ajVnlo": {
+      "date": "2023-05-09",
+      "detail": "部費支払い記録による自動追加です。",
+      "liquid": true,
+      "name": "部費支払い (信嶋　凌 さん)",
+      "price": 1000,
+      "type": 2,
+      "userId": "fD90BXChDvYKPVzl5EExFeUNmKh2"
+    },
+    "-NV-73fR-7FtUcq5wU_N": {
+      "date": "2023-05-09",
+      "detail": "部費支払い記録による自動追加です。",
+      "liquid": true,
+      "name": "部費支払い (倉島颯太 さん)",
+      "price": 1000,
+      "type": 2,
+      "userId": "fD90BXChDvYKPVzl5EExFeUNmKh2"
+    },
+    "-NV-A8RYyoXxmesQv7RM": {
+      "date": "2023-05-09",
+      "detail": "部費支払い記録による自動追加です。",
+      "liquid": true,
+      "name": "部費支払い (伊藤雅紀 さん)",
+      "price": 1000,
+      "type": 2,
+      "userId": "fD90BXChDvYKPVzl5EExFeUNmKh2"
+    },
+    "-NV-AJIjXR0fYPMk43pj": {
+      "date": "2023-05-09",
+      "detail": "部費支払い記録による自動追加です。",
+      "liquid": true,
+      "name": "部費支払い (佐藤聖真 さん)",
+      "price": 1000,
+      "type": 2,
+      "userId": "fD90BXChDvYKPVzl5EExFeUNmKh2"
+    },
+    "-NVD3-MLCSYIGsBX7ADD": {
+      "date": "2023-05-12",
+      "detail": "部費支払い記録による自動追加です。",
+      "liquid": true,
+      "name": "部費支払い (那須皓陽 さん)",
+      "price": 1000,
+      "type": 2,
+      "userId": "pSv3N23pJEd1z7wUup73VEF6HHp1"
+    },
+    "-NVYmZAeXsvcnC1EsYaw": {
+      "date": "2023-05-16",
+      "detail": "部費支払い記録による自動追加です。",
+      "liquid": true,
+      "name": "部費支払い (坂本　章倫 さん)",
+      "price": 1000,
+      "type": 2,
+      "userId": "fD90BXChDvYKPVzl5EExFeUNmKh2"
+    },
+    "-NVYmb959J18F82nMlvL": {
+      "date": "2023-05-16",
+      "detail": "部費支払い記録による自動追加です。",
+      "liquid": true,
+      "name": "部費支払い (小林孝也 さん)",
+      "price": 1000,
+      "type": 2,
+      "userId": "fD90BXChDvYKPVzl5EExFeUNmKh2"
+    },
+    "-NVYmi_yUlCsgFnGJLki": {
+      "date": "2023-05-16",
+      "detail": "部費支払い記録による自動追加です。",
+      "liquid": true,
+      "name": "部費支払い (佐藤太心 さん)",
+      "price": 3000,
+      "type": 2,
+      "userId": "fD90BXChDvYKPVzl5EExFeUNmKh2"
+    },
+    "-NVZAJtLfKy6KlsSKKFM": {
+      "date": "2023-05-16",
+      "detail": "部費支払い記録による自動追加です。",
+      "liquid": true,
+      "name": "部費支払い (刈川 凌 さん)",
+      "price": 3000,
+      "type": 2,
+      "userId": "fD90BXChDvYKPVzl5EExFeUNmKh2"
+    },
+    "-NVZAY16vD1ydDOsMd1q": {
+      "date": "2023-05-16",
+      "detail": "部費支払い記録による自動追加です。",
+      "liquid": true,
+      "name": "部費支払い (村越悠希 さん)",
+      "price": 1000,
+      "type": 2,
+      "userId": "fD90BXChDvYKPVzl5EExFeUNmKh2"
+    },
+    "-NVi66JdIS8oU0Ob7JR9": {
+      "date": "2023-05-18",
+      "detail": "部費支払い記録による自動追加です。",
+      "liquid": true,
+      "name": "部費支払い (田中諒 さん)",
+      "price": 3000,
+      "type": 2,
+      "userId": "pSv3N23pJEd1z7wUup73VEF6HHp1"
+    },
+    "-NW7Nqy9qS8MqLeQi3ou": {
+      "date": "2023-05-23",
+      "detail": "部費支払い記録による自動追加です。",
+      "liquid": true,
+      "name": "部費支払い (田渕　有瑠人 さん)",
+      "price": 1000,
+      "type": 2,
+      "userId": "pSv3N23pJEd1z7wUup73VEF6HHp1"
+    },
+    "-NWFxPvfkyKHvg-iA5SB": {
+      "date": "2023-05-25",
+      "detail": "部費支払い記録による自動追加です。",
+      "liquid": true,
+      "name": "部費支払い (仁平尚樹 さん)",
+      "price": 1000,
+      "type": 2,
+      "userId": "pSv3N23pJEd1z7wUup73VEF6HHp1"
+    },
+    "-NWfsK3fE11qDcWqDntA": {
+      "date": "2023-05-30",
+      "detail": "部費支払い記録による自動追加です。",
+      "liquid": true,
+      "name": "部費支払い (張 瑞申 さん)",
+      "price": 1000,
+      "type": 2,
+      "userId": "fD90BXChDvYKPVzl5EExFeUNmKh2"
+    },
+    "-NX8_z3r-P3tUGc98Zap": {
+      "date": "2023-06-04",
+      "detail": "",
+      "liquid": true,
+      "name": "照光式押しボタンスイッチ2個",
+      "price": -1700,
+      "type": 1,
+      "userId": "fD90BXChDvYKPVzl5EExFeUNmKh2"
+    },
+    "-NXO1W5iMgx_IdVCpHZI": {
+      "date": "2023-05-30",
+      "detail": "",
+      "liquid": true,
+      "name": "ブレッドボード2個",
+      "price": -385,
+      "type": 1,
+      "userId": "fD90BXChDvYKPVzl5EExFeUNmKh2"
+    },
+    "-NXTvN5tRKndOFDh4sgc": {
+      "date": "2023-05-16",
+      "detail": "部費支払い記録による自動追加です。",
+      "liquid": true,
+      "name": "部費支払い (神谷宗典 さん)",
+      "price": 3000,
+      "type": 2,
+      "userId": "fD90BXChDvYKPVzl5EExFeUNmKh2"
+    },
+    "-NXin8pZBIEhAzpcVx3d": {
+      "date": "2023-06-12",
+      "detail": "",
+      "liquid": true,
+      "name": "理大祭2023参加登録費",
+      "price": -10000,
+      "type": 1,
+      "userId": "fD90BXChDvYKPVzl5EExFeUNmKh2"
+    },
+    "-NYwWNvV3Yc3DMcxthua": {
+      "date": "2023-06-27",
+      "detail": "",
+      "liquid": true,
+      "name": "食事会の食費",
+      "price": -17398,
+      "type": 1,
+      "userId": "fD90BXChDvYKPVzl5EExFeUNmKh2"
+    },
+    "-NYwWWFXO6YcQzrJA3zu": {
+      "date": "2023-06-27",
+      "detail": "",
+      "liquid": true,
+      "name": "食事会の参加費",
+      "price": 17399,
+      "type": 2,
+      "userId": "fD90BXChDvYKPVzl5EExFeUNmKh2"
+    },
+    "-N_3CCz9MFjBjPRgfo8j": {
+      "date": "2023-07-11",
+      "detail": "(ブースの収益)+(交流館からの協賛金)-(制作費)",
+      "liquid": true,
+      "name": "水辺で乾杯イベント収益",
+      "price": 48753,
+      "type": 2,
+      "userId": "fD90BXChDvYKPVzl5EExFeUNmKh2"
+    },
+    "-N_3CfeBoBCOSr-wormq": {
+      "date": "2023-07-11",
+      "detail": "",
+      "liquid": true,
+      "name": "ライブ用映像制作費",
+      "price": 10000,
+      "toName": "",
+      "type": 2,
+      "userId": "pSv3N23pJEd1z7wUup73VEF6HHp1"
+    },
+    "-N_3Cwu1WsVTOjJNxNx9": {
+      "date": "2023-07-11",
+      "detail": "刈川くんと、といとんくんと、さとう社長に",
+      "liquid": true,
+      "name": "ボイ部映像制作費の部員への還元",
+      "price": -8000,
+      "type": 1,
+      "userId": "fD90BXChDvYKPVzl5EExFeUNmKh2"
+    },
+    "-N_3FohlsJjxw_tvU_jD": {
+      "date": "2023-07-11",
+      "detail": "といとんくんに",
+      "liquid": true,
+      "name": "CCC景品代支払",
+      "price": -4837,
+      "type": 1,
+      "userId": "fD90BXChDvYKPVzl5EExFeUNmKh2"
+    },
+    "-N_3HwGJ6xI-kzyFL7YF": {
+      "date": "2023-07-11",
+      "detail": "かみやんくんへ",
+      "liquid": true,
+      "name": "CCC景品代支払",
+      "price": -4444,
+      "type": 1,
+      "userId": "fD90BXChDvYKPVzl5EExFeUNmKh2"
+    },
+    "-N_3QOhp4AcDAOAbUCQ-": {
+      "date": "2023-07-11",
+      "detail": "たとへ",
+      "liquid": true,
+      "name": "CCC景品代支払",
+      "price": -4290,
+      "type": 1,
+      "userId": "fD90BXChDvYKPVzl5EExFeUNmKh2"
+    },
+    "-N_lmkdXpnP8buBJa3jT": {
+      "date": "2023-07-20",
+      "detail": "利根運河交流館から、部長がPayPayで受け取り済み。あとで会計担当に現金を渡す。",
+      "liquid": true,
+      "name": "水辺で乾杯 もりポ支払いによる売上",
+      "price": 500,
+      "toName": "利根運河交流館",
+      "type": 2,
+      "userId": "pSv3N23pJEd1z7wUup73VEF6HHp1"
+    },
+    "-N_nWxHldqfpTJ2aHD0_": {
+      "date": "2023-07-20",
+      "detail": "顧問の片山先生から頂いた案件の報酬です。\n【注意】\nC4'sのAmazonアカウントに、Amazonギフト券によるお金として紐付いています。",
+      "liquid": true,
+      "name": "「egocoro」デモ教材制作報酬",
+      "price": 14000,
+      "toName": "",
+      "type": 2,
+      "userId": "fD90BXChDvYKPVzl5EExFeUNmKh2"
+    },
+    "-N_nZK_Ac-fqnpwqO0IS": {
+      "date": "2023-07-20",
+      "detail": "「たと」への支払",
+      "liquid": true,
+      "name": "［制作者還元］egocoro教材制作",
+      "price": -6400,
+      "toName": "",
+      "type": 1,
+      "userId": "fD90BXChDvYKPVzl5EExFeUNmKh2"
+    },
+    "-N_rOz72ettuDQTepd2u": {
+      "date": "2023-07-21",
+      "detail": "「mura」へ\\3,200\n「Suica」へ\\1,600",
+      "liquid": true,
+      "name": "［制作者還元］egocoro教材制作",
+      "price": -4800,
+      "toName": "",
+      "type": 1,
+      "userId": "fD90BXChDvYKPVzl5EExFeUNmKh2"
+    },
+    "-NcD2mAwmWB6Jys9aWYE": {
+      "date": "2023-08-19",
+      "detail": "理大祭の制作用。TAToさんが購入。\nSymcode 58MM",
+      "liquid": true,
+      "name": "レシートプリンター",
+      "price": -4274,
+      "toName": "",
+      "type": 1,
+      "userId": "fD90BXChDvYKPVzl5EExFeUNmKh2"
+    },
+    "-NcD4h0_x61go8oRhs5N": {
+      "date": "2023-08-19",
+      "detail": "お出かけ企画（2023年8月29日(火)）\nマクセル アクアパーク品川 WEB入場券 部費による一部補助 (6人分)\n---------\n［詳細］\n・チケット代: ¥2500 / 人 * 6 = ¥15000\n・個人負担: ¥1500 / 人 * 6 = ¥9000\n・部費補助: ¥1000 / 人 * 6 = ¥6000",
+      "liquid": true,
+      "name": "［チケット×6購入］アクアパーク品川",
+      "price": -6000,
+      "toName": "",
+      "type": 1,
+      "userId": "fD90BXChDvYKPVzl5EExFeUNmKh2"
+    },
+    "-NcvEDdWpZOPR272fa5r": {
+      "date": "2023-08-20",
+      "detail": "室屋さんより頂いた、株式会社Litableさんの広告デザイン制作案件の報酬",
+      "liquid": true,
+      "name": "［案件］広告デザイン制作報酬",
+      "price": 20000,
+      "toName": "",
+      "type": 2,
+      "userId": "fD90BXChDvYKPVzl5EExFeUNmKh2"
+    },
+    "-Ne6Y-WS-4vWaaW5yrXB": {
+      "date": "2023-09-12",
+      "detail": "部費支払い記録による自動追加です。",
+      "liquid": true,
+      "name": "部費支払い (井上優依 さん)",
+      "price": 3000,
+      "type": 2,
+      "userId": "pSv3N23pJEd1z7wUup73VEF6HHp1"
+    },
+    "-Ne6edCuLWbRe_dbNXT1": {
+      "date": "2023-09-12",
+      "detail": "LINEギフト３つ",
+      "liquid": true,
+      "name": "シャトルラン景品",
+      "price": -1368,
+      "toName": "",
+      "type": 1,
+      "userId": "pSv3N23pJEd1z7wUup73VEF6HHp1"
+    },
+    "-NeYvK59vkF9idu8g3q8": {
+      "date": "2023-09-18",
+      "detail": "「しみ兄」さんへの支払い",
+      "liquid": true,
+      "name": "［制作者還元］広告制作案件",
+      "price": -4000,
+      "toName": "",
+      "type": 1,
+      "userId": "fD90BXChDvYKPVzl5EExFeUNmKh2"
+    },
+    "-NeYvxXUDJ_r2EoznNdO": {
+      "date": "2023-09-18",
+      "detail": "「たと」への支払い",
+      "liquid": true,
+      "name": "［制作者還元］広告制作案件",
+      "price": -12000,
+      "toName": "",
+      "type": 1,
+      "userId": "fD90BXChDvYKPVzl5EExFeUNmKh2"
+    },
+    "-NegnA4DVrMjYGadqPdm": {
+      "date": "2023-09-19",
+      "detail": "部費支払い記録による自動追加です。",
+      "liquid": true,
+      "name": "部費支払い (諸橋澪樹 さん)",
+      "price": 3000,
+      "type": 2,
+      "userId": "pSv3N23pJEd1z7wUup73VEF6HHp1"
+    },
+    "-NegnEzvRwLmyK6SwWzM": {
+      "date": "2023-09-19",
+      "detail": "部費支払い記録による自動追加です。",
+      "liquid": true,
+      "name": "部費支払い (張瑞申 さん)",
+      "price": 3000,
+      "type": 2,
+      "userId": "pSv3N23pJEd1z7wUup73VEF6HHp1"
+    },
+    "-NegnIEFd98gDlJJLXK1": {
+      "date": "2023-09-19",
+      "detail": "部費支払い記録による自動追加です。",
+      "liquid": true,
+      "name": "部費支払い (川口翔太 さん)",
+      "price": 3000,
+      "type": 2,
+      "userId": "pSv3N23pJEd1z7wUup73VEF6HHp1"
+    },
+    "-NegnQX1cPzH_2eIm-I4": {
+      "date": "2023-09-19",
+      "detail": "部費支払い記録による自動追加です。",
+      "liquid": true,
+      "name": "部費支払い (佐藤聖真 さん)",
+      "price": 3000,
+      "type": 2,
+      "userId": "pSv3N23pJEd1z7wUup73VEF6HHp1"
+    },
+    "-NegnUSJ47RBzzVCzOP_": {
+      "date": "2023-09-19",
+      "detail": "部費支払い記録による自動追加です。",
+      "liquid": true,
+      "name": "部費支払い (手嶋進太 さん)",
+      "price": 3000,
+      "type": 2,
+      "userId": "pSv3N23pJEd1z7wUup73VEF6HHp1"
+    },
+    "-NegncNlGoOuIa-Na34X": {
+      "date": "2023-09-19",
+      "detail": "部費支払い記録による自動追加です。",
+      "liquid": true,
+      "name": "部費支払い (村越悠希 さん)",
+      "price": 3000,
+      "type": 2,
+      "userId": "pSv3N23pJEd1z7wUup73VEF6HHp1"
+    },
+    "-NegnhiNTnj-a4hgPKxO": {
+      "date": "2023-09-19",
+      "detail": "部費支払い記録による自動追加です。",
+      "liquid": true,
+      "name": "部費支払い (中村祐太郎 さん)",
+      "price": 3000,
+      "type": 2,
+      "userId": "pSv3N23pJEd1z7wUup73VEF6HHp1"
+    },
+    "-NegnrU7r1wFyZ_xkZPp": {
+      "date": "2023-09-19",
+      "detail": "部費支払い記録による自動追加です。",
+      "liquid": true,
+      "name": "部費支払い (坂本章倫 さん)",
+      "price": 3000,
+      "type": 2,
+      "userId": "pSv3N23pJEd1z7wUup73VEF6HHp1"
+    },
+    "-Nego2AQwxgeYEJhv1oh": {
+      "date": "2023-09-19",
+      "detail": "部費支払い記録による自動追加です。",
+      "liquid": true,
+      "name": "部費支払い (西島大智 さん)",
+      "price": 3000,
+      "type": 2,
+      "userId": "pSv3N23pJEd1z7wUup73VEF6HHp1"
+    },
+    "-NegoICY849swUmWdGsM": {
+      "date": "2023-09-19",
+      "detail": "部費支払い記録による自動追加です。",
+      "liquid": true,
+      "name": "部費支払い (西川知伸 さん)",
+      "price": 3000,
+      "type": 2,
+      "userId": "pSv3N23pJEd1z7wUup73VEF6HHp1"
+    },
+    "-NegoZe8-bRTNDk71OAL": {
+      "date": "2023-09-19",
+      "detail": "部費支払い記録による自動追加です。",
+      "liquid": true,
+      "name": "部費支払い (松浦竜征 さん)",
+      "price": 3000,
+      "type": 2,
+      "userId": "pSv3N23pJEd1z7wUup73VEF6HHp1"
+    },
+    "-NegocCz8z91XApD75N7": {
+      "date": "2023-09-19",
+      "detail": "部費支払い記録による自動追加です。",
+      "liquid": true,
+      "name": "部費支払い (村田晴 さん)",
+      "price": 3000,
+      "type": 2,
+      "userId": "pSv3N23pJEd1z7wUup73VEF6HHp1"
+    },
+    "-NegojF-UMe1uK0akvJL": {
+      "date": "2023-09-19",
+      "detail": "部費支払い記録による自動追加です。",
+      "liquid": true,
+      "name": "部費支払い (渡邉明日馬 さん)",
+      "price": 3000,
+      "type": 2,
+      "userId": "pSv3N23pJEd1z7wUup73VEF6HHp1"
+    },
+    "-Negrn9v3YI5PRFE7rpX": {
+      "date": "2023-09-19",
+      "detail": "部費支払い記録による自動追加です。",
+      "liquid": true,
+      "name": "部費支払い (仁平尚樹 さん)",
+      "price": 3000,
+      "type": 2,
+      "userId": "pSv3N23pJEd1z7wUup73VEF6HHp1"
+    },
+    "-NehA3fB1sgaH4_fB82c": {
+      "date": "2023-09-19",
+      "detail": "部費支払い記録による自動追加です。",
+      "liquid": true,
+      "name": "部費支払い (今井悠人 さん)",
+      "price": 3000,
+      "type": 2,
+      "userId": "pSv3N23pJEd1z7wUup73VEF6HHp1"
+    },
+    "-NemcDNHWhvLAsXbc1jF": {
+      "date": "2023-09-20",
+      "detail": "汎用 感熱 レジロール レシート BPA不使用 紙幅58mm 外径80mm 内径12mm 白 3年保存 5巻セット\n[楽天] #Rakutenichiba\nhttps://item.rakuten.co.jp/komamono-honpo/tpr-5880-12-b-5p/?scid=wi_ich_iphoneapp_item_share",
+      "liquid": true,
+      "name": "レシート 5巻セット",
+      "price": -1630,
+      "toName": "",
+      "type": 1,
+      "userId": "pSv3N23pJEd1z7wUup73VEF6HHp1"
+    },
+    "-NfQRJEvMwNRCZPXx_LZ": {
+      "date": "2023-09-28",
+      "detail": "部費支払い記録による自動追加です。",
+      "liquid": true,
+      "name": "部費支払い (吉田幸平 さん)",
+      "price": 3000,
+      "type": 2,
+      "userId": "pSv3N23pJEd1z7wUup73VEF6HHp1"
+    },
+    "-NfiuJbJJFVgPBNqFadg": {
+      "date": "2023-10-02",
+      "detail": "部費支払い記録による自動追加です。",
+      "liquid": true,
+      "name": "部費支払い (城山智礼 さん)",
+      "price": 3000,
+      "type": 2,
+      "userId": "22RngqK8BfOvSjaNOLVUSR8fnJD3"
+    },
+    "-NfolecoragprMIyQu8C": {
+      "date": "2023-10-03",
+      "detail": "さとう社長より",
+      "liquid": true,
+      "name": "［ロゴコンペ］報酬",
+      "price": 500,
+      "toName": "佐藤聖真",
+      "type": 2,
+      "userId": "fD90BXChDvYKPVzl5EExFeUNmKh2"
+    },
+    "-Nfp5k06gmbd3LyvFiWI": {
+      "date": "2023-10-03",
+      "detail": "部費支払い記録による自動追加です。",
+      "liquid": true,
+      "name": "部費支払い (上野雄佑 さん)",
+      "price": 3000,
+      "type": 2,
+      "userId": "fD90BXChDvYKPVzl5EExFeUNmKh2"
+    },
+    "-Nfp68D8bGrSYW21jcqI": {
+      "date": "2023-10-03",
+      "detail": "部費支払い記録による自動追加です。",
+      "liquid": true,
+      "name": "部費支払い (佐藤太心 さん)",
+      "price": 3000,
+      "type": 2,
+      "userId": "fD90BXChDvYKPVzl5EExFeUNmKh2"
+    },
+    "-NgDmu-tE_rAe6fYfXCs": {
+      "date": "2023-10-08",
+      "detail": "",
+      "liquid": false,
+      "name": "カーテンレール&レースカーテン",
+      "price": -6988,
+      "toName": "",
+      "type": 1,
+      "userId": "22RngqK8BfOvSjaNOLVUSR8fnJD3"
+    },
+    "-NgDnJ2G1qPiz9n8Oja3": {
+      "date": "2023-10-08",
+      "detail": "釘、ネジ、模造紙、ナスカン、針金、ハケ",
+      "liquid": false,
+      "name": "緞帳用小物類ほか",
+      "price": -1213,
+      "toName": "",
+      "type": 1,
+      "userId": "22RngqK8BfOvSjaNOLVUSR8fnJD3"
+    },
+    "-NgDnTbDiWyOya0ZHsDh": {
+      "date": "2023-10-08",
+      "detail": "",
+      "liquid": false,
+      "name": "滑車4台、ハンマー",
+      "price": -3816,
+      "toName": "",
+      "type": 1,
+      "userId": "22RngqK8BfOvSjaNOLVUSR8fnJD3"
+    },
+    "-NgEYGc7HcfLjCGHviQc": {
+      "date": "2023-10-08",
+      "detail": "木材の購入",
+      "liquid": false,
+      "name": "木材",
+      "price": -1520,
+      "toName": "",
+      "type": 1,
+      "userId": "t8n35F912UPo55zNKpTTxmynoxi1"
+    },
+    "-NgGOdH9Ot2OCeq0cUQo": {
+      "date": "2023-10-08",
+      "detail": "空間演出用",
+      "liquid": false,
+      "name": "絵の具、ロープ、糊",
+      "price": -8571,
+      "toName": "",
+      "type": 1,
+      "userId": "SSuL9vKCg9YBoBEbf64udKy0L7C2"
+    }
+  }
+}

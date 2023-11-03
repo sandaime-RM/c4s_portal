@@ -100,7 +100,7 @@ window.openModal = async (key) => {
     //編集モード
     default:
       $("#loading").fadeIn();
-      let data = await get(ref(db, `money/FY${new Obj("year").value}/${key}`)).then(snapshot => { return snapshot.val(); });
+      let data = await get(ref(db, `money/${new Obj("year").value}/${key}`)).then(snapshot => { return snapshot.val(); });
       if(status != 2 && data.userId != user.uid) { alert("自分の登録したデータのみ編集できます"); $("#loading").fadeOut(); return; }
 
       new Obj("key").value = key;
@@ -154,7 +154,7 @@ window.pay = async (i) => {
     case 0:
       var ans = confirm("未精算に戻します。よろしいですか？");
       if(ans) {
-        await set(ref(db, `money/FY${new Obj("year").value}/${new Obj("key").value}/liquid`), false);
+        await set(ref(db, `money/${new Obj("year").value}/${new Obj("key").value}/liquid`), false);
         editingData.liquid = false;
         new Obj("payBtn-set").show();
         new Obj("payBtn-unset").hide();
@@ -164,9 +164,9 @@ window.pay = async (i) => {
     case 1:
       var ans = confirm("この操作は元に戻せません。清算済みにしてよろしいですか？");
       if(ans) {
-        let exist = await get(ref(db, `money/FY${new Obj("year").value}/${new Obj("key").value}`)).then(snapshot => { return snapshot.val(); });
+        let exist = await get(ref(db, `money/${new Obj("year").value}/${new Obj("key").value}`)).then(snapshot => { return snapshot.val(); });
         if(exist)
-        { await set(ref(db, `money/FY${new Obj("year").value}/${new Obj("key").value}/liquid`), true); }
+        { await set(ref(db, `money/${new Obj("year").value}/${new Obj("key").value}/liquid`), true); }
         editingData.liquid = true;
         new Obj("payBtn-set").hide();
         new Obj("payBtn-unset").show();
@@ -196,68 +196,66 @@ window.save = async () => {
 
   //2月までは前の年に入れるようにしたい
 
-  await set(ref(db, `money/FY${new Obj("year").value}/${new Obj("key").value}`), editingData);
+  await set(ref(db, `money/${new Obj("year").value}/${new Obj("key").value}`), editingData);
   alert("保存しました。"); closeModal(false);
 }
 // リストの表示・残高の表示
-function showList () {
-  fetch("money.json").then(response => { return response.json()}).then((database) => {
-  // get(ref(db, "money")).then(snapshot => {
-  //   const database = snapshot.val();
-    console.log(database)
-    //リストを表示
-    const data = database[`FY${new Obj("year").value}`];
-    let keys = sortDataKeys(data);
-    function sortDataKeys (data) {
-      let first = Object.keys(data)[0];
-      Object.keys(data).forEach(key => {
-        if(new Date(data[key].date) < new Date(data[first].date)) { first = key; }
-      });
-      delete data[first];
-      if(Object.keys(data).length > 0)
-      { return [first, ...sortDataKeys(data)]; }
-      else
-      { return [first]; }
-    }
-    let list = new Obj("moneyList");
-    list.set();
-    keys.forEach(key => {
-      const element = data[key];
-      console.log(element)
-      //出金
-      if(element.price < 0 || element.type == 1) {
-        let paid;
-        if(element.liquid) { paid = '<div class="text-secondary">精算済み</div>'; }
-        else { paid = '<div class="text-danger"><i class="bi bi-exclamation-circle-fill"> </i>未精算</div>'; }
-        list.before(`<div class="bg-white border border-primary shadow-sm rounded-md w-100 mx-auto mb-2 px-1 py-2 row pointer" onclick="openModal('${key}')"><div class="col-8"><h6 class="mb-0">${element.name}</h6><p class="text-secondary small mb-0">${DateText(new Date(element.date))}</p></div><div class="col-4"><h4 class="text-primary mb-0 text-end">${Number(element.price).toLocaleString()}</h4></div><hr class="mx-0 my-1"><div class="small text-center mx-0 row">${paid}</div></div>`);
-      }
-      //入金
-      else {
-        //部費収入
-        if(element.name.split("部費支払い")[1] !== undefined) {
-          list.before(`<div class="bg-white border border-success shadow-sm rounded-md w-95 mx-auto mb-2 px-1 py-1 row pointer" onclick="openModal('${key}')"><h6 class="col-4 text-end text-success mb-0">部費収入</h6><p class="col-4 text-center text-secondary small mb-0">${DateText(new Date(element.date))}</p><h6 class="col-4 text-success mb-0">+${Number(element.price).toLocaleString()}</h6></div>`)
-        }
-        else {
-          list.before(`<div class="bg-white border border-success shadow-sm rounded-md w-100 mx-auto mb-2 px-1 py-2 row pointer" onclick="openModal('${key}')"><div class="col-8"><h6 class="mb-0">${element.name}</h6><p class="text-secondary small mb-0">${DateText(new Date(element.date))}</p></div><div class="col-4"><h4 class="text-success mb-0 text-end">+${Number(element.price).toLocaleString()}</h4></div></div>`)
-        }
-      }
-    })
-    //残高の表示
-    get(ref(db, `money/FY${new Date().getFullYear()}`)).then(snapshot => {
-      const data = snapshot.val();
-      let goukei = 0;
-      Object.keys(data).forEach(key => {
-        goukei += Number(data[key].price);
-      });
-      new Obj("total").set(goukei.toLocaleString());
+async function showList () {
+  let data;
+  //リストを表示
+  data = await get(ref(db, `money/${new Obj("year").value}`)).then(snapshot => { return snapshot.val(); });
+  console.log(data)
+  let keys = sortDataKeys(data);
+  function sortDataKeys (data) {
+    let first = Object.keys(data)[0];
+    Object.keys(data).forEach(key => {
+      if(new Date(data[key].date) < new Date(data[first].date)) { first = key; }
     });
-    // グラフの描画
-    dispGraph();
+    delete data[first];
+    if(Object.keys(data).length > 0)
+    { return [first, ...sortDataKeys(data)]; }
+    else
+    { return [first]; }
+  }
+  let list = new Obj("moneyList");
+  list.set();
+  keys.forEach(key => {
+    const element = data[key];
+    console.log(element)
+    //出金
+    if(element.price < 0 || element.type == 1) {
+      let paid;
+      if(element.liquid) { paid = '<div class="text-secondary">精算済み</div>'; }
+      else { paid = '<div class="text-danger"><i class="bi bi-exclamation-circle-fill"> </i>未精算</div>'; }
+      list.before(`<div class="bg-white border border-primary shadow-sm rounded-md w-100 mx-auto mb-2 px-1 py-2 row pointer" onclick="openModal('${key}')"><div class="col-8"><h6 class="mb-0">${element.name}</h6><p class="text-secondary small mb-0">${DateText(new Date(element.date))}</p></div><div class="col-4"><h4 class="text-primary mb-0 text-end">${Number(element.price).toLocaleString()}</h4></div><hr class="mx-0 my-1"><div class="small text-center mx-0 row">${paid}</div></div>`);
+    }
+    //入金
+    else {
+      //部費収入
+      if(element.name.split("部費支払い")[1] !== undefined) {
+        list.before(`<div class="bg-white border border-success shadow-sm rounded-md w-95 mx-auto mb-2 px-1 py-1 row pointer" onclick="openModal('${key}')"><h6 class="col-4 text-end text-success mb-0">部費収入</h6><p class="col-4 text-center text-secondary small mb-0">${DateText(new Date(element.date))}</p><h6 class="col-4 text-success mb-0">+${Number(element.price).toLocaleString()}</h6></div>`)
+      }
+      else {
+        list.before(`<div class="bg-white border border-success shadow-sm rounded-md w-100 mx-auto mb-2 px-1 py-2 row pointer" onclick="openModal('${key}')"><div class="col-8"><h6 class="mb-0">${element.name}</h6><p class="text-secondary small mb-0">${DateText(new Date(element.date))}</p></div><div class="col-4"><h4 class="text-success mb-0 text-end">+${Number(element.price).toLocaleString()}</h4></div></div>`)
+      }
+    }
   })
+  //残高の表示
+  data = await get(ref(db, `money/${new Date().getFullYear()}`)).then(snapshot => { return snapshot.val(); });
+  let goukei = 0;
+  Object.keys(data).forEach(key => {
+    goukei += Number(data[key].price);
+  });
+  new Obj("total").set(goukei.toLocaleString());
+  get(ref(db, `money/${new Date().getFullYear()}`)).then(snapshot => {
+  });
+  // グラフの描画
+  dispGraph();
 }
 
 //推移グラフの表示
 async function dispGraph() {
+  let fullData = await get(ref(db, "money")).then(snapshot => { return snapshot.val(); });
   //グラフに描画する月を決定
   let labelData = [];
   labelData[0] = {};

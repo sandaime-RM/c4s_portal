@@ -110,7 +110,7 @@ window.openModal = async (key) => {
 
       editingData = data;
 
-      if(data.type == 1 || data.amount < 0) { new Obj("infoTitle").set('<span>出金情報</span>'); InNOut = "out"; }
+      if(data.type == 1 || data.price < 0) { new Obj("infoTitle").set('<span>出金情報</span>'); InNOut = "out"; }
       else { new Obj("infoTitle").set('<span>入金情報</span>'); InNOut = "in" }
       
       if(data.userId == user.uid) { new Obj("userName").value = c4suser.name; }

@@ -25,12 +25,10 @@ let status;
 let editted;
 let editingData;
 let InNOut;
+let csvData = [];
 
-var data, keys;
 var editting = -1;
 var fullData = {};
-var first = true;
-var exportData = [];
 
 //ユーザー情報の取得
 onAuthStateChanged(auth, async snapshot => {
@@ -45,16 +43,16 @@ onAuthStateChanged(auth, async snapshot => {
   //年度項目の追加＆詳細の表示
   for(var i = 2022; i <= new Date().getFullYear(); i++) {
     if(i == new Date().getFullYear()) 
-    { getObj("year").head('<option value="'+i+'" selected>'+i+'年</option>'); }
+    { getObj("year").head('<option value="'+i+'" selected>'+i+'年度</option>'); }
     else
-    { getObj("year").head('<option value="'+i+'">'+i+'年</option>'); }
+    { getObj("year").head('<option value="'+i+'">'+i+'年度</option>'); }
   }
 
   //詳細の表示
   await onValue(ref(db, `money`), showList);
   await getObj("year").addEventListener('change', showList);
 
-  $("#overray").fadeOut();
+  setTimeout(() => { $("#overray").fadeOut(); }, 1000);
 });
 
 const infoModal = new bootstrap.Modal("#infoModal");
@@ -110,7 +108,7 @@ window.openModal = async (key) => {
 
       editingData = data;
 
-      if(data.type == 1 || data.price < 0) { new Obj("infoTitle").set('<span>出金情報</span>'); InNOut = "out"; }
+      if(data.price < 0) { new Obj("infoTitle").set('<span>出金情報</span>'); InNOut = "out"; }
       else { new Obj("infoTitle").set('<span>入金情報</span>'); InNOut = "in" }
       
       if(data.userId == user.uid) { new Obj("userName").value = c4suser.name; }
@@ -119,13 +117,15 @@ window.openModal = async (key) => {
       new Obj("amount").value = Math.abs(data.price);
       new Obj("date").value = data.date;
       new Obj("detail").value = data.detail;
-      if(data.price < 0 || data.type == 1) {
+      new Obj("detail").style.height = Math.max(data.detail.split('\n').length*1.75, 3.5) + "em";
+      if(data.price < 0) {
         new Obj("liquidForm").show();
         if(data.liquid) { new Obj("payBtn-unset").show(); new Obj("payBtn-set").hide(); }
         else { new Obj("payBtn-unset").hide(); new Obj("payBtn-set").show(); }
         new Obj("receiptForm").hide();
       }
       else {
+        new Obj("liquidForm").hide();
         new Obj("receiptForm").show();
       }
 
@@ -197,14 +197,19 @@ window.save = async () => {
   editingData.date = new Obj("date").value;
   editingData.toName = new Obj("toName").value;
 
-  await set(ref(db, `money/${new Obj("year").value}/${new Obj("key").value}`), editingData);
-  alert("保存しました。"); closeModal(false);
+  //年度を3月スタートにする
+  let saveFor = new Date(editingData.date).getFullYear();
+  if(new Date(editingData.date).getMonth() < 2) { saveFor--; }
+
+  await set(ref(db, `money/${saveFor}/${new Obj("key").value}`), editingData);
+  alert("保存しました。"); closeModal(false); new Obj("year").value = saveFor;
 }
 // リストの表示・残高の表示
-function showList () {
+async function showList () {
+  csvData = [];
   //リストを表示
   const year = Number(new Obj("year").value);
-  get(ref(db, `money/${year}`)).then(snapshot => {
+  await get(ref(db, `money/${year}`)).then(snapshot => {
     let keys = sortDataKeys(snapshot.val());
     function sortDataKeys (data) {
       let first = Object.keys(data)[0];
@@ -217,32 +222,35 @@ function showList () {
       else
       { return [first]; }
     }
-    console.log(keys)
     let list = new Obj("moneyList");
     list.set();
     keys.forEach(key => {
       const element = snapshot.val()[key];
       //出金
-      if(element.price < 0 || element.type == 1) {
+      if(element.price < 0) {
         let paid;
         if(element.liquid) { paid = '<div class="text-secondary">精算済み</div>'; }
         else { paid = '<div class="text-danger"><i class="bi bi-exclamation-circle-fill"> </i>未精算</div>'; }
-        list.before(`<div class="bg-white border border-primary shadow-sm rounded-md w-100 mx-auto mb-2 px-1 py-2 row pointer" onclick="openModal('${key}')"><div class="col-8"><h6 class="mb-0">${element.name}</h6><p class="text-secondary small mb-0">${DateText(new Date(element.date))}</p></div><div class="col-4"><h4 class="text-primary mb-0 text-end">${Number(element.price).toLocaleString()}</h4></div><hr class="mx-0 my-1"><div class="small text-center mx-0 row">${paid}</div></div>`);
+        list.before(`<div class="bg-white border border-primary shadow-sm rounded-md w-100 mx-auto mb-2 px-1 py-2 row pointer hover" onclick="openModal('${key}')"><div class="col-8"><h6 class="mb-0">${element.name}</h6><p class="text-secondary small mb-0">${DateText(new Date(element.date))}</p></div><div class="col-4"><h4 class="text-primary mb-0 text-end">${Number(element.price).toLocaleString()}</h4></div><hr class="mx-0 my-1"><div class="small text-center mx-0 row">${paid}</div></div>`);
       }
       //入金
       else {
-        //部費収入
+        //部費収入(だいぶ原始的なやり方で判定しているので部費かどうかの項目を追加したい)
         if(element.name.split("部費支払い")[1] !== undefined) {
-          list.before(`<div class="bg-white border border-success shadow-sm rounded-md w-95 mx-auto mb-2 px-1 py-1 row pointer" onclick="openModal('${key}')"><h6 class="col-4 text-end text-success mb-0">部費収入</h6><p class="col-4 text-center text-secondary small mb-0">${DateText(new Date(element.date))}</p><h6 class="col-4 text-success mb-0">+${Number(element.price).toLocaleString()}</h6></div>`)
+          list.before(`<div class="bg-white border border-success shadow-sm rounded-md w-95 mx-auto mb-2 px-1 py-1 row pointer hover" onclick="openModal('${key}')"><h6 class="col-4 text-end text-success mb-0">部費収入</h6><p class="col-4 text-center text-secondary small mb-0">${DateText(new Date(element.date))}</p><h6 class="col-4 text-success mb-0">+${Number(element.price).toLocaleString()}</h6></div>`)
         }
         else {
-          list.before(`<div class="bg-white border border-success shadow-sm rounded-md w-100 mx-auto mb-2 px-1 py-2 row pointer" onclick="openModal('${key}')"><div class="col-8"><h6 class="mb-0">${element.name}</h6><p class="text-secondary small mb-0">${DateText(new Date(element.date))}</p></div><div class="col-4"><h4 class="text-success mb-0 text-end">+${Number(element.price).toLocaleString()}</h4></div></div>`)
+          list.before(`<div class="bg-white border border-success shadow-sm rounded-md w-100 mx-auto mb-2 px-1 py-2 row pointer hover" onclick="openModal('${key}')"><div class="col-8"><h6 class="mb-0">${element.name}</h6><p class="text-secondary small mb-0">${DateText(new Date(element.date))}</p></div><div class="col-4"><h4 class="text-success mb-0 text-end">+${Number(element.price).toLocaleString()}</h4></div></div>`)
         }
       }
+      //CSVデータに追加
+      let type;
+      if(element.price < 0) { type = "支出"; } else { type = "収入"; }
+      csvData.push([element.date, element.name, type, element.liquid, Math.abs(element.price), element.detail]);
     })
   });
   //残高の表示
-  get(ref(db, `money/${new Date().getFullYear()}`)).then(snapshot => {
+  await get(ref(db, `money/${new Date().getFullYear()}`)).then(snapshot => {
     const data = snapshot.val();
     let goukei = 0;
     Object.keys(data).forEach(key => {
@@ -250,175 +258,15 @@ function showList () {
     });
     new Obj("total").set(goukei.toLocaleString());
   });
+  //作った二次元配列をCSV文字列に直す
+  let CSVString = csvData.join('\r\n');
+  //CSVのバイナリデータを作る
+  new Obj("exportBtn").href = URL.createObjectURL(new Blob([CSVString], {type: "text/csv"}));
   // グラフの描画
   dispGraph();
 }
 
-// 項目編集・保存
-function upload() {
-    var name = document.getElementById("name");
-    var amount = document.getElementById("amount");
-    //var itemImage = document.getElementById("itemImage");
-    var detail = document.getElementById("detail");
-    var type = 2;
-    var liquid = true;
-    var date = document.getElementById("dateForm");
-    var toName = document.getElementById("toName");
-
-    document.getElementById("uploading").style.display = "";
-
-    if(document.getElementById("type2").checked) {type = 1;}
-    if(document.getElementById("seisan2").checked) {liquid = false;}
-    
-    const setData = {
-        name : name.value,
-        price : Number(amount.value),
-        detail : detail.value,
-        userId : user.uid,
-        date : date.value,
-        type : type,
-        liquid : liquid,
-        toName : toName.value
-    }
-
-    if(editting == -1) {
-        push(ref(db, 'money/' + (new Date(date.value)).getFullYear()), setData)
-        .then(() => {
-            window.location.reload();
-        });
-    } else {
-        var year = document.getElementById("year").value;
-
-        set(ref(db, 'money/' + year + "/" + keys[editting]), setData)
-        .then(() => {
-            window.location.reload();
-        });
-    }
-    
-}
-
-window.upload = upload;
-export{upload}
-
-// 部費情報の表示
-function dispMoneyInfo(e, index, key) {
-
-    if(e.type == 2) {
-        document.getElementById("moneyList").innerHTML = '<li class="list-group-item"><div class="row"><div class="col-2 text-primary fs-6"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor" class="bi bi-box-arrow-in-down" viewBox="0 0 16 16" ><path fill-rule="evenodd" d="M3.5 6a.5.5 0 0 0-.5.5v8a.5.5 0 0 0 .5.5h9a.5.5 0 0 0 .5-.5v-8a.5.5 0 0 0-.5-.5h-2a.5.5 0 0 1 0-1h2A1.5 1.5 0 0 1 14 6.5v8a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 2 14.5v-8A1.5 1.5 0 0 1 3.5 5h2a.5.5 0 0 1 0 1h-2z"/><path fill-rule="evenodd" d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/></svg></div><div class="col-10"><div class="fw-normal">'+e.name+'</div><div class="row py-1"><div class="col-7 text-secondary small">'+e.date+'</div><div class="col-5 fw-bold fs-5 text-end">￥'+Number(e.price).toLocaleString()+'</div></div></div></div><div class="position-absolute top-0 end-0 px-2 py-1 pb-2" style="cursor:pointer;" data-bs-toggle="modal" data-bs-target="#exampleModal" onclick="openModal(\''+key+'\')"><img src="../icons/three-dots-vertical.svg"></div></li>' + document.getElementById("moneyList").innerHTML;
-    } else {
-        var liquid = "";
-        if(e.liquid) {
-            liquid = "<span class='text-success fw-bold'>清算済み</span>";
-        } else {
-            liquid = "<span class='text-danger fw-bold'>未精算</span>";
-        }
-
-        document.getElementById("moneyList").innerHTML = '<li class="list-group-item"><div class="row"><div class="col-2 text-danger fs-6"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor" class="bi bi-box-arrow-up" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M3.5 6a.5.5 0 0 0-.5.5v8a.5.5 0 0 0 .5.5h9a.5.5 0 0 0 .5-.5v-8a.5.5 0 0 0-.5-.5h-2a.5.5 0 0 1 0-1h2A1.5 1.5 0 0 1 14 6.5v8a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 2 14.5v-8A1.5 1.5 0 0 1 3.5 5h2a.5.5 0 0 1 0 1h-2z"/><path fill-rule="evenodd" d="M7.646.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 1.707V10.5a.5.5 0 0 1-1 0V1.707L5.354 3.854a.5.5 0 1 1-.708-.708l3-3z"/></svg></div><div class="col-10"><div class="fw-normal">'+e.name+'</div><div class="row py-1"><div class="col-7 text-secondary small">'+e.date+' '+liquid+'</div><div class="col-5 fw-bold fs-5 text-end">￥'+Number(e.price).toLocaleString()+'</div></div></div></div><div class="position-absolute top-0 end-0 px-2 py-1 pb-2" style="cursor:pointer;" data-bs-toggle="modal" data-bs-target="#exampleModal" onclick="openModal(\''+key+'\')"><img src="../icons/three-dots-vertical.svg"></div></li>' + document.getElementById("moneyList").innerHTML;
-    }
-}
-
-async function dispList() {
-    var total = 0;
-    document.getElementById("moneyList").innerHTML = '<div class="text-center py-3"><div class="spinner-border" role="status"><span class="visually-hidden">Loading...</span></div></div>';
-    exportData = [["日付", "項目", "収入/支出", "清算済み", "金額", "備考"]];
-
-    await get(ref(db, 'money')).then((snapshot) => {
-        document.getElementById("errorMoney").innerHTML = "";
-        data = snapshot.child(document.getElementById("year").value).val();
-
-        //合計金額計算
-        for(var i=2022; i<=(new Date()).getFullYear(); i++) {
-            var data2 = snapshot.child(String(i)).val();
-
-            if(!data2) {continue;}
-
-            Object.keys(data2).forEach(element => {
-                if(data2[element].type == 1) {
-                    total -= Number(data2[element].price);
-                } else {
-                    total += Number(data2[element].price);
-                }
-            });
-
-            Object.assign(fullData, data2);
-        }
-
-        document.getElementById("total").textContent = total.toLocaleString();
-        document.getElementById("nowtime").textContent = (new Date()).toLocaleString();
-
-        //詳細表示
-        if(!data) {
-            document.getElementById("moneyList").innerHTML = "<div class='text-center text-secondary py-3'>データがありません</div>";
-            return;
-        } else {
-            document.getElementById("moneyList").innerHTML = "";
-            keys = Object.keys(data);
-        }
-
-        Object.keys(data).forEach((element, index) => {
-            dispMoneyInfo(data[element], index, element);
-            pushExportData(data[element], index);
-        });
-
-        if(first) {
-            dispGraph();
-            first = false;
-        }
-
-        exportCSV();
-
-        return;
-    })
-    .catch((error) => {
-      console.error(error);
-        document.getElementById("moneyList").innerHTML = "";
-        document.getElementById("errorMoney").innerHTML = '<span class="text-danger small">'+error+'</span>';
-    });
-}
-
-//部費情報の編集画面を表示
-function openInfo(index) {
-    var year = document.getElementById("year").value;
-    var thisData = data[keys[index]];
-    editting = index;
-
-    var name = document.getElementById("name");
-    var price = document.getElementById("amount");
-    var detail = document.getElementById("detail");
-    var date = document.getElementById("dateForm");
-    var toName = document.getElementById("toName");
-
-    name.value = thisData.name;
-    price.value = thisData.price;
-    date.value = thisData.date;
-
-    if(thisData.detail) {
-        detail.value = thisData.detail;
-    } else {
-        detail.value = "";
-    }
-
-    if(thisData.toName) {
-        toName.value = thisData.toName;
-    }
-
-    if(thisData.type == 1) {
-        document.getElementById("type2").checked = true;
-    } else {
-        document.getElementById("type1").checked = true;
-    }
-
-    if(thisData.liquid) {
-        document.getElementById("seisan1").checked = true;
-    } else {
-        document.getElementById("seisan2").checked = true;
-    }
-}
-
-window.openInfo = openInfo;
-export{openInfo}
-
-//部費情報の削除
+// //部費情報の削除
 function delItem() {
     var thisData = data[keys[editting]];
     var year = document.getElementById("year").value;
@@ -458,7 +306,7 @@ function dispGraph() {
     for(var i=0; i < data.length; i++) {
         var thisDate = new Date(labels[i] + "-1");
         thisDate.setMonth(thisDate.getMonth() + 1);
-        console.log(thisDate.toLocaleDateString);
+        console.log(thisDate.toLocaleDateString());
 
         Object.keys(fullData).forEach((key, index) => {
             var dataDate = new Date(fullData[key].date);
@@ -493,47 +341,6 @@ function dispGraph() {
         }
     });
 }
-
-//出力用データに追加
-function pushExportData(pushData, index) {
-    var dataType = "収入";
-
-    if(pushData.type == 1) {
-        dataType = "支出";
-    }
-
-    var liquid2 = false;
-    if(pushData.liquid) {
-        liquid2 = true;
-    }
-
-    exportData.push([pushData.date, pushData.name, dataType, liquid2, pushData.price, pushData.detail]);
-}
-
-//データを出力
-function exportCSV() {
-    console.log(exportData);
-
-    //作った二次元配列をCSV文字列に直す。
-    let csv_string  = ""; 
-    for (let d of exportData) {
-        csv_string += d.join(",");
-        csv_string += '\r\n';
-    }   
-
-    //ファイル名の指定
-    let file_name   = "test.csv";
-
-    //CSVのバイナリデータを作る
-    let blob        = new Blob([csv_string], {type: "text/csv"});
-    let uri         = URL.createObjectURL(blob);
-
-    document.getElementById("exportBtn").href = uri;
-}
-
-window.exportCSV = exportCSV;
-export{exportCSV}
-
 
 //領収書発行
 window.receipt = () => {

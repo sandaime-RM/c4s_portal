@@ -35,6 +35,37 @@ var bookList = document.getElementById("bookList");
 var bookListFuture = document.getElementById("bookListFuture");
 var editModal = new bootstrap.Modal(document.getElementById('exampleModal'));
 
+// 読み込み時に実行
+window.onload = () => {
+    dispCalender();
+}
+
+//カレンダーの表示
+function dispCalender() {
+    var date = new Date();
+    document.getElementById("calenderMonth").textContent = (date.getMonth() + 1) + "月";
+
+    var FirstDay = new Date(date.getFullYear() + "-" + (date.getMonth()+1) + "-1");
+
+    let LastDay = new Date();
+    LastDay.setMonth(LastDay.getMonth()+1, 0);
+
+    var dateCount = 1;
+    
+    for(var week=0; week < 5; week++) {
+        document.getElementById("calenderBody").innerHTML += "<tr id='week_"+week+"'></tr>";
+        for(var day=0; day < 7; day++) {
+            var dateText = "";
+
+            if((dateCount == 1 && FirstDay.getDay() == day) || (dateCount > 1 && dateCount <= 31)) {
+                dateText = dateCount;
+                dateCount ++;
+            }
+
+            document.getElementById("week_"+week).innerHTML += "<td>"+dateText+"</td>";
+        }
+    }
+}
 
 //ユーザー情報の取得
 onAuthStateChanged(auth, (us) => {

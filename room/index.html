@@ -104,7 +104,7 @@
             <li><a href="../equips" class="nav-link px-2 mx-1"><svg viewBox="0 0 16 16" x="0" y="0" width="24px" height="24px"><use class="text-dark" xlink:href="#box"></use></svg></a></li>
             <li><a href="../money" class="nav-link px-2 mx-1"><svg viewBox="0 0 16 16" x="0" y="0" width="24px" height="24px"><use class="text-dark" xlink:href="#cash"></use></svg></a></li>
             <li><a href="../room" class="nav-link px-2 mx-1"><svg viewBox="0 0 16 16" x="0" y="0" width="24px" height="24px"><use class="text-secondary" xlink:href="#wallet"></use></svg></a></li>
-            <li><a href="../store" class="nav-link px-2 mx-1"><svg viewBox="0 0 16 16" x="0" y="0" width="24px" height="24px"><use class="text-dark" xlink:href="#basket"></use></svg></a></li>
+            <li><a href="../shop" class="nav-link px-2 mx-1"><svg viewBox="0 0 16 16" x="0" y="0" width="24px" height="24px"><use class="text-dark" xlink:href="#basket"></use></svg></a></li>
             <li><a href="../procedure" class="nav-link px-2 mx-1"><svg viewBox="0 0 16 16" x="0" y="0" width="24px" height="24px"><use class="text-dark" xlink:href="#textFile"></use></svg></a></li>
           </ul>
     
@@ -118,17 +118,42 @@
 
     <div class="container">
       <h2 class="fs-2 fw-normal"><svg class="me-3 ms-2" viewBox="0 0 16 16" x="0" y="0" width="36px" height="36px"><use xlink:href="#door"></use></svg>場所予約</h2>
-
       <p id="errorRoom"></p>
 
-      <ul class="list-group mb-4 mt-2 shadow-sm" id="bookListFuture">
+      <!-- 2列で表示 -->
+      <div class="row mt-2">
+        <div class="col-lg-6 px-2 mt-3">
+          <ul class="list-group mb-4 shadow-sm" id="bookListFuture">
         
-      </ul>
+          </ul>
 
-      <h6>過去の予約</h6>
-      <ul class="list-group mb-4 shadow-sm" id="bookList">
-        
-      </ul>
+          <!-- カレンダー表示 -->
+          <h4 class="fw-normal" id="calenderMonth"></h4>
+          <table class="table">
+            <thead>
+              <tr>
+                <td style="color:red">日</td>
+                <td>月</td>
+                <td>火</td>
+                <td>水</td>
+                <td>木</td>
+                <td>金</td>
+                <td style="color:blue">土</td>
+              </tr>
+            </thead>
+
+            <tbody id="calenderBody"></tbody>
+          </table>
+        </div>
+
+        <div class="col-lg-6 px-2">
+          <h6>過去の予約</h6>
+          <ul class="list-group mb-4 shadow-sm" id="bookList">
+            
+          </ul>
+        </div>
+      </div>
+
       
     </div>
 

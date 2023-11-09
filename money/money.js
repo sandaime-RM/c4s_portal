@@ -211,6 +211,8 @@ async function showList () {
   const year = Number(new Obj("year").value);
   await get(ref(db, `money/${year}`)).then(snapshot => {
     let keys = sortDataKeys(snapshot.val());
+    fullData = snapshot.val();
+
     function sortDataKeys (data) {
       let first = Object.keys(data)[0];
       Object.keys(data).forEach(key => {
@@ -304,9 +306,9 @@ function dispGraph() {
     }
 
     for(var i=0; i < data.length; i++) {
-        var thisDate = new Date(labels[i] + "-1");
+        var thisDate = new Date(labels[i]);
+        thisDate.setDate(1);
         thisDate.setMonth(thisDate.getMonth() + 1);
-        console.log(thisDate.toLocaleDateString());
 
         Object.keys(fullData).forEach((key, index) => {
             var dataDate = new Date(fullData[key].date);
@@ -321,10 +323,10 @@ function dispGraph() {
         });
     }
 
+    console.log(fullData)
+
     data = data.slice(-12);
     labels = labels.slice(-12);
-
-    console.log(data)
 
     new Chart(ctx1, {
         type: 'line',

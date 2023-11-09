@@ -323,7 +323,6 @@ function dispGraph() {
         });
     }
 
-    console.log(fullData)
 
     data = data.slice(-12);
     labels = labels.slice(-12);

@@ -26,6 +26,7 @@ const analytics = getAnalytics(app);
 const db = getDatabase(app);
 const auth = getAuth();
 var user;
+var today = new Date();
 var roomData;
 var roomIds = [];
 var editting = -1; //編集中の予約情報（-1の場合はなし）
@@ -43,9 +44,10 @@ window.onload = () => {
 //カレンダーの表示
 function dispCalender() {
     var date = new Date();
-    document.getElementById("calenderMonth").textContent = (date.getMonth() + 1) + "月";
+    document.getElementById("calenderMonth").textContent = date.getFullYear() + "年 " + (date.getMonth() + 1) + "月";
 
-    var FirstDay = new Date(date.getFullYear() + "-" + (date.getMonth()+1) + "-1");
+    var FirstDay = new Date();
+    FirstDay.setDate(1);
 
     let LastDay = new Date();
     LastDay.setMonth(LastDay.getMonth()+1, 0);
@@ -57,13 +59,25 @@ function dispCalender() {
         for(var day=0; day < 7; day++) {
             var dateText = "";
 
-            if((dateCount == 1 && FirstDay.getDay() == day) || (dateCount > 1 && dateCount <= 31)) {
+            if((dateCount == 1 && FirstDay.getDay() == day) || (dateCount > 1 && dateCount <= LastDay.getDate())) {
                 dateText = dateCount;
+
+                if(dateCount == date.getDate()) {
+                    dateText = "<span class='cToday'>"+dateText+"</span>";
+                }
+
                 dateCount ++;
             }
 
-            document.getElementById("week_"+week).innerHTML += "<td>"+dateText+"</td>";
+            document.getElementById("week_"+week).innerHTML += "<td id='day_"+(dateCount-1)+"'>"+dateText+"</td>";
         }
+    }
+}
+
+//カレンダーに予定を表示
+function dispSchedule(title, date) {
+    if(date.getMonth() == today.getMonth()) {
+        document.getElementById("day_"+(date.getDate())).innerHTML += "<div class='calenderPlan'>"+title+"</div>";
     }
 }
 
@@ -114,6 +128,8 @@ onAuthStateChanged(auth, (us) => {
                 if(yesterday > rdate) {
                     bookList.innerHTML += '<li class="list-group-item" style="cursor: pointer;" onclick="edit('+index+')"><div class="row"><div class="col-4"><div class="fs-5 fw-bold">'+date+'</div><div class="small">'+room.start+'～'+room.end+'</div></div><div class="col-5"><div class="fs-5 fw-bold">'+room.building+'</div><div>'+room.roomNum+'</div></div><div class="col-3 text-'+color+' text-center">'+status+'</div></div></li>';
                 } else {
+
+                    dispSchedule(room.roomNum, rdate);
 
                     if(dateNow.getMonth() == rdate.getMonth() && rdate.getDate() == dateNow.getDate()) {
                         dateCol = "danger";

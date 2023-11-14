@@ -97,12 +97,12 @@ onAuthStateChanged(auth, (us) => {
     var storeHistory = c4suser.storeHistory;
     if(storeHistory) {
       document.getElementById("storeHistory").innerHTML = "";
+
+      Object.keys(storeHistory).forEach((key, index) => {
+        document.getElementById("storeHistory").innerHTML += '<li class="list-group-item"><span class="fw-bold mx-1">' + storeHistory[key].itemName + '<span class="text-secondary mx-1">×'+storeHistory[key].num+'</span></span><span class="text-secondary mx-1 small">'+(new Date(storeHistory[key].date)).toLocaleString()+'</span></li>';
+      });
     }
     
-    Object.keys(storeHistory).forEach((key, index) => {
-        document.getElementById("storeHistory").innerHTML += '<li class="list-group-item"><span class="fw-bold mx-1">' + storeHistory[key].itemName + '<span class="text-secondary mx-1">×'+storeHistory[key].num+'</span></span><span class="text-secondary mx-1 small">'+(new Date(storeHistory[key].date)).toLocaleString()+'</span></li>';
-    });
-
     $("#overray").fadeOut();
   });
 

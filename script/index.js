@@ -278,6 +278,10 @@ window.attend = () => {
           getObj("attend-points").innerText = events[heldeventID].point;
     
           //データベースに登録
+          push(ref(db, "users/" + user.uid + "/attend"), {
+            date : (new Date()).getTime(),
+            title : events[heldeventID].title
+          });
           set(ref(db, "event/" + heldeventID + "/attenders/" + user.uid), true).then(() => {
             events[heldeventID].attenders = { [user.uid] : true };
           });

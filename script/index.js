@@ -147,7 +147,7 @@ onAuthStateChanged(auth, (snapshot) => {
                 var amount = snapshot.val()[id].amount;
                 getObj("giftNum").value = "";
                 getObj("giftList-footer").show("block");
-                getObj("giftList").tail('<div class="w-100 p-3 position-relative"><h5 class="mb-0">' + amount + 'ポイント</h5><p class="mb-0">https://https://portal.c4-s.net?getpoint=' + id + '</p><h6 onclick="copylink(\'' + id + '\')" style="position: absolute; top: 20%; right: 10%; cursor: pointer;"><i class="bi bi-share-fill"></i></h6></div>');
+                getObj("giftList").tail('<div class="w-100 p-3 position-relative"><h5 class="mb-0">' + amount + 'ポイント</h5><p class="mb-0">https://portal.c4-s.net?getpoint=' + id + '</p><h6 onclick="copylink(\'' + id + '\')" style="position: absolute; top: 20%; right: 10%; cursor: pointer;"><i class="bi bi-share-fill"></i></h6></div>');
               }
             });
           }

@@ -2,7 +2,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/9.17.2/firebas
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-analytics.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-auth.js";
 import { getDatabase, ref, push, remove, set, get, onValue } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-database.js";
-import { getObj, DateText } from "/script/methods.js";
+import { getObj, Obj, DateText } from "/script/methods.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBE60G8yImWlENWpCnQZzqqVUrwWa_torg",
@@ -147,7 +147,7 @@ onAuthStateChanged(auth, (snapshot) => {
                 var amount = snapshot.val()[id].amount;
                 getObj("giftNum").value = "";
                 getObj("giftList-footer").show("block");
-                getObj("giftList").tail('<div class="w-100 p-3 position-relative"><h5 class="mb-0">' + amount + 'ポイント</h5><p class="mb-0">https://https://portal.c4-s.net?getpoint=' + id + '</p><h6 onclick="copylink(\'' + id + '\')" style="position: absolute; top: 20%; right: 10%; cursor: pointer;"><i class="bi bi-share-fill"></i></h6></div>');
+                getObj("giftList").tail('<div class="w-100 p-3 position-relative"><h5 class="mb-0">' + amount + 'ポイント</h5><p class="mb-0">https://portal.c4-s.net?getpoint=' + id + '</p><h6 onclick="copylink(\'' + id + '\')" style="position: absolute; top: 20%; right: 10%; cursor: pointer;"><i class="bi bi-share-fill"></i></h6></div>');
               }
             });
           }
@@ -217,8 +217,7 @@ onAuthStateChanged(auth, (snapshot) => {
       Object.keys(events).forEach((key) => {
         var data = events[key];
         if(data.term){
-          // if(true) {
-          if(new Date() <= new Date(data.term.end) && new Date(data.term.begin) <= new Date()){
+          if(new Date(data.term.begin) - (1000*60*15) <= new Date() && new Date() <= new Date(data.term.end)){
             heldeventID = key;
 
             getObj("heldevent").style.display = "block";
@@ -226,7 +225,7 @@ onAuthStateChanged(auth, (snapshot) => {
             getObj("heldevent_place").innerText = data.place;
             getObj("heldevent_tags").html();
             if(data.tags) { data.tags.forEach(tag => { getObj("heldevent_tags").innerText += "#" + tag; }); }
-            else {  }
+            else { new Obj("heldevent_tags").set(); }
             getObj("heldevent_description").innerText = data.description;
 
             if(data.code){

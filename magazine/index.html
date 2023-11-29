@@ -99,8 +99,9 @@
     </div>
 
     <div class="mw-md mx-auto mb-5"  style="line-height: 2em;">
-        C4'sに興味をお持ちですか？<br>
-        メールマガジンに登録して、C4'sのイベントなどの情報を手に入れましょう！<br>
+        メディアアートサークル C4'sに興味をお持ちですか？<br>
+        入部を検討中の方に向けて、新歓イベントの情報などを配信しています。<br>
+        メールマガジンに登録して、C4'sの情報を手に入れましょう！<br>
         <span class="text-secondary small">いつでも解除できます。記入いただいた情報は、メルマガ配信にのみ使用いたします。</span>
     </div>
 
@@ -116,12 +117,36 @@
         </div>
 
         <div class="text-center mb-4">
-            <button class="btn btn-dark w-75 mx-auto py-2 my-3">
+            <button class="btn btn-dark w-75 mx-auto py-2 my-3" onclick="register()">
                 <i class="bi bi-check-circle me-1"></i>
                 登録
             </button>
         </div>
         
     </div>
+
+  <!-- Modal -->
+  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">登録完了</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="text-center mb-3 text-success">
+            <i class="bi bi-check-circle me-1 fs-1 mb-2"></i><br>
+            <span class="small">登録完了</span>
+          </div>
+          C4's メールマガジンへの登録が完了いたしました。<br>
+          登録ありがとうございます。  
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger">取り消し</button>
+          <button type="button" class="btn btn-dark" data-bs-dismiss="modal">閉じる</button>
+        </div>
+      </div>
+    </div>
+  </div>
 </body>
 </html>

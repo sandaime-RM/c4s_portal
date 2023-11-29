@@ -498,9 +498,10 @@ function getParam(name, url) {
 
 //タブ切り替え
 window.tab = index => {
-  let tablist = ["member", "dashboard", "buhi", "shop"];
+  let tablist = ["member", "dashboard", "buhi", "shop", "magazine"];
 
   if (index == 1) { location.href = "members.html"; return; }
+  if (index == 4) { location.href = "magazine.html"; return; }
   
   for (let i = 0; i < tablist.length; i++) {
     const tabname = tablist[i];

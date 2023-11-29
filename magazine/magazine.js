@@ -34,7 +34,7 @@ function register() {
     }
 
     //登録
-    push(ref(db, "magazine"), {
+    push(ref(db, "magazine/followers"), {
         name : getObj("name").value,
         email : getObj("email").value
     })

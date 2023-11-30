@@ -72,7 +72,7 @@ function loadInfo() {
         getObj("mailList").innerHTML = "";
 
         Object.keys(mails).forEach((key, index) => {
-            getObj("mailList").innerHTML = '<tr><td>'+mails[key].date+'</td><td>'+mails[key].title+'</td><td>'+mails[key].sender+'</td><td><button class="btn btn-default py-0" onclick="delFollower('+index+')"><i class="bi bi-box-arrow-up-right"></i></button></td></tr>' + getObj("mailList").innerHTML;
+            getObj("mailList").innerHTML = '<tr><td>'+mails[key].date+'</td><td>'+mails[key].title+'</td><td>'+mails[key].sender+'</td><td><button class="btn btn-default py-0" onclick="openDetail('+index+')"><i class="bi bi-box-arrow-up-right"></i></button></td></tr>' + getObj("mailList").innerHTML;
         });
     })
 }

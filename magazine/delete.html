@@ -16,7 +16,7 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
   <!-- <script src="../script/login.js" type="module"></script> -->
-  <script src="magazine.js" type="module"></script>
+  <script src="delete.js" type="module"></script>
 
   <title>C4's Portal</title>
   <link rel="icon" href="../img/logo_mini.png">
@@ -105,10 +105,10 @@
     </div>
 
     <div class="mw-md mx-auto mb-5">
-        <span class="fw-bold">example@c4-s.net</span> への配信を停止してよろしいでしょうか。
+        <span class="fw-bold" id="email">example@c4-s.net</span> への配信を停止してよろしいでしょうか。
         
         <div class="text-center my-3">
-            <button class="btn btn-danger w-75 mx-auto py-2 my-3">
+            <button class="btn btn-danger w-75 mx-auto py-2 my-3" onclick="del()">
                 <i class="bi bi-x-lg me-1"></i>
                 配信停止
             </button>

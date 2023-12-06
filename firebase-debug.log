@@ -1,0 +1,72 @@
+[debug] [2023-12-06T05:45:52.203Z] ----------------------------------------------------------------------
+[debug] [2023-12-06T05:45:52.211Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\sienr\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js deploy
+[debug] [2023-12-06T05:45:52.213Z] CLI Version:   12.5.3
+[debug] [2023-12-06T05:45:52.213Z] Platform:      win32
+[debug] [2023-12-06T05:45:52.214Z] Node Version:  v18.16.1
+[debug] [2023-12-06T05:45:52.233Z] Time:          Wed Dec 06 2023 14:45:52 GMT+0900 (日本標準時)
+[debug] [2023-12-06T05:45:52.233Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2023-12-06T05:45:52.252Z] >>> [apiv2][query] GET https://firebase-public.firebaseio.com/cli.json [none]
+[debug] [2023-12-06T05:45:52.736Z] Object ".extensions" in "firebase.json" has unknown property: {"additionalProperty":"firestore-send-email"}
+[debug] [2023-12-06T05:45:52.769Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2023-12-06T05:45:52.770Z] > authorizing via signed-in user (c4stusnoda2016eizou@gmail.com)
+[debug] [2023-12-06T05:45:52.771Z] [iam] checking project c4s-portal for permissions ["cloudfunctions.functions.create","cloudfunctions.functions.delete","cloudfunctions.functions.get","cloudfunctions.functions.list","cloudfunctions.functions.update","cloudfunctions.operations.get","firebase.projects.get","firebasehosting.sites.update",null]
+[debug] [2023-12-06T05:45:52.789Z] > refreshing access token with scopes: []
+[debug] [2023-12-06T05:45:52.793Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2023-12-06T05:45:52.793Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2023-12-06T05:45:53.046Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2023-12-06T05:45:53.046Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2023-12-06T05:45:53.078Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/c4s-portal:testIamPermissions [none]
+[debug] [2023-12-06T05:45:53.078Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/c4s-portal:testIamPermissions x-goog-quota-user=projects/c4s-portal
+[debug] [2023-12-06T05:45:53.079Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/c4s-portal:testIamPermissions {"permissions":["cloudfunctions.functions.create","cloudfunctions.functions.delete","cloudfunctions.functions.get","cloudfunctions.functions.list","cloudfunctions.functions.update","cloudfunctions.operations.get","firebase.projects.get","firebasehosting.sites.update",null]}
+[debug] [2023-12-06T05:45:53.208Z] <<< [apiv2][status] GET https://firebase-public.firebaseio.com/cli.json 200
+[debug] [2023-12-06T05:45:53.208Z] <<< [apiv2][body] GET https://firebase-public.firebaseio.com/cli.json {"cloudBuildErrorAfter":1594252800000,"cloudBuildWarnAfter":1590019200000,"defaultNode10After":1594252800000,"minVersion":"3.0.5","node8DeploysDisabledAfter":1613390400000,"node8RuntimeDisabledAfter":1615809600000,"node8WarnAfter":1600128000000}
+[debug] [2023-12-06T05:45:53.896Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/c4s-portal:testIamPermissions 200
+[debug] [2023-12-06T05:45:53.897Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/c4s-portal:testIamPermissions {"permissions":["cloudfunctions.functions.create","cloudfunctions.functions.delete","cloudfunctions.functions.get","cloudfunctions.functions.list","cloudfunctions.functions.update","cloudfunctions.operations.get","firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2023-12-06T05:45:53.897Z] [iam] error while checking permissions, command may fail: FirebaseError: Authorization failed. This account is missing the following required permissions on project c4s-portal:
+
+  
+[debug] [2023-12-06T05:45:53.899Z] >>> [apiv2][query] POST https://iam.googleapis.com/v1/projects/c4s-portal/serviceAccounts/c4s-portal@appspot.gserviceaccount.com:testIamPermissions [none]
+[debug] [2023-12-06T05:45:53.899Z] >>> [apiv2][body] POST https://iam.googleapis.com/v1/projects/c4s-portal/serviceAccounts/c4s-portal@appspot.gserviceaccount.com:testIamPermissions {"permissions":["iam.serviceAccounts.actAs"]}
+[debug] [2023-12-06T05:45:54.919Z] <<< [apiv2][status] POST https://iam.googleapis.com/v1/projects/c4s-portal/serviceAccounts/c4s-portal@appspot.gserviceaccount.com:testIamPermissions 200
+[debug] [2023-12-06T05:45:54.920Z] <<< [apiv2][body] POST https://iam.googleapis.com/v1/projects/c4s-portal/serviceAccounts/c4s-portal@appspot.gserviceaccount.com:testIamPermissions {"permissions":["iam.serviceAccounts.actAs"]}
+[debug] [2023-12-06T05:45:54.925Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/c4s-portal [none]
+[debug] [2023-12-06T05:45:55.431Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/c4s-portal 200
+[debug] [2023-12-06T05:45:55.432Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/c4s-portal {"projectId":"c4s-portal","projectNumber":"863775995414","displayName":"c4s-portal","name":"projects/c4s-portal","resources":{"hostingSite":"c4s-portal","realtimeDatabaseInstance":"c4s-portal-default-rtdb","storageBucket":"c4s-portal.appspot.com","locationId":"asia-northeast1"},"state":"ACTIVE","etag":"1_dbbb3149-1cba-45b7-94f4-6676eec11bda"}
+[info] 
+[info] === Deploying to 'c4s-portal'...
+[info] 
+[info] i  deploying functions, hosting, extensions 
+[debug] [2023-12-06T05:45:55.450Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/c4s-portal [none]
+[debug] [2023-12-06T05:45:55.857Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/c4s-portal 200
+[debug] [2023-12-06T05:45:55.857Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/c4s-portal {"projectId":"c4s-portal","projectNumber":"863775995414","displayName":"c4s-portal","name":"projects/c4s-portal","resources":{"hostingSite":"c4s-portal","realtimeDatabaseInstance":"c4s-portal-default-rtdb","storageBucket":"c4s-portal.appspot.com","locationId":"asia-northeast1"},"state":"ACTIVE","etag":"1_dbbb3149-1cba-45b7-94f4-6676eec11bda"}
+[info] i  functions: preparing codebase default for deployment 
+[info] i  functions: ensuring required API cloudfunctions.googleapis.com is enabled... 
+[info] i  functions: ensuring required API cloudbuild.googleapis.com is enabled... 
+[info] i  artifactregistry: ensuring required API artifactregistry.googleapis.com is enabled... 
+[debug] [2023-12-06T05:45:55.867Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/c4s-portal/services/cloudfunctions.googleapis.com [none]
+[debug] [2023-12-06T05:45:55.867Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/c4s-portal/services/cloudfunctions.googleapis.com x-goog-quota-user=projects/c4s-portal
+[debug] [2023-12-06T05:45:55.870Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/c4s-portal/services/runtimeconfig.googleapis.com [none]
+[debug] [2023-12-06T05:45:55.871Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/c4s-portal/services/runtimeconfig.googleapis.com x-goog-quota-user=projects/c4s-portal
+[debug] [2023-12-06T05:45:55.874Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/c4s-portal/services/cloudbuild.googleapis.com [none]
+[debug] [2023-12-06T05:45:55.875Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/c4s-portal/services/cloudbuild.googleapis.com x-goog-quota-user=projects/c4s-portal
+[debug] [2023-12-06T05:45:55.878Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/c4s-portal/services/artifactregistry.googleapis.com [none]
+[debug] [2023-12-06T05:45:55.878Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/c4s-portal/services/artifactregistry.googleapis.com x-goog-quota-user=projects/c4s-portal
+[debug] [2023-12-06T05:45:57.292Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/c4s-portal/services/cloudbuild.googleapis.com 200
+[debug] [2023-12-06T05:45:57.292Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/c4s-portal/services/cloudbuild.googleapis.com [omitted]
+[info] +  functions: required API cloudbuild.googleapis.com is enabled 
+[debug] [2023-12-06T05:45:57.296Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/c4s-portal/services/runtimeconfig.googleapis.com 200
+[debug] [2023-12-06T05:45:57.296Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/c4s-portal/services/runtimeconfig.googleapis.com [omitted]
+[debug] [2023-12-06T05:45:57.300Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/c4s-portal/services/cloudfunctions.googleapis.com 200
+[debug] [2023-12-06T05:45:57.300Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/c4s-portal/services/cloudfunctions.googleapis.com [omitted]
+[info] +  functions: required API cloudfunctions.googleapis.com is enabled 
+[debug] [2023-12-06T05:45:57.303Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/c4s-portal/services/artifactregistry.googleapis.com 200
+[debug] [2023-12-06T05:45:57.303Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/c4s-portal/services/artifactregistry.googleapis.com [omitted]
+[info] +  artifactregistry: required API artifactregistry.googleapis.com is enabled 
+[debug] [2023-12-06T05:45:57.305Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/c4s-portal/adminSdkConfig [none]
+[debug] [2023-12-06T05:45:57.689Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/c4s-portal/adminSdkConfig 200
+[debug] [2023-12-06T05:45:57.689Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/c4s-portal/adminSdkConfig {"projectId":"c4s-portal","databaseURL":"https://c4s-portal-default-rtdb.asia-southeast1.firebasedatabase.app","storageBucket":"c4s-portal.appspot.com","locationId":"asia-northeast1"}
+[debug] [2023-12-06T05:45:57.690Z] >>> [apiv2][query] GET https://runtimeconfig.googleapis.com/v1beta1/projects/c4s-portal/configs [none]
+[debug] [2023-12-06T05:45:58.725Z] <<< [apiv2][status] GET https://runtimeconfig.googleapis.com/v1beta1/projects/c4s-portal/configs 200
+[debug] [2023-12-06T05:45:58.725Z] <<< [apiv2][body] GET https://runtimeconfig.googleapis.com/v1beta1/projects/c4s-portal/configs {}
+[debug] [2023-12-06T05:45:58.734Z] Validating nodejs source

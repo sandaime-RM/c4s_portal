@@ -69,6 +69,7 @@ window.openModal = async (key) => {
       new Obj("infoTitle").set('<span class="text-success">入金</span>');
       new Obj("key").value = new Date().getTime().toString(16).toUpperCase();
       new Obj("receiptForm").show();
+      new Obj("deleteBtn").hide();
       new Obj("liquidForm").hide();
       InNOut = "in";
       editingData = {
@@ -86,6 +87,7 @@ window.openModal = async (key) => {
       new Obj("infoTitle").set('<span class="text-danger">出金</span>');
       new Obj("key").value = new Date().getTime().toString(16).toUpperCase();
       new Obj("receiptForm").hide();
+      new Obj("deleteBtn").hide();
       new Obj("liquidForm").hide();
       InNOut = "out";
       editingData = {
@@ -128,6 +130,7 @@ window.openModal = async (key) => {
         new Obj("liquidForm").hide();
         new Obj("receiptForm").show();
       }
+      new Obj("deleteBtn").show();
 
       $("#loading").fadeOut();
     break;
@@ -268,18 +271,17 @@ async function showList () {
   dispGraph();
 }
 
-// //部費情報の削除
+//部費情報の削除
 function delItem() {
-    var thisData = data[keys[editting]];
-    var year = document.getElementById("year").value;
-    var result = confirm("「" + thisData.name + "」の情報を削除してよろしいですか？");
+  // 確認フォーム
+  if (!confirm(`「${editingData.name}」の情報を削除してよろしいですか？`)) { return; }
 
-    if(!result) {return;}
-
-    remove(ref(db, 'money/' + year + "/" + keys[editting]))
-    .then(() => {
-        window.location.reload();
-    });
+  try {
+    remove(ref(db, 'money/'+new Obj("year").value+"/"+new Obj("key").value))
+    .then(() => { alert("削除しました"); });
+  } catch (e) {
+    console.error(e); alert(e);
+  }
 }
 
 window.delItem = delItem;

@@ -272,9 +272,10 @@ async function showList () {
 }
 
 //部費情報の削除
-function delItem() {
+window.delItem = () => {
   // 確認フォーム
   if (!confirm(`「${editingData.name}」の情報を削除してよろしいですか？`)) { return; }
+  if (!confirm(`削除した情報は二度と戻せません。本当によろしいですか？`)) { return; }
 
   try {
     remove(ref(db, 'money/'+new Obj("year").value+"/"+new Obj("key").value))
@@ -283,9 +284,6 @@ function delItem() {
     console.error(e); alert(e);
   }
 }
-
-window.delItem = delItem;
-export{delItem}
 
 //推移グラフの表示
 function dispGraph() {
@@ -316,11 +314,7 @@ function dispGraph() {
             var dataDate = new Date(fullData[key].date);
 
             if(thisDate > dataDate) {
-                if(fullData[key].type == 2) {
-                    data[i]  += Number(fullData[key].price);
-                } else {
-                    data[i]  -= Number(fullData[key].price);
-                }
+              data[i]  += Number(fullData[key].price);
             }
         });
     }

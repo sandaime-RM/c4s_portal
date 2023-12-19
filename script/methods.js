@@ -49,8 +49,8 @@ export function DateText(date) {
   var dif = Math.floor((new Date() - date) / 1000 / 60 / 60 / 24);
   if(dif < 7){
     if(new Date().getDate() == date.getDate()){ return "きょう"; }
-    else if(new Date().getDate() - (1000 * 60 * 60 * 24) == date.getDate()){ return "きのう"; }
-    else if(new Date().getDate() - (1000 * 60 * 60 * 24 * 2) == date.getDate()){ return "おととい"; }
+    else if(new Date().getDate()-1 == date.getDate()){ return "きのう"; }
+    else if(new Date().getDate()-2 == date.getDate()){ return "おととい"; }
     else{ return String(dif) + "日前"; }
   }
   else if(new Date().getFullYear() != date.getFullYear()) {

@@ -279,7 +279,7 @@ window.delItem = () => {
 
   try {
     remove(ref(db, 'money/'+new Obj("year").value+"/"+new Obj("key").value))
-    .then(() => { alert("削除しました"); });
+    .then(() => { alert("削除しました"); closeModal(); });
   } catch (e) {
     console.error(e); alert(e);
   }

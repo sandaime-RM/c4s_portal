@@ -281,8 +281,9 @@ function create_csv(data){
     let file_name   = "test.csv";
 
     //CSVのバイナリデータを作る
-    let blob        = new Blob([csv_string], {type: "text/csv"});
-    let uri         = URL.createObjectURL(blob);
+    let bom  = new Uint8Array([0xef, 0xbb, 0xbf]);
+    let blob = new Blob([bom, csv_string], {type: "text/csv"});
+    let uri  = URL.createObjectURL(blob);
 
     getObj("exportBtn").href = uri;
 }

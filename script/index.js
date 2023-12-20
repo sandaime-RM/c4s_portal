@@ -73,6 +73,7 @@ onAuthStateChanged(auth, (snapshot) => {
             get(ref(db, "users")).then((snapshot) => {
               let users = snapshot.val();
               let noLogins = {};
+              let points = {};
               Object.keys(users).forEach((uid) => {
                 if(!users[uid].accessHistory) {
                   noLogins[uid] = { 氏名 : users[uid].name, 最終ログイン : "不明" };
@@ -80,9 +81,18 @@ onAuthStateChanged(auth, (snapshot) => {
                 else if(new Date(users[uid].accessHistory[Object.keys(users[uid].accessHistory).slice(-1)[0]].date).getTime() < new Date().getTime() - 1000 * 60 * 60 * 24 * 30) {
                   noLogins[uid] = { 氏名 : users[uid].name, 最終ログイン : new Date(users[uid].accessHistory[Object.keys(users[uid].accessHistory).slice(-1)[0]].date) }
                 }
+
+                if(users[uid].point) {
+                  points[users[uid].name] = users[uid].point;
+                } else {
+                  points[users[uid].name] = 0;
+                }
               });
               console.warn("一か月以上ログインしていないユーザー一覧");
               console.table(noLogins);
+
+              console.warn("ユーザのポイント一覧");
+              console.table(points);
             })
           }
         })
@@ -226,7 +236,7 @@ onAuthStateChanged(auth, (snapshot) => {
             getObj("heldevent_tags").html();
             if(data.tags) { data.tags.forEach(tag => { getObj("heldevent_tags").innerText += "#" + tag; }); }
             else { new Obj("heldevent_tags").set(); }
-            getObj("heldevent_description").innerText = data.description;
+            getObj("heldevent_description").html(data.description);
 
             if(data.code){
               getObj("attendbtn-text").style.display = "block";

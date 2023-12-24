@@ -137,6 +137,7 @@ function openDetail(index) {
   document.getElementById("detailBody").innerHTML = mail.content;
   document.getElementById("detailDate").textContent = mail.date;
   document.getElementById("detailSender").textContent = mail.sender;
+  getObj("detailList").innerHTML = "";
 
   if(!mail.test) {
     document.getElementById("detailTable").style.display = "";

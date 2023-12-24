@@ -79,23 +79,25 @@ function restart() {
   if(getParam("id")) {
     let userIndex = userKeys.indexOf(getParam("id"));
     if(userIndex != -1) {
-        openInfo(userIndex);
-        userModal.show();
+      openInfo(userIndex);
+      userModal.show();
     }
   }
 
   userKeys.forEach((key, i) => {
     //引退・退部した部員
     if(users[key].status == 1 || users[key].status == 2) {
-        noExit = false;
-        var role = "引退";
-        if(users[key].status == 1) {role = "退部";}
+      noExit = false;
+      var role = "引退";
+      if(users[key].status == 1) {role = "退部";}
 
-        totalMembers --;
+      totalMembers --;
 
-        getObj("exitMembers").innerHTML += '<li class="list-group-item" onclick="openInfo('+i+')" data-bs-toggle="modal" data-bs-target="#exampleModal"><h6>'+users[key].name + '<span class="badge bg-danger mx-1">'+role+'</span></h6><span class="text-secondary small mx-1">'+users[key].nameKana+' ' + users[key].studentNumber + '</span></li>';
-        return;
+      getObj("exitMembers").innerHTML += '<li class="list-group-item" onclick="openInfo('+i+')" data-bs-toggle="modal" data-bs-target="#exampleModal"><h6>'+users[key].name + '<span class="badge bg-danger mx-1">'+role+'</span></h6><span class="text-secondary small mx-1">'+users[key].nameKana+' ' + users[key].studentNumber + '</span></li>';
+      return;
     }
+
+    console.log({[key]: users[key].name});
 
     var sex = "女性";
     if(users[key].sex == "man") {sex="男性";}
@@ -127,7 +129,7 @@ function restart() {
     }
 
     if(adminusers[key]) {
-        roles += '<span class="badge bg-secondary mx-1">管理者</span>';
+      roles += '<span class="badge bg-secondary mx-1">管理者</span>';
     }
 
     var age = 0;

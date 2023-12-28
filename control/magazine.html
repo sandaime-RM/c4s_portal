@@ -131,7 +131,8 @@
               <div class="row">
                 <div class="small text-secondary col-6">
                   HTMLの記法を利用できます。<br>
-                  Web上の画像やリンク等を載せられます。
+                  Web上の画像やリンク等を載せられます。<br>
+                  テスト配信では、「hello@c4-s.net」のみに送信されます。
                 </div>
                 <div class="small text-secondary col-6">
                   [name] : メルマガ登録者の名前に置き換えられます。<br>
@@ -144,7 +145,10 @@
             </div>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-dark" onclick="send()">
+            <button type="button" class="btn btn-outline-dark" onclick="send(true)">
+              <i class="bi bi-send"></i> テスト配信
+            </button>
+            <button type="button" class="btn btn-dark ms-2" onclick="send(false)">
               <i class="bi bi-send"></i> 配信
             </button>
           </div>
@@ -153,24 +157,50 @@
     </div>
 
   <!-- Modal -->
-  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
+  <div class="modal fade" id="detailModal" tabindex="-1" aria-labelledby="detailModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header">
-          <h1 class="modal-title fs-5" id="exampleModalLabel">登録完了</h1>
+          <h1 class="modal-title fs-5" id="detailModalLabel">メール詳細 <span class="badge bg-danger" style="display: none;" id="mailTest">テスト配信</span></h1>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <div class="text-center mb-3 text-success">
-            <i class="bi bi-check-circle me-1 fs-1 mb-2"></i><br>
-            <span class="small">登録完了</span>
+          <h2 class="fs-5" id="detailTitle"></h2>
+
+          <div class="mb-3 row">
+            <div class="col-6">
+              <span class="fw-bold">送信者 </span><span id="detailSender"></span>
+            </div>
+            <div class="col-6">
+              <span class="fw-bold">送信日時 </span><span id="detailDate"></span>
+              <div class="text-secondary small">実際の配信まで、5分程度かかる可能性があります。</div>
+            </div>
           </div>
-          C4's メールマガジンへの登録が完了いたしました。<br>
-          登録ありがとうございます。  
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-danger">取り消し</button>
-          <button type="button" class="btn btn-dark" data-bs-dismiss="modal">閉じる</button>
+
+          <hr>
+
+          <div class="mx-2">
+            <p id="detailBody"></p>
+          </div>
+
+          <hr>
+          
+          <div class="mb-3" id="detailTable">
+            <span class="fw-bold">受信者 </span><span id="detailNum"></span><br>
+            <table class="table">
+              <thead>
+                  <tr>
+                    <td>No.</td>
+                    <td>名前</td>
+                    <td>メールアドレス</td>
+                  </tr>
+              </thead>
+
+              <tbody id="detailList">
+
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>

@@ -27,6 +27,7 @@ var adminusers;
 
 //Modal
 const modal = new bootstrap.Modal(document.getElementById('editMail'))
+const detailModal = new bootstrap.Modal(document.getElementById('detailModal'))
 
 //ユーザー情報の取得
 onAuthStateChanged(auth, (us) => {
@@ -78,18 +79,26 @@ function loadInfo() {
 }
 
 //メールの送信
-function send() {
+function send(test) {
     var ask = confirm("メールの配信をしてよろしいですか？内容をよくご確認ください。");
 
     if(!ask) { return; }
 
     var date = new Date();
+    var title = getObj("mailTitle").value;
+
+    if(test) {
+      followers=null;
+      title = "【テスト】"+title;
+    }
 
     push(ref(db, "magazine/mails"), {
-        title : getObj("mailTitle").value,
+        title : title,
         content : getObj("mailContent").value,
         sender : myName,
-        date : date.toLocaleString()
+        date : date.toLocaleString(),
+        followers : followers,
+        test : test
     })
     .then(() => {
       alert("配信しました。");
@@ -117,3 +126,37 @@ function delFollower(num) {
 
 window.delFollower = delFollower
 export{delFollower}
+
+//メール詳細
+function openDetail(index) {
+  var key = Object.keys(mails)[index];
+  var mail = mails[key];
+
+  //詳細表示
+  document.getElementById("detailTitle").textContent = mail.title;
+  document.getElementById("detailBody").innerHTML = mail.content;
+  document.getElementById("detailDate").textContent = mail.date;
+  document.getElementById("detailSender").textContent = mail.sender;
+  getObj("detailList").innerHTML = "";
+
+  if(!mail.test) {
+    document.getElementById("detailTable").style.display = "";
+    document.getElementById("mailTest").style.display = "none";
+
+    if(mail.followers) {
+      document.getElementById("detailNum").textContent = Object.keys(mail.followers).length;
+
+      Object.keys(mail.followers).forEach((key, index) => {
+        getObj("detailList").innerHTML += '<tr><td>'+(index+1)+'</td><td>'+mail.followers[key].name+'</td><td>'+mail.followers[key].email+'</td></tr>';
+      });
+    }
+  } else {
+    document.getElementById("detailTable").style.display = "none";
+    document.getElementById("mailTest").style.display = "";
+  }
+
+  detailModal.show()
+}
+
+window.openDetail = openDetail;
+export{openDetail}

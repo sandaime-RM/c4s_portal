@@ -270,8 +270,12 @@ onAuthStateChanged(auth, (snapshot) => {
     if (new Date(top.term.begin) - (1000*60*15) <= new Date()) {
       heldeventID = keys[0];
       new Obj("KaiSaiChu").show();
-      if(top.attenders[user.uid]) { new Obj("attendBtn").hide(); new Obj("attended").show(); }
-      else { new Obj("attendBtn").show(); new Obj("attended").hide(); }
+      if(top.code) {
+        if(top.attenders[user.uid]) { new Obj("attendBtn").hide(); new Obj("attended").show(); }
+        else { new Obj("attendBtn").show(); new Obj("attended").hide(); }
+      } else {
+        new Obj("attendBtn").hide(); new Obj("attended").hide();
+      }
     } else { new Obj("attendBtn").hide(); new Obj("attended").hide(); new Obj("KaiSaiChu").hide(); }
 
     new Obj("other_events").set();

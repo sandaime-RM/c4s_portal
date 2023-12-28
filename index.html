@@ -6,14 +6,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <!--Bootstrap-->
-  <!-- CSS only -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-  <!-- JavaScript Bundle with Popper -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
   <!--BootstrapIcon-->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.0/font/bootstrap-icons.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
   <!--jQuery-->
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 
   <!-- JS QR -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.js"></script>
@@ -28,216 +26,204 @@
   <link rel="manifest" href="manifest.json">
 </head>
 
-<body class="bg-light">
-  <div id="overray" style="position: fixed; left: 0; top: 0; width: 100%; height: 100%; background-color: white; z-index: 2147483647;">
-    <div style="width: 100%; max-width: 120px; margin: 30px auto;">
-      <img src="img/top-loading.svg" style="width: 100%">
+<body class="bg-light mw-xl mx-auto">
+  <div id="overray" class="position-fixed start-0 top-0 w-100 bg-white h-100" style="z-index: 2147483647;">
+    <div class="w-25 mw-xs mx-auto mt-5">
+      <img src="/img/loading.svg" class="w-100">
     </div>
-    <div class="text-center mt-5" id="loading-overray">
-      <div class="spinner-grow" role="status">
+    <div class="text-center" id="loading-overray">
+      <div class="loader text-secondary" role="status">
         <span class="visually-hidden">Loading...</span>
       </div>
     </div>
-    <div class="text-center mt-5" id="login-overray" style="display: none;">
+    <div class="text-center mt-5 hide" id="login-overray">
       <h6 class="mb-3">Googleアカウントが必要です</h6>
-      <a class="h4" style="text-decoration: none; color: Darkblue; cursor: pointer;" onclick="login()">ログイン</a>
+      <p class="h4 pointer text-primary" onclick="login()">ログイン</p>
     </div>
   </div>
   
   <div id="header"></div>
 
-  <!--SVGの定義-->
-  <svg display="none">
-    <defs>
-      <symbol id="calendar" xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-calendar-week" viewBox="0 0 16 16">
-        <path d="M11 6.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1zm-3 0a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1zm-5 3a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1zm3 0a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1z"/>
-        <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4H1z"/>
-      </symbol>
-
-      <symbol id="house" xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-house" viewBox="0 0 16 16">
-        <path fill-rule="evenodd" d="M2 13.5V7h1v6.5a.5.5 0 0 0 .5.5h9a.5.5 0 0 0 .5-.5V7h1v6.5a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 2 13.5zm11-11V6l-2-2V2.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5z"/>
-        <path fill-rule="evenodd" d="M7.293 1.5a1 1 0 0 1 1.414 0l6.647 6.646a.5.5 0 0 1-.708.708L8 2.207 1.354 8.854a.5.5 0 1 1-.708-.708L7.293 1.5z"/>
-      </symbol>
-
-      <symbol id="box" xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-box-seam" viewBox="0 0 16 16">
-        <path d="M8.186 1.113a.5.5 0 0 0-.372 0L1.846 3.5l2.404.961L10.404 2l-2.218-.887zm3.564 1.426L5.596 5 8 5.961 14.154 3.5l-2.404-.961zm3.25 1.7-6.5 2.6v7.922l6.5-2.6V4.24zM7.5 14.762V6.838L1 4.239v7.923l6.5 2.6zM7.443.184a1.5 1.5 0 0 1 1.114 0l7.129 2.852A.5.5 0 0 1 16 3.5v8.662a1 1 0 0 1-.629.928l-7.185 2.874a.5.5 0 0 1-.372 0L.63 13.09a1 1 0 0 1-.63-.928V3.5a.5.5 0 0 1 .314-.464L7.443.184z"/>
-      </symbol>
-
-      <symbol id="cash" xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-cash-coin" viewBox="0 0 16 16">
-        <path fill-rule="evenodd" d="M11 15a4 4 0 1 0 0-8 4 4 0 0 0 0 8zm5-4a5 5 0 1 1-10 0 5 5 0 0 1 10 0z"/>
-        <path d="M9.438 11.944c.047.596.518 1.06 1.363 1.116v.44h.375v-.443c.875-.061 1.386-.529 1.386-1.207 0-.618-.39-.936-1.09-1.1l-.296-.07v-1.2c.376.043.614.248.671.532h.658c-.047-.575-.54-1.024-1.329-1.073V8.5h-.375v.45c-.747.073-1.255.522-1.255 1.158 0 .562.378.92 1.007 1.066l.248.061v1.272c-.384-.058-.639-.27-.696-.563h-.668zm1.36-1.354c-.369-.085-.569-.26-.569-.522 0-.294.216-.514.572-.578v1.1h-.003zm.432.746c.449.104.655.272.655.569 0 .339-.257.571-.709.614v-1.195l.054.012z"/>
-        <path d="M1 0a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h4.083c.058-.344.145-.678.258-1H3a2 2 0 0 0-2-2V3a2 2 0 0 0 2-2h10a2 2 0 0 0 2 2v3.528c.38.34.717.728 1 1.154V1a1 1 0 0 0-1-1H1z"/>
-        <path d="M9.998 5.083 10 5a2 2 0 1 0-3.132 1.65 5.982 5.982 0 0 1 3.13-1.567z"/>
-      </symbol> 
-
-      <symbol id="textFile" xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-file-earmark-text" viewBox="0 0 16 16">
-        <path d="M5.5 7a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1h-5zM5 9.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5z"/>
-        <path d="M9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.5L9.5 0zm0 1v2A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5z"/>
-      </symbol>
-
-      <symbol id="gear" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-gear" viewBox="0 0 16 16">
-        <path d="M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492zM5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0z"/>
-        <path d="M9.796 1.343c-.527-1.79-3.065-1.79-3.592 0l-.094.319a.873.873 0 0 1-1.255.52l-.292-.16c-1.64-.892-3.433.902-2.54 2.541l.159.292a.873.873 0 0 1-.52 1.255l-.319.094c-1.79.527-1.79 3.065 0 3.592l.319.094a.873.873 0 0 1 .52 1.255l-.16.292c-.892 1.64.901 3.434 2.541 2.54l.292-.159a.873.873 0 0 1 1.255.52l.094.319c.527 1.79 3.065 1.79 3.592 0l.094-.319a.873.873 0 0 1 1.255-.52l.292.16c1.64.893 3.434-.902 2.54-2.541l-.159-.292a.873.873 0 0 1 .52-1.255l.319-.094c1.79-.527 1.79-3.065 0-3.592l-.319-.094a.873.873 0 0 1-.52-1.255l.16-.292c.893-1.64-.902-3.433-2.541-2.54l-.292.159a.873.873 0 0 1-1.255-.52l-.094-.319zm-2.633.283c.246-.835 1.428-.835 1.674 0l.094.319a1.873 1.873 0 0 0 2.693 1.115l.291-.16c.764-.415 1.6.42 1.184 1.185l-.159.292a1.873 1.873 0 0 0 1.116 2.692l.318.094c.835.246.835 1.428 0 1.674l-.319.094a1.873 1.873 0 0 0-1.115 2.693l.16.291c.415.764-.42 1.6-1.185 1.184l-.291-.159a1.873 1.873 0 0 0-2.693 1.116l-.094.318c-.246.835-1.428.835-1.674 0l-.094-.319a1.873 1.873 0 0 0-2.692-1.115l-.292.16c-.764.415-1.6-.42-1.184-1.185l.159-.291A1.873 1.873 0 0 0 1.945 8.93l-.319-.094c-.835-.246-.835-1.428 0-1.674l.319-.094A1.873 1.873 0 0 0 3.06 4.377l-.16-.292c-.415-.764.42-1.6 1.185-1.184l.292.159a1.873 1.873 0 0 0 2.692-1.115l.094-.319z"/>
-      </symbol>
-
-      <symbol id="person" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-badge" viewBox="0 0 16 16">
-        <path d="M6.5 2a.5.5 0 0 0 0 1h3a.5.5 0 0 0 0-1h-3zM11 8a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
-        <path d="M4.5 0A2.5 2.5 0 0 0 2 2.5V14a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2.5A2.5 2.5 0 0 0 11.5 0h-7zM3 2.5A1.5 1.5 0 0 1 4.5 1h7A1.5 1.5 0 0 1 13 2.5v10.795a4.2 4.2 0 0 0-.776-.492C11.392 12.387 10.063 12 8 12s-3.392.387-4.224.803a4.2 4.2 0 0 0-.776.492V2.5z"/>
-      </symbol>
-
-      <symbol id="wallet" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-wallet" viewBox="0 0 16 16">
-        <path d="M0 3a2 2 0 0 1 2-2h13.5a.5.5 0 0 1 0 1H15v2a1 1 0 0 1 1 1v8.5a1.5 1.5 0 0 1-1.5 1.5h-12A2.5 2.5 0 0 1 0 12.5V3zm1 1.732V12.5A1.5 1.5 0 0 0 2.5 14h12a.5.5 0 0 0 .5-.5V5H2a1.99 1.99 0 0 1-1-.268zM1 3a1 1 0 0 0 1 1h12V2H2a1 1 0 0 0-1 1z"/>
-      </symbol>
-
-      <symbol id="basket" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-basket3" viewBox="0 0 16 16">
-        <path d="M5.757 1.071a.5.5 0 0 1 .172.686L3.383 6h9.234L10.07 1.757a.5.5 0 1 1 .858-.514L13.783 6H15.5a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5H.5a.5.5 0 0 1-.5-.5v-1A.5.5 0 0 1 .5 6h1.717L5.07 1.243a.5.5 0 0 1 .686-.172zM3.394 15l-1.48-6h-.97l1.525 6.426a.75.75 0 0 0 .729.574h9.606a.75.75 0 0 0 .73-.574L15.056 9h-.972l-1.479 6h-9.21z"/>
-      </symbol>
-
-      <symbol id="richText" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-earmark-richtext" viewBox="0 0 16 16">
-        <path d="M14 4.5V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h5.5L14 4.5zm-3 0A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V4.5h-2z"/>
-        <path d="M4.5 12.5A.5.5 0 0 1 5 12h3a.5.5 0 0 1 0 1H5a.5.5 0 0 1-.5-.5zm0-2A.5.5 0 0 1 5 10h6a.5.5 0 0 1 0 1H5a.5.5 0 0 1-.5-.5zm1.639-3.708 1.33.886 1.854-1.855a.25.25 0 0 1 .289-.047l1.888.974V8.5a.5.5 0 0 1-.5.5H5a.5.5 0 0 1-.5-.5V8s1.54-1.274 1.639-1.208zM6.25 6a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5z"/>
-      </symbol>
-    </defs>
-  </svg>
-
-  <!--メインの画面-->
-  <div class="container mb-5">
-    <!--タイトル・カルーセルに置き換えてもいいかも-->
-    <!--<iframe src="/iframe/carousel" frameborder="0"></iframe>-->
-    <div class="py-3 text-center">
-      <h2 class="fs-2 fw-normal">C4's Portal</h2>
-      <p class="text-secondary">～ワクワクを作りつづける～</p>
-    </div>
-
+  <div class="w-100 mb-3 mx-0 row">
     <!--メイン-->
-    <div class="row mw-lg mx-auto my-3">
-      <!--開催中のイベントがあれば表示-->
-      <div id="heldevent" class="col-lg-6 hide mb-3">
-        <div class="text-center p-3 bg-c4s-dark shadow rounded-md">
-          <h5 class="text-light">開催中のイベント</h5>
-          <div class="shadow-sm rounded-sm w-100 p-3 bg-c4s-light" style="border: 1px solid rgb(127, 63, 0);">
-            <h5 id="heldevent_title" class="text-dark"></h5>
-            <h5 class="mb-2">
-              <span class="badge bg-danger"><span id="heldevent_place"></span>にて開催中!</span>
-            </h5>
-            <p class="small">
-              <div class="alert alert-light text-justify" id="heldevent_description"></div>
-              <p class="my-1 text-primary" id="heldevent_tags"></p>
-            </p>
-            <div class="small mt-3 text-center text-danger" id="attendbtn-text" onclick="openmodal('attend')">
-              <h6>出席登録する</h6>
+    <div class="col-md-8 h-100 px-0">
+      <div class="w-100 mx-0 row">
+        <!-- 広告カルーセル -->
+        <div id="events_carousel" class="carousel slide w-100 mw-lg mx-auto mb-3 px-3">
+          <div class="carousel-indicators">
+            <button type="button" data-bs-target="#events_carousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+            <button type="button" data-bs-target="#events_carousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
+            <button type="button" data-bs-target="#events_carousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
+            <button type="button" data-bs-target="#events_carousel" data-bs-slide-to="3" aria-label="Slide 4"></button>
+          </div>
+          <div class="carousel-inner">
+            <div class="carousel-item active">
+              <img src="/img/advertisement/ad.JPG" class="d-block w-100 rounded-md">
+            </div>
+            <div class="carousel-item">
+              <img src="/img/advertisement/ad1.JPG" class="d-block w-100 rounded-md">
+            </div>
+            <div class="carousel-item">
+              <img src="/img/advertisement/ad2.JPG" class="d-block w-100 rounded-md">
+            </div>
+            <div class="carousel-item">
+              <img src="/img/advertisement/ad3.JPG" class="d-block w-100 rounded-md">
             </div>
           </div>
+          <button class="carousel-control-prev" type="button" data-bs-target="#events_carousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+          </button>
+          <button class="carousel-control-next" type="button" data-bs-target="#events_carousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+          </button>
         </div>
-      </div>
+        <!-- 直近のイベントを表示 -->
+        <div id="eventInfo" class="col-lg-6 mx-auto p-3 mb-3">
+          <div class="bg-white shadow-sm border p-3 rounded-md" id="NoEvents">
+            <h6 class="text-center text-secondary my-3">イベント情報がありません</h6>
+          </div>
+          <div class="bg-white shadow-sm border p-3 rounded-md hide" id="YesEvents">
+            <h6 class="text-center text-secondary mb-3">直近のイベント</h6>
+            <div class="hover pointer" onclick="go('/event')">
+              <div class="text-danger text-center fw-bold fs-3 mb-3" id="KaiSaiChu">開催中</div>
+              <p class="mb-0" id="event_time">-月-日・--:--～</p>
+              <h4 class="mb-0" id="event_title">*****</h4>
+              <p class="mb-0 text-secondary" id="event_location">***</p>
+              <div class="border p-3 mt-2 text-secondary text-justify rounded-sm" id="event_detail">
+                *****
+              </div>
+            </div>
+            <div class="mt-2 py-2 text-center bg-c4s text-white rounded-sm pointer hover" id="attendBtn">
+              <i class="bi bi-person-plus-fill"> </i>出席登録する
+            </div>
+            <div class="mt-2 py-2 text-center bg-c4s-light c4s rounded-sm" id="attended">
+              <i class="bi bi-person-check-fill"> </i>出席登録済み
+            </div>
+            <div id="other_events" class="mt-3">
 
-      <!--プロフィール-->
-      <div id="profile" class="col-lg-6 mx-auto p-3 border rounded-md hide mb-3">
-        <div class="row mb-2" style="display: flex; align-items: flex-end;">
-          <div class="col-sm-4 mt-2">
-            <div id="userPic" style="width: 80%; max-width: 100px; height: auto; margin: 0 auto;">
-              <img src="icons/person-circle-gray.svg" style="width: 100%; height: 100%;">
             </div>
-          </div>
-          <div class="col-sm-8 mt-2" style="text-align: center; padding: auto 0;">
-            <h4 id="userName"></h4>
-            <p id="userRole" style="color: darkslateblue;" class="small"></p>
-            <h5 style="width: 50%; margin: auto;"><span class="badge w-100" id="ranktext"></span></h5>
           </div>
         </div>
-        <hr>
-        <!--ポイント-->
-        <div style="text-align: center;">
-          <p style="margin-bottom: 0;">あなたのC4'sポイント</p>
-          <h1 id="pointnum" style="font-weight: bold;"></h1>
-          <div class="progress" style="height: 10px;" id="pointbars">
-            <div class="progress-bar progress-bar-striped" style="width: 0%;" role="progressbar" id="pointbar0"></div>
-            <div class="progress-bar progress-bar-striped" style="width: 0%;" role="progressbar" id="pointbar1"></div>
-            <div class="progress-bar progress-bar-striped" style="width: 0%;" role="progressbar" id="pointbar2"></div>
-            <div class="progress-bar progress-bar-striped" style="width: 0%;" role="progressbar" id="pointbar3"></div>
-          </div>
-          <div id="restpoint" style="text-align: right; margin: 0;"></div>
-          <!--<div style="margin: 0;">ランク制度についてくわしくは<a href="" style="text-decoration: none;">こちら</a></div>-->
-          <div class="row mx-auto" style="width: 100%; max-width: 300px;">
-            <div class="w-50 px-1">
-              <button type="button" class="btn btn-outline-secondary btn-sm w-100" style="border-radius: 15px;" data-bs-toggle="modal" data-bs-target="#pointModal" id="pointHistoryBtn">
-                ポイント履歴
-              </button>
+        <!-- <div id="heldEvent" class="col-lg-6 mb-3 hide">
+          <div class="text-center p-3 bg-c4s-dark shadow rounded-md">
+            <h5 class="text-light">開催中のイベント</h5>
+            <div class="shadow-sm rounded-sm w-100 p-3 bg-c4s-light" style="border: 1px solid rgb(127, 63, 0);">
+              <h5 id="heldevent_title" class="text-dark"></h5>
+              <h5 class="mb-2">
+                <span class="badge bg-danger"><span id="heldevent_place"></span>にて開催中!</span>
+              </h5>
+              <p class="small">
+                <div class="alert alert-light text-justify" id="heldevent_description"></div>
+                <p class="my-1 text-primary" id="heldevent_tags"></p>
+              </p>
+              <div class="small mt-3 text-center text-danger" id="attendbtn-text" onclick="openmodal('attend')">
+                <h6>出席登録する</h6>
+              </div>
             </div>
-            <div class="w-50 px-1">
-              <button type="button" class="btn btn-outline-secondary btn-sm w-100" style="border-radius: 15px;" data-bs-toggle="modal" data-bs-target="#giftModal" id="sendPointBtn">
-                ポイントをおくる
-              </button>
+          </div>
+  
+        </div> -->
+        <!-- ユーザーのプロフィール -->
+        <div id="profile" class="col-lg-6 mx-auto p-3 mb-3">
+          <div class="bg-white shadow-sm border p-3 rounded-md">
+            <div class="w-100 py-2 mb-3 rounded-sm text-white text-center fw-bold" id="ranktext"></div>
+            <div id="userPic" class="w-25 mw-xs mx-auto h-auto"><img src="icons/person-circle-gray.svg" class="w-100 h-auto"></div>
+            <h4 class="mt-3 mb-1 text-center" id="userName"></h4>
+            <p id="userRole" style="color: indigo;" class="small mb-0 text-center fw-bold"></p>
+            <hr>
+            <!--ポイント-->
+            <div style="text-align: center;">
+              <p style="margin-bottom: 0;">あなたのC4'sポイント</p>
+              <h1 id="pointnum" style="font-weight: bold;"></h1>
+              <div class="progress" style="height: 10px;" id="pointbars">
+                <div class="progress-bar progress-bar-striped" style="width: 0%;" role="progressbar" id="pointbar0"></div>
+                <div class="progress-bar progress-bar-striped" style="width: 0%;" role="progressbar" id="pointbar1"></div>
+                <div class="progress-bar progress-bar-striped" style="width: 0%;" role="progressbar" id="pointbar2"></div>
+                <div class="progress-bar progress-bar-striped" style="width: 0%;" role="progressbar" id="pointbar3"></div>
+              </div>
+              <div id="restpoint" style="text-align: right; margin: 0;"></div>
+              <!--<div style="margin: 0;">ランク制度についてくわしくは<a href="" style="text-decoration: none;">こちら</a></div>-->
+              <div class="row mx-auto" style="width: 100%; max-width: 300px;">
+                <div class="w-50 px-1">
+                  <button type="button" class="btn btn-outline-secondary btn-sm w-100" style="border-radius: 15px;" data-bs-toggle="modal" data-bs-target="#pointModal" id="pointHistoryBtn">
+                    ポイント履歴
+                  </button>
+                </div>
+                <div class="w-50 px-1">
+                  <button type="button" class="btn btn-outline-secondary btn-sm w-100" style="border-radius: 15px;" data-bs-toggle="modal" data-bs-target="#giftModal" id="sendPointBtn">
+                    ポイントをおくる
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
+    <!-- カレンダー、Discordなど -->
+    <div class="col-md-4 h-100 px-0">
+      <iframe src="https://discord.com/widget?id=888778686608859137&theme=light" class="w-100 rounded-md px-3" style="min-width: 240px; aspect-ratio: 0.75;" allowtransparency="true" frameborder="0" sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"></iframe>
 
-    <!--フッター(というかリンク集)-->
-    <div class="py-3">
-      <h3 class="text-center fw-normal text-secondary">リンク集</h3>
-      <div class="row row-cols-1 row-cols-sm-2 row-cols-md-2 g-3 mb-3">
-        <div class="col">
-          <ul class="list-group">
-            <li class="list-group-item"><a href="https://c4-s.net/">C4's HP</a></li>
-            <li class="list-group-item"><a href="https://twitter.com/C4s_TUS">Twitter</a></li>
-            <li class="list-group-item"><a href="https://www.instagram.com/c4s_tus/">Instagram</a></li>
-            <li class="list-group-item"><a href="https://t.co/fH9w6pEkUO">公式LINE</a></li>
-            <li class="list-group-item"><a href="https://peing.net/ja/c4s_tus">Peing 質問箱</a></li>
-            <li class="list-group-item"><a href="https://www.tus-act.tus.ac.jp/club_admin/index.php?c=login_1&amp;next_c=clubinfo">TUS-ACTフォーム</a></li>
-          </ul>
+      <div class="mx-auto p-3 mb-3">
+        <div class="rounded-md bg-white border shadow-sm w-100 p-3">
+          <p class="text-center text-secondary my-3">
+            新機能開発中…
+          </p> 
         </div>
-        <div class="col">
-          <ul class="list-group">
-            <li class="list-group-item"><a href="https://c4s.esa.io/">esa</a><small class="text-secondary">（文書管理）</small></li>
-            <li class="list-group-item"><a href="https://www.value-domain.com/login.php">Value Domain</a><small class="text-secondary">（メール，サーバー，ドメイン）</small></li>
-            <li class="list-group-item"><a href="https://gitlab.com/users/sign_in">GitLab</a><small class="text-secondary">（公式HP用）</small></li>
-            <li class="list-group-item"><a href="https://app.netlify.com/login">Netlify</a><small class="text-secondary">（公式HP用）</small></li>
-            <li class="list-group-item"><a href="https://be.contentful.com/login">Contentful</a><small class="text-secondary">（公式HPでの作品公開用）</small></li>
-            <li class="list-group-item"><a href="magazine/">メールマガジン登録</a></li>
-          </ul>
-        </div>
-      </div>
-    </div>
-
-    <!--通知送信フォーム-->
-    <div class="adminonly mb-5 mw-md mx-auto">
-      <h5 class="text-center">通知送信フォーム</h5>
-      <p class="text-secondary text-center">管理者のみ</p>
-      <div class="form-floating mb-3">
-        <input type="text" class="form-control" id="noticeTitle" placeholder="title">
-        <label for="noticeTitle">タイトル</label>
-      </div>
-      <div class="form-floating mb-3">
-        <textarea type="text" class="form-control" id="noticeContent" placeholder="content" style="height: 5em;"></textarea>
-        <label for="noticeContent">詳細</label>
-      </div>
-      <div class="form-floating mb-3">
-        <select class="form-select" id="noticeTarget">
-          <option value="whole">全体公開</option>
-          <option value="active">部員のみ</option>
-          <option value="admin">管理者のみ</option>
-        </select>
-        <label for="noticeTarget">公開範囲</label>
-      </div>
-      <div class="form-floating mb-3">
-        <input type="date" class="form-control" id="noticeTime" placeholder="time"></input>
-        <label for="noticeTime">公開開始日(午前4時に公開になります)</label>
-      </div>
-      <div class="form-floating mb-3">
-        <input type="date" class="form-control" id="noticeDead" placeholder="dead"></input>
-        <label for="noticeDead">公開終了日(23:59に削除されます)</label>
-      </div>
-      <div class="form-floating mb-3">
-        <input type="url" class="form-control" id="noticeLink" placeholder="url"></input>
-        <label for="noticeLink">遷移先(任意)</label>
-      </div>
-      <div class="w-50 mx-auto mb-5">
-        <button class="btn btn-dark w-100" onclick="sendNotice()">送信</button>
       </div>
     </div>
   </div>
+  
+  <!--フッター(というかリンク集)-->
+  <div class="w-100 mb-5 mx-0 px-3">
+    <div class="bg-white border shadow-sm w-100 mx-auto rounded-md px-1 row">
+      <div id="links" class="col-md mb-3 mw-md mx-auto">
+        <h6 class="text-center text-secondary mt-3 mb-3">リンク集</h6>
+      </div>
+      <div id="adminlinks" class="col-md mb-3 mw-md mx-auto hide">
+        <h6 class="text-center text-secondary mt-3 mb-3">管理者のみ</h6>
+      </div>
+    </div>
+  </div>
+
+  <!--通知送信フォーム-->
+  <!-- <div class="adminonly mb-5 mw-md mx-auto">
+    <h5 class="text-center">通知送信フォーム</h5>
+    <p class="text-secondary text-center">管理者のみ</p>
+    <div class="form-floating mb-3">
+      <input type="text" class="form-control" id="noticeTitle" placeholder="title">
+      <label for="noticeTitle">タイトル</label>
+    </div>
+    <div class="form-floating mb-3">
+      <textarea type="text" class="form-control" id="noticeContent" placeholder="content" style="height: 5em;"></textarea>
+      <label for="noticeContent">詳細</label>
+    </div>
+    <div class="form-floating mb-3">
+      <select class="form-select" id="noticeTarget">
+        <option value="whole">全体公開</option>
+        <option value="active">部員のみ</option>
+        <option value="admin">管理者のみ</option>
+      </select>
+      <label for="noticeTarget">公開範囲</label>
+    </div>
+    <div class="form-floating mb-3">
+      <input type="date" class="form-control" id="noticeTime" placeholder="time"></input>
+      <label for="noticeTime">公開開始日(午前4時に公開になります)</label>
+    </div>
+    <div class="form-floating mb-3">
+      <input type="date" class="form-control" id="noticeDead" placeholder="dead"></input>
+      <label for="noticeDead">公開終了日(23:59に削除されます)</label>
+    </div>
+    <div class="form-floating mb-3">
+      <input type="url" class="form-control" id="noticeLink" placeholder="url"></input>
+      <label for="noticeLink">遷移先(任意)</label>
+    </div>
+    <div class="w-50 mx-auto mb-5">
+      <button class="btn btn-dark w-100" onclick="sendNotice()">送信</button>
+    </div>
+  </div> -->
 </body>
 
 <!--右下に表示するボタン-->

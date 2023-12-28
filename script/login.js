@@ -2,7 +2,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/9.17.2/firebas
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-analytics.js";
 import { GoogleAuthProvider, getAuth, onAuthStateChanged, signInWithPopup, signOut } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-auth.js";
 import { getDatabase, ref, get, set, push, onValue, remove } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-database.js";
-import { getObj } from "/script/methods.js";
+import { getObj, Obj } from "/script/methods.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBE60G8yImWlENWpCnQZzqqVUrwWa_torg",
@@ -29,8 +29,15 @@ var adminusers = {};
 //0:外部、1:部員、2:管理者
 var status = 0;
 
+$(() => {
+  // ロード画面を表示
+  new Obj("loading-overray").show("block");
+  new Obj("login-overray").hide();
+  new Obj("overray").show("block");
+})
+
 //ログイン状態の確認
-onAuthStateChanged(auth, (snapshot) => {
+onAuthStateChanged(auth, snapshot => {
   //ヘッダーを描画(メニューを含む)
   $("#header").load("/frames/header.html", () => {
     let id = location.pathname.split('/')[1].split('?')[0];
@@ -188,7 +195,9 @@ onAuthStateChanged(auth, (snapshot) => {
       })
     });
   } else {
-    if(location.pathname != "/") { location.href = "/"; }
+    new Obj("loading-overray").hide();
+    new Obj("login-overray").show();
+    new Obj("overray").show();
   }
 });
 
@@ -232,3 +241,7 @@ export function logout() {
   });
 }
 window.logout = logout;
+
+window.go = (URL) => {
+  if(URL) { location.href = URL; } else { location.href = "/"; }
+}

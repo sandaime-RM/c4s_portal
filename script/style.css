@@ -1,4 +1,4 @@
-body { overflow-x: hidden; }
+html, body { overflow-x: hidden; }
 
 .hide { display: none; }
 
@@ -12,6 +12,7 @@ body { overflow-x: hidden; }
 .mw-sm { max-width: 360px; }
 .mw-md { max-width: 480px; }
 .mw-lg { max-width: 960px; }
+.mw-xl { max-width: 1200px; }
 
 .rounded-sm { border-radius: 5px; }
 .rounded-md { border-radius: 10px; }
@@ -20,6 +21,7 @@ body { overflow-x: hidden; }
 .text-justify { text-align: justify; }
 
 .c4s-background { background-color: rgb(255, 247, 239);}
+
 .c4s { color: rgb(255, 127, 0); }
 .c4s-dark { color: rgb(191, 95, 0);}
 

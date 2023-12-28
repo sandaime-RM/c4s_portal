@@ -5,20 +5,76 @@
     "color" : ["cornflowerblue", "#c95700", "#aba9a1", "#decb00"],
     "basis" : [0, 1000, 5000, 12000]
   },
+  "links" : {
+    "public" : [
+      {
+        "title" : "C4's ホームページ",
+        "url" : "https://c4-s.net",
+        "description" : ""
+      },
+      {
+        "title" : "公式Twitter/X",
+        "url" : "https://x.com/C4s_TUS",
+        "description" : ""
+      },
+      {
+        "title" : "公式Instagram",
+        "url" : "https://www.instagram.com/c4s_tus",
+        "description" : ""
+      },
+      {
+        "title" : "C4's メルマガ",
+        "url" : "magazine/",
+        "description" : ""
+      }
+    ],
+    "adminonly" : [
+      {
+        "title" : "TUS-ACT フォーム",
+        "url" : "https://www.tus-act.tus.ac.jp/club_admin/index.php?c=login_1&amp;next_c=clubinfo",
+        "description" : "大学のサークル紹介サービス"
+      },
+      {
+        "title" : "ESA",
+        "url" : "https://c4s.esa.io/team/invitations/member-bdea0c194425635198c6ca6e739e0613",
+        "description" : "議事録管理サービス"
+      },
+      {
+        "title" : "Value Domain",
+        "url" : "https://www.value-domain.com/login.php",
+        "description" : "C4'sのレンタルサーバー"
+      },
+      {
+        "title" : "GitLab",
+        "url" : "https://gitlab.com/users/sign_in",
+        "description" : "公式ホームページのソース"
+      },
+      {
+        "title" : "Netlify",
+        "url" : "https://app.netlify.com/login",
+        "description" : "ホームページのなにか。謎。"
+      },
+      {
+        "title" : "contentful",
+        "url" : "https://be.contentful.com/login",
+        "description" : "ホームページの作品ページ"
+      }
+    ]
+  },
   "members": [
     {
       "name": "今井悠人",
       "nickname": "といとん",
       "pic": "imai_yuto.JPG",
-      "role": "部長",
+      "role": "代表",
       "belong": "情報計算科学科２年",
-      "profile": "Web制作、プロジェクションマッピング、デザイン、ディズニーなど。色々なジャンルに足を踏み入れたいです。"
+      "profile": "Webサービス制作、プロジェクションマッピング、ポスター・パンフレットデザインなど。部員の得意を伸ばし、広げる活動をしていきます。"
     },
     {
       "name": "諸橋澪樹",
       "nickname": "諸志貫徹",
       "pic": "morohashi_reiju.JPG",
-      "role": "副部長",
+      "role": "副代表",
       "belong": "電気電子情報工学科１年",
       "profile": "名前に反して初志貫徹は苦手です。動画編集がメイン。自発的に活動できるサークルにしたいです。全員でC4'sを盛り上げましょう！"
     },

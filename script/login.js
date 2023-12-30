@@ -30,6 +30,7 @@ var adminusers = {};
 var status = 0;
 
 $(() => {
+  if(!new Obj("login-overray")) return;
   // ロード画面を表示
   new Obj("loading-overray").show("block");
   new Obj("login-overray").hide();
@@ -38,10 +39,12 @@ $(() => {
 
 //ログイン状態の確認
 onAuthStateChanged(auth, snapshot => {
-  // ロード画面を表示
-  new Obj("loading-overray").show("block");
-  new Obj("login-overray").hide();
-  new Obj("overray").show("block");
+  if(new Obj("login-overray")) {
+    // ロード画面を表示
+    new Obj("loading-overray").show("block");
+    new Obj("login-overray").hide();
+    new Obj("overray").show("block");
+  }
 
   //ヘッダーを描画(メニューを含む)
   $("#header").load("/frames/header.html", () => {

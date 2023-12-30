@@ -222,8 +222,8 @@ onAuthStateChanged(auth, (snapshot) => {
 
       new Obj("profile").show("block");
 
-      $("#pointnum").set("0");
-      $("#restpoint").set("<p>まだポイントを獲得できません</p>");
+      new Obj("pointnum").set("0");
+      new Obj("restpoint").set("<p>まだポイントを獲得できません</p>");
       new Obj("pointHistoryBtn").disabled = true;
       new Obj("sendPointBtn").disabled = true;
       new Obj("info2").textContent = user.email;

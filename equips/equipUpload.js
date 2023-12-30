@@ -3,7 +3,7 @@ import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.17.2/firebase
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-auth.js";
 import { getDatabase, ref, onChildAdded, push, remove, set, get } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-database.js";
 import { getStorage, ref as ref_st, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-storage.js";
-import { getObj } from "/script/methods.js"
+import { getObj, Obj } from "/script/methods.js"
 
 const firebaseConfig = {
   apiKey: "AIzaSyBE60G8yImWlENWpCnQZzqqVUrwWa_torg",
@@ -38,7 +38,7 @@ var photoModal = new bootstrap.Modal(getObj('photoModal'))
 var status;
 
 onAuthStateChanged(auth, (snapshot) => {
-  user = snapshot;
+  user = snapshot; if(!user) return;
 
   get(ref(db, "users/" + user.uid)).then((snapshot) => {
     if(snapshot.val()) { 
@@ -47,10 +47,42 @@ onAuthStateChanged(auth, (snapshot) => {
       })
     }
     else { status = 0; }
+
+    //リストの表示
+    get(ref(db, 'equips')).then((snapshot) => {
+      data = snapshot.val();
+      var totalNum = Object.keys(data).length;
+      new Obj("totalNum").set("総数：" + totalNum);
+      
+      Object.keys(data).forEach((key, i) => {
+        equips[i] = data[key];
+        equipKeys[i] = key;
+  
+        data[key].cat = -1;
+        var imgname;
+        var equipname = data[key].name;
+        for (let i = 0; i < categoryNames.length; i++) {
+          if(data[key].category[i]) { data[key].cat = i; imgname = "cat" + String(i); break; }
+        }
+        if (data[key].cat == -1) { imgname = "noimage"; } 
+        if (data[key].number != 1) { equipname += "(x" + String(data[key].number) + ")"; }
+        new Obj("list").after(`
+          <div class="col-lg-6 mb-1" style="display: flex; cursor: pointer;" id="equip${key}" onclick="ClickEquip('${key}')">
+            <img class="rounded-3" src="cats/${imgname}.svg" style="width: 100px; height: 100px;">
+            <div class="px-3" style="height: 100px;">
+              <p class="mb-0"><span class="h5">${equipname}</span> <span class="text-secondary small">${data[key].place}</span></p>
+              <p class="mb-0 small">${data[key].detail}</p>
+            </div>
+          </div>
+        `);
+      })
+  
+      $("#overray").fadeOut();
+    });
   });
 })
 
-window.onload = function() {
+$(() => {
   //カテゴリボタンを設置
   for (let i = 0; i < categoryNames.length; i++) {
     getObj("cats").tail('<h6 id="cat' + i + '">' + categoryNames[i] + '</h6>')
@@ -59,66 +91,39 @@ window.onload = function() {
     //onclick属性を追加
     getObj("cat" + i).setAttribute("onclick", "setcats(" + i + ")")
   }
+})
 
-  //リストの表示
-  get(ref(db, 'equips')).then((snapshot) => {
-    data = snapshot.val();
-    var totalNum = Object.keys(data).length;
-    document.getElementById("totalNum").innerHTML = "総数：" + totalNum;
-    
-    Object.keys(data).forEach((key, i) => {
-      equips[i] = data[key];
-      equipKeys[i] = key;
+//カテゴリ切り替え
+window.setcats = i => {
+  var totalNum = 0;
+  //いったん全部消す
+  Object.keys(data).forEach((key) => { getObj("equip" + key).hide(); })
 
-      data[key].cat = -1;
-      var imgname;
-      var equipname = data[key].name;
-      for (let i = 0; i < categoryNames.length; i++) {
-        if(data[key].category[i]) { data[key].cat = i; imgname = "cat" + String(i); break; }
-      }
-      if (data[key].cat == -1) { imgname = "noimage"; } 
-      if (data[key].number != 1) { equipname += "(x" + String(data[key].number) + ")"; }
-      getObj("list").tail('<div class="col-lg-6 mb-1" style="display: flex; cursor: pointer;" id="equip' + key + '" onclick="ClickEquip(\'' + key + '\')"><img class="rounded-3" src="cats/' + imgname + '.svg" style="width: 100px; height: 100px;"><div class="px-3" style="height: 100px;"><p class="mb-0"><span class="h5">' + equipname + '</span> <span class="text-secondary small">' + data[key].place + '</span></p><p class="mb-0 small">' + data[key].detail + '</p></div></div>');
-    })
+  //変数の書き換え
+  catSelected[i] = !catSelected[i];
+  //HTML上での表示切替
+  if(catSelected[i]) { getObj("cat" + i).setAttribute("class", "clicked"); }
+  else { getObj("cat" + i).setAttribute("class", "unclicked"); }
 
-    $("#overray").fadeOut();
-  });
-
-  //カテゴリ切り替え
-  function setcats (i) {
-    var totalNum = 0;
-    //いったん全部消す
-    Object.keys(data).forEach((key) => { getObj("equip" + key).hide(); })
-
-    //変数の書き換え
-    catSelected[i] = !catSelected[i];
-    //HTML上での表示切替
-    if(catSelected[i]) { getObj("cat" + i).setAttribute("class", "clicked"); }
-    else { getObj("cat" + i).setAttribute("class", "unclicked"); }
-
-    //表示するcatの番号リスト
-    var displays = [];
-    for (let i = 0; i < categoryNames.length; i++) {
-      if(catSelected[i]) { displays.push(i); }
-    }
-    //それぞれの要素に対して表示・非表示の設定
-    Object.keys(data).forEach((key) => { 
-      var display = false;
-      if(displays[0] === undefined) { display = true; }
-      else {
-        displays.forEach((n) => {
-          if(data[key].category[n]) { display = true; }
-        })
-      }
-      if(display) { getObj("equip" + key).style.display = "flex"; totalNum ++; }
-    })
-    
-    document.getElementById("totalNum").innerHTML = "総数：" + (totalNum);
+  //表示するcatの番号リスト
+  var displays = [];
+  for (let i = 0; i < categoryNames.length; i++) {
+    if(catSelected[i]) { displays.push(i); }
   }
-
-  window.setcats = setcats;
+  //それぞれの要素に対して表示・非表示の設定
+  Object.keys(data).forEach((key) => { 
+    var display = false;
+    if(displays[0] === undefined) { display = true; }
+    else {
+      displays.forEach((n) => {
+        if(data[key].category[n]) { display = true; }
+      })
+    }
+    if(display) { getObj("equip" + key).style.display = "flex"; totalNum ++; }
+  })
+  
+  document.getElementById("totalNum").innerHTML = "総数：" + (totalNum);
 }
-
 
 //備品情報アップロード
 function upload() {

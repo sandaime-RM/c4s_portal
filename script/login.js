@@ -30,7 +30,7 @@ var adminusers = {};
 var status = 0;
 
 $(() => {
-  if(!new Obj("login-overray")) return;
+  if(!new Obj("login-overray").exists) return;
   // ロード画面を表示
   new Obj("loading-overray").show("block");
   new Obj("login-overray").hide();
@@ -39,7 +39,7 @@ $(() => {
 
 //ログイン状態の確認
 onAuthStateChanged(auth, snapshot => {
-  if(new Obj("login-overray")) {
+  if(new Obj("login-overray").exists) {
     // ロード画面を表示
     new Obj("loading-overray").show("block");
     new Obj("login-overray").hide();

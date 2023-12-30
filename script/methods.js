@@ -1,7 +1,9 @@
 //画面上の要素をオブジェクトで取得
 export class Obj {
+  exists;
   constructor(id) {
     let obj = document.getElementById(id);
+    this.exists = obj !== null;
     if(obj) {
       //表示・非表示
       obj.hide = function () { this.style.display = "none"; }

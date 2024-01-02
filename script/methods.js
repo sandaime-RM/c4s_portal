@@ -4,22 +4,25 @@ export class Obj {
   constructor(id) {
     let obj = document.getElementById(id);
     this.exists = obj !== null;
+    if(!this.exists) { console.error(`the object named ${id} does not exist`)}
     if(obj) {
       //表示・非表示
-      obj.hide = function () { this.style.display = "none"; }
+      obj.hide = function () { this.style.display = "none"; return this; }
       obj.show = function (style) {
         if(style) { this.style.display = style; }
         else { this.style.display = "inherit"; }
+        return this;
       }
       //HTMLに追加
-      obj.before = function ( HTML ) { this.innerHTML = HTML + this.innerHTML; }
-      obj.after = function ( HTML ) { this.innerHTML += HTML; }
+      obj.before = function ( HTML ) { this.innerHTML = HTML + this.innerHTML; return this; }
+      obj.after = function ( HTML ) { this.innerHTML += HTML; return this; }
       obj.set = function ( HTML ) {
         if(HTML) { this.innerHTML = HTML; }
         else { this.innerHTML = ""; }
+        return this;
       }
       //onclick属性をaddeventlistenerで追加
-      obj.tap = (f) => { this.onclick = f; }
+      obj.tap = (f) => { this.onclick = f; return this; }
     }
     return obj;
   }

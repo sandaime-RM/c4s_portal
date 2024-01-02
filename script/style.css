@@ -14,6 +14,14 @@ html, body { overflow-x: hidden; }
 .mw-lg { max-width: 960px; }
 .mw-xl { max-width: 1200px; }
 
+.h-eq {
+  display: flex;
+  flex-wrap: wrap;
+}
+.h-full {
+  height: 100%;
+}
+
 .rounded-sm { border-radius: 5px; }
 .rounded-md { border-radius: 10px; }
 .rounded-lg { border-radius: 15px; }

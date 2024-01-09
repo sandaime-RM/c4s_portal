@@ -1,4 +1,74 @@
-//getObjは非推奨、new Objの方を使ってください
+//画面上の要素をオブジェクトで取得
+export class Obj {
+  exists;
+  constructor(id) {
+    let obj = document.getElementById(id);
+    this.exists = obj !== null;
+    if(!this.exists) { console.error(`the object named ${id} does not exist`)}
+    if(obj) {
+      //表示・非表示
+      obj.hide = function () { this.style.display = "none"; return this; }
+      obj.show = function (style) {
+        if(style) { this.style.display = style; }
+        else { this.style.display = "inherit"; }
+        return this;
+      }
+      //HTMLに追加
+      obj.before = function ( HTML ) { this.innerHTML = HTML + this.innerHTML; return this; }
+      obj.after = function ( HTML ) { this.innerHTML += HTML; return this; }
+      obj.set = function ( HTML ) {
+        if(HTML) { this.innerHTML = HTML; }
+        else { this.innerHTML = ""; }
+        return this;
+      }
+      //onclick属性をaddeventlistenerで追加
+      obj.tap = (f) => { this.onclick = f; return this; }
+    }
+    return obj;
+  }
+}
+
+export class Hizke {
+  data; year; month; date; hour; minute;
+
+  constructor(snapshot) {
+    if(!snapshot) { this.data = new Date(); return; }
+    this.data = new Date(snapshot);
+    this.year = this.data.getFullYear();
+    this.month = this.data.getMonth()+1;
+    this.date = this.data.getDate();
+    this.hour = this.data.getHours();
+    this.minute = this.data.getMinutes();
+  }
+
+  DateInput() {
+    return this.year + "-" + addzero(this.month.toString()) + "-" + addzero(this.date.toString());
+    function addzero (str) { if(str[1]) { return String(str); } else { return addzero("0" + str); }}
+  }
+
+  DateText() {
+    var dif = Math.round(new Date(DateInput(this.date)) - (new Date(DateInput(new Date()))) / 1000 / 60 / 60 / 24);
+    switch (dif) {
+      case 2: return "あさって";
+      case 1: return "あした";
+      case 0: return "きょう";
+      case -1:return "きのう";
+      case -2:return "おととい";
+      default:
+        if(-7 < dif && dif < 0) { return String(dif)+"日前"; }
+        if(0 < dif && dif < 7)  { return String(dif)+"日後"; }
+      break;
+    }
+    if(new Date().getFullYear() != this.year) {
+      return String(this.year) + "年" + String(this.month) + "月" + String(this.date) + "日"
+    }
+    else {
+      return String(this.month) + "月" + String(this.date) + "日"
+    }
+  }
+}
+
+// 非推奨、Objクラスを使用する
 export function getObj(id) {
   var obj = document.getElementById(id);
   if(obj){
@@ -19,72 +89,34 @@ export function getObj(id) {
   return obj;
 }
 
-//画面上の要素をオブジェクトで取得
-export class Obj {
-  constructor(id) {
-    let obj = document.getElementById(id);
-    if(obj) {
-      //表示・非表示
-      obj.hide = function () { this.style.display = "none"; }
-      obj.show = function (style) {
-        if(style) { this.style.display = style; }
-        else { this.style.display = "inherit"; }
-      }
-      //HTMLに追加
-      obj.before = function ( HTML ) { this.innerHTML = HTML + this.innerHTML; }
-      obj.after = function ( HTML ) { this.innerHTML += HTML; }
-      obj.set = function ( HTML ) {
-        if(HTML) { this.innerHTML = HTML; }
-        else { this.innerHTML = ""; }
-      }
-      //onclick属性をaddeventlistenerで追加
-      obj.tap = (f) => { this.onclick = f; }
-    }
-    return obj;
-  }
-}
-
-//日付計算
+// 非推奨、Hizkeクラスを使用する
 export function DateText(date) {
-  var dif = Math.floor((new Date() - date) / 1000 / 60 / 60 / 24);
-  if(dif < 7){
-    if(new Date().getDate() == date.getDate()){ return "きょう"; }
-    else if(new Date().getDate()-1 == date.getDate()){ return "きのう"; }
-    else if(new Date().getDate()-2 == date.getDate()){ return "おととい"; }
-    else{ return String(dif) + "日前"; }
+  var dif = Math.round(new Date(DateInput(date)) - (new Date(DateInput(new Date()))) / 1000 / 60 / 60 / 24);
+  switch (dif) {
+    case 2: return "あさって";
+    case 1: return "あした";
+    case 0: return "きょう";
+    case -1:return "きのう";
+    case -2:return "おととい";
+    default:
+      if(-7 < dif && dif < 0) { return String(dif)+"日前"; }
+      if(0 < dif && dif < 7)  { return String(dif)+"日後"; }
+    break;
   }
-  else if(new Date().getFullYear() != date.getFullYear()) {
+  if(new Date().getFullYear() != date.getFullYear()) {
     return String(date.getFullYear()) + "年" + String(date.getMonth() + 1) + "月" + String(date.getDate()) + "日"
   }
-  else{
+  else {
     return String(date.getMonth() + 1) + "月" + String(date.getDate()) + "日"
   }
 }
 
-//transform date object into date text for input "type = date"
+// 非推奨、Hizkeクラスを使用する
 export function DateInput(input) {
   let date;
   if(!input) { date = new Date(); } else { date = new Date(input); }
   return date.getFullYear() + "-" + addzero((date.getMonth() + 1).toString()) + "-" + addzero(date.getDate().toString());
   function addzero (str) { if(str[1]) { return String(str); } else { return addzero("0" + str); }}
-}
-
-export class Hizke {
-  constructor(snapshot) {
-    let date = new Date(snapshot);
-    date.year = date.getFullYear();
-    date.month = date.getMonth()+1;
-    date.date = date.getDate();
-    date.setYear = date.setFullYear();
-    return date;
-  }
-
-  DateInput(input) {
-    let date;
-    if(!input) { date = new Date(); } else { date = new Date(input); }
-    return date.getFullYear() + "-" + addzero((date.getMonth() + 1).toString()) + "-" + addzero(date.getDate().toString());
-    function addzero (str) { if(str[1]) { return String(str); } else { return addzero("0" + str); }}
-  }
 }
 
 //部員をソート(users:全ユーザーのデータ、keys:ソートしたい部員のIDリスト)

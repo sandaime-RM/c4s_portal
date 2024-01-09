@@ -627,15 +627,19 @@ window.projectcontrol = (projectID, type) => {
   }
 }
 
-window.projectReaction = (ID) => {
+window.projectReaction = ID => {
+  if(status == 0) { alert("参加には部員登録が必要です。"); return; }
+
   //メンバーから削除
   if(projects[ID].joiners && projects[ID].joiners[user.uid]) {
+    delete projects[ID].joiners[user.uid];
     remove(ref(db, `projects/${ID}/joiners/${user.uid}`)).then(() => { alert("メンバーから削除しました"); });
     getObj("projectJoin" + ID).html('<i class="bi bi-person-plus"> </i>');
     // document.getElementById("JoinerNum" + ID).textContent = Number(getObj("JoinerNum" + ID).html) - 1;
   }
   //メンバーに登録
   else {
+    projects[ID].joiners[user.uid] = true;
     update(ref(db, `projects/${ID}/joiners`), { [user.uid]: true }).then(() => { alert("メンバーに登録しました") });
     getObj("projectJoin" + ID).html('<i class="bi bi-person-check-fill" style="color: indigo"> </i>');
     // document.getElementById("JoinerNum" + ID).textContent = Number(getObj("JoinerNum" + ID).html) + 1;

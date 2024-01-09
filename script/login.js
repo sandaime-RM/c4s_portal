@@ -2,7 +2,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/9.17.2/firebas
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-analytics.js";
 import { GoogleAuthProvider, getAuth, onAuthStateChanged, signInWithPopup, signOut } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-auth.js";
 import { getDatabase, ref, get, set, push, onValue, remove } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-database.js";
-import { getObj } from "/script/methods.js";
+import { getObj, Obj } from "/script/methods.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBE60G8yImWlENWpCnQZzqqVUrwWa_torg",
@@ -29,12 +29,27 @@ var adminusers = {};
 //0:外部、1:部員、2:管理者
 var status = 0;
 
+$(() => {
+  if(!new Obj("login-overray").exists) return;
+  // ロード画面を表示
+  new Obj("loading-overray").show("block");
+  new Obj("login-overray").hide();
+  new Obj("overray").show("block");
+})
+
 //ログイン状態の確認
-onAuthStateChanged(auth, (snapshot) => {
+onAuthStateChanged(auth, snapshot => {
+  if(new Obj("login-overray").exists) {
+    // ロード画面を表示
+    new Obj("loading-overray").show("block");
+    new Obj("login-overray").hide();
+    new Obj("overray").show("block");
+  }
+
   //ヘッダーを描画(メニューを含む)
   $("#header").load("/frames/header.html", () => {
     let id = location.pathname.split('/')[1].split('?')[0];
-    if(id == "index.html") { id = ""; }
+    if(id == "index.html") id = "";
     $("#menu-" + id).css("color", "darkorange");
   });
 
@@ -57,17 +72,12 @@ onAuthStateChanged(auth, (snapshot) => {
         if(c4suser) {
           status = 1;
 
-          //更新情報を表示
-          function news () {
-            //ローカル環境でも表示しない
-            if(location.hostname == "localhost") { return; }
-            if(!c4suser.accessHistory || new Date(c4suser.accessHistory[Object.keys(c4suser.accessHistory).slice(-1)[0]].date) < new Date("2023-10-05 00:00"))
-            {
-              alert("アップデート：幹部紹介ページが新登場！");
-              alert("左上のメニュー画面からアクセスしてみよう");
-            }
+          // 1か月以上ぶりにアクセスした人にはメニューの紹介をする
+          if(location.hostname != "localhost" && (!c4suser.accessHistory || new Date(c4suser.accessHistory[Object.keys(c4suser.accessHistory).slice(-1)[0]].date) < new Date()-(1000*60*60*24*30)))
+          {
+            alert("C4's Portalへようこそ");
+            alert("左上のメニュー画面からアクセスしてみよう");
           }
-          news();
 
           //ユーザーアイコンのURLを取得
           set(ref(db, "users/" + user.uid + "/userPic"), user.photoURL);
@@ -188,33 +198,25 @@ onAuthStateChanged(auth, (snapshot) => {
       })
     });
   } else {
-    if(location.pathname != "/") { location.href = "/"; }
+    new Obj("loading-overray").hide();
+    new Obj("login-overray").show();
+    new Obj("overray").show();
   }
 });
 
 //ログイン
-function login() {
+window.login = () => {
   signInWithPopup(auth, provider)
   .catch((error) => {
-    // Handle Errors here.
     const errorCode = error.code;
     const errorMessage = error.message;
-    // The email of the user's account used.
     const email = error.customData.email;
-    // The AuthCredential type that was used.
     const credential = GoogleAuthProvider.credentialFromError(error);
-    // ...
-    if (errorMessage == "Firebase: Error (auth/unauthorized-domain).") {
-      alert("不正なドメインです");
-    }
-    else{
-      alert(errorMessage);
-    }
+    
+    (errorMessage == "Firebase: Error (auth/unauthorized-domain).")
+      ? alert("不正なドメインです") : alert(errorMessage);
   });
 }
-
-window.login = login;
-export{login}
 
 //アカウントページへ
 export function goAccount() { window.location.href = "/account"; } window.goAccount = goAccount;
@@ -232,3 +234,7 @@ export function logout() {
   });
 }
 window.logout = logout;
+
+window.go = (URL) => {
+  if(URL) { location.href = URL; } else { location.href = "/"; }
+}

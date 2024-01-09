@@ -29,33 +29,33 @@
     <hr>
     <div style="margin-left: 30px;">
       <!--誰でもアクセスできるページ-->
-      <h4 style="line-height: 45px; cursor: pointer;" id="menu-" onclick="location.href='/'"><i class="bi bi-house mx-3"></i>トップページ</h4>
-      <h4 style="line-height: 45px; cursor: pointer;" id="menu-event" onclick="location.href='/event'"><i class="bi bi-calendar-check mx-3"></i>イベント・企画一覧</h4>
-      <h4 style="line-height: 45px; cursor: pointer;" id="menu-equips" onclick="location.href='/equips'"><i class="bi bi-usb-symbol mx-3"></i>備品一覧</h4>
+      <h4 style="line-height: 45px;" class="pointer" id="menu-" onclick="location.href='/'"><i class="bi bi-house mx-3"></i>トップページ</h4>
+      <h4 style="line-height: 45px;" class="pointer" id="menu-event" onclick="location.href='/event'"><i class="bi bi-calendar-check mx-3"></i>イベント・企画一覧</h4>
+      <h4 style="line-height: 45px;" class="pointer" id="menu-equips" onclick="location.href='/equips'"><i class="bi bi-usb-symbol mx-3"></i>備品一覧</h4>
       <!--部員にならないとアクセスできないページ-->
       <!--このリスト内のページタイトルはprocedure/join2.html内「以下のページが解放されました！」にも手動で同期させてください-->
       <div class="activeonly">
-        <h4 style="line-height: 45px; cursor: pointer;" id="menu-document" onclick="location.href='/document'"><i class="bi bi-clipboard mx-3"></i>掲示板</h4>
-        <h4 style="line-height: 45px; cursor: pointer;" id="menu-room" onclick="location.href='/room'"><i class="bi bi-door-open mx-3"></i>場所予約</h4>
-        <h4 style="line-height: 45px; cursor: pointer;" id="menu-money" onclick="location.href='/money'"><i class="bi bi-cash mx-3"></i>部費</h4>
-        <h4 style="line-height: 45px; cursor: pointer;" id="menu-article" onclick="location.href='/article/member.html'"><i class="bi bi-people mx-3"></i>幹部紹介</h4>
-        <h4 style="line-height: 45px; cursor: pointer;" id="menu-procedure" onclick="location.href='/procedure'"><i class="bi bi-file-earmark-text mx-3"></i>各種手続き</h4>
+        <h4 style="line-height: 45px;" class="pointer" id="menu-money" onclick="location.href='/money'"><i class="bi bi-cash mx-3"></i>部費通帳</h4>
+        <h4 style="line-height: 45px;" class="pointer" id="menu-article" onclick="location.href='/article/member.html'"><i class="bi bi-people mx-3"></i>メンバー紹介</h4>
+        <h4 style="line-height: 45px;" class="pointer" id="menu-room" onclick="location.href='/room'"><i class="bi bi-door-open mx-3"></i>場所予約照会</h4>
+        <h4 style="line-height: 45px;" class="pointer" id="menu-procedure" onclick="location.href='/procedure'"><i class="bi bi-file-earmark-text mx-3"></i>各種手続き</h4>
       </div>
       <!--管理者しかアクセスできないアクセスできないページ-->
       <div class="adminonly" style="color: indigo">
         <p class="small text-secondary mt-3">管理者のみ</p>
-        <h4 style="line-height: 45px; cursor: pointer;" id="menu-control" onclick="location.href='/control'"><i class="bi bi-info-circle mx-3"></i>管理画面</h4>
-        <h4 style="line-height: 45px; cursor: pointer;" id="menu-wallet" onclick="location.href='/wallet'"><i class="bi bi-wallet mx-3"></i>ウォレット</h4>
-        <h4 style="line-height: 45px; cursor: pointer;" id="menu-shop" onclick="location.href='/shop'"><i class="bi bi-cart mx-3"></i>C4's ショップ</h4>
-        <h4 style="line-height: 45px; cursor: pointer;" id="menu-store" onclick="location.href='/store'"><i class="bi bi-basket3 mx-3"></i>ストア</h4>
+        <h4 style="line-height: 45px;" class="pointer" id="menu-control" onclick="location.href='/control'"><i class="bi bi-info-circle mx-3"></i>管理画面</h4>
+        <p class="small text-secondary mt-3">非公開のページ</p>
+        <h4 style="line-height: 45px;" class="pointer" id="menu-document" onclick="location.href='/document'"><i class="bi bi-clipboard mx-3"></i>掲示板</h4>
+        <h4 style="line-height: 45px;" class="pointer" id="menu-shop" onclick="location.href='/shop'"><i class="bi bi-cart mx-3"></i>C4's ショップ</h4>
+        <h4 style="line-height: 45px;" class="pointer" id="menu-store" onclick="location.href='/store'"><i class="bi bi-basket3 mx-3"></i>ストア</h4>
       </div>
       <hr>
       <!--入部フォームは部外者だけに表示-->
       <div class="outsideonly">
-        <h4 style="line-height: 45px; cursor: pointer;" onclick="location.href='/procedure/join.html'"><i class="bi bi-file-earmark-text mx-3"></i>入部する</h4>
+        <h4 style="line-height: 45px;" class="pointer" onclick="location.href='/procedure/join.html'"><i class="bi bi-file-earmark-text mx-3"></i>入部する</h4>
       </div>
       <!--ログアウトボタン-->
-      <h4 style="line-height: 45px; cursor: pointer;" onclick="logout()"><i class="bi bi-person-x mx-3"></i>ログアウト</h4>
+      <h4 style="line-height: 45px;" class="pointer" onclick="logout()"><i class="bi bi-person-x mx-3"></i>ログアウト</h4>
     </div>
   </div>
 </div>

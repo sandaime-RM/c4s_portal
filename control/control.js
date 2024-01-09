@@ -85,15 +85,13 @@ function restart() {
   }
 
   userKeys.forEach((key, i) => {
-    //引退・退部した部員
+    //退部した部員
     if(users[key].status == 1 || users[key].status == 2) {
       noExit = false;
-      var role = "引退";
-      if(users[key].status == 1) {role = "退部";}
 
       totalMembers --;
 
-      getObj("exitMembers").innerHTML += '<li class="list-group-item" onclick="openInfo('+i+')" data-bs-toggle="modal" data-bs-target="#exampleModal"><h6>'+users[key].name + '<span class="badge bg-danger mx-1">'+role+'</span></h6><span class="text-secondary small mx-1">'+users[key].nameKana+' ' + users[key].studentNumber + '</span></li>';
+      getObj("exitMembers").innerHTML += '<li class="list-group-item" onclick="openInfo('+i+')" data-bs-toggle="modal" data-bs-target="#exampleModal"><h6>'+users[key].name + '</h6><span class="text-secondary small mx-1">'+users[key].nameKana+' ' + users[key].studentNumber + '</span></li>';
       return;
     }
 

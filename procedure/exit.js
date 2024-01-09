@@ -37,8 +37,8 @@ function upload() {
         nameKana : userData.nameKana,
         studentNumber : userData.studentNumber,
         time : (new Date()).getTime(),
-        status : Number(document.getElementById("type").selectedIndex) + 1, //status 1 : 途中退部者
         reason : document.getElementById("reason").value,
+        status : 1
     }
 
     if(userData.buhiRecord) {

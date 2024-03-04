@@ -1,4 +1,72 @@
 {
+  "pages": [
+    {
+      "title": "ホーム",
+      "target": "",
+      "icon": "house",
+      "auth": "public"
+    },
+    {
+      "title": "イベント・企画一覧",
+      "target": "event",
+      "icon": "calendar-check",
+      "auth": "public"
+    },
+    {
+      "title": "備品一覧",
+      "target": "equips",
+      "icon": "usb-symbol",
+      "auth": "public"
+    },
+    {
+      "title": "部費通帳",
+      "target": "money",
+      "icon": "cash",
+      "auth": "activeonly"
+    },
+    {
+      "title": "メンバー紹介",
+      "target": "article/member.html",
+      "icon": "people",
+      "auth": "activeonly"
+    },
+    {
+      "title": "場所予約照会",
+      "target": "room",
+      "icon": "door-open",
+      "auth": "activeonly"
+    },
+    {
+      "title": "各種手続き",
+      "target": "procedure",
+      "icon": "file-earmark-text",
+      "auth": "activeonly"
+    },
+    {
+      "title": "部員情報",
+      "target": "control",
+      "icon": "info-circle",
+      "auth": "adminonly"
+    },
+    {
+      "title": "掲示板",
+      "target": "document",
+      "icon": "clipboard",
+      "auth": "adminonly"
+    },
+    {
+      "title": "C4's ショップ",
+      "target": "shop",
+      "icon": "cart",
+      "auth": "adminonly"
+    },
+    {
+      "title": "ストア",
+      "target": "store",
+      "icon": "basket3",
+      "auth": "adminonly"
+    }
+  ],
   "ranks" : {
     "name" : ["ノーマル", "ブロンズ", "シルバー", "ゴールド"],
     "color-sample" : ["cornflowerblue", "darkgreen", "purple", "goldenrod"],

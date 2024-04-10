@@ -136,7 +136,7 @@ function restart() {
     if(!users[key].nickname) {users[key].nickname = "";}
 
     //リストに表示
-    getObj("memberList").innerHTML += '<li class="list-group-item" onclick="openInfo('+i+')" data-bs-toggle="modal" data-bs-target="#exampleModal"><h6>'+users[key].name + '<span class="text-secondary mx-1">' + users[key].nickname + '</span>' + roles + '</h6><div class="small text-secondary">'+users[key].department+' '+users[key].grade+'年 '+sex+' '+age+'歳</div>'+tags+'</li>'
+    getObj("memberList").innerHTML += '<li class="list-group-item" onclick="openInfo('+i+')" data-bs-toggle="modal" data-bs-target="#exampleModal"><h6>'+users[key].name + '<span class="text-secondary mx-1">' + users[key].nickname + '</span>' + roles + '</h6><div class="small text-secondary">'+users[key].department+' '+gradeText(users[key].grade)+" "+sex+' '+age+'歳</div>'+tags+'</li>'
     
     toCsvData.push([users[key].name, users[key].nameKana, users[key].studentNumber, users[key].department, users[key].otherDepart, users[key].grade, sex, users[key].birth, String(users[key].phoneNumber)]);
 
@@ -164,7 +164,7 @@ function restart() {
 
   create_csv(toCsvData);
 
-  //引退・退部部員がいる
+  //退部部員がいる
   if(!noExit) {
       getObj("noExit").style.display = "none";
   }
@@ -223,7 +223,8 @@ function openInfo(i) {
   
       getObj("mbSex").textContent = sex;
       getObj("mbDepartment").textContent = users[userKeys[i]].department;
-      getObj("mbGrade").textContent = users[userKeys[i]].grade + "年生";
+
+      getObj("mbGrade").textContent = gradeText(users[userKeys[i]].grade);
       getObj("mbPR").textContent = users[userKeys[i]].detail;
       getObj("detailTitle").textContent = "自己PR";
     }
@@ -430,7 +431,7 @@ function reshowBuhi() {
 
         if(buhiUids.indexOf(key) == -1) {
             notPaidNum ++;
-            getObj("buhiNotList").innerHTML += '<li class="list-group-item">'+users[key].studentNumber+' ' + users[key].name + '<div class="small text-secondary">'+users[key].department+' '+users[key].grade+'年</div></li>';
+            getObj("buhiNotList").innerHTML += '<li class="list-group-item">'+users[key].studentNumber+' ' + users[key].name + '<div class="small text-secondary">'+users[key].department+' '+gradeText(users[key].grade)+'</div></li>';
         }
     });
 
@@ -510,4 +511,18 @@ window.tab = index => {
   }
 
   location.href = "#header";
+}
+
+
+//学年を「～年生」で表記
+function gradeText(grade) {
+    let txt = grade + "年生";
+    //修士・博士の学年表記に対応
+    if(grade >= 5 && grade <=6) {
+        txt = "修士" + (grade - 4) + "年生";
+    } else if(grade >= 7 && grade <=9) {
+        txt = "博士" + (grade - 6) + "年生";
+    }
+
+    return(txt)
 }

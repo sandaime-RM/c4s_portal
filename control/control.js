@@ -523,4 +523,6 @@ function gradeText(grade) {
     } else if(grade >= 7 && grade <=9) {
         txt = "博士" + (grade - 6) + "年生";
     }
+
+    return(txt)
 }

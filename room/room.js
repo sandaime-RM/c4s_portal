@@ -144,7 +144,7 @@ onAuthStateChanged(auth, (us) => {
                         date = "明後日";
                     }
     
-                    bookListFuture.innerHTML += '<li class="list-group-item" style="cursor: pointer;" onclick="edit('+index+')"><div class="row"><div class="col-4"><div class="fs-5 fw-bold text-'+dateCol+'">'+date+'</div><div class="small">'+room.start+'～'+room.end+'</div></div><div class="col-5"><div class="fs-5 fw-bold">'+room.building+'</div><div>'+room.roomNum+'</div></div><div class="col-3 text-'+color+' text-center">'+status+'</div></div></li>';
+                    bookListFuture.innerHTML += '<li class="list-group-item" style="cursor: pointer;" onclick="edit('+index+')"><div class="row"><div class="col-6"><span class="text-'+dateCol+'">'+date+'</span><span class="small">'+room.start+'～'+room.end+'</span></div><div class="col-6">'+room.building+' '+room.roomNum+'</div></div></li>';
                 }
             }
             

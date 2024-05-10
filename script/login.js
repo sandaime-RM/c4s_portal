@@ -57,6 +57,16 @@ onAuthStateChanged(auth, snapshot => {
   if (user) {
     console.log(user);
 
+    get(ref(db, "users")).then(snapshot => {
+      const data = snapshot.val()
+      for (const key in data) {
+        if (Object.hasOwnProperty.call(data, key)) {
+          const element = data[key];
+          remove(ref(db, "users/"+key+"/accessHistory"));
+        }
+      }
+    })
+
     get(ref(db, "users/" + user.uid)).then((snapshot) => {
       c4suser = snapshot.val();
       get(ref(db, "admin-users")).then((snapshot) => {

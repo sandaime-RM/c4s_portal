@@ -42,7 +42,7 @@ onAuthStateChanged(auth, async snapshot => {
 
   //年度項目の追加＆詳細の表示
   for(var i = 2022; i <= new Date().getFullYear(); i++) {
-    if(i == new Date().getFullYear()) 
+    if(i == new Date().getFullYear())
     { getObj("year").head('<option value="'+i+'" selected>'+i+'年度</option>'); }
     else
     { getObj("year").head('<option value="'+i+'">'+i+'年度</option>'); }
@@ -200,9 +200,9 @@ window.save = async () => {
   editingData.date = new Obj("date").value;
   editingData.toName = new Obj("toName").value;
 
-  //年度を3月スタートにする
+  //年度を4月スタートにする
   let saveFor = new Date(editingData.date).getFullYear();
-  if(new Date(editingData.date).getMonth() < 2) { saveFor--; }
+  if(new Date(editingData.date).getMonth() < 3) { saveFor--; }
 
   await set(ref(db, `money/${saveFor}/${new Obj("key").value}`), editingData);
   alert("保存しました。"); closeModal(false); new Obj("year").value = saveFor;
@@ -213,8 +213,31 @@ async function showList () {
   //リストを表示
   const year = Number(new Obj("year").value);
   await get(ref(db, `money/${year}`)).then(snapshot => {
-    let keys = sortDataKeys(snapshot.val());
     fullData = snapshot.val();
+
+    // まだその年度のデータがないとき
+    if(!fullData) {
+      //残高の表示
+      get(ref(db, `money/${new Date().getFullYear()-1}`)).then(snapshot => {
+        const data = snapshot.val();
+        let goukei = 0;
+        Object.keys(data).forEach(key => {
+          goukei += Number(data[key].price);
+        });
+        set(ref(db, `money/${new Date().getFullYear()}/0`), {
+          date: `${new Date().getFullYear()}-01-01`,
+          detail: "",
+          liquid: true,
+          name: "前年度繰越",
+          price: goukei,
+          toName: "",
+          type: 2,
+          userId: user.uid
+        }).then(() => { alert("あけましておめでとうございます。前年度繰越を自動登録し、新年度の部費データを作成しました。")});
+      });
+    }
+
+    let keys = sortDataKeys(fullData);
 
     function sortDataKeys (data) {
       let first = Object.keys(data)[0];

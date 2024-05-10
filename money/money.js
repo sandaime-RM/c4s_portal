@@ -32,6 +32,10 @@ var fullData = {};
 
 //ユーザー情報の取得
 onAuthStateChanged(auth, async snapshot => {
+  alert("メンテナンス中です。部費情報は幹部にお問い合わせください。") 
+  location.href="/"
+  return
+
   $("#overray").fadeIn();
 
   user = snapshot;

@@ -11,189 +11,255 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
   <!--BootstrapIcon-->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
-  <!--jQuery-->
-  <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-  
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-  <script src="/script/login.js" type="module"></script>
-  <script src="money.js" type="module"></script>
+  <!-- Vue.js -->
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 
   <title>C4's Portal</title>
-  <link rel="icon" href="../img/logo_mini.png">
-  <link rel="manifest" href="../manifest.json">
+  <!-- <link rel="icon" href="../img/logo_mini.png">
+  <link rel="manifest" href="../manifest.json"> -->
 
-  <link rel="stylesheet" href="/script/style.css">
+  <!-- <link rel="stylesheet" href="/script/style.css"> -->
 </head>
-<body class="bg-light mw-lg mx-auto">
-  <!--最初のロード画面-->
-  <div id="overray" class="position-fixed start-0 top-0 w-100 bg-white h-100" style="z-index: 2147483647;">
-    <div class="w-25 mw-xs mx-auto mt-5">
-      <img src="/img/loading.svg" class="w-100">
-    </div>
-    <h5 class="text-center mt-5">部費通帳</h5>
-    <div class="text-center" id="loading-overray">
-      <div class="loader text-secondary" role="status">
-        <span class="visually-hidden">Loading...</span>
-      </div>
-    </div>
-    <div class="text-center mt-5 hide" id="login-overray">
-      <h6 class="mb-3">Googleアカウントが必要です</h6>
-      <p class="h4 pointer text-primary" onclick="login()">ログイン</p>
-    </div>
+
+<body>
+  <div class="bg-danger w-100 py-3 px-5 text-light">
+    メンテナンス中のため、かわりに開発版のPortalを表示しています。<br>
+    登録・精算処理は<a href="https://portal.c4-s.net/procedure/contact.html" class="text-light">問い合わせフォーム</a>からお願いします。
   </div>
-
-  <!--読み込み中画面-->
-  <div id="loading" class="position-fixed top-0 start-0 w-100 h-100 bg-light bg-opacity-75 hide" style="z-index: 2147483647;">
-    <div class="text-center mt-5">
-      <div class="loader" role="status">
-        <span class="visually-hidden">Loading...</span>
-      </div>
-    </div>
-    <h5 class="mt-5 text-center">Loading...</h5>
+  <div class="mt-5 mx-5">
+    <a href="https://portal.c4-s.net">もどる</a>
   </div>
-
-  <div id="header"></div>
-
-  <h2 class="text-center my-5"><i class="bi bi-cash-coin"> </i>部費通帳</h2>
-
-  <div class="row mb-5">
-    <div class="col-lg-6">
-      <div class="rounded-md w-95 mx-auto p-3 shadow bg-c4s-light border position-relative">
-        <div class="w-100 rounded-sm bg-c4s white p-3">
-          <p class="mb-0">部費残高</p>
-          <b class="mb-0" style="font-size: 3em; line-height: 0.8em;" id="total"></b><span class="h6"> 円</span>
+  <div id="app">
+    <h1 class="mt-5 mb-5 text-center">{{ pagename }}</h1>
+    <div class="row mb-5 mw-lg mx-auto">
+      <div class="col-lg-6">
+        <!-- 残高表示 -->
+        <div class="w-100 px-3 mb-3 text-light">
+          <div class="w-100 bg-c4s p-3 rounded-3">
+            <p class="mb-0">部費残高</p>
+            <p class="mb-0">
+              <span class="fs-3em">{{ total.toLocaleString() }}</span
+              ><span>円</span>
+            </p>
+          </div>
         </div>
-        <p class="mb-0 text-secondary text-end small" id="nowtime"></p>
-        <div class="text-center mt-3 adminonly"><a id="exportBtn" class="text-secondary mx-auto">CSV出力</a></div>
-        
-        <h5 class="text-center mt-5 text-secondary">入出金明細</h5>
-        <select class="form-select w-75 mx-auto mb-3 small" id="year"></select>
-    
-        <p id="errorMoney"></p>
-        <div id="moneyList">
-          <!-- 入金 -->
-          <div class="bg-white border border-success shadow-sm rounded-md w-100 mx-auto mb-2 px-1 py-2 row pointer">
-            <div class="col-8">
-              <h6 class="mb-0">交流館からのお小遣い</h6>
-              <p class="text-secondary small mb-0">きのう</p>
-            </div>
-            <div class="col-4">
-              <h4 class="text-success mb-0 text-end">+10,000</h4>
-            </div>
-          </div>
-          <!-- 出金 -->
-          <div class="bg-white border border-primary shadow-sm rounded-md w-100 mx-auto mb-2 px-1 py-2 row pointer">
-            <div class="col-8">
-              <h6 class="mb-0">クソデカスピーカー</h6>
-              <p class="text-secondary small mb-0">4日前</p>
-            </div>
-            <div class="col-4">
-              <h4 class="text-primary mb-0 text-end">-19,800</h4>
-            </div>
-            <hr class="mx-0 my-1">
-            <div class="small text-center mx-0 row">
-              <div class="text-danger"><i class="bi bi-exclamation-circle-fill"> </i>未精算</div>
-              <div class="text-secondary">精算済み</div>
-            </div>
-          </div>
+      </div>
+      <div class="col-lg-6">
+        <!-- 明細の年度選択 -->
+        <select class="form-select w-75 mx-auto mb-3 small" v-model="selectedYear">
+          <option
+            v-for="(year, key) in moneyData"
+            :key="key"
+            :value="key"
+            :selected="getYear() == key"
+          >
+            {{ key }}年度
+          </option>
+        </select>
+        <!-- 明細 -->
+        <div v-for="(element, key) in moneyData[selectedYear]" :key="key" class="w-100 px-3 mb-2">
           <!-- 部費支払い -->
-          <div class="bg-white border border-success shadow-sm rounded-md w-95 mx-auto mb-2 px-1 py-1 row pointer">
+          <div
+            class="bg-white border border-success shadow-sm rounded-3 py-1 w-95 mx-auto d-flex"
+            v-if="element.type == 'FeePaid'"
+          >
             <h6 class="col-4 text-end text-success mb-0">部費収入</h6>
-            <p class="col-4 text-center text-secondary small mb-0">4日前</p>
-            <h6 class="col-4 text-success mb-0">+3,000</h6>
+            <p class="col-4 text-center text-secondary small mb-0">{{ getDateText(element.date) }}</p>
+            <h6 class="col-4 text-success mb-0">+{{ element.price.toLocaleString() }}</h6>
           </div>
-        </div>
-      </div>
-    </div>
-    <div class="col-lg-6">
-      <h5 class="text-center mt-5 text-secondary">残高推移</h5>
-      <canvas id="graphMoney"></canvas>
-    </div>
-  </div>
-
-  <!--追加ボタン-->
-  <div class="position-fixed bottom-0 start-0 w-100">
-    <div class="w-100 mw-md mx-auto mb-4 px-3 row">
-      <!-- 入金ボタン -->
-      <div class="col-6 px-1">
-        <div class="bg-dark border border-success shadow-sm rounded-pill w-100 text-white text-center py-2 pointer" onclick="openModal('in')">入金する</div>
-      </div>
-      <!-- 出金ボタン -->
-      <div class="col-6 px-1">
-        <div class="bg-dark border border-danger shadow-sm rounded-pill w-100 text-white text-center py-2 pointer" onclick="openModal('out')">出金する</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- 部費情報モーダル -->
-  <div class="modal fade" id="infoModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-scrollable modal-fullscreen-sm-down">
-      <div class="modal-content">
-        <div class="modal-header w-100">
-          <h1 class="modal-title fs-1 text-center mx-auto" id="infoTitle"></h1>
-        </div>
-        <div class="modal-body">
-          <div class="my-2">
-            <label>データID<span class="text-secondary small ms-1">(変更できません)</span></label>
-            <input class="form-control" type="text" id="key" disabled>
-          </div>
-          <div class="my-2">
-            <label>登録者<span class="text-secondary small ms-1">(変更できません)</span></label>
-            <input class="form-control" type="text" id="userName" disabled>
-          </div>
-          <div class="my-2">
-            <label>項目名<span class="text-danger"> * </span></label>
-            <input class="form-control" type="text" placeholder="用途を入力" id="name">
-          </div>
-          <div class="my-2">
-            <label>金額<span class="text-danger"> * </span></label>
-            <input class="form-control" type="number" placeholder="金額を入力" id="amount">
-          </div>
-          <div class="my-2">
-            <label>日付<span class="text-danger"> * </span></label>
-            <input class="form-control" type="date" id="date">
-          </div>
-          <div class="my-2">
-            <label>備考</label>
-            <textarea class="form-control" id="detail"></textarea>
-          </div>
-          <div id="liquidForm">
-            <hr>
-            <div class="py-2">
-              <p class="text-secondary text-center fw-bold">精算情報</p>
-              <div class="text-center bg-dark text-white w-50 mx-auto my-3 small py-1 border border-success rounded-pill pointer" onclick="pay(1)" id="payBtn-set">清算済みにする</div>
-              <div class="text-center text-success w-50 mx-auto my-3 small py-1 border border-success rounded-pill pointer" onclick="pay(0)" id="payBtn-unset">精算済み <i class="bi bi-check-lg"></i></div>
+          <!-- その他収入・支出 -->
+          <div
+            class="bg-white border shadow-sm rounded-md w-100 mx-auto mb-2 px-1 py-2 row pointer hover"
+            :class="element.price < 0 ? 'border-primary' : 'border-success'"
+            v-else
+          >
+            <div class="col-8">
+              <h6 class="mb-0">{{ element.name }}</h6>
+              <p class="text-secondary small mb-0">{{ getDateText(new Date(element.date)) }}</p>
             </div>
-          </div>
-          <div id="receiptForm">
-            <hr>
-            <div class="py-2">
-              <p class="text-secondary text-center fw-bold">領収書情報</p>
-              <div class="input-group">
-                <input type="text" class="form-control" id="toName" placeholder="宛名を入力" aria-describedby="basic-addon2">
-                <span class="input-group-text" id="basic-addon2">御中</span>
+            <div class="col-4">
+              <h4 class="mb-0 text-end" :class="element.price < 0 ? 'text-primary' : 'text-success'">
+                {{ element.price > 0 ? '+' : '' }}{{ Number(element.price).toLocaleString() }}
+              </h4>
+            </div>
+            <div v-if="!element.liquid">
+              <hr class="my-2" />
+              <div class="text-danger text-center fw-bold">
+                <i class="bi bi-exclamation-circle-fill"> </i>未精算
               </div>
             </div>
-            <div class="text-center text-secondary w-50 mx-auto my-3 small py-1 border rounded-pill" onclick="receipt()">発行</div>
-          </div>
-          <div id="deleteBtn">
-            <hr>
-            <div class="py-2">
-              <p class="text-danger text-center pointer mb-0" onclick="delItem()">削除する</p>
-            </div>
-          </div>
-        </div>
-        <div class="modal-footer">
-          <div class="row w-100">
-            <div class="col-6 py-2 text-secondary text-center small"><span class="pointer" onclick="closeModal(true)">キャンセル</span></div>
-            <div class="col-6 px-2 text-center">
-              <div class="bg-primary text-white rounded-pill py-2 text-center pointer hover" onclick="save()">保存</div>
-            </div>
           </div>
         </div>
       </div>
     </div>
   </div>
+
+  <script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-app.js";
+  import { getDatabase, push, set, ref, get, child, remove, onValue } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-database.js";
+  
+  const firebaseConfig = {
+    apiKey: 'AIzaSyBE60G8yImWlENWpCnQZzqqVUrwWa_torg',
+    authDomain: 'c4s-portal.firebaseapp.com',
+    databaseURL: 'https://c4s-portal-default-rtdb.asia-southeast1.firebasedatabase.app',
+    projectId: 'c4s-portal',
+    storageBucket: 'c4s-portal.appspot.com',
+    messagingSenderId: '863775995414',
+    appId: '1:863775995414:web:82eb9557a13a099dfbe737',
+    measurementId: 'G-K2SR1WSNRC'
+  }
+  
+  const app = initializeApp(firebaseConfig)
+  const db = getDatabase(app)
+  
+  const Vueapp = Vue.createApp({
+    data() {
+      return {
+        pagename: '部費通帳',
+        selectedYear: this.getYear().toString(),
+        moneyData: {},
+        total: '---,---'
+      }
+    },
+    created() {
+      // データを取得
+      get(ref(db, 'money')).then((snapshot) => {
+        const data = snapshot.val()
+        const reversedKeys = Object.keys(data).reverse()
+        this.total = 0
+        for (const i in reversedKeys) {
+          const key = reversedKeys[i]
+          const element = data[key]
+          if (!this.moneyData[this.getYear(element.date)]) {
+            this.moneyData[this.getYear(element.date)] = {}
+          }
+          this.moneyData[this.getYear(element.date)][key] = element
+          this.total += element.price
+        }
+      })
+      console.warn('データを取得しました')
+      console.log(this.moneyData)
+    },
+    methods: {
+      // 年度を取得（3月までは前年になる）
+      getYear(snapshot) {
+        const date = snapshot ? new Date(snapshot) : new Date()
+        const year = date.getFullYear()
+        const result = date.getMonth() < 3 ? year - 1 : year
+        return result.toString()
+      },
+      // 日時をテキストに変換
+      getDateText(snapshot) {
+        const DATE = new Date(snapshot)
+        const TODAY = new Date()
+  
+        const LIST = (input) => {
+          let date = new Date(input)
+          return [
+            date.getFullYear(),
+            date.getMonth() + 1,
+            date.getDate(),
+            date.getHours(),
+            date.getMinutes()
+          ]
+        }
+        const Shift = (date, int) => {
+          let result = date
+          result.setDate(date.getDate() + int)
+          return result
+        }
+        const compareDate = (a, b) => {
+          return LIST(a)[0] == LIST(b)[0] && LIST(a)[1] == LIST(b)[1] && LIST(a)[2] == LIST(b)[2]
+        }
+  
+        if (compareDate(TODAY, DATE)) return 'きょう'
+        if (compareDate(Shift(TODAY, -1), DATE)) return 'きのう'
+        if (compareDate(Shift(TODAY, -1), DATE)) return 'おととい'
+        if (Shift(TODAY, -5) < DATE)
+          return `${Math.round((Shift(TODAY, 7) - DATE) / (1000 * 60 * 60 * 24))}日前`
+        return `${LIST(DATE)[1]}月${LIST(DATE)[2]}日`
+      }
+    }
+    })
+    Vueapp.mount('#app');
+  </script>
+  
+  <style>
+  .bg-c4s {
+    background-color: var(--c-c4s);
+  }
+  .fs-3em {
+    font-size: 3em;
+    font-weight: bold;
+    line-height: 0.8em;
+  }
+  .w-95 {
+    width: 95%;
+  }
+  :root {
+  --c-c4s: #ff7f00;
+  --c-c4s-light: #ffbf7f;
+  --c-c4s-dark: #7f3f00;
+}
+
+.mt-25vh {
+  margin-top: 25vh;
+}
+
+.mw-xs {
+  max-width: 120px;
+}
+.mw-sm {
+  max-width: 360px;
+}
+.mw-md {
+  max-width: 480px;
+}
+.mw-lg {
+  max-width: 960px;
+}
+.mw-xl {
+  max-width: 1200px;
+}
+.mw-xxl {
+  max-width: 1600px;
+}
+
+.h-eq {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.rounded-sm {
+  border-radius: 5px;
+}
+.rounded-md {
+  border-radius: 10px;
+}
+.rounded-lg {
+  border-radius: 15px;
+}
+
+.text-justify {
+  text-align: justify;
+}
+
+.pointer {
+  cursor: pointer;
+}
+.pointer:hover {
+  animation: itemhover 0.15s ease-out 0s 1 reverse;
+  opacity: 70%;
+}
+@keyframes itemhover {
+  from {
+    opacity: 70%;
+  }
+  to {
+    opacity: 100%;
+  }
+}
+
+  </style>
 </body>
-</html>

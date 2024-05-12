@@ -32,8 +32,8 @@ var fullData = {};
 
 //ユーザー情報の取得
 onAuthStateChanged(auth, async snapshot => {
-  alert("メンテナンス中です。部費情報は幹部にお問い合わせください。") 
-  location.href="/"
+  alert("メンテナンス中です。部費情報は新ポータル（開発版）をご利用ください。") 
+  location.href="https://c4s-portal-vue.web.app/money"
   return
 
   $("#overray").fadeIn();

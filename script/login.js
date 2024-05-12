@@ -82,13 +82,6 @@ onAuthStateChanged(auth, snapshot => {
         if(c4suser) {
           status = 1;
 
-          // 1か月以上ぶりにアクセスした人にはメニューの紹介をする
-          if(location.hostname != "localhost" && (!c4suser.accessHistory || new Date(c4suser.accessHistory[Object.keys(c4suser.accessHistory).slice(-1)[0]].date) < new Date()-(1000*60*60*24*30)))
-          {
-            alert("C4's Portalへようこそ");
-            alert("左上のメニュー画面からアクセスしてみよう");
-          }
-
           //ユーザーアイコンのURLを取得
           set(ref(db, "users/" + user.uid + "/userPic"), user.photoURL);
 

@@ -164,7 +164,7 @@ window.pay = async (i) => {
     case 0:
       var ans = confirm("未精算に戻します。よろしいですか？");
       if(ans) {
-        await set(ref(db, `money/${new Obj("year").value}/${new Obj("key").value}/liquid`), false);
+        await set(ref(db, `money/${new Obj("key").value}/liquid`), false);
         editingData.liquid = false;
         new Obj("payBtn-set").show();
         new Obj("payBtn-unset").hide();
@@ -174,9 +174,9 @@ window.pay = async (i) => {
     case 1:
       var ans = confirm("この操作は元に戻せません。清算済みにしてよろしいですか？");
       if(ans) {
-        let exist = await get(ref(db, `money/${new Obj("year").value}/${new Obj("key").value}`)).then(snapshot => { return snapshot.val(); });
+        let exist = await get(ref(db, `money/${new Obj("key").value}`)).then(snapshot => { return snapshot.val(); });
         if(exist)
-        { await set(ref(db, `money/${new Obj("year").value}/${new Obj("key").value}/liquid`), true); }
+        { await set(ref(db, `money/${new Obj("key").value}/liquid`), true); }
         editingData.liquid = true;
         new Obj("payBtn-set").hide();
         new Obj("payBtn-unset").show();
@@ -204,41 +204,73 @@ window.save = async () => {
   editingData.date = new Obj("date").value;
   editingData.toName = new Obj("toName").value;
 
-  //年度を4月スタートにする
-  let saveFor = new Date(editingData.date).getFullYear();
-  if(new Date(editingData.date).getMonth() < 3) { saveFor--; }
+  //年度を1月スタートで計算
+  let saveForYear = new Date(editingData.date).getFullYear();
 
-  await set(ref(db, `money/${saveFor}/${new Obj("key").value}`), editingData);
-  alert("保存しました。"); closeModal(false); new Obj("year").value = saveFor;
+  await set(ref(db, `money/${new Obj("key").value}`), editingData);
+  alert("保存しました。"); closeModal(false); new Obj("year").value = saveForYear;
 }
 // リストの表示・残高の表示
 async function showList () {
   csvData = [];
   //リストを表示
   const year = Number(new Obj("year").value);
-  await get(ref(db, `money/${year}`)).then(snapshot => {
-    fullData = snapshot.val();
+  await get(ref(db, `money`)).then(snapshot => {
+    const allData = snapshot.val();
+    fullData = {};
+
+         // 指定年度のデータのみをフィルタリング
+     if(allData) {
+       Object.keys(allData).forEach(key => {
+         const element = allData[key];
+         if(element.date) {
+           // dateから年度を計算（1月スタート）
+           let dataYear = new Date(element.date).getFullYear();
+           
+           if(dataYear === year) {
+             fullData[key] = element;
+           }
+         }
+       });
+     }
 
     // まだその年度のデータがないとき
-    if(!fullData) {
+    if(!fullData || Object.keys(fullData).length === 0) {
       //残高の表示
-      get(ref(db, `money/${new Date().getFullYear()-1}`)).then(snapshot => {
-        const data = snapshot.val();
-        let goukei = 0;
-        Object.keys(data).forEach(key => {
-          goukei += Number(data[key].price);
-        });
-        set(ref(db, `money/${new Date().getFullYear()}/0`), {
-          date: `${new Date().getFullYear()}-01-01`,
-          detail: "",
-          liquid: true,
-          name: "前年度繰越",
-          price: goukei,
-          toName: "",
-          type: 2,
-          userId: user.uid
-        }).then(() => { alert("あけましておめでとうございます。前年度繰越を自動登録し、新年度の部費データを作成しました。")});
+      get(ref(db, `money`)).then(snapshot => {
+        const allPrevData = snapshot.val();
+        if(allPrevData) {
+          let goukei = 0;
+          Object.keys(allPrevData).forEach(key => {
+            const element = allPrevData[key];
+            if(element.date) {
+              // dateから年度を計算（4月スタート）
+              let dataYear = new Date(element.date).getFullYear();
+              if(new Date(element.date).getMonth() < 3) { dataYear--; }
+              
+              if(dataYear === (year - 1)) {
+                goukei += Number(element.price);
+              }
+            }
+          });
+          
+          const newKey = new Date().getTime().toString(16).toUpperCase();
+          set(ref(db, `money/${newKey}`), {
+            date: `${year}-04-01`,
+            detail: "",
+            liquid: true,
+            name: "前年度繰越",
+            price: goukei,
+            toName: "",
+            type: 'FeePaid',
+            userId: user.uid
+          }).then(() => { 
+            alert("あけましておめでとうございます。前年度繰越を自動登録し、新年度の部費データを作成しました。");
+            showList(); // 再表示
+          });
+        }
       });
+      return;
     }
 
     let keys = sortDataKeys(fullData);
@@ -257,7 +289,7 @@ async function showList () {
     let list = new Obj("moneyList");
     list.set();
     keys.forEach(key => {
-      const element = snapshot.val()[key];
+      const element = fullData[key];
       //出金
       if(element.price < 0) {
         let paid;
@@ -282,12 +314,22 @@ async function showList () {
     })
   });
   //残高の表示
-  await get(ref(db, `money/${new Date().getFullYear()}`)).then(snapshot => {
-    const data = snapshot.val();
+  await get(ref(db, `money`)).then(snapshot => {
+    const allData = snapshot.val();
     let goukei = 0;
-    Object.keys(data).forEach(key => {
-      goukei += Number(data[key].price);
-    });
+    if(allData) {
+             Object.keys(allData).forEach(key => {
+         const element = allData[key];
+         if(element.date) {
+           // dateから年度を計算（1月スタート）
+           let dataYear = new Date(element.date).getFullYear();
+           
+           if(dataYear <= year) {
+             goukei += Number(element.price);
+           }
+         }
+       });
+    }
     new Obj("total").set(goukei.toLocaleString());
   });
   //作った二次元配列をCSV文字列に直す
@@ -305,7 +347,7 @@ window.delItem = () => {
   if (!confirm(`削除した情報は二度と戻せません。本当によろしいですか？`)) { return; }
 
   try {
-    remove(ref(db, 'money/'+new Obj("year").value+"/"+new Obj("key").value))
+    remove(ref(db, 'money/'+new Obj("key").value))
     .then(() => { alert("削除しました"); closeModal(); });
   } catch (e) {
     console.error(e); alert(e);

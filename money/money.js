@@ -204,11 +204,13 @@ window.save = async () => {
   editingData.date = new Obj("date").value;
   editingData.toName = new Obj("toName").value;
 
-  //年度を1月スタートで計算
-  let saveForYear = new Date(editingData.date).getFullYear();
+  //年度を4月スタートにする
+  let saveFor = new Date(editingData.date).getFullYear();
+  if(new Date(editingData.date).getMonth() < 3) { saveFor--; }
+  
 
   await set(ref(db, `money/${new Obj("key").value}`), editingData);
-  alert("保存しました。"); closeModal(false); new Obj("year").value = saveForYear;
+  alert("保存しました。"); closeModal(false); new Obj("year").value = saveFor;
 }
 // リストの表示・残高の表示
 async function showList () {

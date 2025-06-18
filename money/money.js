@@ -226,7 +226,7 @@ async function showList () {
        Object.keys(allData).forEach(key => {
          const element = allData[key];
          if(element.date) {
-           // dateから年度を計算（1月スタート）
+           // dateから年度を計算（4月スタート）
            let dataYear = new Date(element.date).getFullYear();
            
            if(dataYear === year) {

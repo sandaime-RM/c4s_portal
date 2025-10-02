@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!--Bootstrap-->
+  <!-- CSS only -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <!-- JavaScript Bundle with Popper -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+  <!--BootstrapIcon-->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.0/font/bootstrap-icons.css">
+  <!--jQuery-->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+  <script src="memberData.js" type="module"></script>
+  <script src="/script/login.js" type="module"></script>
+
+  <title>C4's Portal</title>
+  <link rel="icon" href="../img/logo_mini.png">
+  <link rel="manifest" href="../manifest.json">
+
+  <link rel="stylesheet" href="/script/style.css">
+</head>
+<body class="bg-light">
+  <!--最初のロード画面-->
+  <div id="overray" style="position: fixed; left: 0; top: 0; width: 100%; height: 100%; background-color: white; z-index: 2147483647;">
+    <div style="width: 100%; max-width: 120px; margin: 30px auto;">
+      <img src="/img/loading.svg" style="width: 100%">
+    </div>
+    <h5 class="mt-3 text-center">プロフィール</h5>
+    <div class="text-center mt-5" id="loading-overray">
+      <div class="spinner-grow" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
+  </div>
+
+  <div id="header"></div>
+
+  <div class="container mw-lg mb-5">
+    <h2 class="text-center my-5"><i class="bi bi-person-badge"> </i>プロフィール</h2>
+
+    <div class="row">
+      <div class="col-lg-6">
+        <h6 class="fw-normal text-secondary text-center mt-5 mb-3">Google アカウント</h6>
+        <div class="p-3 rounded-md border bg-white mw-md mx-auto shadow-sm">
+          <div style="max-width: 48px; height: auto;" class="mx-auto">
+            <img src="/icons/person-circle-gray.svg" id="userPic" class="rounded-circle w-100">
+          </div>
+          <h4 id="userName" class="text-center mt-3"></h4>
+          <p class="text-secondary text-center my-1" id="userEmail"></p> 
+          <div class="mx-auto mt-3" style="width: 160px;">
+            <button class="btn btn-outline-secondary btn-sm rounded-pill w-100" onclick="logout()">ログアウト</button>
+          </div>
+        </div>
+    
+        <h6 class="fw-normal text-secondary text-center mt-5 mb-3">C4's アカウント</h6>
+        <div class="p-3 rounded-md border bg-white mw-md mx-auto shadow-sm">
+          <h4 id="c4suserName" class="text-center"></h4>
+          <p class="text-secondary text-center small my-1" style="color: darkslateblue;" id="c4suserRole"></p>
+          <h5 class="w-50 m-auto"><span class="badge w-100" id="ranktext"></span></h5>
+          <hr>
+          <!--トップページから移植したポイント表示-->
+          <div class="text-center">
+            <p class="mb-0">あなたのC4'sポイント</p>
+            <h1 id="pointnum" class="fw-bold"></h1>
+            <div class="progress" style="height: 10px;" id="pointbars">
+              <div class="progress-bar progress-bar-striped" style="width: 0%;" role="progressbar" id="pointbar0"></div>
+              <div class="progress-bar progress-bar-striped" style="width: 0%;" role="progressbar" id="pointbar1"></div>
+              <div class="progress-bar progress-bar-striped" style="width: 0%;" role="progressbar" id="pointbar2"></div>
+              <div class="progress-bar progress-bar-striped" style="width: 0%;" role="progressbar" id="pointbar3"></div>
+            </div>
+            <div id="restpoint" class="text-end m-0"></div>
+          </div>
+        </div>
+
+        <h6 class="fw-normal text-secondary text-center mt-5 mb-3">活動履歴</h6>
+        <div class="p-3 rounded-md border bg-white mw-md mx-auto shadow-sm">
+          <div class="accordion" id="accordionExample">
+            <div class="accordion-item">
+              <h2 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                  活動参加履歴
+                </button>
+              </h2>
+              <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                <div class="accordion-body" id="attendHistory">
+                  <p class="text-danger text-center">
+                    履歴はありません
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="accordion-item">
+              <h2 class="accordion-header" id="headingTwo">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                  部費支払い履歴
+                </button>
+              </h2>
+              <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
+                <div class="accordion-body" id="buhiRecord">
+                  <p class="text-danger text-center">
+                    履歴はありません
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="accordion-item">
+              <h2 class="accordion-header" id="headingThree">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                  ストア購入履歴
+                </button>
+              </h2>
+              <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
+                <div class="accordion-body" id="storeHistory">
+                  <p class="text-danger text-center">
+                    履歴はありません
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <h6 class="fw-normal text-secondary text-center mt-5 mb-3">部員情報</h6>
+        <div class="p-3 rounded-md border bg-white mw-md mx-auto shadow-sm">
+          <p class="text-secondary text-center">
+            部員名簿に登録されている情報です。<br>
+            氏名・性別などが変更になる場合は<br>
+            ページ下部のフォームからお願いします。
+          </p>
+          
+          <div class="mw-md mx-auto">
+            <div class="mb-3">
+              <h6>お名前</h6>
+              <input class="form-control" type="text" id="name" disabled>
+            </div>
+            <div class="mb-3">
+              <h6>お名前(よみがな)</h6>
+              <input class="form-control" type="text" id="nameKana" disabled>
+            </div>
+            <div class="mb-3">
+              <h6>ニックネーム</h6>
+              <input class="form-control" type="text" id="nickname">
+              <p class="mb-0 text-danger text-end small" id="grade-alert">変更できます</p>
+            </div>
+            <div class="mb-3">
+              <h6>性別</h6>
+              <input class="form-control" type="text" id="gender" disabled>
+            </div>
+            <div class="mb-3">
+              <h6>生年月日</h6>
+              <input class="form-control" type="date" id="birth" disabled>
+            </div>
+            <div class="mb-3">
+              <h6>所属</h6>
+              <input class="form-control" type="text" id="department" disabled>
+            </div>
+            <div class="mb-3">
+              <h6>学年</h6>
+              <input class="form-control" type="number" id="grade">
+              <p class="mb-0 text-danger text-end small" id="grade-alert">変更できます</p>
+            </div>
+            <div class="mb-3">
+              <h6>学籍番号</h6>
+              <input class="form-control" type="text" id="studentNumber" disabled>
+            </div>
+            <div class="mb-3">
+              <h6>電話番号</h6>
+              <input class="form-control" type="tel" id="phoneNumber">
+              <p class="mb-0 text-danger text-end small" id="phoneNumber-alert">変更できます</p>
+            </div>
+            <div class="mb-3">
+              <h6>自己紹介</h6>
+              <textarea class="form-control" type="tel" id="detail"></textarea>
+              <p class="mb-0 text-danger text-end small" id="detail-alert">変更できます</p>
+            </div>
+            <div class="w-50 mx-auto">
+              <button class="btn btn-dark w-100" onclick="upload()">更新</button>
+            </div>
+
+            <p class="my-3 text-center">
+              <a onclick="offer()" class="text-secondary pointer">その他の情報を変更する</a>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,174 @@
+{
+  "pages": [
+    {
+      "title": "ホーム",
+      "target": "",
+      "icon": "house",
+      "auth": "public"
+    },
+    {
+      "title": "イベント・企画一覧",
+      "target": "event",
+      "icon": "calendar-check",
+      "auth": "public"
+    },
+    {
+      "title": "備品一覧",
+      "target": "equips",
+      "icon": "usb-symbol",
+      "auth": "public"
+    },
+    {
+      "title": "部費通帳",
+      "target": "money",
+      "icon": "cash",
+      "auth": "activeonly"
+    },
+    {
+      "title": "メンバー紹介",
+      "target": "article/member.html",
+      "icon": "people",
+      "auth": "activeonly"
+    },
+    {
+      "title": "場所予約照会",
+      "target": "room",
+      "icon": "door-open",
+      "auth": "activeonly"
+    },
+    {
+      "title": "各種手続き",
+      "target": "procedure",
+      "icon": "file-earmark-text",
+      "auth": "activeonly"
+    },
+    {
+      "title": "部員情報",
+      "target": "control",
+      "icon": "info-circle",
+      "auth": "adminonly"
+    },
+    {
+      "title": "掲示板",
+      "target": "document",
+      "icon": "clipboard",
+      "auth": "adminonly"
+    },
+    {
+      "title": "C4's ショップ",
+      "target": "shop",
+      "icon": "cart",
+      "auth": "adminonly"
+    },
+    {
+      "title": "ストア",
+      "target": "store",
+      "icon": "basket3",
+      "auth": "adminonly"
+    }
+  ],
+  "ranks" : {
+    "name" : ["ノーマル", "ブロンズ", "シルバー", "ゴールド"],
+    "color-sample" : ["cornflowerblue", "darkgreen", "purple", "goldenrod"],
+    "color" : ["cornflowerblue", "#c95700", "#aba9a1", "#decb00"],
+    "basis" : [0, 1000, 5000, 12000]
+  },
+  "links" : {
+    "public" : [
+      {
+        "title" : "C4's ホームページ",
+        "url" : "https://c4-s.net",
+        "description" : ""
+      },
+      {
+        "title" : "公式Twitter/X",
+        "url" : "https://x.com/C4s_TUS",
+        "description" : ""
+      },
+      {
+        "title" : "公式Instagram",
+        "url" : "https://www.instagram.com/c4s_tus",
+        "description" : ""
+      },
+      {
+        "title" : "C4's メルマガ",
+        "url" : "magazine/",
+        "description" : ""
+      }
+    ],
+    "adminonly" : [
+      {
+        "title" : "TUS-ACT フォーム",
+        "url" : "https://www.tus-act.tus.ac.jp/club_admin/index.php?c=login_1&amp;next_c=clubinfo",
+        "description" : "大学のサークル紹介サービス"
+      },
+      {
+        "title" : "ESA",
+        "url" : "https://c4s.esa.io/team/invitations/member-bdea0c194425635198c6ca6e739e0613",
+        "description" : "議事録管理サービス"
+      },
+      {
+        "title" : "Value Domain",
+        "url" : "https://www.value-domain.com/login.php",
+        "description" : "C4'sのレンタルサーバー"
+      },
+      {
+        "title" : "GitLab",
+        "url" : "https://gitlab.com/users/sign_in",
+        "description" : "公式ホームページのソース"
+      },
+      {
+        "title" : "Netlify",
+        "url" : "https://app.netlify.com/login",
+        "description" : "ホームページのなにか。謎。"
+      },
+      {
+        "title" : "contentful",
+        "url" : "https://be.contentful.com/login",
+        "description" : "ホームページの作品ページ"
+      }
+    ]
+  },
+  "members": [
+    {
+      "name": "今井悠人",
+      "nickname": "といとん",
+      "pic": "imai_yuto.JPG",
+      "role": "代表",
+      "belong": "情報計算科学科２年",
+      "profile": "Webサービス制作、プロジェクションマッピング、ポスター・パンフレットデザインなど。部員の得意を伸ばし、広げる活動をしていきます。"
+    },
+    {
+      "name": "諸橋澪樹",
+      "nickname": "諸志貫徹",
+      "pic": "morohashi_reiju.JPG",
+      "role": "副代表",
+      "belong": "電気電子情報工学科１年",
+      "profile": "名前に反して初志貫徹は苦手です。動画編集がメイン。自発的に活動できるサークルにしたいです。全員でC4'sを盛り上げましょう！"
+    },
+    {
+      "name": "川口翔太",
+      "nickname": "８９",
+      "pic": "kawaguchi_shota.JPG",
+      "role": "会計",
+      "belong": "情報計算科学科１年",
+      "profile": "好きな素数は89です。web開発をしていることが多いです。よろしくお願いします。"
+    },
+    {
+      "name": "松浦竜征",
+      "nickname": "まつり",
+      "pic": "c4s_artPic-2_square.jpg",
+      "role": "名誉部長",
+      "belong": "電気電子情報工学科３年",
+      "profile": "２年間C4'sの代表をやっています。サークルにワクワクを増やしていきます。<br>突発的なモチベが原動力。<br>Web, 電子工作, TouchDesignerとか。"
+    },
+    {
+      "name": "佐藤太心",
+      "nickname": "たと",
+      "pic": "c4s_artPic-3_square.jpg",
+      "role": "ベテラン部員",
+      "belong": "情報計算科学科３年",
+      "profile": "<div class=\"text-center\">写真とデザインと寝坊と遅刻。<br>かわいいぷろばいだー。</div>"
+    }
+  ]
+}

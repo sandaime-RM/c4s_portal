@@ -37,9 +37,18 @@
         <span class="visually-hidden">Loading...</span>
       </div>
     </div>
-    <div class="text-center mt-5 hide" id="login-overray">
-      <h6 class="mb-3">Googleアカウントが必要です</h6>
-      <p class="h4 pointer text-primary" onclick="login()">ログイン</p>
+    <div class="text-center mt-5 hide p-3 mw-md mx-auto border" id="login-overray" style="overflow-y: scroll; height: 300px;">
+      <h6 class="mb-3">ログインが必要です</h6>
+      <p class="h4 pointer text-primary text-decoration-underline" onclick="login()">Googleアカウントでログイン</p>
+      <div class="mt-5 w-95 mx-auto border rounded-3 bg-white shadow-sm p-3">
+        <h4 class="text-center text-danger">Googleログインはまもなく使用できなくなります。</h4>
+        <p class="text-center text-secondary">C4's Portal 2025に移行中です。<br>今後は学籍番号でログインしてください。</p>
+        <input type="text" class="form-control text-center mb-3" placeholder="学籍番号" id="login-id">
+        <input type="password" class="form-control text-center mb-3" placeholder="パスワード" id="login-pass">
+        <button class="btn btn-dark w-100 mb-3" onclick="login(true)">ログイン</button>
+        <p class="text-secondary small">※パスワード未登録の場合は、お好きなパスワードを入力してログインすると登録されます</p>
+        <p class="text-secondary small">※学籍番号だけ入力するとリセットメールが送られます（パスワード登録後のみ）</p>
+      </div>
     </div>
   </div>
   

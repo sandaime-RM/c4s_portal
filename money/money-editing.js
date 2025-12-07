@@ -185,6 +185,8 @@ window.save = async () => {
   { alert("金額が不正です"); return; }
   if(new Date(new Obj("date").value) > new Date(new Date().getTime() + (1000 * 60 * 60 * 48)))
   { alert("48時間以上先の情報を入力することはできません"); return; }
+  const regex = /^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$/;
+  if(!regex.test(new Obj("date").value)) {alert("時間は規定のフォーマットで入力してください。(例：2025-01-01)"); return;}
 
   editingData.name = new Obj("name").value;
   let price = Number(new Obj("amount").value);

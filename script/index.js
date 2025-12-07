@@ -74,7 +74,9 @@ onAuthStateChanged(auth, (snapshot) => {
   get(ref(db, "users/" + user.uid)).then((snapshot) => {
     //部員
     if(snapshot.val()){
+      
       c4suser = snapshot.val();
+      
 
       // 管理者のみ
       get(ref(db, "admin-users/" + user.uid)).then((snapshot) => {

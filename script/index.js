@@ -74,7 +74,9 @@ onAuthStateChanged(auth, (snapshot) => {
   get(ref(db, "users/" + user.uid)).then((snapshot) => {
     //部員
     if(snapshot.val()){
+      
       c4suser = snapshot.val();
+      
 
       // 管理者のみ
       get(ref(db, "admin-users/" + user.uid)).then((snapshot) => {
@@ -267,16 +269,22 @@ onAuthStateChanged(auth, (snapshot) => {
     new Obj("event_location").set(top.place);
     new Obj("event_detail").set(top.description);
 
+    get(ref(db, "users/" + user.uid)).then((usersnap) => {
     if (new Date(top.term.begin) - (1000*60*15) <= new Date()) {
       heldeventID = keys[0];
       new Obj("KaiSaiChu").show();
+
       if(top.code) {
-        if(top.attenders[user.uid]) { new Obj("attendBtn").hide(); new Obj("attended").show(); }
-        else { new Obj("attendBtn").show(); new Obj("attended").hide(); }
+        if(!usersnap.val()){
+          new Obj("attendBtn").hide(); new Obj("attended").hide(); new Obj("notinclub").show(); 
+        } else if(top.attenders[user.uid]) { new Obj("notinclub").hide(); new Obj("attendBtn").hide(); new Obj("attended").show(); }
+        else { new Obj("attendBtn").show(); new Obj("notinclub").hide(); new Obj("attended").hide(); }
       } else {
         new Obj("attendBtn").hide(); new Obj("attended").hide();
       }
     } else { new Obj("attendBtn").hide(); new Obj("attended").hide(); new Obj("KaiSaiChu").hide(); }
+  })
+
 
     new Obj("other_events").set();
     for(let i = 1; i < keys.length; i++) {

@@ -1,7 +1,7 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-app.js";
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-analytics.js";
-import { GoogleAuthProvider, getAuth, onAuthStateChanged, signInWithPopup, signOut } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-auth.js";
-import { getDatabase, ref, get, set, push, onValue, remove } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-database.js";
+import { GoogleAuthProvider, getAuth, onAuthStateChanged, signInWithPopup, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswordResetEmail, updateEmail, signOut } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-auth.js";
+import { getDatabase, ref, get, set, push, onValue, remove, update } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-database.js";
 import { getObj, Obj } from "/script/methods.js";
 
 const firebaseConfig = {
@@ -208,17 +208,60 @@ onAuthStateChanged(auth, snapshot => {
 });
 
 //ログイン
-window.login = () => {
-  signInWithPopup(auth, provider)
-  .catch((error) => {
-    const errorCode = error.code;
-    const errorMessage = error.message;
-    const email = error.customData.email;
-    const credential = GoogleAuthProvider.credentialFromError(error);
+window.login = (newLogin) => {
+  alert("ログインします");
+  if(newLogin) {
+    const email = new Obj("login-id").value + "@ed.tus.ac.jp";
+    const password = new Obj("login-pass").value;
+    if(email && password) {
+      signInWithEmailAndPassword(auth, email, password).catch((error) => {
+      // email と passwordでアカウントを作成
+      createUserWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+        })
+        .catch((error) => {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          alert(errorMessage);
+        });
+      });
+    } else if(email) {
+      sendPasswordResetEmail(auth, email).then(() => {
+        alert("パスワードリセットメールを送信しました。");
+      }).catch((error) => {
+        alert(error.message);
+      });
+    } else {
+      alert("学籍番号を入力してください");
+    }
+  } else {
+    signInWithPopup(auth, provider)
+    .then((result) => {
+      const credential = GoogleAuthProvider.credentialFromResult(result);
+      const token = credential.accessToken;
+      get(ref(db, "users/" + result.user.uid)).then((snapshot) => {
+        const portaluser = snapshot.val();
+        const newEmail = portaluser.studentNumber + "@ed.tus.ac.jp";
+        updateEmail(auth.currentUser, newEmail).then(() => {
+          update(ref(db, "users/" + result.user.uid), {
+            _Email: newEmail
+          })
+        })
+        .catch((error) => {
+          alert(error.message);
+        });
+      })
+    })
+    .catch((error) => {
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      const email = error.customData.email;
+      const credential = GoogleAuthProvider.credentialFromError(error);
     
-    (errorMessage == "Firebase: Error (auth/unauthorized-domain).")
-      ? alert("不正なドメインです") : alert(errorMessage);
-  });
+      (errorMessage == "Firebase: Error (auth/unauthorized-domain).")
+        ? alert("不正なドメインです") : alert(errorMessage);
+    });
+  }
 }
 
 //アカウントページへ

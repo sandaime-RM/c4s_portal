@@ -107,7 +107,7 @@ window.openModal = async (key) => {
     //編集モード
     default:
       $("#loading").fadeIn();
-      let data = await get(ref(db, "money/" + new Obj("year").value + "/" + key)).then(snapshot => { return snapshot.val(); });
+      let data = await get(ref(db, "money/" + key)).then(snapshot => { return snapshot.val(); });
       if(status != 2 && data.userId != user.uid) { alert("自分の登録したデータのみ編集できます"); $("#loading").fadeOut(); return; }
 
       new Obj("key").value = key;
@@ -164,7 +164,7 @@ window.pay = async (i) => {
     case 0:
       var ans = confirm("未精算に戻します。よろしいですか？");
       if(ans) {
-        await set(ref(db, `money/${new Obj("year").value}/${new Obj("key").value}/liquid`), false);
+        await set(ref(db, `money/${new Obj("key").value}/liquid`), false);
         editingData.liquid = false;
         new Obj("payBtn-set").show();
         new Obj("payBtn-unset").hide();
@@ -174,9 +174,9 @@ window.pay = async (i) => {
     case 1:
       var ans = confirm("この操作は元に戻せません。清算済みにしてよろしいですか？");
       if(ans) {
-        let exist = await get(ref(db, `money/${new Obj("year").value}/${new Obj("key").value}`)).then(snapshot => { return snapshot.val(); });
+        let exist = await get(ref(db, `money/${new Obj("key").value}`)).then(snapshot => { return snapshot.val(); });
         if(exist)
-        { await set(ref(db, `money/${new Obj("year").value}/${new Obj("key").value}/liquid`), true); }
+        { await set(ref(db, `money/${new Obj("key").value}/liquid`), true); }
         editingData.liquid = true;
         new Obj("payBtn-set").hide();
         new Obj("payBtn-unset").show();
@@ -195,6 +195,8 @@ window.save = async () => {
   { alert("金額が不正です"); return; }
   if(new Date(new Obj("date").value) > new Date(new Date().getTime() + (1000 * 60 * 60 * 48)))
   { alert("48時間以上先の情報を入力することはできません"); return; }
+  const regex = /^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$/;
+  if(!regex.test(new Obj("date").value)) {alert("時間は規定のフォーマットで入力してください。(例：2025-01-01)"); return;}
 
   editingData.name = new Obj("name").value;
   let price = Number(new Obj("amount").value);
@@ -208,7 +210,7 @@ window.save = async () => {
   let saveFor = new Date(editingData.date).getFullYear();
   if(new Date(editingData.date).getMonth() < 3) { saveFor--; }
 
-  await set(ref(db, `money/${saveFor}/${new Obj("key").value}`), editingData);
+  await set(ref(db, `money/${new Obj("key").value}`), editingData);
   alert("保存しました。"); closeModal(false); new Obj("year").value = saveFor;
 }
 // リストの表示・残高の表示
@@ -216,19 +218,19 @@ async function showList () {
   csvData = [];
   //リストを表示
   const year = Number(new Obj("year").value);
-  await get(ref(db, `money/${year}`)).then(snapshot => {
+  await get(ref(db, `money`)).then(snapshot => {
     fullData = snapshot.val();
 
     // まだその年度のデータがないとき
     if(!fullData) {
       //残高の表示
-      get(ref(db, `money/${new Date().getFullYear()-1}`)).then(snapshot => {
+      get(ref(db, `money`)).then(snapshot => {
         const data = snapshot.val();
         let goukei = 0;
         Object.keys(data).forEach(key => {
           goukei += Number(data[key].price);
         });
-        set(ref(db, `money/${new Date().getFullYear()}/0`), {
+        set(ref(db, `money/0`), {
           date: `${new Date().getFullYear()}-01-01`,
           detail: "",
           liquid: true,
@@ -282,7 +284,7 @@ async function showList () {
     })
   });
   //残高の表示
-  await get(ref(db, `money/${new Date().getFullYear()}`)).then(snapshot => {
+  await get(ref(db, `money`)).then(snapshot => {
     const data = snapshot.val();
     let goukei = 0;
     Object.keys(data).forEach(key => {
@@ -305,7 +307,7 @@ window.delItem = () => {
   if (!confirm(`削除した情報は二度と戻せません。本当によろしいですか？`)) { return; }
 
   try {
-    remove(ref(db, 'money/'+new Obj("year").value+"/"+new Obj("key").value))
+    remove(ref(db, 'money/'+new Obj("key").value))
     .then(() => { alert("削除しました"); closeModal(); });
   } catch (e) {
     console.error(e); alert(e);
